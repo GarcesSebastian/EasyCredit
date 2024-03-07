@@ -23,9 +23,10 @@
 
 <script>
 
-    let elementCenter = document.querySelector("#SectionCenter");
+    let elementCenter = document.querySelector("#SectionCenter") as HTMLElement;
+    let buttonFloat = document.querySelector("#ButtonFloat") as HTMLElement;
 
-	document.querySelector("#ButtonFloat")?.addEventListener("click", () =>{
+	buttonFloat?.addEventListener("click", () =>{
         elementCenter?.scrollIntoView({ behavior: 'smooth' });
 	});
 
@@ -37,9 +38,9 @@
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if(entry.isIntersecting){
-                document.querySelector("#ButtonFloat").style.display = "none";
+                buttonFloat.style.display = "none";
             }else{
-                document.querySelector("#ButtonFloat").style.display = "initial";
+                buttonFloat.style.display = "initial";
             }
         });
     }, options);
