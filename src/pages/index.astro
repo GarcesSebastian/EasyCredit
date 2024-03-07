@@ -21,9 +21,3 @@ import ArticleRight from "../components/ArticleRight.astro"
 	<Footer></Footer>
 	<ArrowFloat id="ButtonFloat"></ArrowFloat>
 </Layout>
-
-<script>
-	document.querySelector("#ButtonFloat")?.addEventListener("click", () =>{
-        document.querySelector("#SectionCenter")?.scrollIntoView({ behavior: 'smooth' });
-	});
-</script>
