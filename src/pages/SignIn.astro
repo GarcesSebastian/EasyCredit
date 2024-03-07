@@ -1,8 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro"
 import Header from "../components/Header.astro"
+import Section from "../components/Section.astro"
+import FormLogin from "../components/FormLogin.astro"
+import Footer from "../components/Footer.astro"
 ---
 
 <Layout title="Sebxstt - Sign In">
 	<Header href_image="/" href_signin="./SignIn" href_signup="./SignUp"></Header>
+	<Section>
+		<FormLogin></FormLogin>
+		<Footer></Footer>
+	</Section>
 </Layout>

@@ -1,0 +1,75 @@
+<form class="bg-transparent relative top-20 py-10 px-5 max-w-[35rem] w-full flex flex-col justify-center items-center gap-y-6 m-5">
+
+    <div id="background-blur" class="absolute w-full h-full flex bg-[rgba(255,255,255,.02)] border border-gray-600 rounded-lg backdrop-blur-lg"></div>
+
+    <div class="w-full flex flex-col justify-center items-center gap-y-2 z-2">
+        <h2 class="text-white font-bold text-2xl relative">
+            Sign In
+        </h2>
+
+        <span class="text-gray-300 font-light text-base relative">
+            New? <a class="text-white underline font-normal" href="/SignUp">Create an account</a>
+        </span>
+    </div>
+
+    <div class="w-full flex flex-col z-2">
+        <label for="input-email" class="block mb-2 text-sm font-medium text-white relative">Email</label>
+        <div class="relative mb-6">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                    <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
+                    <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
+                </svg>
+            </div>
+            <input type="email" id="input-email" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="email@example.com" required>
+        </div>
+
+        <label for="input-password" class="block mb-2 text-sm font-medium text-white relative">Password</label>
+        <div class="relative mb-0">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-key w-5 h-5 text-gray-500 dark:text-gray-400" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z" />
+                    <path d="M15 9h.01" />
+                </svg>
+            </div>
+            <input type="text" id="input-password" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Password" required>
+        </div>
+    </div>
+
+    <div class="w-full flex justify-end items-center">
+        <a class="text-white fond-bold underline relative" href="#">Forgot your password?</a>
+    </div>
+
+    <div class="w-full flex justify-center items-center relative">
+        <button type="submit" class="w-full text-white outline-none text-bold text-base bg-slate-800 hover:bg-slate-800/90 focus:ring-slate-700 focus:ring-4 font-medium rounded-lg px-5 py-4 text-center inline-flex items-center justify-center me-2 mb-2">
+            Sign in
+        </button>
+    </div>
+
+    <div class="w-full flex justify-center items-center py-1 relative">
+        <span>
+            OR CONTINUE WITH
+        </span>
+    </div>
+
+    <div class="w-full flex justify-center items-center relative">
+        <button type="button" class="w-full text-white outline-none bg-gradient-to-r to-[#0074D3] from-[#0040A8] hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-4 text-center inline-flex items-center justify-center dark:focus:ring-[#4285F4]/55 me-2 mb-2">
+            <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 19">
+                <path fill-rule="evenodd" d="M8.842 18.083a8.8 8.8 0 0 1-8.65-8.948 8.841 8.841 0 0 1 8.8-8.652h.153a8.464 8.464 0 0 1 5.7 2.257l-2.193 2.038A5.27 5.27 0 0 0 9.09 3.4a5.882 5.882 0 0 0-.2 11.76h.124a5.091 5.091 0 0 0 5.248-4.057L14.3 11H9V8h8.34c.066.543.095 1.09.088 1.636-.086 5.053-3.463 8.449-8.4 8.449l-.186-.002Z" clip-rule="evenodd"/>
+            </svg>
+            Sign in with Google
+        </button>
+    </div>
+
+</form>
+
+<style>
+    #background-blur{
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+    }
+</style>
