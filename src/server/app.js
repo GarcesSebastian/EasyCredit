@@ -5,8 +5,10 @@ import * as database from "./database.js";
 
 const app = express();
 
+const port = process.env.PORT || 4000;
+
 // Configuración inicial
-app.set("port", 4000);
+app.set("port", port);
 app.listen(app.get("port"));
 console.log("Escuchando el puerto " + app.get("port"));
 
