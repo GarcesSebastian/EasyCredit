@@ -5,6 +5,13 @@ import * as database from "./database.js";
 
 const app = express();
 
+const port = process.env.PORT || 4000;
+
+// Configuración inicial
+app.set("port", port);
+app.listen(app.get("port"));
+console.log("Escuchando el puerto " + app.get("port"));
+
 // Middlewares
 app.use(cors({
     origin: ["http://localhost:4321", "http://localhost:4322", "http://localhost:5500", "http://localhost:5501", "http://localhost:" + process.env.PORT]
@@ -59,4 +66,3 @@ app.get("/test", (req,res) => {
     });
 });
 
-export { app };

@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "astro dev",
-    "dev": "nodemon index.js",
+    "dev": "nodemon ./src/server/app.js",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
