@@ -1,4 +1,4 @@
-<form class="bg-transparent relative top-20 py-10 px-5 max-w-[35rem] w-full flex flex-col justify-center items-center gap-y-6 m-5">
+<article class="bg-transparent relative top-20 py-10 px-5 max-w-[35rem] w-full flex flex-col justify-center items-center gap-y-6 m-5">
 
     <div id="background-blur" class="absolute w-full h-full flex bg-[rgba(255,255,255,.02)] border border-gray-600 rounded-lg backdrop-blur-lg"></div>
 
@@ -14,7 +14,7 @@
 
     <div class="w-full flex flex-col z-2">
 
-        <label for="input-text" class="block mb-2 text-sm font-medium text-white relative">Email</label>
+        <label for="input-text" class="block mb-2 text-sm font-medium text-white relative">Username</label>
         <div class="relative mb-6">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500 dark:text-gray-400 icon icon-tabler icon-tabler-user-hexagon" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -24,7 +24,7 @@
                     <path d="M19.875 6.27c.7 .398 1.13 1.143 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z" />
                 </svg>
             </div>
-            <input type="text" id="input-text" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Username" required>
+            <input type="text" id="input-username" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Username" required>
         </div>
 
         <label for="input-email" class="block mb-2 text-sm font-medium text-white relative">Email</label>
@@ -47,7 +47,7 @@
                     <path d="M15 9h.01" />
                 </svg>
             </div>
-            <input type="text" id="input-password" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Password" required>
+            <input type="password" id="input-password" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Password" required>
         </div>
     </div>
 
@@ -61,7 +61,7 @@
     </div>
 
     <div class="w-full flex justify-center items-center relative">
-        <button type="submit" class="w-full text-white outline-none text-bold text-base bg-slate-800 hover:bg-slate-800/90 focus:ring-slate-700 focus:ring-4 font-medium rounded-lg px-5 py-4 text-center inline-flex items-center justify-center me-2 mb-2">
+        <button id="submit-signup" type="submit" class="w-full text-white outline-none text-bold text-base bg-slate-800 hover:bg-slate-800/90 focus:ring-slate-700 focus:ring-4 font-medium rounded-lg px-5 py-4 text-center inline-flex items-center justify-center me-2 mb-2">
             Sign up
         </button>
     </div>
@@ -81,7 +81,47 @@
         </button>
     </div>
 
-</form>
+</article>
+
+<script>
+    document.querySelector("#submit-signup")?.addEventListener("click", async () => {
+        const username = document.querySelector("#input-username");
+        const email = document.querySelector("#input-email");
+        const password = document.querySelector("#input-password");
+        const checkTerms = document.querySelector("#remember");
+
+        if (username?.value.length > 0 && email?.value.length > 0 && password?.value.length > 0 && checkTerms?.checked) {
+            const data = {
+                username: username?.value,
+                email: email?.value,
+                password: password?.value
+            };
+
+            const res = await fetch("http://localhost:4000/register/auth_email", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const responseJson = await res.json();
+
+            if (res.ok) {
+                console.log("Registrado con éxito");
+                window.location.href = "/SignIn";
+            } else {
+
+                if (responseJson.message === "Email already registered") {
+                    console.log("Repeat Email");
+                }
+
+                console.log("Ocurrió un error al intentar registrarse");
+            }
+        }
+    });
+</script>
+
 
 <style>
     #background-blur{
