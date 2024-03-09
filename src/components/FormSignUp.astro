@@ -85,10 +85,10 @@
 
 <script>
     document.querySelector("#submit-signup")?.addEventListener("click", async () => {
-        const username = document.querySelector("#input-username");
-        const email = document.querySelector("#input-email");
-        const password = document.querySelector("#input-password");
-        const checkTerms = document.querySelector("#remember");
+        const username = document.querySelector("#input-username") as HTMLInputElement;
+        const email = document.querySelector("#input-email") as HTMLInputElement;
+        const password = document.querySelector("#input-password") as HTMLInputElement;
+        const checkTerms = document.querySelector("#remember") as HTMLInputElement;
 
         if (username?.value.length > 0 && email?.value.length > 0 && password?.value.length > 0 && checkTerms?.checked) {
             const data = {
