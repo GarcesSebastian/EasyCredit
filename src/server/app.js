@@ -14,7 +14,7 @@ console.log("Escuchando el puerto " + app.get("port"));
 
 // Middlewares
 app.use(cors({
-    origin: ["http://localhost:4321"]
+    origin: ["http://localhost:4321", "http://localhost:4322", "http://localhost:5500", "http://localhost:5501", "http://localhost:" + process.env.PORT]
 }));
 
 app.use(morgan("dev"));
@@ -58,5 +58,11 @@ app.post("/register/auth_email", async (req, res) => {
     } else {
         res.status(400).json({ message: "Bad Request" });
     }
+});
+
+app.get("/test", (req,res) => {
+    res.json({
+        "Message": "Bienvenido sebxstt"
+    });
 });
 
