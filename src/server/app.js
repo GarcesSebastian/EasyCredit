@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import * as database from "./database.js";
+import bcrypt from 'bcrypt';
 
 const app = express();
 
@@ -20,10 +21,10 @@ app.use(cors({
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.post("/register/auth_email", async (req, res) => {
+app.post("/register/auth", async (req, res) => {
     if (req.body && req.body.email) {
         const connection = await database.getConnection();
-        const emailExists = await connection.query("SELECT email FROM easycredit.registers WHERE email = ?", [req.body.email]);
+        const emailExists = await connection.query("SELECT email FROM registers WHERE email = ?", [req.body.email]);
 
         if (emailExists.length > 0) {
             res.status(400).json({ message: "Email already registered" });
@@ -38,7 +39,7 @@ app.post("/register/auth_email", async (req, res) => {
             while (!isAvailable && attempts < maxAttempts) {
                 user_id = Math.floor(Math.random() * max) + min;
 
-                const userIdExists = await connection.query("SELECT id FROM easycredit.registers WHERE id = ?", [user_id]);
+                const userIdExists = await connection.query("SELECT id FROM registers WHERE id = ?", [user_id]);
 
                 if (userIdExists.length === 0) {
                     isAvailable = true;
@@ -52,8 +53,38 @@ app.post("/register/auth_email", async (req, res) => {
                 return;
             }
 
-            const result = await connection.query("INSERT INTO easycredit.registers (id, username, email, password) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, req.body.password]);
-            res.status(200).json(result);
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            console.log(req.body.numero_telefono);
+            const hashedNumero_telefono = await bcrypt.hash(req.body.numero_telefono, 10);
+            console.log(hashedNumero_telefono)
+            const hashedNumero_identidad = await bcrypt.hash(req.body.numero_identidad, 10);
+
+            connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false]);
+            res.status(200).json({ message: "Register Successful"});
+        }
+    } else {
+        res.status(400).json({ message: "Bad Request" });
+    }
+});
+
+app.post("/login/auth", async (req, res) => {
+    if(req.body){
+        const connection = await database.getConnection();
+        const emailExists = await connection.query("SELECT email, password FROM registers WHERE email = ?", [req.body.email]);
+
+        if (!emailExists.length > 0) {
+            res.status(400).json({ message: "Incorrect Email" });
+        } else {
+            const hashedPassword = emailExists[0].password;
+
+            const passwordMatch = await bcrypt.compare(req.body.password, hashedPassword);
+
+            if (passwordMatch) {
+                connection.query("UPDATE registers SET estado = ? WHERE email = ?", [true, req.body.email]);
+                res.status(200).json({ message: "Login Successful" });
+            } else {
+                res.status(400).json({ message: "Incorrect Password" });
+            }
         }
     } else {
         res.status(400).json({ message: "Bad Request" });
@@ -62,7 +93,6 @@ app.post("/register/auth_email", async (req, res) => {
 
 app.get("/test", (req,res) => {
     res.json({
-        "Message": "Bienvenido sebxstt"
+        "Message": "Welcome sebxstt"
     });
 });
-

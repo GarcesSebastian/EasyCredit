@@ -1,4 +1,4 @@
-<form class="bg-transparent relative top-20 py-10 px-5 max-w-[35rem] w-full flex flex-col justify-center items-center gap-y-6 m-5">
+<article class="bg-transparent relative top-20 py-10 px-5 max-w-[35rem] w-full flex flex-col justify-center items-center gap-y-6 m-5">
 
     <div id="background-blur" class="absolute w-full h-full flex bg-[rgba(255,255,255,.02)] border border-gray-600 rounded-lg backdrop-blur-lg"></div>
 
@@ -14,15 +14,17 @@
 
     <div class="w-full flex flex-col z-2">
         <label for="input-email" class="block mb-2 text-sm font-medium text-white relative">Email</label>
-        <div class="relative mb-6">
+        <div class="relative mb-0">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
                     <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
                     <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
                 </svg>
             </div>
-            <input type="email" id="input-email" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="email@example.com" required>
+            <input type="email" id="input-email" class="mb-1 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="email@example.com" required>
         </div>
+        <span id="err-email" class="relative text-sm mx-2 mb-5 text-[tomato] transition-all duration-500 opacity-0"></span>
+
 
         <label for="input-password" class="block mb-2 text-sm font-medium text-white relative">Password</label>
         <div class="relative mb-0">
@@ -33,8 +35,10 @@
                     <path d="M15 9h.01" />
                 </svg>
             </div>
-            <input type="text" id="input-password" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Password" required>
+            <input type="password" id="input-password" class="mb-1 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Password" required>
         </div>
+        <span id="err-password" class="relative text-sm mx-2 mb-0 text-[tomato] transition-all duration-500 opacity-0"></span>
+
     </div>
 
     <div class="w-full flex justify-end items-center">
@@ -42,7 +46,7 @@
     </div>
 
     <div class="w-full flex justify-center items-center relative">
-        <button type="submit" class="w-full text-white outline-none text-bold text-base bg-slate-800 hover:bg-slate-800/90 focus:ring-slate-700 focus:ring-4 font-medium rounded-lg px-5 py-4 text-center inline-flex items-center justify-center me-2 mb-2">
+        <button type="submit" id="submit-signin" class="w-full text-white outline-none text-bold text-base bg-slate-800 hover:bg-slate-800/90 focus:ring-slate-700 focus:ring-4 font-medium rounded-lg px-5 py-4 text-center inline-flex items-center justify-center me-2 mb-2">
             Sign in
         </button>
     </div>
@@ -54,7 +58,7 @@
     </div>
 
     <div class="w-full flex justify-center items-center relative">
-        <button type="button" class="w-full text-white outline-none bg-gradient-to-r to-[#0074D3] from-[#0040A8] hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-4 text-center inline-flex items-center justify-center dark:focus:ring-[#4285F4]/55 me-2 mb-2">
+        <button type="button" class="w-full text-white transition-all duration-500 outline-none bg-gradient-to-r to-[#0074D3] from-[#0040A8] hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-4 text-center inline-flex items-center justify-center dark:focus:ring-[#4285F4]/55 me-2 mb-2">
             <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 19">
                 <path fill-rule="evenodd" d="M8.842 18.083a8.8 8.8 0 0 1-8.65-8.948 8.841 8.841 0 0 1 8.8-8.652h.153a8.464 8.464 0 0 1 5.7 2.257l-2.193 2.038A5.27 5.27 0 0 0 9.09 3.4a5.882 5.882 0 0 0-.2 11.76h.124a5.091 5.091 0 0 0 5.248-4.057L14.3 11H9V8h8.34c.066.543.095 1.09.088 1.636-.086 5.053-3.463 8.449-8.4 8.449l-.186-.002Z" clip-rule="evenodd"/>
             </svg>
@@ -62,7 +66,51 @@
         </button>
     </div>
 
-</form>
+</article>
+
+<script>
+
+    // import states from "../js/states.js";
+
+    document.querySelector("#submit-signin")?.addEventListener("click", async () => {
+        const email = document.querySelector("#input-email") as HTMLInputElement;
+        const password = document.querySelector("#input-password") as HTMLInputElement;
+
+        if (email.value.length > 0 && password.value.length > 0) {
+            const data = {
+                email: email.value,
+                password: password.value
+            };
+
+            const res = await fetch("http://localhost:4000/login/auth", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const responseJson = await res.json();
+            // states.inputSucess(document.querySelector("#input-email"), "#err-email");
+            // states.inputSucess(document.querySelector("#input-password"), "#err-password");
+
+            if (res.ok) {
+                console.log("Logeado con éxito");
+                window.location.href = "/"
+            } else {
+                if (responseJson.message === "Incorrect Password") {
+                    // states.inputErr(document.querySelector("#input-password"), "#err-password", responseJson.message);
+                }
+                
+                if(responseJson.message === "Incorrect Email") {
+                    // states.inputErr(document.querySelector("#input-email"), "#err-email", responseJson.message);
+                }
+
+                console.log("Ocurrió un error " + responseJson.message);
+            }
+        }
+    });
+</script>
 
 <style>
     #background-blur{
