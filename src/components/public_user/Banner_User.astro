@@ -1,0 +1,53 @@
+---
+---
+
+<section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center">
+    <article class="w-full flex flex-col justify-center items-center h-[42rem] bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
+        <div class="w-full h-full gap-x-5 flex justify-between items-center max-[880px]:flex-col max-w-7xl max-xl:px-5 max-[880px]:justify-center max-[880px]:gap-y-10">
+            <!--CODE NEW GUI -->
+        </div>
+    </article>
+</section>
+
+<style>
+    .container-image{
+        width: 30rem;
+        height: 100%    ;
+        background-image: url("../../public/background/giro.png");
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+    }
+
+    @media (width > 640px) {
+        .list-options li:not(.list-options li:last-child){
+            border-right: 2px solid #ccc;
+        }
+    }
+
+    @media (width < 640px) {
+        .list-options li:not(.list-options li:last-child){
+            border-bottom: 2px solid #ccc;
+        }
+    }
+
+    @media (max-width: 1280px) {
+        .container-image{
+            width: 25rem;
+        }
+    }
+
+    @media (max-width: 1080px) {
+        .container-image{
+            width: 20rem;
+        }
+    }
+
+    @media (max-width: 880px) {
+        .container-image{
+            width: 15rem;
+            height: 15rem;
+        }
+    }
+
+</style>

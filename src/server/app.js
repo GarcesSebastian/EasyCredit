@@ -54,9 +54,7 @@ app.post("/register/auth", async (req, res) => {
             }
 
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            console.log(req.body.numero_telefono);
             const hashedNumero_telefono = await bcrypt.hash(req.body.numero_telefono, 10);
-            console.log(hashedNumero_telefono)
             const hashedNumero_identidad = await bcrypt.hash(req.body.numero_identidad, 10);
 
             connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false]);

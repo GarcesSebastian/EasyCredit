@@ -1,0 +1,89 @@
+---
+import 'animate.css';
+
+interface Props{
+[x: string]: any;
+    href_image: string;
+    href_signin: string;
+    href_signup: string;
+}
+
+const {href_image, href_signin, href_signup} = Astro.props;
+
+---
+
+<header class=`fixed w-screen h-20 flex flex-col justify-center items-center ${Astro.props.class}`>
+    <div id="content-header" class="w-full max-w-7xl max-xl:px-5 max-md:gap-y-5 grid py-2 z-15 bg-transparent">
+        <a href={href_image} class="flex justify-left items-center cursor-pointer">
+            <svg id="icon-header" class="icon icon-tabler icon-tabler-steam w-16 h-16" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" fill="white" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M12 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+                <path d="M4 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+                <path d="M20 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+                <path d="M12 20m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+                <path d="M5.5 5.5l3 3"/>
+                <path d="M15.5 15.5l3 3"/>
+                <path d="M18.5 5.5l-3 3"/>
+                <path d="M8.5 15.5l-3 3"/>
+            </svg>
+        </a>
+    
+        <div class="flex gap-x-5 justify-end items-center px-3">
+    
+            <div class="flex gap-x-5 items-center justify-center">
+    
+                <a href={href_signin} class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                    <span class="max-lg:hidden">
+                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user w-6 h-6">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                        </svg>
+                    </span>
+                </a>
+    
+                <a href={href_signin} class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                    <span class="max-lg:hidden">
+                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings-2 w-6 h-6">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z" />
+                            <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                        </svg>
+                    </span>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<style>
+    #content-header{
+        grid-template-columns: 1fr 5fr;
+        grid-template-rows: 1fr;
+    }
+
+    header{
+        z-index: 50;
+        --tw-bg-opacity: .75;
+        background-color: rgba(13, 17, 23, var(--tw-bg-opacity));
+        border-bottom-width: 1px;
+        --tw-border-opacity: 1;
+        border-color: rgba(32, 38, 47, var(--tw-border-opacity));
+        backdrop-filter:blur(3px);
+        backface-visibility: hidden;
+        perspective: 1000px;
+        transform: translateZ(0px);
+    }
+</style>
+
+<script>
+    let header = document.querySelector("header") || document.createElement("header");
+
+    window.addEventListener("scroll", () =>{
+        let posY = window.scrollY;
+        if(posY > 0){
+        }else{
+        }
+    });
+</script>

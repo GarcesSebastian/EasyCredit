@@ -70,7 +70,7 @@
 
 <script>
 
-    // import states from "../js/states.js";
+    import states from "../js/states.js";
 
     document.querySelector("#submit-signin")?.addEventListener("click", async () => {
         const email = document.querySelector("#input-email") as HTMLInputElement;
@@ -91,19 +91,19 @@
             });
 
             const responseJson = await res.json();
-            // states.inputSucess(document.querySelector("#input-email"), "#err-email");
-            // states.inputSucess(document.querySelector("#input-password"), "#err-password");
+            states.inputSucess(document.querySelector("#input-email"), "#err-email");
+            states.inputSucess(document.querySelector("#input-password"), "#err-password");
 
             if (res.ok) {
                 console.log("Logeado con éxito");
                 window.location.href = "/"
             } else {
                 if (responseJson.message === "Incorrect Password") {
-                    // states.inputErr(document.querySelector("#input-password"), "#err-password", responseJson.message);
+                    states.inputErr(document.querySelector("#input-password"), "#err-password", responseJson.message);
                 }
                 
                 if(responseJson.message === "Incorrect Email") {
-                    // states.inputErr(document.querySelector("#input-email"), "#err-email", responseJson.message);
+                    states.inputErr(document.querySelector("#input-email"), "#err-email", responseJson.message);
                 }
 
                 console.log("Ocurrió un error " + responseJson.message);
