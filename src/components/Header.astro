@@ -63,6 +63,30 @@ const {href_image, href_signin, href_signup} = Astro.props;
                         </svg>
                     </span>
                 </a>
+
+                <div class="relative w-20 h-fit cursor-pointer text-whitefont-medium rounded-md text-sm">
+                    <span id="actual-flag" class="flex gap-x-2 justify-center items-center bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 px-2 py-2 rounded-md" data-flag-now="es">
+                        <img src="../../public/flags/espana.svg" class="w-6 h-6" alt="">
+
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-caret-down rotate-90 transition-all duration-300">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M6 10l6 6l6 -6h-12" />
+                        </svg>
+                    </span>
+
+                    <div id="list-flags" class="transition-all duration-300 flex cursor-pointer flex-col gap-x-2 w-full h-5 absolute mt-1 text-white bg-blue-700 focus:ring-blue-300 font-medium rounded-md text-sm dark:bg-blue-600 focus:outline-none dark:focus:ring-blue-800">
+                        <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-4 rounded-md" data-flag="en">
+                            <img src="../../public/flags/usa.svg" class="w-6 h-6" alt="">
+
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -72,6 +96,10 @@ const {href_image, href_signin, href_signup} = Astro.props;
     #content-header{
         grid-template-columns: 1fr 5fr;
         grid-template-rows: 1fr;
+    }
+
+    #list-flags{
+        display: none;
     }
 
     header{
@@ -89,12 +117,55 @@ const {href_image, href_signin, href_signup} = Astro.props;
 </style>
 
 <script>
-    let header = document.querySelector("header") || document.createElement("header");
+    let actual_element = document.querySelector("#actual-flag") as HTMLSpanElement;
+    let list_flags = document.querySelector("#list-flags") as HTMLDivElement;
 
-    window.addEventListener("scroll", () =>{
-        let posY = window.scrollY;
-        if(posY > 0){
+    actual_element?.addEventListener("click", () =>{
+        let svg = actual_element?.querySelector("svg") as HTMLOrSVGElement;
+        if(window.getComputedStyle(list_flags).display == "none"){
+            svg.style.transform = "rotate(0deg)";
+            list_flags.style.display = "flex";
         }else{
+            svg.style.transform = "rotate(90deg)";
+            list_flags.style.display = "none";
         }
     });
+
+    list_flags.querySelectorAll("div").forEach(item => {
+        item.addEventListener("click", () => {
+
+            if(item.getAttribute("data-flag") == "es"){
+                actual_element.setAttribute("data-flag-now", "es")
+                item.setAttribute("data-flag", "en")
+                localStorage.setItem("flag", "es");
+            }else if(item.getAttribute("data-flag") == "en"){
+                actual_element.setAttribute("data-flag-now", "en")
+                item.setAttribute("data-flag", "es")
+                localStorage.setItem("flag", "en");
+            }
+
+            let srcImage = item.querySelector("img")?.src.split("/");
+            let src = transformSrc(srcImage);
+            let srcImageNow = actual_element.querySelector("img")?.src.split("/");
+            let srcNow = transformSrc(srcImageNow);
+            actual_element.querySelector("img").src = src;
+            item.querySelector("img").src = srcNow;
+
+            let svg = actual_element?.querySelector("svg") as HTMLOrSVGElement;
+
+            svg.style.transform = "rotate(90deg)";
+            list_flags.style.display = "none";
+        })
+    });
+
+    function transformSrc(srcImage){
+        let src = "";
+        for(let i = 0; i < srcImage.length; i++){
+                if(i > 2){
+                    src += "/" + srcImage[i]
+                }
+        }
+        return src;
+    }
+
 </script>

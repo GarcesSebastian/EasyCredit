@@ -89,6 +89,17 @@ app.post("/login/auth", async (req, res) => {
     }
 });
 
+app.get("/words", async (req, res) => {
+    const connection = await database.getConnection();
+    const words = await connection.query("SELECT * FROM easycredit.words");
+    if(words.length > 0){
+        res.json(words);
+    }else{
+        res.status(400).send({ message: "Bad Request" });
+    }
+
+});
+
 app.get("/test", (req,res) => {
     res.json({
         "Message": "Welcome sebxstt"
