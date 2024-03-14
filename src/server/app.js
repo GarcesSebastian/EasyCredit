@@ -6,6 +6,8 @@ import bcrypt from 'bcrypt';
 
 const app = express();
 
+let flag = "";
+
 const port = process.env.PORT || 4000;
 
 // Configuración inicial
@@ -125,3 +127,6 @@ app.get("/test", (req,res) => {
         "Message": "Welcome sebxstt"
     });
 });
+
+
+export default {flag};
