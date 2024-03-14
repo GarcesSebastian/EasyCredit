@@ -12,6 +12,10 @@ interface Props{
     iniciar_text: string;
 }
 
+import { initiated } from "../pages/index.astro";
+
+console.log(initiated)
+
 const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = Astro.props;
 
 ---
@@ -36,37 +40,104 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
     
             <div class="flex gap-x-5 items-center justify-center">
     
-                <a href={href_signin} class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
-                    
-                    <span class="max-lg:hidden">
-                        {iniciar_text}
-                    </span>
-    
-                    <span class="lg:hidden">
-                        <svg class="icon icon-tabler icon-tabler-login-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M9 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
-                            <path d="M3 12h13l-3 -3" />
-                            <path d="M13 15l3 -3" />
-                        </svg>
-                    </span>
-                </a>
-    
-                <a href={href_signup} class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                    <span class="max-lg:hidden">
-                        {registrarse_text}
-                    </span>
-    
-                    <span class="lg:hidden">
-                        <svg class="icon icon-tabler icon-tabler-user-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                            <path d="M16 19h6" />
-                            <path d="M19 16v6" />
-                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
-                        </svg>
-                    </span>
-                </a>
+                {
+                    initiated == "false" ? (
+                        <a href={href_signin} class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                            
+                            <span class="max-lg:hidden">
+                                {iniciar_text}
+                            </span>
+            
+                            <span class="lg:hidden">
+                                <svg class="icon icon-tabler icon-tabler-login-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M9 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
+                                    <path d="M3 12h13l-3 -3" />
+                                    <path d="M13 15l3 -3" />
+                                </svg>
+                            </span>
+                        </a>
+
+                        <a href={href_signup} class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            <span class="max-lg:hidden">
+                                {registrarse_text}
+                            </span>
+            
+                            <span class="lg:hidden">
+                                <svg class="icon icon-tabler icon-tabler-user-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                                    <path d="M16 19h6" />
+                                    <path d="M19 16v6" />
+                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
+                                </svg>
+                            </span>
+                        </a>
+                    ) : (
+                        <div class="relative">            
+                            <span id="button_profile"  class="relative cursor-pointer bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 flex w-full h-full">
+                                <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                                </svg>
+                            </span>
+                            
+                            <div id="list_profile" class="transition-all duration-300 hidden cursor-pointer flex-col gap-1 w-36 absolute mt-2 bg-slate-800 h-fit p-1.5 rounded-sm">
+                                <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
+                                    <span>
+                                        Bullet
+                                    </span>
+                                </div>
+
+                                <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
+                                    <span>
+                                        Bullet
+                                    </span>
+                                </div>
+
+                                <div id="button_logout" class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
+                                    <span>
+                                        Log out
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="relative">            
+                            <span id="button_config"  class="relative cursor-pointer bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 flex w-full h-full">
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings-2">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z" />
+                                    <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                </svg>
+                            </span>
+                            
+                            <div id="list_config" class="transition-all duration-300 hidden cursor-pointer flex-col gap-1 w-36 absolute mt-2 bg-slate-800 h-fit p-1.5 rounded-sm">
+                                <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
+                                    <span>
+                                        Theme
+                                    </span>
+                                </div>
+
+                                <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
+                                    <span>
+                                        Theme
+                                    </span>
+                                </div>
+
+                                <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
+                                    <span>
+                                        Theme
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    )
+                }
 
                 <div class="relative w-20 h-fit cursor-pointer text-whitefont-medium rounded-md text-sm">
                     <span id="actual-flag" class="flex gap-x-2 justify-center items-center bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 px-2 py-2 rounded-md" data-flag-now="es" data-flag-src="../../public/flags/espana.svg">
@@ -137,6 +208,43 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
         }
     });
 
+    let button_profile = document.querySelector("#button_profile") as HTMLButtonElement;
+    let list_profile = document.querySelector("#list_profile") as HTMLDivElement;
+
+    if(button_profile){
+        button_profile.addEventListener("click", () =>{
+            if(window.getComputedStyle(list_profile).display != "none"){
+                list_profile.style.display = "none";
+            }else{
+                list_profile.style.display = "flex";
+                list_config.style.display = "none";
+            }
+        });
+    }
+
+    let button_config = document.querySelector("#button_config") as HTMLButtonElement;
+    let list_config = document.querySelector("#list_config") as HTMLDivElement;
+
+    if(button_config){
+        button_config.addEventListener("click", () =>{
+            if(window.getComputedStyle(list_config).display != "none"){
+                list_config.style.display = "none";
+            }else{
+                list_config.style.display = "flex";
+                list_profile.style.display = "none";
+            }
+        });
+    }
+
+    let button_logout = document.querySelector("#button_logout") as HTMLButtonElement;
+
+    if(button_logout){
+        button_logout.addEventListener("click", () => {
+            localStorage.setItem("initiated", "false")
+            window.location.href = "/";
+        });
+    }
+
     list_flags.querySelectorAll("div").forEach(item => {
         item.addEventListener("click", () => {
 
@@ -159,9 +267,14 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
             let imgItem = item.querySelector("img") as HTMLImageElement;
             imgItem.src = srcNow;
 
-            fetch("http://localhost:4000/flag", {
+            let data = {
+                flag: localStorage.getItem("flag"),
+                initiated: localStorage.getItem("initiated"),
+            }
+
+            fetch("http://localhost:4000/variables", {
                 method: "POST",
-                body: JSON.stringify({flag: localStorage.getItem("flag")}),
+                body: JSON.stringify(data),
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -172,6 +285,7 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
             svg.style.transform = "rotate(90deg)";
             list_flags.style.display = "none";
 
+            window.location.reload();
         })
     });
 

@@ -34,4 +34,4 @@ function inputSucess(input, id) {
     }
 }
 
-export default { inputErr, inputSucess };
+export { inputErr, inputSucess };

@@ -8,55 +8,52 @@ import ArrowFloat from "../components/ArrowFloat.astro"
 import ArticleLeft from "../components/ArticleLeft.astro"
 import ArticleRight from "../components/ArticleRight.astro"
 
-interface WordItem {
+interface WordItem{
     word: string;
     es: string;
     en: string;
 }
 
-let data: WordItem[] = [];
-let flag: { flag: string } = { flag: "" };
+const response = await fetch("http://localhost:4000/words");
 
-try {
-    const response = await fetch("http://localhost:4000/words");
-    data = await response.json();
+const data: WordItem[] = await response.json();
 
-    const responseFlag = await fetch("http://localhost:4000/flag/res");
-    flag = await responseFlag.json();
+let response_variables = await fetch("http://localhost:4000/variables/res");
 
-} catch (error) {
-    console.error("Error al realizar la solicitud HTTP:", error);
-}
-
+let data_variables = await response_variables.json();
 
 let text = {
-        titulo_inicio: (data.find(item => item.word === "titulo_inicio") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        nombre_inicio: (data.find(item => item.word === "nombre_inicio") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        descripcion_inicio: (data.find(item => item.word === "descripcion_inicio") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        calcular_inicio: (data.find(item => item.word === "calcular_inicio") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        online_title: (data.find(item => item.word === "article_1_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        online_description: (data.find(item => item.word === "article_1_description") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        cuota_title: (data.find(item => item.word === "article_2_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        cuota_description: (data.find(item => item.word === "article_2_description") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        pay_title: (data.find(item => item.word === "article_3_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        pay_description: (data.find(item => item.word === "article_3_description") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        tasa_title: (data.find(item => item.word === "article_4_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        tasa_description: (data.find(item => item.word === "article_4_description") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        recursos_footer_titulo: (data.find(item => item.word === "recursos_footer_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        recursos_item_1: (data.find(item => item.word === "recursos_item_1") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        recursos_item_2: (data.find(item => item.word === "recursos_item_2") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        recursos_item_3: (data.find(item => item.word === "recursos_item_3") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        recursos_item_4: (data.find(item => item.word === "recursos_item_4") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        siganos_footer_titulo: (data.find(item => item.word === "siganos_footer_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        siganos_item_1: (data.find(item => item.word === "siganos_item_1") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        siganos_item_2: (data.find(item => item.word === "siganos_item_2") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        legal_footer_titulo: (data.find(item => item.word === "legal_footer_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        legal_item_1: (data.find(item => item.word === "legal_item_1") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        legal_item_2: (data.find(item => item.word === "legal_item_2") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        rights_footer: (data.find(item => item.word === "rights_footer") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        iniciar_text: (data.find(item => item.word === "iniciar_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-        registrarse_text: (data.find(item => item.word === "registrarse_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
-    };
+    titulo_inicio: (data.find(item => item.word === "titulo_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    nombre_inicio: (data.find(item => item.word === "nombre_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    descripcion_inicio: (data.find(item => item.word === "descripcion_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    calcular_inicio: (data.find(item => item.word === "calcular_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    online_title: (data.find(item => item.word === "article_1_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    online_description: (data.find(item => item.word === "article_1_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    cuota_title: (data.find(item => item.word === "article_2_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    cuota_description: (data.find(item => item.word === "article_2_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    pay_title: (data.find(item => item.word === "article_3_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    pay_description: (data.find(item => item.word === "article_3_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    tasa_title: (data.find(item => item.word === "article_4_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    tasa_description: (data.find(item => item.word === "article_4_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_footer_titulo: (data.find(item => item.word === "recursos_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_1: (data.find(item => item.word === "recursos_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_2: (data.find(item => item.word === "recursos_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_3: (data.find(item => item.word === "recursos_item_3") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_4: (data.find(item => item.word === "recursos_item_4") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    siganos_footer_titulo: (data.find(item => item.word === "siganos_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_1: (data.find(item => item.word === "siganos_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_2: (data.find(item => item.word === "siganos_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    legal_footer_titulo: (data.find(item => item.word === "legal_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    legal_item_1: (data.find(item => item.word === "legal_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    legal_item_2: (data.find(item => item.word === "legal_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    rights_footer: (data.find(item => item.word === "rights_footer") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    iniciar_text: (data.find(item => item.word === "iniciar_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    registrarse_text: (data.find(item => item.word === "registrarse_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+};
+
+export let newResponse_variables = await fetch("http://localhost:4000/variables/res");
+export let newData_variables = await newResponse_variables.json();
+export let initiated = await newData_variables.initiated;
 
 ---
 
@@ -122,5 +119,3 @@ let text = {
     ></Footer>
     <ArrowFloat id="ButtonFloat"></ArrowFloat>
 </Layout>
-
-

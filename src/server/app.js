@@ -6,7 +6,9 @@ import bcrypt from 'bcrypt';
 
 const app = express();
 
+//Variables globals
 let flag = "";
+let initiated = "";
 
 const port = process.env.PORT || 4000;
 
@@ -91,24 +93,25 @@ app.post("/login/auth", async (req, res) => {
     }
 });
 
-app.post("/flag", (req, res) => {
+app.post("/variables", (req, res) => {
     if(req.body){
-        if(req.body.flag == 'es'){
-            flag = "es";
-            res.status(200).json({ message: "Español" });
-        }else if(req.body.flag == 'en'){
-            flag = "en";
-            res.status(200).json({ message: "Ingles" });
+        if(req.body.flag && req.body.initiated){
+            flag = req.body.flag;
+            initiated = req.body.initiated;
+            res.status(200).json({ message: "True Request" });
         }else{
             flag = "es";
+            initiated = "false";
+            console.log(req.body)
             res.status(400).send({ message: "Bad Request" });
         }
     }
 });
 
-app.get("/flag/res", (req,res) => {
+app.get("/variables/res", (req,res) => {
     res.json({
-        flag: flag
+        flag: flag,
+        initiated: initiated,
     });
 });
 
@@ -128,5 +131,3 @@ app.get("/test", (req,res) => {
     });
 });
 
-
-export default {flag};
