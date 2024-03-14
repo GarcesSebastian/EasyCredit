@@ -6,6 +6,8 @@ import bcrypt from 'bcrypt';
 
 const app = express();
 
+let flag = "";
+
 const port = process.env.PORT || 4000;
 
 // Configuración inicial
@@ -15,9 +17,9 @@ console.log("Escuchando el puerto " + app.get("port"));
 
 // Middlewares
 app.use(cors({
-    origin: ["http://localhost:4321", "http://localhost:4322", "http://localhost:5500", "http://localhost:5501", "http://localhost:" + process.env.PORT]
+    origin: ["http://localhost:4321", "http://localhost:4322", "http://localhost:5500", "http://localhost:5501", "http://localhost:" + process.env.PORT],
+    credentials: true
 }));
-
 app.use(morgan("dev"));
 app.use(express.json());
 
@@ -89,6 +91,30 @@ app.post("/login/auth", async (req, res) => {
     }
 });
 
+app.post("/flag", (req, res) => {
+    if(req.body){
+        if(req.body.flag == 'es'){
+            flag = "es";
+            console.log("Español")
+            res.status(200).json({ message: "Español" });
+        }else if(req.body.flag == 'en'){
+            flag = "en";
+            console.log("Ingles")
+            res.status(200).json({ message: "Ingles" });
+        }else{
+            flag = "es";
+            console.log("Cagaste")
+            res.status(400).send({ message: "Bad Request" });
+        }
+    }
+});
+
+app.get("/flag/res", (req,res) => {
+    res.json({
+        flag: flag
+    });
+});
+
 app.get("/words", async (req, res) => {
     const connection = await database.getConnection();
     const words = await connection.query("SELECT * FROM easycredit.words");
@@ -97,7 +123,6 @@ app.get("/words", async (req, res) => {
     }else{
         res.status(400).send({ message: "Bad Request" });
     }
-
 });
 
 app.get("/test", (req,res) => {
@@ -105,3 +130,6 @@ app.get("/test", (req,res) => {
         "Message": "Welcome sebxstt"
     });
 });
+
+
+export default {flag};

@@ -1,20 +1,41 @@
 ---
+interface Props{
+    titulo_inicio: string;
+    nombre_inicio: string;
+    descripcion_inicio: string;
+    calcular_inicio: string;
+    titulo_item_1: string;
+    titulo_item_2: string;
+    titulo_item_3: string;
+    titulo_item_4: string;
+}
+
+const {
+    titulo_inicio, 
+    nombre_inicio, 
+    descripcion_inicio, 
+    calcular_inicio, 
+    titulo_item_1, 
+    titulo_item_2,  
+    titulo_item_3,  
+    titulo_item_4, 
+    } = Astro.props;
 ---
 
-<section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center">
+<section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
     <article class="w-full flex flex-col justify-center items-center h-[42rem] bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
         <div class="w-full h-full gap-x-5 flex justify-between items-center max-[880px]:flex-col max-w-7xl max-xl:px-5 max-[880px]:justify-center max-[880px]:gap-y-10">
             <div class="max-w-[35rem] max-lg:max-w-[30rem] max-[880px]:w-full max-[880px]:max-w-[40rem] flex flex-col gap-y-5 justify-center items-start">
                 <h1 class="text-white text-5xl max-xl:text-4xl max-[420px]:text-3xl font-bold">
-                    Simulador de crédito <span class="bg-gradient-to-br from-yellow-300 to-yellow-600 bg-clip-text text-transparent">EasyCredit</span>
+                    {titulo_inicio} <span class="bg-gradient-to-br from-yellow-300 to-yellow-600 bg-clip-text text-transparent">{nombre_inicio}</span>
                 </h1>
 
                 <p class="text-gray-100 text-lg">
-                    Explora las posibilidades con nuestro simulador de crédito. Calcula las cuotas y diseña tu plan de pago en línea de manera conveniente y sin complicaciones.
+                    {descripcion_inicio}
                 </p>
 
                 <button type="button" class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5 me-2 mb-2">
-                    Calcular
+                    {calcular_inicio}
                 </button>
 
             </div>
@@ -38,7 +59,7 @@
                         </span>
 
                         <span>
-                            Proceso 100% en linea
+                            {titulo_item_1}
                         </span>    
                     </a>
                 </li>
@@ -60,7 +81,7 @@
                         </span>
 
                         <span>
-                            Calcula tu cuota
+                            {titulo_item_2}
                         </span>    
                     </a>
                 </li>
@@ -79,7 +100,7 @@
                         </span>
 
                         <span>
-                            Plazo de pago flexible
+                            {titulo_item_3}
                         </span>    
                     </a>
                 </li>
@@ -98,7 +119,7 @@
                         </span>
 
                         <span>
-                            Tasa y cuota fijas
+                            {titulo_item_4}
                         </span>    
                     </a>
                 </li>

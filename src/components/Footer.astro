@@ -1,4 +1,32 @@
 ---
+interface Props{
+    recursos_footer_titulo: string;
+    recursos_item_1: string;
+    recursos_item_2: string;
+    recursos_item_3: string;
+    recursos_item_4: string;
+    siganos_footer_titulo: string;
+    siganos_item_1: string;
+    siganos_item_2: string;
+    legal_footer_titulo: string;
+    legal_item_1: string;
+    legal_item_2: string;
+    rights_footer: string;
+}
+
+const {
+    recursos_footer_titulo, 
+    recursos_item_1, 
+    recursos_item_2, 
+    recursos_item_3, 
+    recursos_item_4, 
+    siganos_footer_titulo, 
+    siganos_item_1, 
+    siganos_item_2, 
+    legal_footer_titulo, 
+    legal_item_1, 
+    legal_item_2,
+    rights_footer} = Astro.props;
 
 ---
 
@@ -24,41 +52,41 @@
           </div>
           <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
               <div>
-                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
+                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">{recursos_footer_titulo}</h2>
                   <ul class="text-gray-500 dark:text-gray-400 font-medium">
                       <li class="mb-2">
-                          <a href="https://astro.build/" target="_blank" class="hover:underline">Astro</a>
+                          <a href="https://astro.build/" target="_blank" class="hover:underline">{recursos_item_1}</a>
                       </li>
                       <li class="mb-2">
-                        <a href="https://astro.build/" target="_blank" class="hover:underline">Tailwind CSS</a>
+                        <a href="https://astro.build/" target="_blank" class="hover:underline">{recursos_item_2}</a>
                       </li>
                       <li class="mb-2">
-                        <a href="https://astro.build/" target="_blank" class="hover:underline">NodeJS</a>
+                        <a href="https://astro.build/" target="_blank" class="hover:underline">{recursos_item_3}</a>
                       </li>
                       <li>
-                        <a href="https://astro.build/" target="_blank" class="hover:underline">ExpressJS</a>
+                        <a href="https://astro.build/" target="_blank" class="hover:underline">{recursos_item_4}</a>
                       </li>
                   </ul>
               </div>
               <div>
-                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Follow us</h2>
+                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">{siganos_footer_titulo}</h2>
                   <ul class="text-gray-500 dark:text-gray-400 font-medium">
                       <li class="mb-2">
-                          <a href="https://github.com/GarcesSebastian/EasyCredit/tree/main" target="_blank" class="hover:underline ">Github</a>
+                          <a href="https://github.com/GarcesSebastian/EasyCredit/tree/main" target="_blank" class="hover:underline ">{siganos_item_1}</a>
                       </li>
                       <li>
-                          <a href="#" target="_blank" class="hover:underline">Linkedin</a>
+                          <a href="#" target="_blank" class="hover:underline">{siganos_item_2}</a>
                       </li>
                   </ul>
               </div>
               <div>
-                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Legal</h2>
+                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">{legal_footer_titulo}</h2>
                   <ul class="text-gray-500 dark:text-gray-400 font-medium">
                       <li class="mb-2">
-                          <a href="#" target="_blank" class="hover:underline">Privacy Policy</a>
+                          <a href="#" target="_blank" class="hover:underline">{legal_item_1}</a>
                       </li>
                       <li>
-                          <a href="#" target="_blank" class="hover:underline">Terms &amp; Conditions</a>
+                          <a href="#" target="_blank" class="hover:underline">{legal_item_2}</a>
                       </li>
                   </ul>
               </div>
@@ -66,7 +94,7 @@
       </div>
       <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
       <div class="sm:flex sm:items-center sm:justify-between">
-          <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="/" class="hover:underline">EasyCredit™</a>. All Rights Reserved.
+          <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="/" class="hover:underline">EasyCredit™.</a> {rights_footer}
           </span>
           <div class="flex mt-4 sm:justify-center sm:mt-0">
               <a href="#" target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5">

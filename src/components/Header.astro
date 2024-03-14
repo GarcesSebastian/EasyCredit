@@ -6,9 +6,13 @@ interface Props{
     href_image: string;
     href_signin: string;
     href_signup: string;
+
+    // Props for translate
+    registrarse_text: string;
+    iniciar_text: string;
 }
 
-const {href_image, href_signin, href_signup} = Astro.props;
+const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = Astro.props;
 
 ---
 
@@ -35,7 +39,7 @@ const {href_image, href_signin, href_signup} = Astro.props;
                 <a href={href_signin} class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
                     
                     <span class="max-lg:hidden">
-                        Sign In
+                        {iniciar_text}
                     </span>
     
                     <span class="lg:hidden">
@@ -50,7 +54,7 @@ const {href_image, href_signin, href_signup} = Astro.props;
     
                 <a href={href_signup} class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                     <span class="max-lg:hidden">
-                        Sign Up
+                        {registrarse_text}
                     </span>
     
                     <span class="lg:hidden">
@@ -65,17 +69,19 @@ const {href_image, href_signin, href_signup} = Astro.props;
                 </a>
 
                 <div class="relative w-20 h-fit cursor-pointer text-whitefont-medium rounded-md text-sm">
-                    <span id="actual-flag" class="flex gap-x-2 justify-center items-center bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 px-2 py-2 rounded-md" data-flag-now="es">
+                    <span id="actual-flag" class="flex gap-x-2 justify-center items-center bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 px-2 py-2 rounded-md" data-flag-now="es" data-flag-src="../../public/flags/espana.svg">
                         <img src="../../public/flags/espana.svg" class="w-6 h-6" alt="">
 
-                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-caret-down rotate-90 transition-all duration-300">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M6 10l6 6l6 -6h-12" />
-                        </svg>
+                        <span>
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-caret-down rotate-90 transition-all duration-300">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M6 10l6 6l6 -6h-12" />
+                            </svg>
+                        </span>
                     </span>
 
                     <div id="list-flags" class="transition-all duration-300 flex cursor-pointer flex-col gap-x-2 w-full h-5 absolute mt-1 text-white bg-blue-700 focus:ring-blue-300 font-medium rounded-md text-sm dark:bg-blue-600 focus:outline-none dark:focus:ring-blue-800">
-                        <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-4 rounded-md" data-flag="en">
+                        <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-4 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
                             <img src="../../public/flags/usa.svg" class="w-6 h-6" alt="">
 
                             <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
@@ -121,7 +127,7 @@ const {href_image, href_signin, href_signup} = Astro.props;
     let list_flags = document.querySelector("#list-flags") as HTMLDivElement;
 
     actual_element?.addEventListener("click", () =>{
-        let svg = actual_element?.querySelector("svg") as HTMLOrSVGElement;
+        let svg = actual_element?.querySelector("span") as HTMLSpanElement;
         if(window.getComputedStyle(list_flags).display == "none"){
             svg.style.transform = "rotate(0deg)";
             list_flags.style.display = "flex";
@@ -144,21 +150,33 @@ const {href_image, href_signin, href_signup} = Astro.props;
                 localStorage.setItem("flag", "en");
             }
 
-            let srcImage = item.querySelector("img")?.src.split("/");
+            let srcImage = item.querySelector("img")?.src.split("/") as string[];
             let src = transformSrc(srcImage);
-            let srcImageNow = actual_element.querySelector("img")?.src.split("/");
+            let srcImageNow = actual_element.querySelector("img")?.src.split("/") as string[];
             let srcNow = transformSrc(srcImageNow);
-            actual_element.querySelector("img").src = src;
-            item.querySelector("img").src = srcNow;
+            let imgActualElement = actual_element.querySelector("img") as HTMLImageElement;
+            imgActualElement.src = src;
+            let imgItem = item.querySelector("img") as HTMLImageElement;
+            imgItem.src = srcNow;
 
-            let svg = actual_element?.querySelector("svg") as HTMLOrSVGElement;
+            fetch("http://localhost:4000/flag", {
+                method: "POST",
+                body: JSON.stringify({flag: localStorage.getItem("flag")}),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+
+            let svg = actual_element?.querySelector("span") as HTMLSpanElement;
 
             svg.style.transform = "rotate(90deg)";
             list_flags.style.display = "none";
+
+            window.location.reload();
         })
     });
 
-    function transformSrc(srcImage){
+    function transformSrc(srcImage : string[]){
         let src = "";
         for(let i = 0; i < srcImage.length; i++){
                 if(i > 2){

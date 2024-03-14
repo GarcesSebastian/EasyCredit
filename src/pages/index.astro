@@ -12,14 +12,46 @@ const response = await fetch("http://localhost:4000/words");
 
 const data = await response.json();
 
+console.log(data)
+
+let response_flag = await fetch("http://localhost:4000/flag/res");
+
+let flag = await response_flag.json();
+
 ---
 
 <Layout title="Sebxstt - Inicio">
-    <Header href_image="/" href_signin="./SignIn" href_signup="./SignUp"></Header>
-    <Banner link_first=""></Banner>
+    <Header href_image="/" href_signin="./SignIn" href_signup="./SignUp" registrarse_text={data[11].es} iniciar_text={data[10].es}></Header>
+        {
+            flag.flag == "es" ? (
+            <Banner
+                titulo_inicio={data[18].es}
+                nombre_inicio={data[15].es}
+                descripcion_inicio={data[9].es}
+                calcular_inicio={data[8].es}
+                titulo_item_1={data[11].es}
+                titulo_item_2={data[12].es}
+                titulo_item_3={data[13].es}
+                titulo_item_4={data[14].es}
+                >
+            </Banner>
+            ) : (
+            <Banner
+                titulo_inicio={data[18].en}
+                nombre_inicio={data[15].en}
+                descripcion_inicio={data[9].en}
+                calcular_inicio={data[8].en}
+                titulo_item_1={data[11].en}
+                titulo_item_2={data[12].en}
+                titulo_item_3={data[13].en}
+                titulo_item_4={data[14].en}
+                >
+            </Banner>
+            )
+        }
     <Info id="SectionCenter">
         {
-            "es" === "es" ? (
+            flag.flag == "es" ? (
                 <div>
                     <ArticleLeft id="online" title={data[1].es} description={data[0].es} image="/background/online.png"></ArticleLeft>
                     <ArticleRight id="cuota" title={data[3].es} description={data[2].es} image="/background/cuota.png"></ArticleRight>
@@ -36,7 +68,41 @@ const data = await response.json();
             )
         }
     </Info>
-    <Footer></Footer>
+    {
+        flag.flag == "es" ? (
+        <Footer 
+            recursos_footer_titulo={data[19].es} 
+            recursos_item_1={data[20].es} 
+            recursos_item_2={data[21].es} 
+            recursos_item_3={data[22].es} 
+            recursos_item_4={data[23].es} 
+            siganos_footer_titulo={data[26].es} 
+            siganos_item_1={data[27].es} 
+            siganos_item_2={data[28].es} 
+            legal_footer_titulo={data[15].es} 
+            legal_item_1={data[17].es} 
+            legal_item_2={data[16].es}
+            rights_footer={data[29].es}
+            >
+        </Footer>
+        ) : (
+        <Footer 
+            recursos_footer_titulo={data[19].en} 
+            recursos_item_1={data[20].en} 
+            recursos_item_2={data[21].en} 
+            recursos_item_3={data[22].en} 
+            recursos_item_4={data[23].en} 
+            siganos_footer_titulo={data[26].en} 
+            siganos_item_1={data[27].en} 
+            siganos_item_2={data[28].en} 
+            legal_footer_titulo={data[15].en} 
+            legal_item_1={data[17].en} 
+            legal_item_2={data[16].en}
+            rights_footer={data[25].en}
+            >
+        </Footer>
+        )
+    }
     <ArrowFloat id="ButtonFloat"></ArrowFloat>
 </Layout>
 

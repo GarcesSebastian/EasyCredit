@@ -1,48 +1,54 @@
 let actual_element = document.querySelector("#actual-flag");
 let list_flags = document.querySelector("#list-flags");
-let state_flag = "";
 
 window.addEventListener("DOMContentLoaded", () =>{
     if(localStorage.getItem("flag") === null){
         localStorage.setItem("flag", "es")
-        state_flag = "es";
     }else{
         if(localStorage.getItem("flag") == "es"){
-            console.log("En Español")
-            list_flags.querySelectorAll("div").forEach(item => {
-                if(item.querySelector("img").src.split("/")[item.querySelector("img").src.split("/").length - 1] == "espana.svg"){
-                    let srcImage = item.querySelector("img")?.src.split("/");
-                    let src = transformSrc(srcImage);
-                    let srcImageNow = actual_element.querySelector("img")?.src.split("/");
-                    let srcNow = transformSrc(srcImageNow);
-                    actual_element.querySelector("img").src = src;
-                    item.querySelector("img").src = srcNow;
-        
-                    actual_element?.querySelector("svg").style.transform = "rotate(90deg)";
-                    list_flags.style.display = "none";
-                }
-            })
-            state_flag = "es";
+            if(actual_element.getAttribute("data-flag-now") != "es"){
+                let attrSrc = actual_element.getAttribute("data-flag-src");
+                let attrFlag = actual_element.getAttribute("data-flag-now");
+                actual_element.setAttribute("data-flag-now", "es");
+                actual_element.setAttribute("data-flag-src", "../../public/flags/espana.svg");
+
+                list_flags.querySelectorAll("div").forEach((item) =>{
+                    if(item.getAttribute("data-flag") == "es"){
+                        item.setAttribute("data-flag", attrFlag);
+                        item.setAttribute("data-flag-src", attrSrc);
+                    }
+                })
+            }
         }else if(localStorage.getItem("flag") == "en"){
-            console.log("In English")
-            list_flags.querySelectorAll("div").forEach(item => {
-                if(item.querySelector("img").src.split("/")[item.querySelector("img").src.split("/").length - 1] == "usa.svg"){
-                    let srcImage = item.querySelector("img")?.src.split("/");
-                    let src = transformSrc(srcImage);
-                    let srcImageNow = actual_element.querySelector("img")?.src.split("/");
-                    let srcNow = transformSrc(srcImageNow);
-                    actual_element.querySelector("img").src = src;
-                    item.querySelector("img").src = srcNow;
-    
-                    actual_element?.querySelector("svg").style.transform = "rotate(90deg)";
-                    list_flags.style.display = "none";
-                }
-            })
-            state_flag = "en";
+            if(actual_element.getAttribute("data-flag-now") != "en"){
+                let attrSrc = actual_element.getAttribute("data-flag-src");
+                let attrFlag = actual_element.getAttribute("data-flag-now");
+                actual_element.setAttribute("data-flag-now", "en");
+                actual_element.setAttribute("data-flag-src", "../../public/flags/usa.svg");
+
+                list_flags.querySelectorAll("div").forEach((item) =>{
+                    if(item.getAttribute("data-flag") == "en"){
+                        item.setAttribute("data-flag", attrFlag);
+                        item.setAttribute("data-flag-src", attrSrc);
+                    }
+                })
+            }
         }
+
+        actual_element.querySelector("img").src = actual_element.getAttribute("data-flag-src");
+        list_flags.querySelectorAll("div").forEach((item) =>{
+            item.querySelector("img").src = item.getAttribute("data-flag-src");
+        });
     }
 })
 
+fetch("http://localhost:4000/flag", {
+    method: "POST",
+    body: JSON.stringify({flag: localStorage.getItem("flag")}),
+    headers: {
+        "Content-Type": "application/json"
+    }
+})
 
 function transformSrc(srcImage){
     let src = "";
@@ -53,5 +59,3 @@ function transformSrc(srcImage){
     }
     return src;
 }
-
-export default {state_flag};
