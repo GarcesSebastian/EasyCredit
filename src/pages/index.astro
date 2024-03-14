@@ -8,100 +8,113 @@ import ArrowFloat from "../components/ArrowFloat.astro"
 import ArticleLeft from "../components/ArticleLeft.astro"
 import ArticleRight from "../components/ArticleRight.astro"
 
+interface WordItem{
+    word: string;
+    es: string;
+    en: string;
+}
+
 const response = await fetch("http://localhost:4000/words");
 
-const data = await response.json();
+const data: WordItem[] = await response.json();
 
 let response_flag = await fetch("http://localhost:4000/flag/res");
 
 let flag = await response_flag.json();
 
+let text = {
+    titulo_inicio: (data.find(item => item.word === "titulo_inicio") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    nombre_inicio: (data.find(item => item.word === "nombre_inicio") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    descripcion_inicio: (data.find(item => item.word === "descripcion_inicio") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    calcular_inicio: (data.find(item => item.word === "calcular_inicio") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    online_title: (data.find(item => item.word === "article_1_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    online_description: (data.find(item => item.word === "article_1_description") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    cuota_title: (data.find(item => item.word === "article_2_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    cuota_description: (data.find(item => item.word === "article_2_description") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    pay_title: (data.find(item => item.word === "article_3_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    pay_description: (data.find(item => item.word === "article_3_description") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    tasa_title: (data.find(item => item.word === "article_4_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    tasa_description: (data.find(item => item.word === "article_4_description") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_footer_titulo: (data.find(item => item.word === "recursos_footer_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_1: (data.find(item => item.word === "recursos_item_1") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_2: (data.find(item => item.word === "recursos_item_2") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_3: (data.find(item => item.word === "recursos_item_3") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_4: (data.find(item => item.word === "recursos_item_4") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    siganos_footer_titulo: (data.find(item => item.word === "siganos_footer_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_1: (data.find(item => item.word === "siganos_item_1") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_2: (data.find(item => item.word === "siganos_item_2") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    legal_footer_titulo: (data.find(item => item.word === "legal_footer_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    legal_item_1: (data.find(item => item.word === "legal_item_1") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    legal_item_2: (data.find(item => item.word === "legal_item_2") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    rights_footer: (data.find(item => item.word === "rights_footer") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    iniciar_text: (data.find(item => item.word === "iniciar_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    registrarse_text: (data.find(item => item.word === "registrarse_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+};
+
+
 ---
 
 <Layout title="Sebxstt - Inicio">
-        {
-            flag.flag == "es" ? (
-            <Header href_image="/" href_signin="./SignIn" href_signup="./SignUp" registrarse_text={data[24].es} iniciar_text={data[10].es}></Header>
-            <Banner
-                titulo_inicio={data[29].es}
-                nombre_inicio={data[18].es}
-                descripcion_inicio={data[9].es}
-                calcular_inicio={data[8].es}
-                titulo_item_1={data[11].es}
-                titulo_item_2={data[12].es}
-                titulo_item_3={data[13].es}
-                titulo_item_4={data[14].es}
-                >
-            </Banner>
-            ) : (
-            <Header href_image="/" href_signin="./SignIn" href_signup="./SignUp" registrarse_text={data[24].en} iniciar_text={data[10].en}></Header>
-            <Banner
-                titulo_inicio={data[29].en}
-                nombre_inicio={data[18].en}
-                descripcion_inicio={data[9].en}
-                calcular_inicio={data[8].en}
-                titulo_item_1={data[11].en}
-                titulo_item_2={data[12].en}
-                titulo_item_3={data[13].en}
-                titulo_item_4={data[14].en}
-                >
-            </Banner>
-            )
-        }
+    <Header
+        href_image="/"
+        href_signin="./SignIn"
+        href_signup="./SignUp"
+        registrarse_text={text.registrarse_text}
+        iniciar_text={text.iniciar_text}
+    ></Header>
+    <Banner
+        titulo_inicio={text.titulo_inicio}
+        nombre_inicio={text.nombre_inicio}
+        descripcion_inicio={text.descripcion_inicio}
+        calcular_inicio={text.calcular_inicio}
+        titulo_item_1={text.online_title}
+        titulo_item_2={text.cuota_title}
+        titulo_item_3={text.pay_title}
+        titulo_item_4={text.tasa_title}
+    ></Banner>
     <Info id="SectionCenter">
-        {
-            flag.flag == "es" ? (
-                <div>
-                    <ArticleLeft id="online" title={data[1].es} description={data[0].es} image="/background/online.png"></ArticleLeft>
-                    <ArticleRight id="cuota" title={data[3].es} description={data[2].es} image="/background/cuota.png"></ArticleRight>
-                    <ArticleLeft id="pay" title={data[5].es} description={data[4].es} image="/background/pay.png"></ArticleLeft>
-                    <ArticleRight id="tasa" title={data[7].es} description={data[6].es} image="/background/tasa.png"></ArticleRight>
-                </div>
-            ) : (
-                <div>
-                    <ArticleLeft id="online" title={data[1].en} description={data[0].en} image="/background/online.png"></ArticleLeft>
-                    <ArticleRight id="cuota" title={data[3].en} description={data[2].en} image="/background/cuota.png"></ArticleRight>
-                    <ArticleLeft id="pay" title={data[5].en} description={data[4].en} image="/background/pay.png"></ArticleLeft>
-                    <ArticleRight id="tasa" title={data[7].en} description={data[6].en} image="/background/tasa.png"></ArticleRight>
-                </div>
-            )
-        }
+        <div>
+            <ArticleLeft
+                id="online"
+                title={text.online_title}
+                description={text.online_description}
+                image="/background/online.png"
+            ></ArticleLeft>
+            <ArticleRight
+                id="cuota"
+                title={text.cuota_title}
+                description={text.cuota_description}
+                image="/background/cuota.png"
+            ></ArticleRight>
+            <ArticleLeft
+                id="pay"
+                title={text.pay_title}
+                description={text.pay_description}
+                image="/background/pay.png"
+            ></ArticleLeft>
+            <ArticleRight
+                id="tasa"
+                title={text.tasa_title}
+                description={text.tasa_description}
+                image="/background/tasa.png"
+            ></ArticleRight>
+        </div>
     </Info>
-    {
-        flag.flag == "es" ? (
-        <Footer 
-            recursos_footer_titulo={data[19].es} 
-            recursos_item_1={data[20].es} 
-            recursos_item_2={data[21].es} 
-            recursos_item_3={data[22].es} 
-            recursos_item_4={data[23].es} 
-            siganos_footer_titulo={data[26].es} 
-            siganos_item_1={data[27].es} 
-            siganos_item_2={data[28].es} 
-            legal_footer_titulo={data[15].es} 
-            legal_item_1={data[17].es} 
-            legal_item_2={data[16].es}
-            rights_footer={data[25].es}
-            >
-        </Footer>
-        ) : (
-        <Footer 
-            recursos_footer_titulo={data[19].en} 
-            recursos_item_1={data[20].en} 
-            recursos_item_2={data[21].en} 
-            recursos_item_3={data[22].en} 
-            recursos_item_4={data[23].en} 
-            siganos_footer_titulo={data[26].en} 
-            siganos_item_1={data[27].en} 
-            siganos_item_2={data[28].en} 
-            legal_footer_titulo={data[15].en} 
-            legal_item_1={data[17].en} 
-            legal_item_2={data[16].en}
-            rights_footer={data[25].en}
-            >
-        </Footer>
-        )
-    }
+    <Footer
+        recursos_footer_titulo={text.recursos_footer_titulo}
+        recursos_item_1={text.recursos_item_1}
+        recursos_item_2={text.recursos_item_2}
+        recursos_item_3={text.recursos_item_3}
+        recursos_item_4={text.recursos_item_4}
+        siganos_footer_titulo={text.siganos_footer_titulo}
+        siganos_item_1={text.siganos_item_1}
+        siganos_item_2={text.siganos_item_2}
+        legal_footer_titulo={text.legal_footer_titulo}
+        legal_item_1={text.legal_item_1}
+        legal_item_2={text.legal_item_2}
+        rights_footer={text.rights_footer}
+    ></Footer>
     <ArrowFloat id="ButtonFloat"></ArrowFloat>
 </Layout>
+
 

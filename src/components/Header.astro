@@ -172,7 +172,6 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
             svg.style.transform = "rotate(90deg)";
             list_flags.style.display = "none";
 
-            window.location.reload();
         })
     });
 
@@ -185,5 +184,19 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
         }
         return src;
     }
+
+    function changeFlag(flag: string, src: string){
+    let attrSrc = actual_element.getAttribute("data-flag-src") as string;
+    let attrFlag = actual_element.getAttribute("data-flag-now") as string;
+    actual_element.setAttribute("data-flag-now", flag);
+    actual_element.setAttribute("data-flag-src", src);
+
+    list_flags.querySelectorAll("div").forEach((item) =>{
+        if(item.getAttribute("data-flag") == flag){
+            item.setAttribute("data-flag", attrFlag);
+            item.setAttribute("data-flag-src", attrSrc);
+        }
+    })
+}
 
 </script>

@@ -1,19 +1,31 @@
+---
+interface Props{
+    registrarse_text: string;
+    crear_cuenta_text: string;
+    new_text: string;
+    email_text: string;
+    password_text: string;
+    forgot_password_text: string;
+    continue_with_text: string;
+    registrarse_with_google: string;
+}
+
+const {registrarse_text,crear_cuenta_text,new_text,email_text,password_text,forgot_password_text,continue_with_text,registrarse_with_google} = Astro.props;
+
+---
+
 <article class="bg-transparent relative top-20 py-10 px-5 max-w-[35rem] w-full flex flex-col justify-center items-center gap-y-6 m-5">
-
     <div id="background-blur" class="absolute w-full h-full flex bg-[rgba(255,255,255,.02)] border border-gray-600 rounded-lg backdrop-blur-lg"></div>
-
     <div class="w-full flex flex-col justify-center items-center gap-y-2 z-2">
         <h2 class="text-white font-bold text-2xl relative">
-            Sign In
+            {registrarse_text}
         </h2>
-
         <span class="text-gray-300 font-light text-base relative">
-            New? <a class="text-white underline font-normal" href="/SignUp">Create an account</a>
+            {new_text}? <a class="text-white underline font-normal" href="/SignUp">{crear_cuenta_text}</a>
         </span>
     </div>
-
     <div class="w-full flex flex-col z-2">
-        <label for="input-email" class="block mb-2 text-sm font-medium text-white relative">Email</label>
+        <label for="input-email" class="block mb-2 text-sm font-medium text-white relative">{email_text}</label>
         <div class="relative mb-0">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
@@ -24,9 +36,7 @@
             <input type="email" id="input-email" class="mb-1 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="email@example.com" required>
         </div>
         <span id="err-email" class="relative text-sm mx-2 mb-5 text-[tomato] transition-all duration-500 opacity-0"></span>
-
-
-        <label for="input-password" class="block mb-2 text-sm font-medium text-white relative">Password</label>
+        <label for="input-password" class="block mb-2 text-sm font-medium text-white relative">{password_text}</label>
         <div class="relative mb-0">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-key w-5 h-5 text-gray-500 dark:text-gray-400" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -35,38 +45,33 @@
                     <path d="M15 9h.01" />
                 </svg>
             </div>
-            <input type="password" id="input-password" class="mb-1 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Password" required>
+            <input type="password" id="input-password" class="mb-1 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={password_text} required>
         </div>
         <span id="err-password" class="relative text-sm mx-2 mb-0 text-[tomato] transition-all duration-500 opacity-0"></span>
-
     </div>
-
     <div class="w-full flex justify-end items-center">
-        <a class="text-white fond-bold underline relative" href="#">Forgot your password?</a>
+        <a class="text-white fond-bold underline relative" href="#">{forgot_password_text}</a>
     </div>
-
     <div class="w-full flex justify-center items-center relative">
         <button type="submit" id="submit-signin" class="w-full text-white outline-none text-bold text-base bg-slate-800 hover:bg-slate-800/90 focus:ring-slate-700 focus:ring-4 font-medium rounded-lg px-5 py-4 text-center inline-flex items-center justify-center me-2 mb-2">
-            Sign in
+            {registrarse_text}
         </button>
     </div>
-
     <div class="w-full flex justify-center items-center py-1 relative">
         <span>
-            OR CONTINUE WITH
+            {continue_with_text}
         </span>
     </div>
-
     <div class="w-full flex justify-center items-center relative">
         <button type="button" class="w-full text-white transition-all duration-500 outline-none bg-gradient-to-r to-[#0074D3] from-[#0040A8] hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-4 text-center inline-flex items-center justify-center dark:focus:ring-[#4285F4]/55 me-2 mb-2">
             <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 19">
                 <path fill-rule="evenodd" d="M8.842 18.083a8.8 8.8 0 0 1-8.65-8.948 8.841 8.841 0 0 1 8.8-8.652h.153a8.464 8.464 0 0 1 5.7 2.257l-2.193 2.038A5.27 5.27 0 0 0 9.09 3.4a5.882 5.882 0 0 0-.2 11.76h.124a5.091 5.091 0 0 0 5.248-4.057L14.3 11H9V8h8.34c.066.543.095 1.09.088 1.636-.086 5.053-3.463 8.449-8.4 8.449l-.186-.002Z" clip-rule="evenodd"/>
             </svg>
-            Sign in with Google
+            {registrarse_with_google}
         </button>
     </div>
-
 </article>
+
 
 <script>
 

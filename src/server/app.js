@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 
 const app = express();
 
-let flag = "";
+let flag = "xdd";
 
 const port = process.env.PORT || 4000;
 
@@ -95,15 +95,12 @@ app.post("/flag", (req, res) => {
     if(req.body){
         if(req.body.flag == 'es'){
             flag = "es";
-            console.log("Español")
             res.status(200).json({ message: "Español" });
         }else if(req.body.flag == 'en'){
             flag = "en";
-            console.log("Ingles")
             res.status(200).json({ message: "Ingles" });
         }else{
             flag = "es";
-            console.log("Cagaste")
             res.status(400).send({ message: "Bad Request" });
         }
     }

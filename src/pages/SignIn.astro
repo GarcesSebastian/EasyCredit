@@ -5,61 +5,80 @@ import Section from "../components/Section.astro"
 import FormLogin from "../components/FormLogin.astro"
 import Footer from "../components/Footer.astro"
 
+interface WordItem{
+    word: string;
+    es: string;
+    en: string;
+}
+
 const response = await fetch("http://localhost:4000/words");
 
-const data = await response.json();
+const data: WordItem[] = await response.json();
 
 let response_flag = await fetch("http://localhost:4000/flag/res");
 
 let flag = await response_flag.json();
 
+let text = {
+	crear_cuenta_text: (data.find(item => item.word === "crear_cuenta_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    new_text: (data.find(item => item.word === "new_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    email_text: (data.find(item => item.word === "email_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    password_text: (data.find(item => item.word === "password_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    forgot_password_text: (data.find(item => item.word === "forgot_password_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    continue_with_text: (data.find(item => item.word === "continue_with_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    registrarse_with_google: (data.find(item => item.word === "registrarse_with_google") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_footer_titulo: (data.find(item => item.word === "recursos_footer_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_1: (data.find(item => item.word === "recursos_item_1") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_2: (data.find(item => item.word === "recursos_item_2") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_3: (data.find(item => item.word === "recursos_item_3") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_4: (data.find(item => item.word === "recursos_item_4") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    siganos_footer_titulo: (data.find(item => item.word === "siganos_footer_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_1: (data.find(item => item.word === "siganos_item_1") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_2: (data.find(item => item.word === "siganos_item_2") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    legal_footer_titulo: (data.find(item => item.word === "legal_footer_titulo") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    legal_item_1: (data.find(item => item.word === "legal_item_1") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    legal_item_2: (data.find(item => item.word === "legal_item_2") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    rights_footer: (data.find(item => item.word === "rights_footer") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    iniciar_text: (data.find(item => item.word === "iniciar_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+    registrarse_text: (data.find(item => item.word === "registrarse_text") || {})[flag.flag === "es" ? 'es' : 'en'] as string,
+};
+
 ---
 
 <Layout title="Sebxstt - Sign In">
-		{
-			flag.flag == "es" ? (
-			<Header href_image="/" href_signin="./SignIn" href_signup="./SignUp" registrarse_text={data[24].es} iniciar_text={data[10].es}></Header>
-			) : (
-			<Header href_image="/" href_signin="./SignIn" href_signup="./SignUp" registrarse_text={data[24].en} iniciar_text={data[10].en}></Header>
-			)
-		}
+		<Header
+			href_image="/"
+			href_signin="./SignIn"
+			href_signup="./SignUp"
+			registrarse_text={text.registrarse_text}
+			iniciar_text={text.iniciar_text}
+		></Header>
 		<Section>
-		<FormLogin></FormLogin>
-		{
-			flag.flag == "es" ? (
-			<Footer 
-				recursos_footer_titulo={data[19].es} 
-				recursos_item_1={data[20].es} 
-				recursos_item_2={data[21].es} 
-				recursos_item_3={data[22].es} 
-				recursos_item_4={data[23].es} 
-				siganos_footer_titulo={data[26].es} 
-				siganos_item_1={data[27].es} 
-				siganos_item_2={data[28].es} 
-				legal_footer_titulo={data[15].es} 
-				legal_item_1={data[17].es} 
-				legal_item_2={data[16].es}
-				rights_footer={data[25].es}
-				>
-			</Footer>
-			) : (
-			<Footer 
-				recursos_footer_titulo={data[19].en} 
-				recursos_item_1={data[20].en} 
-				recursos_item_2={data[21].en} 
-				recursos_item_3={data[22].en} 
-				recursos_item_4={data[23].en} 
-				siganos_footer_titulo={data[26].en} 
-				siganos_item_1={data[27].en} 
-				siganos_item_2={data[28].en} 
-				legal_footer_titulo={data[15].en} 
-				legal_item_1={data[17].en} 
-				legal_item_2={data[16].en}
-				rights_footer={data[25].en}
-				>
-			</Footer>
-			)
-		}
+		<FormLogin
+			registrarse_text={text.iniciar_text}
+			crear_cuenta_text={text.crear_cuenta_text}
+			new_text={text.new_text}
+			email_text={text.email_text}
+			password_text={text.password_text}
+			forgot_password_text={text.forgot_password_text}
+			continue_with_text={text.continue_with_text}
+			registrarse_with_google={text.registrarse_with_google}
+		>
+		</FormLogin>
+		<Footer
+        recursos_footer_titulo={text.recursos_footer_titulo}
+        recursos_item_1={text.recursos_item_1}
+        recursos_item_2={text.recursos_item_2}
+        recursos_item_3={text.recursos_item_3}
+        recursos_item_4={text.recursos_item_4}
+        siganos_footer_titulo={text.siganos_footer_titulo}
+        siganos_item_1={text.siganos_item_1}
+        siganos_item_2={text.siganos_item_2}
+        legal_footer_titulo={text.legal_footer_titulo}
+        legal_item_1={text.legal_item_1}
+        legal_item_2={text.legal_item_2}
+        rights_footer={text.rights_footer}
+    	></Footer>
 	</Section>
 </Layout>
 

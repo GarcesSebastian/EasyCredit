@@ -7,31 +7,13 @@ window.addEventListener("DOMContentLoaded", () =>{
     }else{
         if(localStorage.getItem("flag") == "es"){
             if(actual_element.getAttribute("data-flag-now") != "es"){
-                let attrSrc = actual_element.getAttribute("data-flag-src");
-                let attrFlag = actual_element.getAttribute("data-flag-now");
-                actual_element.setAttribute("data-flag-now", "es");
-                actual_element.setAttribute("data-flag-src", "../../public/flags/espana.svg");
-
-                list_flags.querySelectorAll("div").forEach((item) =>{
-                    if(item.getAttribute("data-flag") == "es"){
-                        item.setAttribute("data-flag", attrFlag);
-                        item.setAttribute("data-flag-src", attrSrc);
-                    }
-                })
+                changeFlag("es", "../../public/flags/espana.svg")
+                console.log("ESPAÑOL")
             }
         }else if(localStorage.getItem("flag") == "en"){
             if(actual_element.getAttribute("data-flag-now") != "en"){
-                let attrSrc = actual_element.getAttribute("data-flag-src");
-                let attrFlag = actual_element.getAttribute("data-flag-now");
-                actual_element.setAttribute("data-flag-now", "en");
-                actual_element.setAttribute("data-flag-src", "../../public/flags/usa.svg");
-
-                list_flags.querySelectorAll("div").forEach((item) =>{
-                    if(item.getAttribute("data-flag") == "en"){
-                        item.setAttribute("data-flag", attrFlag);
-                        item.setAttribute("data-flag-src", attrSrc);
-                    }
-                })
+                changeFlag("en", "../../public/flags/usa.svg")
+                console.log("INGLES")
             }
         }
 
@@ -58,4 +40,18 @@ function transformSrc(srcImage){
             }
     }
     return src;
+}
+
+function changeFlag(flag, src){
+    let attrSrc = actual_element.getAttribute("data-flag-src");
+    let attrFlag = actual_element.getAttribute("data-flag-now");
+    actual_element.setAttribute("data-flag-now", flag);
+    actual_element.setAttribute("data-flag-src", src);
+
+    list_flags.querySelectorAll("div").forEach((item) =>{
+        if(item.getAttribute("data-flag") == flag){
+            item.setAttribute("data-flag", attrFlag);
+            item.setAttribute("data-flag-src", attrSrc);
+        }
+    })
 }
