@@ -8,12 +8,10 @@ window.addEventListener("DOMContentLoaded", () =>{
         if(localStorage.getItem("flag") == "es"){
             if(actual_element.getAttribute("data-flag-now") != "es"){
                 changeFlag("es", "../../public/flags/espana.svg")
-                console.log("ESPAÑOL")
             }
         }else if(localStorage.getItem("flag") == "en"){
             if(actual_element.getAttribute("data-flag-now") != "en"){
                 changeFlag("en", "../../public/flags/usa.svg")
-                console.log("INGLES")
             }
         }
 
