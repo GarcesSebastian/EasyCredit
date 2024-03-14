@@ -61,7 +61,7 @@ app.post("/register/auth", async (req, res) => {
 
             connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false]);
             res.status(200).json({ message: "Register Successful"});
-        }
+        } 
     } else {
         res.status(400).json({ message: "Bad Request" });
     }
@@ -117,7 +117,7 @@ app.get("/flag/res", (req,res) => {
 
 app.get("/words", async (req, res) => {
     const connection = await database.getConnection();
-    const words = await connection.query("SELECT * FROM easycredit.words");
+    const words = await connection.query("SELECT * FROM easycredit.words ORDER BY word ASC");
     if(words.length > 0){
         res.json(words);
     }else{

@@ -4,13 +4,62 @@ import Header from "../components/Header.astro"
 import Section from "../components/Section.astro"
 import FormLogin from "../components/FormLogin.astro"
 import Footer from "../components/Footer.astro"
+
+const response = await fetch("http://localhost:4000/words");
+
+const data = await response.json();
+
+let response_flag = await fetch("http://localhost:4000/flag/res");
+
+let flag = await response_flag.json();
+
 ---
 
 <Layout title="Sebxstt - Sign In">
-	<Header href_image="/" href_signin="./SignIn" href_signup="./SignUp"></Header>
-	<Section>
+		{
+			flag.flag == "es" ? (
+			<Header href_image="/" href_signin="./SignIn" href_signup="./SignUp" registrarse_text={data[24].es} iniciar_text={data[10].es}></Header>
+			) : (
+			<Header href_image="/" href_signin="./SignIn" href_signup="./SignUp" registrarse_text={data[24].en} iniciar_text={data[10].en}></Header>
+			)
+		}
+		<Section>
 		<FormLogin></FormLogin>
-		<Footer></Footer>
+		{
+			flag.flag == "es" ? (
+			<Footer 
+				recursos_footer_titulo={data[19].es} 
+				recursos_item_1={data[20].es} 
+				recursos_item_2={data[21].es} 
+				recursos_item_3={data[22].es} 
+				recursos_item_4={data[23].es} 
+				siganos_footer_titulo={data[26].es} 
+				siganos_item_1={data[27].es} 
+				siganos_item_2={data[28].es} 
+				legal_footer_titulo={data[15].es} 
+				legal_item_1={data[17].es} 
+				legal_item_2={data[16].es}
+				rights_footer={data[25].es}
+				>
+			</Footer>
+			) : (
+			<Footer 
+				recursos_footer_titulo={data[19].en} 
+				recursos_item_1={data[20].en} 
+				recursos_item_2={data[21].en} 
+				recursos_item_3={data[22].en} 
+				recursos_item_4={data[23].en} 
+				siganos_footer_titulo={data[26].en} 
+				siganos_item_1={data[27].en} 
+				siganos_item_2={data[28].en} 
+				legal_footer_titulo={data[15].en} 
+				legal_item_1={data[17].en} 
+				legal_item_2={data[16].en}
+				rights_footer={data[25].en}
+				>
+			</Footer>
+			)
+		}
 	</Section>
 </Layout>
 
