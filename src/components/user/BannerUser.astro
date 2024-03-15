@@ -12,9 +12,28 @@ interface Props{
 <section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
     <article class="w-full flex flex-col justify-center items-center h-fit py-10 bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
         <div class="w-full h-fit gap-x-5 flex justify-between items-start max-w-7xl max-xl:px-5">
-            <div id="content-banner-grid" class="grid grid-cols-2 w-full gap-10 justify-between">
-                <div class="flex flex-col gap-3 gap-x-5 w-full h-full">
-                    <div class="flex flex-col gap-3 gap-x-5 w-full h-fit p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+            <div id="content-banner-grid" class="w-full gap-7">
+                <div id="content-grid-elements" class="grid grid-cols-4 grid-rows-2 gap-y-5 gap-x-7 w-full h-full ">
+
+                    <div id="card_balance" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                        <CardBasic
+                        img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
+                        balance_text='43,500'
+                        available_balance_text='Available Balance'
+                        >
+                        </CardBasic>
+                    </div>
+
+                    <div id="card_pays" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                        <CardBasic
+                        img_url="https://cdn-icons-png.flaticon.com/512/2769/2769569.png"
+                        balance_text='7,500'
+                        available_balance_text='Total Income'
+                        >
+                        </CardBasic>
+                    </div>
+
+                    <div id="welcome" class="flex col-span-3 row-span-1 justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
                         <h1 class="text-4xl font-bold text-white">
                             Welcome <span class="text-yellow-500">Sebxstt</span>! Nice to see you again
                         </h1>
@@ -32,40 +51,110 @@ interface Props{
                         </div>
                     </div>
 
-                    <div class="flex gap-x-5 w-full h-fit">
-                        <div class="flex flex-col gap-3 gap-x-5 w-full h-[15rem] p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                            <h1 class="text-2xl font-bold text-white">
-                                Do you want to make your <span class="text-yellow-500">first loan</span>?
-                            </h1>
-
-                            <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                                Make Loan
-                            </button>
-                        </div>
-
-                        <div class="flex flex-col gap-3 gap-x-5 w-full h-[15rem] p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                            <h1 class="text-2xl font-bold text-white">
-                                Special Offer
-                            </h1>
-                            <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam rutrum fermentum urna.</p>
-                            <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                                Learn More
-                            </button>
-                        </div>
+                    <div id="card_balance_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                        <CardBasic
+                        img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
+                        balance_text='43,500'
+                        available_balance_text='Available Balance'
+                        >
+                        </CardBasic>
                     </div>
 
-                    <div class="flex flex-col gap-3 gap-x-5 w-full h-fit p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                        <h1 class="text-2xl font-bold text-white">
-                            Latest News
+                    <div id="make_loan" class="flex col-span-3 row-span-1 justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                        <h1 class="text-white text-2xl font-bold">
+                            Are you new? Would you like to make your <span class="text-yellow-400">first loan</span>? Please enter
                         </h1>
-                        <p class="text-white">Check out our latest updates and news.</p>
-                        <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                            Read Now
+
+                        <button class="bg-white w-fit text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                            Make Loan
                         </button>
                     </div>
+
+                    <div id="card_pays_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                        <CardBasic
+                        img_url="https://cdn-icons-png.flaticon.com/512/2769/2769569.png"
+                        balance_text='7,500'
+                        available_balance_text='Total Income'
+                        >
+                        </CardBasic>
+                    </div>
+
+                    <div id="credit" class="flex col-span-1 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                        <h1 class="text-white text-lg font-bold">
+                            Check out our latest credit card offers!
+                        </h1>
+                        <p class="text-white">Earn rewards and save with our exclusive credit card promotions.</p>
+                        <ul class="text-white">
+                            <li>Up to 5% cashback on select purchases</li>
+                            <li>0% introductory APR for the first 12 months</li>
+                            <li>No annual fee</li>
+                        </ul>
+                        <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                            Learn More
+                        </button>
+                    </div>
+
+                    <div id="security" class="flex col-span-2 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                        <h1 class="text-white text-lg font-bold">
+                            Your security is our priority!
+                        </h1>
+                        <p class="text-white">Learn how we protect your financial information and transactions.</p>
+                        <ul class="text-white">
+                            <li>Secure encryption of all sensitive data</li>
+                            <li>Two-factor authentication for enhanced account security</li>
+                            <li>24/7 monitoring and fraud detection</li>
+                        </ul>
+                        <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                            Learn More
+                        </button>
+                    </div>                                       
+
+                    <CardMovements>
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Bank Loan"}
+                        date_text={"08/02/2024"}
+                        amount={"1,000.00"}
+                        is_positive={true}
+                        />
+            
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Personal Loan"}
+                        date_text={"10/05/2023"}
+                        amount={"2,500.00"}
+                        is_positive={false}
+                        />
+            
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Credit Card"}
+                        date_text={"12/12/2022"}
+                        amount={"500.00"}
+                        is_positive={true}
+                        />
+            
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Mortgage"}
+                        date_text={"05/09/2025"}
+                        amount={"200,000.00"}
+                        is_positive={true}
+                        />
+
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Mortgage"}
+                        date_text={"05/09/2025"}
+                        amount={"200,000.00"}
+                        is_positive={true}
+                        />
+                    </CardMovements>
+
+
                 </div>
 
-                <div class="flex flex-col gap-y-5 justify-center items-end">
+                <!-- <div class="flex flex-col gap-y-5 justify-between items-end">
                     <CardBasic
                     img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
                     balance_text='43,500'
@@ -119,7 +208,7 @@ interface Props{
                         text_button='Simulate'
                     >
                     </CardAction>
-                </div>
+                </div> -->
             </div>
         </div>
     </article>
@@ -129,4 +218,77 @@ interface Props{
     #content-banner-grid{
         grid-template-columns: 2fr minmax(0, 22rem);
     }
+
+    #content-grid-elements{
+        grid-template-columns: 1fr 1fr .5fr 1fr;
+    }
+
+    #card_balance{
+        display: none;
+    }
+
+    #card_pays{
+        display: none;
+    }
+
+    @media (max-width: 1160px) {
+        #security{
+            grid-column: span 1 / 1 span;
+        }
+    }    
+
+    @media (max-width: 1024px) {
+        #security{
+            grid-column: span 2 / 2 span;
+        }
+
+        #credit{
+            grid-column: span 2 / 2 span;
+        }
+    }
+
+    @media (max-width: 830px) {
+        #welcome h1{
+            font-size: 1.7rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        #security{
+            grid-column: span 4 / 4 span;
+        }
+
+        #credit{
+            grid-column: span 4 / 4 span;
+        }
+    }
+
+    @media (max-width: 550px) {
+        #welcome{
+            grid-column: span 4 / 4 span;
+        }
+
+        #make_loan{
+            grid-column: span 4 / 4 span;
+        }
+
+        #card_balance{
+            display: flex;
+            grid-column: span 4 / 4 span;
+        }
+
+        #card_pays{
+            display: flex;
+            grid-column: span 4 / 4 span;
+        }
+
+        #card_pays_principal{
+            display: none;
+        }
+
+        #card_balance_principal{
+            display: none;
+        }
+    }
+
 </style>

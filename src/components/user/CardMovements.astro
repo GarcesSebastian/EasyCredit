@@ -1,7 +1,7 @@
 ---
 ---
 
-<span class="flex flex-col gap-y-5 w-full h-full max-h-[24rem] overflow-hidden px-5 items-center justify-left py-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+<span class="flex justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105" id="card_movements">
     <div class="flex w-full justify-between items-center">
         <h1 class="text-white font-bold">
             History Movements
@@ -22,8 +22,12 @@
             Not Found History Movements
         </span>
 
-        <div class="flex flex-col w-full h-[19rem] gap-4 overflow-y-auto custom-scroll pr-3 pb-5">
+        <div id="slot_card" class="flex flex-col w-full gap-4 pr-3 pb-0">
             <slot/>
+
+            <span class="text-white text-sm font-bold text-right hover:text-blue-500">
+                More...
+            </span>
         </div>
     </div>
 </span>
@@ -46,5 +50,18 @@
     .custom-scroll::-webkit-scrollbar-thumb:hover {
       background: rgb(255, 255, 255, 0);
       border-radius: 30px;
+    }
+
+    @media (max-width: 1160px) {
+        #card_movements{
+            grid-column: span 2 / 2 span;
+        }
+    }  
+
+    @media (max-width: 1024px) {
+        #card_movements{
+            grid-column: span 4 / 4 span;
+            grid-row: span 1 / 1 span;
+        }
     }
 </style>
