@@ -22,23 +22,19 @@
             Not Found History Movements
         </span>
 
-        <div class="flex flex-col w-full h-[24rem] gap-4 overflow-y-scroll custom-scroll pr-3 pb-5">
+        <div class="flex flex-col w-full h-[19rem] gap-4 overflow-y-auto custom-scroll pr-3 pb-5">
             <slot/>
         </div>
     </div>
 </span>
 
 <style>
-    .drop-shadow-lg {
-      --tw-drop-shadow: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.06)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.6));
-    }
-
     .custom-scroll::-webkit-scrollbar {
       width: 5px;
     }
 
     .custom-scroll::-webkit-scrollbar-track {
-      background: #555;
+      background: rgb(255, 255, 255, 0);
       border-radius: 30px;
     }
 
@@ -48,7 +44,7 @@
     }
 
     .custom-scroll::-webkit-scrollbar-thumb:hover {
-      background: #555;
+      background: rgb(255, 255, 255, 0);
       border-radius: 30px;
     }
 </style>

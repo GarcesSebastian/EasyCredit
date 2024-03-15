@@ -13,7 +13,7 @@ const {img_url, type_loan_text, date_text, amount, is_positive} = Astro.props;
 <div class="flex justify-between items-center">
     <div class="flex justify-center items-center gap-x-3">
         <div>
-            <img src={img_url} alt="" class="w-12 h-12">
+            <img src={img_url} alt="" class="w-12 h-12 drop-shadow-lg">
         </div>
 
         <div class="flex flex-col">
@@ -40,3 +40,9 @@ const {img_url, type_loan_text, date_text, amount, is_positive} = Astro.props;
         }
     </div>
 </div>
+
+<style>
+    .drop-shadow-lg {
+      --tw-drop-shadow: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.4));
+    }
+</style>

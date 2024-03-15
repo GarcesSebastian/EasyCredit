@@ -11,22 +11,56 @@ interface Props{
 
 <section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
     <article class="w-full flex flex-col justify-center items-center h-fit py-10 bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
-        <div class="w-full h-full gap-x-5 flex justify-between items-start max-w-7xl max-xl:px-5">
-            <div id="content-banner-grid" class="grid grid-cols-2 w-full justify-between">
-                <div class="flex flex-col gap-3">
-                    <h1 class="text-4xl font-bold text-white">
-                        Welcome <span class="text-yellow-500">Sebxstt</span>! nice to see you again
-                    </h1>
-    
-                    <div>
-                        <span class="text-white">
-                            <p>
-                                You have <span class="text-red-500 font-bold">3</span> new notifications
-                            </p>
-                        </span>
-    
-                        <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none">
-                            View all
+        <div class="w-full h-fit gap-x-5 flex justify-between items-start max-w-7xl max-xl:px-5">
+            <div id="content-banner-grid" class="grid grid-cols-2 w-full gap-10 justify-between">
+                <div class="flex flex-col gap-3 gap-x-5 w-full h-full">
+                    <div class="flex flex-col gap-3 gap-x-5 w-full h-fit p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                        <h1 class="text-4xl font-bold text-white">
+                            Welcome <span class="text-yellow-500">Sebxstt</span>! Nice to see you again
+                        </h1>
+        
+                        <div>
+                            <span class="text-white">
+                                <p>
+                                    You have <span class="text-red-500 font-bold">3</span> new notifications
+                                </p>
+                            </span>
+        
+                            <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                View all
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-x-5 w-full h-fit">
+                        <div class="flex flex-col gap-3 gap-x-5 w-full h-[15rem] p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                            <h1 class="text-2xl font-bold text-white">
+                                Do you want to make your <span class="text-yellow-500">first loan</span>?
+                            </h1>
+
+                            <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                Make Loan
+                            </button>
+                        </div>
+
+                        <div class="flex flex-col gap-3 gap-x-5 w-full h-[15rem] p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                            <h1 class="text-2xl font-bold text-white">
+                                Special Offer
+                            </h1>
+                            <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam rutrum fermentum urna.</p>
+                            <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-3 gap-x-5 w-full h-fit p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                        <h1 class="text-2xl font-bold text-white">
+                            Latest News
+                        </h1>
+                        <p class="text-white">Check out our latest updates and news.</p>
+                        <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                            Read Now
                         </button>
                     </div>
                 </div>
@@ -71,38 +105,6 @@ interface Props{
                         is_positive={true}
                         />
             
-                        <CardMovementsArtcile
-                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
-                        type_loan_text={"Mortgage"}
-                        date_text={"05/09/2025"}
-                        amount={"200,000.00"}
-                        is_positive={true}
-                        />
-
-                        <CardMovementsArtcile
-                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
-                        type_loan_text={"Mortgage"}
-                        date_text={"05/09/2025"}
-                        amount={"200,000.00"}
-                        is_positive={true}
-                        />
-
-                        <CardMovementsArtcile
-                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
-                        type_loan_text={"Mortgage"}
-                        date_text={"05/09/2025"}
-                        amount={"200,000.00"}
-                        is_positive={true}
-                        />
-
-                        <CardMovementsArtcile
-                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
-                        type_loan_text={"Mortgage"}
-                        date_text={"05/09/2025"}
-                        amount={"200,000.00"}
-                        is_positive={true}
-                        />
-
                         <CardMovementsArtcile
                         img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
                         type_loan_text={"Mortgage"}
