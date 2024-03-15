@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", () =>{
 
 let data = {
     flag: localStorage.getItem("flag"),
-    initiated: localStorage.getItem("initiated"),
+    initiated: localStorage.getItem("W-INIT-ENT"),
 }
 
 fetch("http://localhost:4000/variables", {
@@ -19,15 +19,6 @@ fetch("http://localhost:4000/variables", {
     }
 })
 
-function transformSrc(srcImage){
-    let src = "";
-    for(let i = 0; i < srcImage.length; i++){
-            if(i > 2){
-                src += "/" + srcImage[i]
-            }
-    }
-    return src;
-}
 
 function changeFlag(flag, src){
     let attrSrc = actual_element.getAttribute("data-flag-src");
@@ -64,8 +55,24 @@ function initFlagKey(){
     }
 }
 
-function initFlagInitiated(){
-    if(localStorage.getItem("initiated") === null){
-        localStorage.setItem("initiated", "false")
+async function initFlagInitiated() {
+    if (localStorage.getItem("W-INIT-ENT") === null) {
+        let encryptedInitiated = encrypt("true");
+        localStorage.setItem("W-INIT-ENT", encryptedInitiated);
+        let decryptedInitiated = decrypt(localStorage.getItem("W-INIT-ENT"));
+        console.log(decryptedInitiated); 
     }
 }
+
+function encrypt(value) {
+    var encryptedValue = CryptoJS.AES.encrypt(value, 'clave_secreta').toString();
+    return encryptedValue;
+}
+
+function decrypt(encryptedValue) {
+    var decryptedValue = CryptoJS.AES.decrypt(encryptedValue, 'clave_secreta').toString(CryptoJS.enc.Utf8);
+    return decryptedValue;
+}
+
+
+export {encrypt, decrypt}

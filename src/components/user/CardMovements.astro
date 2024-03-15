@@ -1,0 +1,54 @@
+---
+---
+
+<span class="flex flex-col gap-y-5 w-full h-full max-h-[24rem] overflow-hidden px-5 items-center justify-left py-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+    <div class="flex w-full justify-between items-center">
+        <h1 class="text-white font-bold">
+            History Movements
+        </h1>
+
+        <span class="transition-all duration-150 ease-in hover:scale-125">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            </svg>
+        </span>
+    </div>
+
+    <div class="flex flex-col gap-y-1 justify-center w-full">
+        <span class="text-gray-300 hidden">
+            Not Found History Movements
+        </span>
+
+        <div class="flex flex-col w-full h-[24rem] gap-4 overflow-y-scroll custom-scroll pr-3 pb-5">
+            <slot/>
+        </div>
+    </div>
+</span>
+
+<style>
+    .drop-shadow-lg {
+      --tw-drop-shadow: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.06)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.6));
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #555;
+      border-radius: 30px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #777;
+      border-radius: 30px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #555;
+      border-radius: 30px;
+    }
+</style>

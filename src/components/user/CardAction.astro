@@ -1,0 +1,26 @@
+---
+interface Props{
+    text_article: string;
+    text_button: string;
+}
+
+const {text_article, text_button} = Astro.props;
+---
+
+<span class="flex gap-x-5 w-full px-3 items-center justify-left py-3 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+    <div class="flex w-full gap-y-1 justify-between items-center">
+        <h1 class="text-white font-bold">
+            {text_article}
+        </h1>
+
+        <button class="bg-white text-black rounded-lg px-4 py-2 outline-none">
+            {text_button}
+        </button>
+    </div>
+</span>
+
+<style>
+    .drop-shadow-lg {
+      --tw-drop-shadow: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.06)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.6));
+    }
+</style>

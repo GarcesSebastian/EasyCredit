@@ -12,9 +12,7 @@ interface Props{
     iniciar_text: string;
 }
 
-import { initiated } from "../pages/index.astro";
-
-console.log(initiated)
+let newData_variables = await fetch("http://localhost:4000/variables/res").then(response => response.json());
 
 const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = Astro.props;
 
@@ -38,10 +36,10 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
     
         <div class="flex gap-x-5 justify-end items-center px-3">
     
-            <div class="flex gap-x-5 items-center justify-center">
-    
+            <div class="flex items-center justify-center gap-x-5">
+
                 {
-                    initiated == "false" ? (
+                    newData_variables.initiated == "false" ? (
                         <a href={href_signin} class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
                             
                             <span class="max-lg:hidden">
@@ -75,39 +73,8 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
                         </a>
                     ) : (
                         <div class="relative">            
-                            <span id="button_profile"  class="relative cursor-pointer bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 flex w-full h-full">
-                                <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                                </svg>
-                            </span>
-                            
-                            <div id="list_profile" class="transition-all duration-300 hidden cursor-pointer flex-col gap-1 w-36 absolute mt-2 bg-slate-800 h-fit p-1.5 rounded-sm">
-                                <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
-                                    <span>
-                                        Bullet
-                                    </span>
-                                </div>
-
-                                <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
-                                    <span>
-                                        Bullet
-                                    </span>
-                                </div>
-
-                                <div id="button_logout" class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
-                                    <span>
-                                        Log out
-                                    </span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="relative">            
                             <span id="button_config"  class="relative cursor-pointer bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 flex w-full h-full">
-                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings-2">
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings-2">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                     <path d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z" />
                                     <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
@@ -123,19 +90,38 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
 
                                 <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
                                     <span>
-                                        Theme
+                                        Notifications
                                     </span>
                                 </div>
 
                                 <div class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
                                     <span>
-                                        Theme
+                                        Settings
+                                    </span>
+                                </div>
+
+                                <div id="button_logout" class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
+                                    <span>
+                                        Log out
                                     </span>
                                 </div>
                             </div>
 
                         </div>
 
+                        <div class="relative">            
+                            <span class="relative cursor-pointer bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 flex w-full h-full">
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="7"  height="7"  viewBox="0 0 24 24"  fill="tomato"  class="absolute translate-x-[1.1rem] icon icon-tabler icons-tabler-filled icon-tabler-circle">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M7 3.34a10 10 0 1 1 -4.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 4.995 -8.336z" />
+                                </svg>
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="relative icon icon-tabler icons-tabler-outline icon-tabler-bell">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+                                    <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+                                </svg>
+                            </span>
+                        </div>
                     )
                 }
 
@@ -191,9 +177,20 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
         perspective: 1000px;
         transform: translateZ(0px);
     }
+
+    .initiated{
+        display: flex;
+    }
+
+    .no_initiated{
+        display: none;
+    }
 </style>
 
 <script>
+
+    import {encrypt} from "../js/index.js";
+
     let actual_element = document.querySelector("#actual-flag") as HTMLSpanElement;
     let list_flags = document.querySelector("#list-flags") as HTMLDivElement;
 
@@ -208,20 +205,6 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
         }
     });
 
-    let button_profile = document.querySelector("#button_profile") as HTMLButtonElement;
-    let list_profile = document.querySelector("#list_profile") as HTMLDivElement;
-
-    if(button_profile){
-        button_profile.addEventListener("click", () =>{
-            if(window.getComputedStyle(list_profile).display != "none"){
-                list_profile.style.display = "none";
-            }else{
-                list_profile.style.display = "flex";
-                list_config.style.display = "none";
-            }
-        });
-    }
-
     let button_config = document.querySelector("#button_config") as HTMLButtonElement;
     let list_config = document.querySelector("#list_config") as HTMLDivElement;
 
@@ -231,7 +214,6 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
                 list_config.style.display = "none";
             }else{
                 list_config.style.display = "flex";
-                list_profile.style.display = "none";
             }
         });
     }
@@ -240,8 +222,23 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
 
     if(button_logout){
         button_logout.addEventListener("click", () => {
-            localStorage.setItem("initiated", "false")
-            window.location.href = "/";
+            let encryptedInitiated = encrypt("false");
+            localStorage.setItem("W-INIT-ENT", encryptedInitiated);
+
+            let data = {
+                flag: localStorage.getItem("flag"),
+                initiated: localStorage.getItem("W-INIT-ENT"),
+            }
+
+            fetch("http://localhost:4000/variables", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+
+            window.location.reload();
         });
     }
 
@@ -269,7 +266,7 @@ const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = A
 
             let data = {
                 flag: localStorage.getItem("flag"),
-                initiated: localStorage.getItem("initiated"),
+                initiated: localStorage.getItem("W-INIT-ENT"),
             }
 
             fetch("http://localhost:4000/variables", {

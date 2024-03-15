@@ -57,7 +57,7 @@ const {registrarse_text,crear_cuenta_text,new_text,email_text,password_text,forg
             {registrarse_text}
         </button>
     </div>
-    <div class="w-full flex justify-center items-center py-1 relative">
+    <div class="w-full flex justify-center items-center py-1 relative text-white">
         <span>
             {continue_with_text}
         </span>
@@ -76,6 +76,7 @@ const {registrarse_text,crear_cuenta_text,new_text,email_text,password_text,forg
 <script>
 
     import {inputErr, inputSucess} from "../js/states.js";
+    import {encrypt} from "../js/index.js";
 
     document.querySelector("#submit-signin")?.addEventListener("click", async () => {
         const email = document.querySelector("#input-email") as HTMLInputElement;
@@ -101,7 +102,23 @@ const {registrarse_text,crear_cuenta_text,new_text,email_text,password_text,forg
 
             if (res.ok) {
                 console.log("Logeado con éxito");
-                localStorage.setItem("initiated", "true")
+                
+                let encryptedInitiated = encrypt("true");
+                localStorage.setItem("W-INIT-ENT", encryptedInitiated);
+
+                let Info = {
+                    flag: localStorage.getItem("flag"),
+                    initiated: localStorage.getItem("W-INIT-ENT"),
+                }
+
+                fetch("http://localhost:4000/variables", {
+                    method: "POST",
+                    body: JSON.stringify(Info),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+
                 window.location.href = "/"
             } else {
                 if (responseJson.message === "Incorrect Password") {

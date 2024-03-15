@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro"
 import Header from "../components/Header.astro"
 import Footer from "../components/Footer.astro"
 import Banner from "../components/Banner.astro"
+import BannerUser from "../components/user/BannerUser.astro"
 import Info from "../components/Info.astro"
 import ArrowFloat from "../components/ArrowFloat.astro"
 import ArticleLeft from "../components/ArticleLeft.astro"
@@ -21,6 +22,8 @@ const data: WordItem[] = await response.json();
 let response_variables = await fetch("http://localhost:4000/variables/res");
 
 let data_variables = await response_variables.json();
+
+let newData_variables = await fetch("http://localhost:4000/variables/res").then(response => response.json());
 
 let text = {
     titulo_inicio: (data.find(item => item.word === "titulo_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
@@ -51,10 +54,6 @@ let text = {
     registrarse_text: (data.find(item => item.word === "registrarse_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
 };
 
-export let newResponse_variables = await fetch("http://localhost:4000/variables/res");
-export let newData_variables = await newResponse_variables.json();
-export let initiated = await newData_variables.initiated;
-
 ---
 
 <Layout title="Sebxstt - Inicio">
@@ -65,44 +64,51 @@ export let initiated = await newData_variables.initiated;
         registrarse_text={text.registrarse_text}
         iniciar_text={text.iniciar_text}
     ></Header>
-    <Banner
-        titulo_inicio={text.titulo_inicio}
-        nombre_inicio={text.nombre_inicio}
-        descripcion_inicio={text.descripcion_inicio}
-        calcular_inicio={text.calcular_inicio}
-        titulo_item_1={text.online_title}
-        titulo_item_2={text.cuota_title}
-        titulo_item_3={text.pay_title}
-        titulo_item_4={text.tasa_title}
-    ></Banner>
-    <Info id="SectionCenter">
-        <div>
-            <ArticleLeft
-                id="online"
-                title={text.online_title}
-                description={text.online_description}
-                image="/background/online.png"
-            ></ArticleLeft>
-            <ArticleRight
-                id="cuota"
-                title={text.cuota_title}
-                description={text.cuota_description}
-                image="/background/cuota.png"
-            ></ArticleRight>
-            <ArticleLeft
-                id="pay"
-                title={text.pay_title}
-                description={text.pay_description}
-                image="/background/pay.png"
-            ></ArticleLeft>
-            <ArticleRight
-                id="tasa"
-                title={text.tasa_title}
-                description={text.tasa_description}
-                image="/background/tasa.png"
-            ></ArticleRight>
-        </div>
-    </Info>
+    {
+        newData_variables.initiated == "false" ? (
+            <Banner
+                titulo_inicio={text.titulo_inicio}
+                nombre_inicio={text.nombre_inicio}
+                descripcion_inicio={text.descripcion_inicio}
+                calcular_inicio={text.calcular_inicio}
+                titulo_item_1={text.online_title}
+                titulo_item_2={text.cuota_title}
+                titulo_item_3={text.pay_title}
+                titulo_item_4={text.tasa_title}
+            ></Banner>
+            <Info id="SectionCenter">
+                <div>
+                    <ArticleLeft
+                        id="online"
+                        title={text.online_title}
+                        description={text.online_description}
+                        image="/background/online.png"
+                    ></ArticleLeft>
+                    <ArticleRight
+                        id="cuota"
+                        title={text.cuota_title}
+                        description={text.cuota_description}
+                        image="/background/cuota.png"
+                    ></ArticleRight>
+                    <ArticleLeft
+                        id="pay"
+                        title={text.pay_title}
+                        description={text.pay_description}
+                        image="/background/pay.png"
+                    ></ArticleLeft>
+                    <ArticleRight
+                        id="tasa"
+                        title={text.tasa_title}
+                        description={text.tasa_description}
+                        image="/background/tasa.png"
+                    ></ArticleRight>
+                </div>
+            </Info>
+        ):(
+            <BannerUser
+            ></BannerUser>
+        )
+    }
     <Footer
         recursos_footer_titulo={text.recursos_footer_titulo}
         recursos_item_1={text.recursos_item_1}
@@ -117,5 +123,11 @@ export let initiated = await newData_variables.initiated;
         legal_item_2={text.legal_item_2}
         rights_footer={text.rights_footer}
     ></Footer>
-    <ArrowFloat id="ButtonFloat"></ArrowFloat>
+    {
+        newData_variables.initiated == "false" ? (
+            <ArrowFloat id="ButtonFloat"></ArrowFloat>
+        ):(
+            <div></div>
+        )
+    }
 </Layout>

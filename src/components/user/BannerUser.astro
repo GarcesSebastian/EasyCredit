@@ -1,0 +1,130 @@
+---
+import CardBasic from '../user/CardBasic.astro';
+import CardAction from '../user/CardAction.astro';
+import CardMovements from '../user/CardMovements.astro';
+import CardMovementsArtcile from "../user/CardMovementsArticle.astro"
+
+interface Props{
+}
+
+---
+
+<section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
+    <article class="w-full flex flex-col justify-center items-center h-fit py-10 bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
+        <div class="w-full h-full gap-x-5 flex justify-between items-start max-w-7xl max-xl:px-5">
+            <div id="content-banner-grid" class="grid grid-cols-2 w-full justify-between">
+                <div class="flex flex-col gap-3">
+                    <h1 class="text-4xl font-bold text-white">
+                        Welcome <span class="text-yellow-500">Sebxstt</span>! nice to see you again
+                    </h1>
+    
+                    <div>
+                        <span class="text-white">
+                            <p>
+                                You have <span class="text-red-500 font-bold">3</span> new notifications
+                            </p>
+                        </span>
+    
+                        <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none">
+                            View all
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-y-5 justify-center items-end">
+                    <CardBasic
+                    img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
+                    balance_text='43,500'
+                    available_balance_text='Available Balance'
+                    >
+                    </CardBasic>
+
+                    <CardBasic
+                    img_url="https://cdn-icons-png.flaticon.com/512/2769/2769569.png"
+                    balance_text='7,500'
+                    available_balance_text='Total Income'
+                    >
+                    </CardBasic>
+
+                    <CardMovements>
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Bank Loan"}
+                        date_text={"08/02/2024"}
+                        amount={"1,000.00"}
+                        is_positive={true}
+                        />
+            
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Personal Loan"}
+                        date_text={"10/05/2023"}
+                        amount={"2,500.00"}
+                        is_positive={false}
+                        />
+            
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Credit Card"}
+                        date_text={"12/12/2022"}
+                        amount={"500.00"}
+                        is_positive={true}
+                        />
+            
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Mortgage"}
+                        date_text={"05/09/2025"}
+                        amount={"200,000.00"}
+                        is_positive={true}
+                        />
+
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Mortgage"}
+                        date_text={"05/09/2025"}
+                        amount={"200,000.00"}
+                        is_positive={true}
+                        />
+
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Mortgage"}
+                        date_text={"05/09/2025"}
+                        amount={"200,000.00"}
+                        is_positive={true}
+                        />
+
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Mortgage"}
+                        date_text={"05/09/2025"}
+                        amount={"200,000.00"}
+                        is_positive={true}
+                        />
+
+                        <CardMovementsArtcile
+                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                        type_loan_text={"Mortgage"}
+                        date_text={"05/09/2025"}
+                        amount={"200,000.00"}
+                        is_positive={true}
+                        />
+                    </CardMovements>
+
+                    <CardAction
+                        text_article='Simulate Credit'
+                        text_button='Simulate'
+                    >
+                    </CardAction>
+                </div>
+            </div>
+        </div>
+    </article>
+</section>
+
+<style>
+    #content-banner-grid{
+        grid-template-columns: 2fr minmax(0, 22rem);
+    }
+</style>

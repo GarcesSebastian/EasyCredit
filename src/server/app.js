@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import * as database from "./database.js";
 import bcrypt from 'bcrypt';
+import CryptoJS from 'crypto-js';
 
 const app = express();
 
@@ -102,16 +103,16 @@ app.post("/variables", (req, res) => {
         }else{
             flag = "es";
             initiated = "false";
-            console.log(req.body)
             res.status(400).send({ message: "Bad Request" });
         }
     }
 });
 
 app.get("/variables/res", (req,res) => {
+    var decryptedValue = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);
     res.json({
         flag: flag,
-        initiated: initiated,
+        initiated: decryptedValue,
     });
 });
 

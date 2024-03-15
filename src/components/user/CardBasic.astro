@@ -1,0 +1,31 @@
+---
+interface Props{
+    img_url: string;
+    balance_text: string;
+    available_balance_text: string;
+}
+
+const {img_url, balance_text, available_balance_text} = Astro.props;
+---
+
+<span class="flex gap-x-5 w-full px-5 items-center justify-left py-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+    <div class="flex justify-center items-center">
+        <img src={img_url} alt="" class="w-16 h-16 filter drop-shadow-lg">
+    </div>
+
+    <div class="flex flex-col gap-y-1 justify-center">
+        <h1 class="text-white font-bold">
+            ${balance_text}
+        </h1>
+
+        <span class="text-gray-300">
+            {available_balance_text}
+        </span>
+    </div>
+</span>
+
+<style>
+    .drop-shadow-lg {
+      --tw-drop-shadow: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.06)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.6));
+    }
+</style>
