@@ -119,7 +119,7 @@ app.post("/variables", (req, res) => {
     }
 });
 
-app.get("/variables/res", (res) => {
+app.get("/variables/res", (req,res) => {
     var decryptedEmail = CryptoJS.AES.decrypt(email, 'clave_secreta').toString(CryptoJS.enc.Utf8);
     var decryptedInitiated = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);
     res.json({
@@ -159,7 +159,7 @@ app.get("/user/data", async (req, res) => {
     }
 });
 
-app.get("/words", async (res) => {
+app.get("/words", async (req, res) => {
     const connection = await database.getConnection();
     const words = await connection.query("SELECT * FROM easycredit.words ORDER BY word ASC");
     if(words.length > 0){
