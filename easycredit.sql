@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-03-2024 a las 22:59:45
+-- Tiempo de generación: 16-03-2024 a las 12:53:14
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -24,6 +24,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `movements`
+--
+
+CREATE TABLE `movements` (
+  `id_user` int(11) NOT NULL,
+  `email_user` text NOT NULL,
+  `numero_movements` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id_user` int(11) NOT NULL,
+  `name_user` varchar(45) NOT NULL,
+  `email_user` text NOT NULL,
+  `numero_notifications` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `registers`
 --
 
@@ -34,16 +59,22 @@ CREATE TABLE `registers` (
   `email` text NOT NULL,
   `numero_identidad` text NOT NULL,
   `numero_telefono` text NOT NULL,
-  `estado` tinyint(1) NOT NULL,
-  `flag` text NOT NULL
+  `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `registers`
+-- Estructura de tabla para la tabla `users`
 --
 
-INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `flag`) VALUES
-(896421, 'sebxstt', '$2b$10$5xCpxjlrKikxLDk2d4p6buqvOh6ZH1TCZVtw58ih5vzap1UzXSrWu', 'sebastiangarces152@gmail.com', '$2b$10$gMSET4f.V/3JRBBAez30Du1eQChiOSg6cBr/pRUtDL.4ddbJoLFPG', '$2b$10$h5oZWByUe/WCtWQDCqBgo.JvcB.OSDTqBmlOqqzgvPpTpFQ6RX0si', 1, '');
+CREATE TABLE `users` (
+  `id_user` int(11) NOT NULL,
+  `name_user` varchar(45) NOT NULL,
+  `email_user` text NOT NULL,
+  `saldo_disponible` int(250) NOT NULL,
+  `ingresos_totales` int(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -62,6 +93,7 @@ CREATE TABLE `words` (
 --
 
 INSERT INTO `words` (`word`, `es`, `en`) VALUES
+('agree_text', 'Estoy de acuerdo con el', 'I agree with the'),
 ('article_1_description', 'Realiza todos los trámites y gestiones de tu crédito libre inversión de manera conveniente y segura a través de nuestro proceso 100% en línea. Desde la solicitud hasta la aprobación, te ofrecemos una experiencia eficiente y sin complicaciones.', 'Carry out all the procedures and procedures for your free investment credit in a convenient and secure manner through our 100% online process. From application to approval, we offer you an efficient and hassle-free experience.'),
 ('article_1_titulo', 'Proceso 100% en linea', '100% online process'),
 ('article_2_description', 'Utiliza nuestra herramienta de simulación para calcular la cuota de tu crédito libre inversión. Personaliza las condiciones según tus necesidades financieras, incluyendo montos, plazos y tasas de interés, y obtén un plan de pagos transparente y adaptado a ti.', 'Use our simulation tool to calculate the quota of your free investment credit. Customize the conditions according to your financial needs, including amounts, terms and interest rates, and get a transparent payment plan adapted to you.'),
@@ -70,20 +102,73 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('article_3_titulo', 'Plazo de pago flexible', 'Flexible payment term'),
 ('article_4_description', 'Obtén estabilidad financiera con nuestra tasa de interés y cuotas fijas. Conoce de antemano el costo total de tu préstamo y planifica tus pagos con seguridad. Nuestra transparencia y predictibilidad te brindan la tranquilidad que necesitas para tomar decisiones informadas sobre tu crédito libre inversión.', 'Obtain financial stability with our fixed interest rate and installments. Know in advance the total cost of your loan and plan your payments safely. Our transparency and predictability give you the peace of mind you need to make informed decisions about your free credit investment.'),
 ('article_4_titulo', 'Tasa y cuota fijas', 'Fixed rate and fee'),
+('available_balance', 'Saldo disponible', 'Available Balance'),
+('calcular_inicio', 'Calcular', 'Calculate'),
+('check_card_text', '¡Consulte nuestra opción de simulación de crédito!', 'Check out our credit simulation option!'),
+('content_check_card_text', '¿Necesitas calcular tus pagos mensuales de préstamo antes de comprometerte? ¡Estás en el lugar correcto! Con nuestra herramienta de simulación de crédito, puedes explorar diferentes escenarios financieros y planificar tu futuro con confianza.', 'Do you need to calculate your monthly loan payments before committing? You are in the right place! With our credit simulation tool, you can explore different financial scenarios and plan your future with confidence.'),
+('content_security_text', '¿Necesitas enviar dinero a amigos o familiares? Con nuestra función de transferencia a otros usuarios, puedes enviar fondos de manera rápida y segura. Ya sea que estés compartiendo gastos, ayudando a un ser querido o simplemente pagando por un servicio, nuestra plataforma te permite realizar transferencias de manera conveniente y sin complicaciones. Olvídate de los largos procesos bancarios y las comisiones excesivas. Con nosotros, enviar dinero es tan fácil como pulsar un botón.', 'Do you need to send money to friends or family? With our transfer feature to other users, you can send funds quickly and securely. Whether you\'re sharing expenses, helping a loved one, or simply paying for a service, our platform allows you to make transfers conveniently and without complications. Forget about long banking processes and excessive commissions. With us, sending money is as easy as pressing a button.'),
+('continue_with_text', 'O CONTINUAR CON', 'OR CONTINUE WITH'),
+('crear_cuenta_text', 'Crea una cuenta', 'Create an account'),
 ('descripcion_inicio', 'Explora las posibilidades con nuestro simulador de crédito. Calcula las cuotas y diseña tu plan de pago en línea de manera conveniente y sin complicaciones.', 'Explore the possibilities with our credit simulator. Calculate installments and design your payment plan online in a convenient and hassle-free way.'),
+('email_text', 'Correo electrónico', 'Email'),
+('exists_text', 'Ya tienes una cuenta?', 'Already have an account?'),
+('first_loan_text', 'primer préstamo', 'first loan'),
+('first_part_make_loan', '¿Eres nuevo? ¿Quieres hacer tu ', 'Are you new? Would you like to make your '),
+('forgot_password_text', '¿Olvidaste tu contraseña?', 'Forgot your password?'),
+('have_you_text', 'Tienes', 'You have'),
+('history_movements_text', 'Historial de movimientos', 'History Movements'),
+('id_number_text', 'Número de identificación', 'ID number'),
 ('iniciar_text', 'Iniciar sesión', 'Sign In'),
-('item_1_inicio', 'Proceso 100% en linea', '100% online process'),
-('item_2_inicio', 'Calcula tu cuota', 'Calculate your fee'),
-('item_3_inicio', 'Plazo de pago flexible', 'Flexible payment term'),
-('item_4_inicio', 'Tasa y cuota fijas', 'Fixed rate and fee'),
+('learn_more_text', 'Aprende Más', 'Learn More'),
+('legal_footer_titulo', 'Legal', 'Legal'),
+('legal_item_1', 'Política de Privacidad', 'Privacy Policy'),
+('legal_item_2', 'Términos y Condiciones', 'Terms & Conditions'),
+('make_loan_text', 'Hacer préstamo', 'Make loan'),
+('more_text', 'Más', 'More'),
+('new_notifications_text', 'nuevas notificaciones', 'new notifications'),
+('new_text', 'Nuevo', 'New'),
 ('nombre_inicio', 'EasyCredit', 'EasyCredit'),
-('registrarse_text', 'Sign Up', 'Registrarse'),
-('rights_footer', '© 2024 EasyCredit™. Todos los derechos reservados.', '© 2024 EasyCredit™. All Rights Reserved.'),
-('titulo_inicio', 'Simulador de crédito', 'Credit simulator');
+('not_found_text', 'Movimientos históricos no encontrados', 'Not Found History Movements'),
+('password_text', 'Contraseña', 'Password'),
+('phone_text', 'Número de teléfono', 'Phone number'),
+('please_enter_text', 'Por favor ingresa aquí', 'Please enter here'),
+('recursos_footer_titulo', 'Recursos', 'Resources'),
+('recursos_item_1', 'Astro', 'Astro'),
+('recursos_item_2', 'Tailwind CSS', 'Tailwind CSS'),
+('recursos_item_3', 'NodeJS', 'NodeJS'),
+('recursos_item_4', 'ExpressJS', 'ExpressJS'),
+('registrarse_text', 'Registrarse', 'Sign Up'),
+('registrarse_with_google', 'Inicia sesión con Google', 'Sign in with Google'),
+('rights_footer', 'Todos los derechos reservados.', 'All Rights Reserved.'),
+('security_text', '¡Transfiere fondos a otros usuarios de manera rápida y segura!', 'Transfer funds to other users quickly and securely!'),
+('siganos_footer_titulo', 'Síganos', 'Follow us'),
+('siganos_item_1', 'Github', 'Github'),
+('siganos_item_2', 'Linkedin', 'Linkedin'),
+('simulate_loan_text', 'Simular Préstamo', 'Simulate Loan'),
+('titulo_inicio', 'Simulador de crédito', 'Credit simulator'),
+('total_income_text', 'Ingresos totales', 'Total Income'),
+('transferir_text', 'Transferir', 'Transfer'),
+('username_text', 'Nombre de usuario', 'Username'),
+('view_all_text', 'Ver todo', 'View all'),
+('welcome_back_text', 'Bienvenido de nuevo ', 'Welcome back ');
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `movements`
+--
+ALTER TABLE `movements`
+  ADD PRIMARY KEY (`id_user`),
+  ADD UNIQUE KEY `email_no_repeat` (`email_user`) USING HASH;
+
+--
+-- Indices de la tabla `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id_user`),
+  ADD UNIQUE KEY `email_no_repeat` (`email_user`) USING HASH;
 
 --
 -- Indices de la tabla `registers`
@@ -91,6 +176,13 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ALTER TABLE `registers`
   ADD PRIMARY KEY (`id`) USING BTREE,
   ADD UNIQUE KEY `UNIQUE` (`email`,`numero_identidad`,`numero_telefono`) USING HASH;
+
+--
+-- Indices de la tabla `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id_user`),
+  ADD UNIQUE KEY `email_no_repeat` (`email_user`) USING HASH;
 
 --
 -- Indices de la tabla `words`
