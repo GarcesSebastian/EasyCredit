@@ -12,32 +12,15 @@ interface Props{
     iniciar_text: string;
 }
 
+let newData_variables = await fetch("http://localhost:4000/variables/res").then(response => response.json());
+
 const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = Astro.props;
 
+const response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+const data_variables = await response_data_variables.json();
 
-let response_variables: Response;
-let response_data_variables: Response;
-let response_data_user: Response;
-
-let variables: any;
-let data_variables: any;
-let data_user: any;
-
-let isContinue = true;
-
-try{
-    response_variables = await fetch("http://localhost:4000/variables/res");
-    variables = await response_variables.json();
-
-    response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-    data_variables = await response_data_variables.json();
-
-    response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
-    data_user = await response_data_user.json();
-}catch(Exception){
-    isContinue = false;
-    console.log(Exception);
-}
+let response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${"sebastiangarces152@gmail.com"}`);
+const data_user = await response_data_user.json();
 
 
 ---
@@ -62,7 +45,7 @@ try{
             <div class="flex items-center justify-center gap-x-5">
 
                 {
-                    variables.initiated == "false" ? (
+                    newData_variables.initiated == "false" ? (
                         <a href={href_signin} class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
                             
                             <span class="max-lg:hidden">

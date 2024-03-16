@@ -48,31 +48,17 @@ const {
     not_found_text,
 } = Astro.props;
 
-let response_data_variables: Response;
-let data_variables: any;
+//Hacer Try Catch
 
-let response_data_user: Response;
-let data_user: any;
+let response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+let data_variables = await response_data_variables.json();
 
-let data_movements_incomplete: any;
+let response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${"sebastiangarces152@gmail.com"}`);
+let data_user = await response_data_user.json();
 
-let isContinue = true;
+let data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
 
-try{
-    response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-    data_variables = await response_data_variables.json();
-
-    response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
-    data_user = await response_data_user.json();
-
-    data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
-
-    console.log(data_movements_incomplete.length);
-}catch(Exception){
-    isContinue != isContinue
-    console.log(Exception)
-}
-
+console.log(data_movements_incomplete);
 
 ---
 
@@ -274,5 +260,32 @@ try{
 </style>
 
 <script>
+    let response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+    let data_variables = await response_data_variables.json();
 
+    let response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${"sebastiangarces152@gmail.com"}`);
+    let data_user = await response_data_user.json();
+
+    let data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
+
+    let initial_value_movements:number = data_movements_incomplete.length;
+
+    async function fetchDataAndUpdate() { // Falta agregar que solo lo haga cuando esta logeado el usuario
+        response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+        data_variables = await response_data_variables.json();
+
+        response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+        data_user = await response_data_user.json();
+
+        data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
+
+        if(data_movements_incomplete.length != initial_value_movements){
+            initial_value_movements = data_movements_incomplete.length;
+            window.location.reload();
+        }
+    }
+
+    fetchDataAndUpdate();
+
+    setInterval(fetchDataAndUpdate, 10000);
 </script>
