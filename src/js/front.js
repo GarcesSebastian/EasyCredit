@@ -161,6 +161,47 @@ document.querySelector("#submit-signin")?.addEventListener("click", async () => 
     }
 });
 
+let response_data_variables;
+let data_variables;
+
+let response_data_user;
+let data_user;
+
+let data_movements_incomplete;
+
+let initial_value_movements;
+
+let isContinue = true;
+
+response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+data_variables = await response_data_variables.json();
+
+response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+data_user = await response_data_user.json();
+
+data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);
+
+initial_value_movements = data_movements_incomplete.length;
+
+async function fetchDataAndUpdate() { // Falta agregar que solo lo haga cuando esta logeado el usuario
+    response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+    data_variables = await response_data_variables.json();
+
+    response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+    data_user = await response_data_user.json();
+
+    data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);
+
+    if(data_movements_incomplete.length != initial_value_movements){
+        initial_value_movements = data_movements_incomplete.length;
+        window.location.reload();
+    }
+}
+
+fetchDataAndUpdate();
+
+setInterval(fetchDataAndUpdate, 10000);
+
 function transformSrc(srcImage){
     let src = "";
     for(let i = 0; i < srcImage.length; i++){
