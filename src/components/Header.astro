@@ -22,8 +22,8 @@ const data_variables = await response_data_variables.json();
 const response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
 const data_user = await response_data_user.json();
 
----
 
+---
 <header class=`fixed w-screen h-20 flex flex-col justify-center items-center ${Astro.props.class}`>
     <div id="content-header" class="w-full max-w-7xl max-xl:px-5 max-md:gap-y-5 grid py-2 z-15 bg-transparent">
         <a href={href_image} class="flex justify-left items-center cursor-pointer">
@@ -200,15 +200,9 @@ const data_user = await response_data_user.json();
 </style>
 
 <script>
-
     function encrypt(value:string) {
         var encryptedValue = CryptoJS.AES.encrypt(value, 'clave_secreta').toString();
         return encryptedValue;
-    }
-
-    function decrypt(encryptedValue:string) {
-        var decryptedValue = CryptoJS.AES.decrypt(encryptedValue, 'clave_secreta').toString(CryptoJS.enc.Utf8);
-        return decryptedValue;
     }
 
     let actual_element = document.querySelector("#actual-flag") as HTMLSpanElement;
@@ -320,19 +314,5 @@ const data_user = await response_data_user.json();
         }
         return src;
     }
-
-    function changeFlag(flag: string, src: string){
-    let attrSrc = actual_element.getAttribute("data-flag-src") as string;
-    let attrFlag = actual_element.getAttribute("data-flag-now") as string;
-    actual_element.setAttribute("data-flag-now", flag);
-    actual_element.setAttribute("data-flag-src", src);
-
-    list_flags.querySelectorAll("div").forEach((item) =>{
-        if(item.getAttribute("data-flag") == flag){
-            item.setAttribute("data-flag", attrFlag);
-            item.setAttribute("data-flag-src", attrSrc);
-        }
-    })
-}
 
 </script>

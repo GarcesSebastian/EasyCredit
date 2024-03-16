@@ -9,8 +9,8 @@ window.addEventListener("DOMContentLoaded", () =>{
 
 let data = {
     flag: localStorage.getItem("flag"),
-    initiated: localStorage.getItem("W-INIT-ENT"),
-    email: localStorage.getItem("W-I-D"),
+    initiated: localStorage.getItem("W-INIT-ENT") || encrypt("false"),
+    email: localStorage.getItem("W-I-D") || encrypt("false"),
 }
 
 fetch("http://localhost:4000/variables", {
@@ -20,7 +20,6 @@ fetch("http://localhost:4000/variables", {
         "Content-Type": "application/json"
     }
 })
-
 
 function changeFlag(flag, src){
     let attrSrc = actual_element.getAttribute("data-flag-src");
@@ -81,10 +80,5 @@ function initId(){
 function encrypt(value) {
     var encryptedValue = CryptoJS.AES.encrypt(value, 'clave_secreta').toString();
     return encryptedValue;
-}
-
-function decrypt(encryptedValue) {
-    var decryptedValue = CryptoJS.AES.decrypt(encryptedValue, 'clave_secreta').toString(CryptoJS.enc.Utf8);
-    return decryptedValue;
 }
 

@@ -3,7 +3,7 @@ import CardBasic from '../user/CardBasic.astro';
 import CardMovements from '../user/CardMovements.astro';
 import CardMovementsArtcile from "../user/CardMovementsArticle.astro"
 
-interface Props{
+interface Props {
     welcome_back_text: string,
     have_you_text: string,
     new_notifications_text: string,
@@ -27,38 +27,36 @@ interface Props{
 }
 
 const {
-    welcome_back_text, 
-    have_you_text, 
-    new_notifications_text, 
-    view_all_text, 
-    first_part_make_loan, 
-    first_loan_text, 
-    please_enter_text, 
-    make_loan_text, 
-    available_balance, 
-    total_income_text, 
-    check_card_text, 
-    content_check_card_text, 
-    security_text, 
-    content_security_text, 
+    welcome_back_text,
+    have_you_text,
+    new_notifications_text,
+    view_all_text,
+    first_part_make_loan,
+    first_loan_text,
+    please_enter_text,
+    make_loan_text,
+    available_balance,
+    total_income_text,
+    check_card_text,
+    content_check_card_text,
+    security_text,
+    content_security_text,
     history_movements_text,
-    learn_more_text,
     transferir_text,
     simulate_loan_text,
     more_text,
     not_found_text,
-    } = Astro.props;
+} = Astro.props;
 
+let response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+let data_variables = await response_data_variables.json();
 
-const response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-const data_variables = await response_data_variables.json();
+let response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+let data_user = await response_data_user.json();
 
-console.log(data_variables);
+let data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
 
-const response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
-const data_user = await response_data_user.json();
-
-console.log(data_user);
+console.log(data_movements_incomplete.length);
 
 ---
 
@@ -71,7 +69,7 @@ console.log(data_user);
                     <div id="card_balance" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
                         <CardBasic
                         img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
-                        balance_text={data_user.user_info[0].saldo_disponible}
+                        balance_text={data_user?.user_info[0].saldo_disponible}
                         available_balance_text='Available Balance'
                         >
                         </CardBasic>
@@ -158,15 +156,20 @@ console.log(data_user);
                     titulo={history_movements_text}
                     not_found={not_found_text}
                     more={more_text}
-                    num_movements={data_user.user_movements[0].numero_movements}
+                    num_movements={data_movements_incomplete.length}
                     >
-                        <CardMovementsArtcile
-                        img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
-                        type_loan_text={"Bank Loan"}
-                        date_text={"08/02/2024"}
-                        amount={"1,000.00"}
-                        is_positive={true}
-                        />
+                    {
+                        data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: string; }) => (
+                            <CardMovementsArtcile
+                            img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                            type_loan_text={item.tipo_movement}
+                            date_text={item.fecha_movement}
+                            amount={item.action_movement}
+                            is_positive={true}
+                            />
+                        ))
+                    }
+
                     </CardMovements>
 
                 </div>
@@ -253,3 +256,34 @@ console.log(data_user);
     }
 
 </style>
+
+<script>
+        let response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+        let data_variables = await response_data_variables.json();
+
+        let response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+        let data_user = await response_data_user.json();
+
+        let data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
+
+        let initial_value_movements:number = data_movements_incomplete.length;
+
+    async function fetchDataAndUpdate() {
+        response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+        data_variables = await response_data_variables.json();
+
+        response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+        data_user = await response_data_user.json();
+
+        data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
+
+        if(data_movements_incomplete.length != initial_value_movements){
+            initial_value_movements = data_movements_incomplete.length;
+            window.location.reload();
+        }
+    }
+
+    fetchDataAndUpdate();
+
+    setInterval(fetchDataAndUpdate, 10000);
+</script>

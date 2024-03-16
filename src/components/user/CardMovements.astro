@@ -9,7 +9,7 @@ interface Props{
 const {titulo, not_found, more, num_movements} = Astro.props;
 ---
 
-<span class="flex justify-start flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105" id="card_movements">
+<span class="relative flex justify-start flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105" id="card_movements">
     <div class="flex w-full justify-between items-center">
         <h1 class="text-white font-bold">
             {titulo}
@@ -28,10 +28,10 @@ const {titulo, not_found, more, num_movements} = Astro.props;
     <div class="flex flex-col gap-y-1 justify-center items-start w-full">
         {
             num_movements > 0 ?(
-                <div id="slot_card" class="flex flex-col w-full gap-4 pr-3 pb-0">
+                <div id="slot_card" class="flex flex-col w-full gap-4 pr-3 pb-10">
                     <slot/>
 
-                    <span class="text-white text-sm font-bold text-right hover:text-blue-500">
+                    <span class="text-white text-sm font-bold text-right hover:text-blue-500 absolute bottom-5 right-7">
                         {more}...
                     </span>
                 </div>

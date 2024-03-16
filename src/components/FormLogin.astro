@@ -112,14 +112,10 @@ const {registrarse_text,crear_cuenta_text,new_text,email_text,password_text,forg
     }
 
     function encrypt(value:string) {
-    var encryptedValue = CryptoJS.AES.encrypt(value, 'clave_secreta').toString();
-    return encryptedValue;
+        var encryptedValue = CryptoJS.AES.encrypt(value, 'clave_secreta').toString();
+        return encryptedValue;
     }
 
-    function decrypt(encryptedValue:string) {
-        var decryptedValue = CryptoJS.AES.decrypt(encryptedValue, 'clave_secreta').toString(CryptoJS.enc.Utf8);
-        return decryptedValue;
-    }
 
     document.querySelector("#submit-signin")?.addEventListener("click", async () => {
         const email = document.querySelector("#input-email") as HTMLInputElement;

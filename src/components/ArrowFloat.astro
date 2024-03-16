@@ -45,7 +45,9 @@
         });
     }, options);
 
-    observer.observe(elementCenter);
+    if(elementCenter){
+        observer.observe(elementCenter);
+    }
 </script>
 
 

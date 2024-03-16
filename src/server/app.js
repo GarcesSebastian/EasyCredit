@@ -139,11 +139,13 @@ app.get("/user/data", async (req, res) => {
     const connection = await database.getConnection();
     const data_user_info = await connection.query("SELECT * FROM easycredit.users WHERE email_user = ?", [email_user]);
     const data_user_notifications = await connection.query("SELECT * FROM easycredit.notifications WHERE email_user = ?", [email_user]);
-    const data_user_movements = await connection.query("SELECT * FROM easycredit.movements WHERE email_user = ?", [email_user]);
+    const data_user_movements_incomplete = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? LIMIT 4", [data_user_info[0].id_user]);
+    const data_user_movements = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ?", [data_user_info[0].id_user]);
     const data = {
         user_info: data_user_info,
         user_notifications: data_user_notifications,
-        user_movements: data_user_movements,
+        user_movements_incomplete: data_user_movements_incomplete,
+        user_movements_complete: data_user_movements,
     };
 
     if (data) {
