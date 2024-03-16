@@ -4,11 +4,13 @@ let list_flags = document.querySelector("#list-flags");
 window.addEventListener("DOMContentLoaded", () =>{
     initFlagKey();
     initFlagInitiated();
+    initId();
 })
 
 let data = {
     flag: localStorage.getItem("flag"),
     initiated: localStorage.getItem("W-INIT-ENT"),
+    email: localStorage.getItem("W-I-D"),
 }
 
 fetch("http://localhost:4000/variables", {
@@ -59,8 +61,20 @@ async function initFlagInitiated() {
     if (localStorage.getItem("W-INIT-ENT") === null) {
         let encryptedInitiated = encrypt("true");
         localStorage.setItem("W-INIT-ENT", encryptedInitiated);
-        let decryptedInitiated = decrypt(localStorage.getItem("W-INIT-ENT"));
-        console.log(decryptedInitiated); 
+    }
+}
+
+function initId(){
+    if (localStorage.getItem("W-I-D") === null) {
+        let encryptedData = encrypt("false");
+        localStorage.setItem("W-I-D", encryptedData);
+        localStorage.setItem("W-INIT-ENT", encryptedData);
+    }else{
+        if(localStorage.getItem("W-I-D") == "false"){
+            let encryptedData = encrypt("false");
+            localStorage.setItem("W-I-D", encryptedData);
+            localStorage.setItem("W-INIT-ENT", encryptedData);
+        }
     }
 }
 
@@ -74,5 +88,3 @@ function decrypt(encryptedValue) {
     return decryptedValue;
 }
 
-
-export {encrypt, decrypt}

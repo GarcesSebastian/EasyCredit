@@ -138,6 +138,42 @@ const {registrarse_text,iniciar_text,exists_text,username_text,email_text,passwo
 <script>
 
 
+function inputErr(input: any, id: string, message:string) {
+        if (!input) {
+            console.error("El elemento de entrada es nulo.");
+            return;
+        }
+
+        input.style.border = "1px solid tomato";
+
+        var errElement = input.parentNode.parentNode.querySelector(id);
+        
+        if (errElement) {
+            errElement.style.opacity = "1";
+            errElement.innerHTML = message;
+        } else {
+            console.error("El elemento de error no se encontró.");
+        }
+    }
+
+    function inputSucess(input: any, id:string) {
+        if (!input) {
+            console.error("El elemento de entrada es nulo.");
+            return;
+        }
+
+        input.style.border = "1px solid rgb(30,41,59)";
+
+        var errElement = input.parentNode.parentNode.querySelector(id);
+        
+        if (errElement) {
+            errElement.style.opacity = "1";
+            errElement.innerHTML = "";
+        } else {
+            console.error("El elemento de error no se encontró.");
+        }
+    }
+    
     document.querySelector("#submit-signup")?.addEventListener("click", async () => {
         const username = document.querySelector("#input-username") as HTMLInputElement;
         const email = document.querySelector("#input-email") as HTMLInputElement;

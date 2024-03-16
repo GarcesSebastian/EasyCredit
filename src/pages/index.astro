@@ -52,6 +52,26 @@ let text = {
     rights_footer: (data.find(item => item.word === "rights_footer") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     iniciar_text: (data.find(item => item.word === "iniciar_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     registrarse_text: (data.find(item => item.word === "registrarse_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    welcome_back_text: (data.find(item => item.word === "welcome_back_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    have_you_text: (data.find(item => item.word === "have_you_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    new_notifications_text: (data.find(item => item.word === "new_notifications_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    view_all_text: (data.find(item => item.word === "view_all_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    first_part_make_loan: (data.find(item => item.word === "first_part_make_loan") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    first_loan_text: (data.find(item => item.word === "first_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    please_enter_text: (data.find(item => item.word === "please_enter_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    make_loan_text: (data.find(item => item.word === "make_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    available_balance: (data.find(item => item.word === "available_balance") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    total_income_text: (data.find(item => item.word === "total_income_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    check_card_text: (data.find(item => item.word === "check_card_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    content_check_card_text: (data.find(item => item.word === "content_check_card_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    security_text: (data.find(item => item.word === "security_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    content_security_text: (data.find(item => item.word === "content_security_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    history_movements_text: (data.find(item => item.word === "history_movements_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    learn_more_text: (data.find(item => item.word === "learn_more_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    transferir_text: (data.find(item => item.word === "transferir_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    simulate_loan_text: (data.find(item => item.word === "simulate_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    more_text: (data.find(item => item.word === "more_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    not_found_text: (data.find(item => item.word === "not_found_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
 };
 
 ---
@@ -106,6 +126,26 @@ let text = {
             </Info>
         ):(
             <BannerUser
+            welcome_back_text={text.welcome_back_text}
+            have_you_text={text.have_you_text}
+            new_notifications_text={text.new_notifications_text}
+            view_all_text={text.view_all_text}
+            first_part_make_loan={text.first_part_make_loan}
+            first_loan_text={text.first_loan_text}
+            please_enter_text={text.please_enter_text}
+            make_loan_text={text.make_loan_text}
+            available_balance={text.available_balance}
+            total_income_text={text.total_income_text}
+            check_card_text={text.check_card_text}
+            content_check_card_text={text.content_check_card_text}
+            security_text={text.security_text}
+            content_security_text={text.content_security_text}
+            history_movements_text={text.history_movements_text}
+            learn_more_text={text.learn_more_text}
+            transferir_text={text.transferir_text}
+            simulate_loan_text={text.simulate_loan_text}
+            more_text={text.more_text}
+            not_found_text={text.not_found_text}
             ></BannerUser>
         )
     }

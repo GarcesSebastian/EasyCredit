@@ -75,8 +75,51 @@ const {registrarse_text,crear_cuenta_text,new_text,email_text,password_text,forg
 
 <script>
 
-    import {inputErr, inputSucess} from "../js/states.js";
-    import {encrypt} from "../js/index.js";
+    function inputErr(input: any, id: string, message:string) {
+        if (!input) {
+            console.error("El elemento de entrada es nulo.");
+            return;
+        }
+
+        input.style.border = "1px solid tomato";
+
+        var errElement = input.parentNode.parentNode.querySelector(id);
+        
+        if (errElement) {
+            errElement.style.opacity = "1";
+            errElement.innerHTML = message;
+        } else {
+            console.error("El elemento de error no se encontró.");
+        }
+    }
+
+    function inputSucess(input: any, id:string) {
+        if (!input) {
+            console.error("El elemento de entrada es nulo.");
+            return;
+        }
+
+        input.style.border = "1px solid rgb(30,41,59)";
+
+        var errElement = input.parentNode.parentNode.querySelector(id);
+        
+        if (errElement) {
+            errElement.style.opacity = "1";
+            errElement.innerHTML = "";
+        } else {
+            console.error("El elemento de error no se encontró.");
+        }
+    }
+
+    function encrypt(value:string) {
+    var encryptedValue = CryptoJS.AES.encrypt(value, 'clave_secreta').toString();
+    return encryptedValue;
+    }
+
+    function decrypt(encryptedValue:string) {
+        var decryptedValue = CryptoJS.AES.decrypt(encryptedValue, 'clave_secreta').toString(CryptoJS.enc.Utf8);
+        return decryptedValue;
+    }
 
     document.querySelector("#submit-signin")?.addEventListener("click", async () => {
         const email = document.querySelector("#input-email") as HTMLInputElement;
@@ -106,9 +149,13 @@ const {registrarse_text,crear_cuenta_text,new_text,email_text,password_text,forg
                 let encryptedInitiated = encrypt("true");
                 localStorage.setItem("W-INIT-ENT", encryptedInitiated);
 
+                let encryptedId = encrypt(email.value);
+                localStorage.setItem("W-I-D", encryptedId);
+
                 let Info = {
                     flag: localStorage.getItem("flag"),
                     initiated: localStorage.getItem("W-INIT-ENT"),
+                    email: localStorage.getItem("W-I-D"),
                 }
 
                 fetch("http://localhost:4000/variables", {

@@ -10,6 +10,7 @@ const app = express();
 //Variables globals
 let flag = "";
 let initiated = "";
+let email = "";
 
 const port = process.env.PORT || 4000;
 
@@ -63,6 +64,9 @@ app.post("/register/auth", async (req, res) => {
             const hashedNumero_identidad = await bcrypt.hash(req.body.numero_identidad, 10);
 
             connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false]);
+            connection.query("INSERT INTO users (id_user, name_user, email_user, saldo_disponible) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
+            connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
+            connection.query("INSERT INTO movements (id_user, email_user, numero_movements) VALUES (?, ?, ?)", [user_id, req.body.email, 0]);
             res.status(200).json({ message: "Register Successful"});
         } 
     } else {
@@ -96,24 +100,57 @@ app.post("/login/auth", async (req, res) => {
 
 app.post("/variables", (req, res) => {
     if(req.body){
-        if(req.body.flag && req.body.initiated){
+        if(req.body.flag && req.body.initiated && req.body.email){
             flag = req.body.flag;
             initiated = req.body.initiated;
+            email = req.body.email;
+            if(email == 'false'){
+                var encryptedValue = CryptoJS.AES.encrypt("false", 'clave_secreta').toString();
+                initiated = encryptedValue
+                console.log("Llego")
+            }
             res.status(200).json({ message: "True Request" });
         }else{
             flag = "es";
             initiated = "false";
+            email = "false";
             res.status(400).send({ message: "Bad Request" });
         }
     }
 });
 
 app.get("/variables/res", (req,res) => {
-    var decryptedValue = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);
+    var decryptedEmail = CryptoJS.AES.decrypt(email, 'clave_secreta').toString(CryptoJS.enc.Utf8);
+    var decryptedInitiated = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);
     res.json({
         flag: flag,
-        initiated: decryptedValue,
+        initiated: decryptedInitiated,
+        email: decryptedEmail,
     });
+});
+
+app.get("/user/data", async (req, res) => {
+    const email_user = req.query.email_user;
+
+    if (!email_user) {
+        return res.status(400).send({ message: "User Email is required" });
+    }
+
+    const connection = await database.getConnection();
+    const data_user_info = await connection.query("SELECT * FROM easycredit.users WHERE email_user = ?", [email_user]);
+    const data_user_notifications = await connection.query("SELECT * FROM easycredit.notifications WHERE email_user = ?", [email_user]);
+    const data_user_movements = await connection.query("SELECT * FROM easycredit.movements WHERE email_user = ?", [email_user]);
+    const data = {
+        user_info: data_user_info,
+        user_notifications: data_user_notifications,
+        user_movements: data_user_movements,
+    };
+
+    if (data) {
+        res.json(data);
+    } else {
+        res.status(404).send({ message: "User not found" });
+    }
 });
 
 app.get("/words", async (req, res) => {
@@ -124,11 +161,5 @@ app.get("/words", async (req, res) => {
     }else{
         res.status(400).send({ message: "Bad Request" });
     }
-});
-
-app.get("/test", (req,res) => {
-    res.json({
-        "Message": "Welcome sebxstt"
-    });
 });
 
