@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-03-2024 a las 12:53:14
+-- Tiempo de generación: 16-03-2024 a las 23:17:26
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -29,9 +29,18 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `movements` (
   `id_user` int(11) NOT NULL,
-  `email_user` text NOT NULL,
-  `numero_movements` int(11) NOT NULL
+  `index_movement` int(11) NOT NULL,
+  `tipo_movement` text NOT NULL,
+  `fecha_movement` text NOT NULL,
+  `action_movement` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `movements`
+--
+
+INSERT INTO `movements` (`id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`) VALUES
+(444949, 1, 'Bank Loan', '16/03/2024', 50000);
 
 -- --------------------------------------------------------
 
@@ -45,6 +54,14 @@ CREATE TABLE `notifications` (
   `email_user` text NOT NULL,
   `numero_notifications` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `notifications`
+--
+
+INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
+(444949, 'Sebxstt', 'sebastiangarces152@gmail.com', 0),
+(560951, 'sebastian', 'sebastiangarces158@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -62,6 +79,14 @@ CREATE TABLE `registers` (
   `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `registers`
+--
+
+INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`) VALUES
+(444949, 'Sebxstt', '$2b$10$IO8wqnvBCnTltDacz9XfIOV4zBx8X.fmv0YlsK5cehQK312glZSyq', 'sebastiangarces152@gmail.com', '$2b$10$bPlfckWqo3IdkTBvbpz1feft6TucaTngfxAAfVQ61ToXYmImOQLdq', '$2b$10$gqvoGR2sFkn8GGr0qaZIVu8/dKyUuyTk3cMXAFRyl00Cz515qCYsy', 1),
+(560951, 'sebastian', '$2b$10$80hdef6W/5bfauYIwmIsJuwHGKXzkav.VOKbFTob0eTY9RxWk/oMm', 'sebastiangarces158@gmail.com', '$2b$10$QB1d6BVZ0ZQfLevbdb4tk.TZM5HjllhxAlphT0N/LK/bbleIAPL6i', '$2b$10$A73xf0n4EzaioQGJ9deUxeMCaEcHk/YbV.d2jwuiIT61AJc7.602m', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -75,6 +100,14 @@ CREATE TABLE `users` (
   `saldo_disponible` int(250) NOT NULL,
   `ingresos_totales` int(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `users`
+--
+
+INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `saldo_disponible`, `ingresos_totales`) VALUES
+(444949, 'Sebxstt', 'sebastiangarces152@gmail.com', 25000, 25000),
+(560951, 'sebastian', 'sebastiangarces158@gmail.com', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -155,13 +188,6 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 --
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `movements`
---
-ALTER TABLE `movements`
-  ADD PRIMARY KEY (`id_user`),
-  ADD UNIQUE KEY `email_no_repeat` (`email_user`) USING HASH;
 
 --
 -- Indices de la tabla `notifications`
