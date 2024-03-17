@@ -50,220 +50,241 @@ const {
 
 //Hacer Try Catch
 
-let response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-let data_variables = await response_data_variables.json();
+let response_data_variables: Response;
+let response_data_user: Response;
 
-let response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${"sebastiangarces152@gmail.com"}`);
-let data_user = await response_data_user.json();
+let data_variables: any;
+let data_user: any;
+let data_movements_incomplete: any;
 
-let data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
+let isContinue = true;
+let err: any;
 
-console.log(data_movements_incomplete);
+try{
+    response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+    data_variables = await response_data_variables.json();
+
+    response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+    data_user = await response_data_user.json();
+
+    data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
+}catch(e){
+    isContinue = !isContinue;
+    console.log(e);
+    err = e;
+}
+
+console.log(data_movements_incomplete.length);
 
 ---
 
-<section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
-    <article class="w-full flex flex-col justify-center items-center h-fit py-10 bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
-        <div class="w-full h-fit gap-x-5 flex justify-between items-start max-w-7xl max-xl:px-5">
-            <div id="content-banner-grid" class="w-full gap-7">
-                <div id="content-grid-elements" class="grid grid-cols-4 grid-rows-2 gap-y-5 gap-x-7 w-full h-full ">
+{
+    isContinue ? (
+        <section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
+            <article class="w-full flex flex-col justify-center items-center h-fit py-10 bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
+                <div class="w-full h-fit gap-x-5 flex justify-between items-start max-w-7xl max-xl:px-5">
+                    <div id="content-banner-grid" class="w-full gap-7">
+                        <div id="content-grid-elements" class="grid grid-cols-4 grid-rows-2 gap-y-5 gap-x-7 w-full h-full ">
 
-                    <div id="card_balance" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                        <CardBasic
-                        img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
-                        balance_text={data_user?.user_info[0].saldo_disponible}
-                        available_balance_text='Available Balance'
-                        >
-                        </CardBasic>
-                    </div>
+                            <div id="card_balance" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <CardBasic
+                                img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
+                                balance_text={data_user?.user_info[0].saldo_disponible}
+                                available_balance_text='Available Balance'
+                                >
+                                </CardBasic>
+                            </div>
 
-                    <div id="card_pays" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                        <CardBasic
-                        img_url="https://cdn-icons-png.flaticon.com/512/2769/2769569.png"
-                        balance_text={data_user.user_info[0].ingresos_totales}
-                        available_balance_text='Total Income'
-                        >
-                        </CardBasic>
-                    </div>
+                            <div id="card_pays" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <CardBasic
+                                img_url="https://cdn-icons-png.flaticon.com/512/2769/2769569.png"
+                                balance_text={data_user.user_info[0].ingresos_totales}
+                                available_balance_text='Total Income'
+                                >
+                                </CardBasic>
+                            </div>
 
-                    <div id="welcome" class="flex col-span-3 row-span-1 justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                        <h1 class="text-4xl font-bold text-white">
-                            {welcome_back_text}<span class="text-yellow-500">{data_user.user_info[0].name_user}</span>!
-                        </h1>
-        
-                        <div>
-                            <span class="text-white">
-                                <p>
-                                    {have_you_text} <span class="text-red-500 font-bold">{data_user.user_notifications[0].numero_notifications}</span> {new_notifications_text}
-                                </p>
-                            </span>
-        
-                            <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                                {view_all_text}
-                            </button>
+                            <div id="welcome" class="flex col-span-3 row-span-1 justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <h1 class="text-4xl font-bold text-white">
+                                    {welcome_back_text}<span class="text-yellow-500">{data_user.user_info[0].name_user}</span>!
+                                </h1>
+                
+                                <div>
+                                    <span class="text-white">
+                                        <p>
+                                            {have_you_text} <span class="text-red-500 font-bold">{data_user.user_notifications[0].numero_notifications}</span> {new_notifications_text}
+                                        </p>
+                                    </span>
+                
+                                    <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                        {view_all_text}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="card_balance_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <CardBasic
+                                img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
+                                balance_text={data_user.user_info[0].saldo_disponible}
+                                available_balance_text={available_balance}
+                                >
+                                </CardBasic>
+                            </div>
+
+                            <div id="make_loan" class="flex col-span-3 row-span-1 justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <h1 class="text-white text-2xl font-bold">
+                                    {first_part_make_loan} <span class="text-yellow-400">{first_loan_text}</span>? {please_enter_text}
+                                </h1>
+
+                                <button id="button-loan" class="bg-white w-fit text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                    {make_loan_text}
+                                </button>
+                            </div>
+
+                            <div id="card_pays_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <CardBasic
+                                img_url="https://cdn-icons-png.flaticon.com/512/2769/2769569.png"
+                                balance_text={data_user.user_info[0].ingresos_totales}
+                                available_balance_text={total_income_text}
+                                >
+                                </CardBasic>
+                            </div>
+
+                            <div id="credit" class="flex col-span-1 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <h1 class="text-white text-lg font-bold">
+                                    {check_card_text}
+                                </h1>
+                                <p class="text-white">{content_check_card_text}</p>
+
+                                <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                    {simulate_loan_text}
+                                </button>
+                            </div>
+
+                            <div id="security" class="flex col-span-2 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <h1 class="text-white text-lg font-bold">
+                                    {security_text}
+                                </h1>
+                                <p class="text-white">{content_security_text}</p>
+
+                                <button id="button-transfer" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                    {transferir_text}
+                                </button>
+                            </div>                                       
+
+                            <CardMovements
+                            titulo={history_movements_text}
+                            not_found={not_found_text}
+                            more={more_text}
+                            num_movements={data_movements_incomplete.length}
+                            >
+                            {
+                                data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: string; }) => (
+                                    <CardMovementsArtcile
+                                    img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
+                                    type_loan_text={item.tipo_movement}
+                                    date_text={item.fecha_movement}
+                                    amount={item.action_movement}
+                                    is_positive={true}
+                                    />
+                                ))
+                            }
+                            </CardMovements>
+
                         </div>
                     </div>
-
-                    <div id="card_balance_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                        <CardBasic
-                        img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
-                        balance_text={data_user.user_info[0].saldo_disponible}
-                        available_balance_text={available_balance}
-                        >
-                        </CardBasic>
-                    </div>
-
-                    <div id="make_loan" class="flex col-span-3 row-span-1 justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                        <h1 class="text-white text-2xl font-bold">
-                            {first_part_make_loan} <span class="text-yellow-400">{first_loan_text}</span>? {please_enter_text}
-                        </h1>
-
-                        <button class="bg-white w-fit text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                            {make_loan_text}
-                        </button>
-                    </div>
-
-                    <div id="card_pays_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                        <CardBasic
-                        img_url="https://cdn-icons-png.flaticon.com/512/2769/2769569.png"
-                        balance_text={data_user.user_info[0].ingresos_totales}
-                        available_balance_text={total_income_text}
-                        >
-                        </CardBasic>
-                    </div>
-
-                    <div id="credit" class="flex col-span-1 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                        <h1 class="text-white text-lg font-bold">
-                            {check_card_text}
-                        </h1>
-                        <p class="text-white">{content_check_card_text}</p>
-
-                        <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                            {simulate_loan_text}
-                        </button>
-                    </div>
-
-                    <div id="security" class="flex col-span-2 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                        <h1 class="text-white text-lg font-bold">
-                            {security_text}
-                        </h1>
-                        <p class="text-white">{content_security_text}</p>
-
-                        <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                            {transferir_text}
-                        </button>
-                    </div>                                       
-
-                    <CardMovements
-                    titulo={history_movements_text}
-                    not_found={not_found_text}
-                    more={more_text}
-                    num_movements={data_movements_incomplete.length}
-                    >
-                    {
-                        data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: string; }) => (
-                            <CardMovementsArtcile
-                            img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}
-                            type_loan_text={item.tipo_movement}
-                            date_text={item.fecha_movement}
-                            amount={item.action_movement}
-                            is_positive={true}
-                            />
-                        ))
-                    }
-
-                    </CardMovements>
-
                 </div>
-            </div>
-        </div>
-    </article>
-</section>
+            </article>
+        </section>
 
-<style>
-    #content-banner-grid{
-        grid-template-columns: 2fr minmax(0, 22rem);
-    }
+        <style>
+            #content-banner-grid{
+                grid-template-columns: 2fr minmax(0, 22rem);
+            }
 
-    #content-grid-elements{
-        grid-template-columns: 1fr 1fr .5fr 1fr;
-    }
+            #content-grid-elements{
+                grid-template-columns: 1fr 1fr .5fr 1fr;
+            }
 
-    #card_balance{
-        display: none;
-    }
+            #card_balance{
+                display: none;
+            }
 
-    #card_pays{
-        display: none;
-    }
+            #card_pays{
+                display: none;
+            }
 
-    @media (max-width: 1160px) {
-        #security{
-            grid-column: span 1 / 1 span;
-        }
-    }    
+            @media (max-width: 1160px) {
+                #security{
+                    grid-column: span 1 / 1 span;
+                }
+            }    
 
-    @media (max-width: 1024px) {
-        #security{
-            grid-column: span 2 / 2 span;
-        }
+            @media (max-width: 1024px) {
+                #security{
+                    grid-column: span 2 / 2 span;
+                }
 
-        #credit{
-            grid-column: span 2 / 2 span;
-        }
-    }
+                #credit{
+                    grid-column: span 2 / 2 span;
+                }
+            }
 
-    @media (max-width: 830px) {
-        #welcome h1{
-            font-size: 1.7rem;
-        }
-    }
+            @media (max-width: 830px) {
+                #welcome h1{
+                    font-size: 1.7rem;
+                }
+            }
 
-    @media (max-width: 640px) {
-        #security{
-            grid-column: span 4 / 4 span;
-        }
+            @media (max-width: 640px) {
+                #security{
+                    grid-column: span 4 / 4 span;
+                }
 
-        #credit{
-            grid-column: span 4 / 4 span;
-        }
-    }
+                #credit{
+                    grid-column: span 4 / 4 span;
+                }
+            }
 
-    @media (max-width: 550px) {
-        #welcome{
-            grid-column: span 4 / 4 span;
-        }
+            @media (max-width: 550px) {
+                #welcome{
+                    grid-column: span 4 / 4 span;
+                }
 
-        #make_loan{
-            grid-column: span 4 / 4 span;
-        }
+                #make_loan{
+                    grid-column: span 4 / 4 span;
+                }
 
-        #card_balance{
-            display: flex;
-            grid-column: span 4 / 4 span;
-        }
+                #card_balance{
+                    display: flex;
+                    grid-column: span 4 / 4 span;
+                }
 
-        #card_pays{
-            display: flex;
-            grid-column: span 4 / 4 span;
-        }
+                #card_pays{
+                    display: flex;
+                    grid-column: span 4 / 4 span;
+                }
 
-        #card_pays_principal{
-            display: none;
-        }
+                #card_pays_principal{
+                    display: none;
+                }
 
-        #card_balance_principal{
-            display: none;
-        }
-    }
+                #card_balance_principal{
+                    display: none;
+                }
+            }
 
-</style>
+        </style>
+    ): (
+        <h1>{err}</h1>
+    )
+}
 
 <script>
     let response_data_variables = await fetch(`http://localhost:4000/variables/res`);
     let data_variables = await response_data_variables.json();
 
-    let response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${"sebastiangarces152@gmail.com"}`);
+    let response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
     let data_user = await response_data_user.json();
 
     let data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
@@ -283,6 +304,8 @@ console.log(data_movements_incomplete);
             initial_value_movements = data_movements_incomplete.length;
             window.location.reload();
         }
+
+        console.log(data_movements_incomplete.length);
     }
 
     fetchDataAndUpdate();

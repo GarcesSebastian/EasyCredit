@@ -1,0 +1,40 @@
+---
+interface Props{
+    class: string;
+    class_content: string;
+    id: string;
+}
+---
+
+<div id={Astro.props.id} class=`popup fixed top-20 w-screen h-[91.5%] justify-center items-center p-5 ${Astro.props.class_content}`>
+    <div id="background-popup" class="absolute w-full h-full bg-transparent cursor-pointer"></div>
+
+    <div class=`${Astro.props.class}`>
+        
+        <div id="x-popup" class="absolute top-5 right-5 hover:bg-slate-800 cursor-pointer p-[.25rem] rounded-sm">
+            <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x w-6 h-6 text-white">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M18 6l-12 12" />
+                <path d="M6 6l12 12" />
+            </svg>
+        </div>
+
+        <slot/>
+    </div>
+</div>
+
+<style>
+    .popup{
+        z-index: 50;
+        --tw-bg-opacity: .75;
+        background-color: rgba(13, 17, 23, var(--tw-bg-opacity));
+        border-bottom-width: 1px;
+        --tw-border-opacity: 1;
+        border-color: rgba(32, 38, 47, var(--tw-border-opacity));
+        backdrop-filter:blur(3px);
+        backface-visibility: hidden;
+        perspective: 1000px;
+        transform: translateZ(0px);
+        transition: all .3s ease-in;
+    }
+</style>

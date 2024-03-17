@@ -159,6 +159,30 @@ document.querySelector("#submit-signin")?.addEventListener("click", async () => 
     }
 });
 
+document.querySelectorAll("#background-popup").forEach((item) => {
+    item.addEventListener("click", () => {
+        document.querySelectorAll(".popup").forEach((popup) => {
+            popup.style.display = "none";
+        });
+    });
+});
+
+document.querySelectorAll("#x-popup").forEach((item) => {
+    item.addEventListener("click", () => {
+        document.querySelectorAll(".popup").forEach((popup) => {
+            popup.style.display = "none";
+        });
+    });
+})
+
+document.querySelector("#button-transfer").addEventListener("click", () =>{
+    document.querySelector("#popup-center").style.display = "flex";
+});
+
+document.querySelector("#button-loan").addEventListener("click", () =>{
+    document.querySelector("#popup-center-loan").style.display = "flex";
+});
+
 function transformSrc(srcImage){
     let src = "";
     for(let i = 0; i < srcImage.length; i++){
