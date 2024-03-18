@@ -2,7 +2,13 @@
 import PopupBase from "./PopupBase.astro"
 ---
 
-<PopupBase class="relative w-[55rem] top-0  py-5 rounded-md z-10 bg-slate-700" id="popup-center-loan" class_content="hidden">
+<PopupBase 
+    class="relative w-[55rem] max-sm:top-0 -top-10 py-5 rounded-md z-10 bg-slate-700" 
+    id="popup-center-loan" 
+    class_content="hidden h-screen fixed max-sm:h-fit max-sm:absolute" 
+    id_background="background-popup-loan"
+    id_close="close-loan"
+    >
     <form id="form-loan" class=" w-full h-full grid grid-cols-2 gap-4 p-4">
         <div class="flex flex-col gap-2 max-sm:col-span-2">
 
@@ -35,10 +41,34 @@ import PopupBase from "./PopupBase.astro"
                             <path d="M5 15v1m0 -8v1" />
                         </svg>
                     </div>
-                    <input type="number" id="input-tasa-loan" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Tasa de Interes"} disabled>
+                    <input type="text" id="input-tasa-loan" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Tasa de Interes"} value={"Loading..."} disabled>
                 </div>        
 
-                <label for="input-action" class="block mb-1 text-sm font-medium text-white relative">{"Cuotas"}</label>
+                <label for="input-cuotas" class="block mb-1 text-sm font-medium text-white relative">{"Cuotas"}</label>
+                <div class="relative mb-3">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M13 21h-7a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3" />
+                            <path d="M16 3v4" />
+                            <path d="M8 3v4" />
+                            <path d="M4 11h12.5" />
+                            <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                            <path d="M19 21v1m0 -8v1" />
+                        </svg>
+                    </div>
+                    <select id="input-cuotas" class="outline-none border text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" required>
+                        <option value="" disabled selected hidden>Seleccione las cuotas</option>
+                        <option value="3 cuotas">3 cuotas</option>
+                        <option value="6 cuotas">6 cuotas</option>
+                        <option value="12 cuotas">12 cuotas</option>
+                        <option value="24 cuotas">24 cuotas</option>
+                        <option value="36 cuotas">36 cuotas</option>
+                        <option value="48 cuotas">48 cuotas</option>
+                    </select>
+                </div>
+
+                <label for="input-frecuencia" class="block mb-1 text-sm font-medium text-white relative">{"Frecuencia de pagos"}</label>
                 <div class="relative mb-0">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                         <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -51,11 +81,12 @@ import PopupBase from "./PopupBase.astro"
                             <path d="M19 21v1m0 -8v1" />
                         </svg>
                     </div>
-                    <select id="input-action" class="outline-none border text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" required>
-                        <option value="" disabled selected hidden>Seleccione las cuotas</option>
-                        <option value="100">$100</option>
-                        <option value="200">$200</option>
-                        <option value="300">$300</option>
+                    <select id="input-frecuencia" class="outline-none border text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" required>
+                        <option value="" disabled selected hidden>Seleccione la frecuencia</option>
+                        <option value="3 cuotas">Mensual</option>
+                        <option value="6 cuotas">Trimestral</option>
+                        <option value="12 cuotas">Semestral</option>
+                        <option value="24 cuotas">Anual</option>
                     </select>
                 </div>
             </div>
@@ -77,6 +108,17 @@ import PopupBase from "./PopupBase.astro"
                         </svg>
                     </div>
                     <input type="text" id="input-name-loan" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Nombre"} required>
+                </div>
+
+                <label for="input-email" class="block mb-2 text-sm font-medium text-white relative">{"Correo Electronico"}</label>
+                <div class="relative mb-3">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                            <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
+                            <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
+                        </svg>
+                    </div>
+                    <input type="email" id="input-email" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Correo Electronico"} required>
                 </div>
 
                 <label for="input-id-loan" class="block mb-1 text-sm font-medium text-white relative">{"Numero de Identificacion"}</label>
@@ -107,16 +149,16 @@ import PopupBase from "./PopupBase.astro"
             </div>
         </div>
 
-        <div class="flex flex-col max-sm:col-span-2">
+        <div class="flex flex-col col-span-2">
             <label for="content-prestamo" class="text-white text-lg font-bold">Tipo de Prestamo</label>
             <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1 flex w-full">
-                <div class="flex justify-center items-center gap-8 w-full py-2 max-md:flex-col">
-                    <div class="justify-center items-center flex gap-2 max-md:w-full">
-                        <input type="checkbox" name="tasa_fija" id="tasa_fija" required>
+                <div class="flex justify-between items-center gap-8 w-full">
+                    <div class="justify-center items-center flex gap-2 w-full">
+                        <input type="checkbox" name="tasa_fija" id="tasa_fija" checked required>
                         <label for="tasa_fija" class="text-white text-md font-bold">Tasa Fija</label>
                     </div>
 
-                    <div class="justify-center items-center flex gap-2 max-md:w-full">
+                    <div class="justify-center items-center flex gap-2 w-full">
                         <input type="checkbox" name="tasa_variable" id="tasa_variable" required>
                         <label for="tasa_variable" class="text-white text-md font-bold">Tasa Variable</label>
                     </div>
@@ -124,15 +166,15 @@ import PopupBase from "./PopupBase.astro"
             </div>
         </div>
 
-        <div class="flex flex-col max-sm:col-span-2">
+        <div class="flex flex-col col-span-2">
             <label for="content-prestamo" class="text-white text-lg font-bold">Finalizar Prestamo</label>
             <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1 flex w-full">
-                <div class="flex justify-center items-center gap-6 w-full max-md:flex-col max-md:gap-4">
-                    <div class="justify-center items-center flex gap-2 max-md:w-full">
+                <div class="flex justify-center items-center w-full gap-4">
+                    <div class="justify-center items-center flex gap-2 w-full">
                         <input id="button-confirm-loan" type="submit" value="CONFIRMAR" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-2 text-center inline-flex items-center justify-center cursor-pointer">
                     </div>
 
-                    <div class="justify-center items-center flex gap-2 max-md:w-full">
+                    <div class="justify-center items-center flex gap-2 w-full">
                         <input id="button-simulate-loan" type="submit" value="SIMULAR" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-2 text-center inline-flex items-center justify-center cursor-pointer">
                     </div>
                 </div>
@@ -142,7 +184,5 @@ import PopupBase from "./PopupBase.astro"
 </PopupBase>
 
 <script>
-    document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
-        event.preventDefault();
-    })
+
 </script>

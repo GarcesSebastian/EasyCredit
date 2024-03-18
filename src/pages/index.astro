@@ -17,64 +17,81 @@ interface WordItem{
     en: string;
 }
 
-const response = await fetch("http://localhost:4000/words");
+let response: Response;
+let data: any;
+let response_variables: Response;
+let variables: any;
+let response_data_variables: Response;
+let data_variables: any;
 
-const data: WordItem[] = await response.json();
+let text: any;
 
-let response_variables = await fetch("http://localhost:4000/variables/res");
+let err: any;
+let isContinue = true;
 
-let data_variables = await response_variables.json();
+try{
+    response = await fetch("http://localhost:4000/words");
+    data = await response.json();
 
-let newData_variables = await fetch("http://localhost:4000/variables/res").then(response => response.json());
+    response_variables = await fetch("http://localhost:4000/variables/res");
+    variables = await response_variables.json();
 
-let text = {
-    titulo_inicio: (data.find(item => item.word === "titulo_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    nombre_inicio: (data.find(item => item.word === "nombre_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    descripcion_inicio: (data.find(item => item.word === "descripcion_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    calcular_inicio: (data.find(item => item.word === "calcular_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    online_title: (data.find(item => item.word === "article_1_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    online_description: (data.find(item => item.word === "article_1_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    cuota_title: (data.find(item => item.word === "article_2_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    cuota_description: (data.find(item => item.word === "article_2_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    pay_title: (data.find(item => item.word === "article_3_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    pay_description: (data.find(item => item.word === "article_3_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    tasa_title: (data.find(item => item.word === "article_4_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    tasa_description: (data.find(item => item.word === "article_4_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_footer_titulo: (data.find(item => item.word === "recursos_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_item_1: (data.find(item => item.word === "recursos_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_item_2: (data.find(item => item.word === "recursos_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_item_3: (data.find(item => item.word === "recursos_item_3") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_item_4: (data.find(item => item.word === "recursos_item_4") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    siganos_footer_titulo: (data.find(item => item.word === "siganos_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    siganos_item_1: (data.find(item => item.word === "siganos_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    siganos_item_2: (data.find(item => item.word === "siganos_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    legal_footer_titulo: (data.find(item => item.word === "legal_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    legal_item_1: (data.find(item => item.word === "legal_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    legal_item_2: (data.find(item => item.word === "legal_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    rights_footer: (data.find(item => item.word === "rights_footer") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    iniciar_text: (data.find(item => item.word === "iniciar_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    registrarse_text: (data.find(item => item.word === "registrarse_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    welcome_back_text: (data.find(item => item.word === "welcome_back_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    have_you_text: (data.find(item => item.word === "have_you_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    new_notifications_text: (data.find(item => item.word === "new_notifications_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    view_all_text: (data.find(item => item.word === "view_all_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    first_part_make_loan: (data.find(item => item.word === "first_part_make_loan") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    first_loan_text: (data.find(item => item.word === "first_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    please_enter_text: (data.find(item => item.word === "please_enter_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    make_loan_text: (data.find(item => item.word === "make_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    available_balance: (data.find(item => item.word === "available_balance") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    total_income_text: (data.find(item => item.word === "total_income_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    check_card_text: (data.find(item => item.word === "check_card_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    content_check_card_text: (data.find(item => item.word === "content_check_card_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    security_text: (data.find(item => item.word === "security_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    content_security_text: (data.find(item => item.word === "content_security_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    history_movements_text: (data.find(item => item.word === "history_movements_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    learn_more_text: (data.find(item => item.word === "learn_more_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    transferir_text: (data.find(item => item.word === "transferir_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    simulate_loan_text: (data.find(item => item.word === "simulate_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    more_text: (data.find(item => item.word === "more_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    not_found_text: (data.find(item => item.word === "not_found_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    response_data_variables = await fetch("http://localhost:4000/variables/res");
+    data_variables = await response_data_variables.json();
+
+    text = {
+    titulo_inicio: (data.find((item: { word: string }) => item.word === "titulo_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    nombre_inicio: (data.find((item: { word: string }) => item.word === "nombre_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    descripcion_inicio: (data.find((item: { word: string }) => item.word === "descripcion_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    calcular_inicio: (data.find((item: { word: string }) => item.word === "calcular_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    online_title: (data.find((item: { word: string }) => item.word === "article_1_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    online_description: (data.find((item: { word: string }) => item.word === "article_1_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    cuota_title: (data.find((item: { word: string }) => item.word === "article_2_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    cuota_description: (data.find((item: { word: string }) => item.word === "article_2_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    pay_title: (data.find((item: { word: string }) => item.word === "article_3_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    pay_description: (data.find((item: { word: string }) => item.word === "article_3_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    tasa_title: (data.find((item: { word: string }) => item.word === "article_4_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    tasa_description: (data.find((item: { word: string }) => item.word === "article_4_description") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_footer_titulo: (data.find((item: { word: string }) => item.word === "recursos_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_1: (data.find((item: { word: string }) => item.word === "recursos_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_2: (data.find((item: { word: string }) => item.word === "recursos_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_3: (data.find((item: { word: string }) => item.word === "recursos_item_3") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_4: (data.find((item: { word: string }) => item.word === "recursos_item_4") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    siganos_footer_titulo: (data.find((item: { word: string }) => item.word === "siganos_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_1: (data.find((item: { word: string }) => item.word === "siganos_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_2: (data.find((item: { word: string }) => item.word === "siganos_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    legal_footer_titulo: (data.find((item: { word: string }) => item.word === "legal_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    legal_item_1: (data.find((item: { word: string }) => item.word === "legal_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    legal_item_2: (data.find((item: { word: string }) => item.word === "legal_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    rights_footer: (data.find((item: { word: string }) => item.word === "rights_footer") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    iniciar_text: (data.find((item: { word: string }) => item.word === "iniciar_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    registrarse_text: (data.find((item: { word: string }) => item.word === "registrarse_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    welcome_back_text: (data.find((item: { word: string }) => item.word === "welcome_back_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    have_you_text: (data.find((item: { word: string }) => item.word === "have_you_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    new_notifications_text: (data.find((item: { word: string }) => item.word === "new_notifications_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    view_all_text: (data.find((item: { word: string }) => item.word === "view_all_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    first_part_make_loan: (data.find((item: { word: string }) => item.word === "first_part_make_loan") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    first_loan_text: (data.find((item: { word: string }) => item.word === "first_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    please_enter_text: (data.find((item: { word: string }) => item.word === "please_enter_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    make_loan_text: (data.find((item: { word: string }) => item.word === "make_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    available_balance: (data.find((item: { word: string }) => item.word === "available_balance") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    total_income_text: (data.find((item: { word: string }) => item.word === "total_income_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    check_card_text: (data.find((item: { word: string }) => item.word === "check_card_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    content_check_card_text: (data.find((item: { word: string }) => item.word === "content_check_card_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    security_text: (data.find((item: { word: string }) => item.word === "security_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    content_security_text: (data.find((item: { word: string }) => item.word === "content_security_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    history_movements_text: (data.find((item: { word: string }) => item.word === "history_movements_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    learn_more_text: (data.find((item: { word: string }) => item.word === "learn_more_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    transferir_text: (data.find((item: { word: string }) => item.word === "transferir_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    simulate_loan_text: (data.find((item: { word: string }) => item.word === "simulate_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    more_text: (data.find((item: { word: string }) => item.word === "more_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    not_found_text: (data.find((item: { word: string }) => item.word === "not_found_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
 };
+}catch(e){
+    err = e;
+    isContinue = !isContinue;
+    console.log(err);
+}
 
 ---
 
@@ -83,11 +100,11 @@ let text = {
         href_image="/"
         href_signin="./SignIn"
         href_signup="./SignUp"
-        registrarse_text={text.registrarse_text}
-        iniciar_text={text.iniciar_text}
+        registrarse_text={text.registrarse_text || "Registrarse"}
+        iniciar_text={text.iniciar_text || "Iniciar sesión"}
     ></Header>
     {
-        newData_variables.initiated == "false" ? (
+        data_variables.initiated == "false" ? (
             <Banner
                 titulo_inicio={text.titulo_inicio}
                 nombre_inicio={text.nombre_inicio}
@@ -166,7 +183,7 @@ let text = {
         rights_footer={text.rights_footer}
     ></Footer>
     {
-        newData_variables.initiated == "false" ? (
+        data_variables.initiated == "false" ? (
             <ArrowFloat id="ButtonFloat"></ArrowFloat>
         ):(
             <div></div>

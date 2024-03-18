@@ -1,4 +1,11 @@
-
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 18-03-2024 a las 03:28:35
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,7 +40,7 @@ CREATE TABLE `movements` (
 --
 
 INSERT INTO `movements` (`id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`) VALUES
-(444949, 1, 'Bank Loan', '16/03/2024', 50000);
+(176361, 1, 'Bank Loan', '16/03/2024', 25000);
 
 -- --------------------------------------------------------
 
@@ -53,8 +60,21 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
-(444949, 'Sebxstt', 'sebastiangarces152@gmail.com', 0),
-(560951, 'sebastian', 'sebastiangarces158@gmail.com', 0);
+(176361, 'Sebastian', 'sebastiangarces152@gmail.com', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `prestamos`
+--
+
+CREATE TABLE `prestamos` (
+  `id_user` int(11) NOT NULL,
+  `tasa_interes` double NOT NULL,
+  `cuotas` int(11) NOT NULL,
+  `frencuencia_pago` text NOT NULL,
+  `tipo_prestamo` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -77,8 +97,7 @@ CREATE TABLE `registers` (
 --
 
 INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`) VALUES
-(444949, 'Sebxstt', '$2b$10$IO8wqnvBCnTltDacz9XfIOV4zBx8X.fmv0YlsK5cehQK312glZSyq', 'sebastiangarces152@gmail.com', '$2b$10$bPlfckWqo3IdkTBvbpz1feft6TucaTngfxAAfVQ61ToXYmImOQLdq', '$2b$10$gqvoGR2sFkn8GGr0qaZIVu8/dKyUuyTk3cMXAFRyl00Cz515qCYsy', 1),
-(560951, 'sebastian', '$2b$10$80hdef6W/5bfauYIwmIsJuwHGKXzkav.VOKbFTob0eTY9RxWk/oMm', 'sebastiangarces158@gmail.com', '$2b$10$QB1d6BVZ0ZQfLevbdb4tk.TZM5HjllhxAlphT0N/LK/bbleIAPL6i', '$2b$10$A73xf0n4EzaioQGJ9deUxeMCaEcHk/YbV.d2jwuiIT61AJc7.602m', 1);
+(176361, 'Sebastian', '$2b$10$Fd0dpnJ30WmBFPqa/nqpMuHkdnf.L4JKaXtukuMyi9Wk6AeBzVnru', 'sebastiangarces152@gmail.com', '$2b$10$3jhMp4qiJvMOZ8akggaYoOItvIhrF.v4b.ImmFq6vl5uwI09aQBVG', '$2b$10$P5LiT9KqzFyKtpOdTfxbHeAQNXdx6efVxO0vvl3DE7ppyXyAUx.JK', 1);
 
 -- --------------------------------------------------------
 
@@ -99,8 +118,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `saldo_disponible`, `ingresos_totales`) VALUES
-(444949, 'Sebxstt', 'sebastiangarces152@gmail.com', 25000, 25000),
-(560951, 'sebastian', 'sebastiangarces158@gmail.com', 0, 0);
+(176361, 'Sebastian', 'sebastiangarces152@gmail.com', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -141,7 +159,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('first_loan_text', 'primer préstamo', 'first loan'),
 ('first_part_make_loan', '¿Eres nuevo? ¿Quieres hacer tu ', 'Are you new? Would you like to make your '),
 ('forgot_password_text', '¿Olvidaste tu contraseña?', 'Forgot your password?'),
-('have_you_text', 'Tienes', 'You have'),
+('have_you_text', 'Tienes ', 'You have '),
 ('history_movements_text', 'Historial de movimientos', 'History Movements'),
 ('id_number_text', 'Número de identificación', 'ID number'),
 ('iniciar_text', 'Iniciar sesión', 'Sign In'),
@@ -151,7 +169,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('legal_item_2', 'Términos y Condiciones', 'Terms & Conditions'),
 ('make_loan_text', 'Hacer préstamo', 'Make loan'),
 ('more_text', 'Más', 'More'),
-('new_notifications_text', 'nuevas notificaciones', 'new notifications'),
+('new_notifications_text', ' nuevas notificaciones', ' new notifications'),
 ('new_text', 'Nuevo', 'New'),
 ('nombre_inicio', 'EasyCredit', 'EasyCredit'),
 ('not_found_text', 'Movimientos históricos no encontrados', 'Not Found History Movements'),
@@ -188,6 +206,12 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id_user`),
   ADD UNIQUE KEY `email_no_repeat` (`email_user`) USING HASH;
+
+--
+-- Indices de la tabla `prestamos`
+--
+ALTER TABLE `prestamos`
+  ADD PRIMARY KEY (`id_user`);
 
 --
 -- Indices de la tabla `registers`

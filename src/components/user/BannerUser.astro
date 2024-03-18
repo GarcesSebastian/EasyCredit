@@ -281,34 +281,5 @@ console.log(data_movements_incomplete.length);
 }
 
 <script>
-    let response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-    let data_variables = await response_data_variables.json();
 
-    let response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
-    let data_user = await response_data_user.json();
-
-    let data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
-
-    let initial_value_movements:number = data_movements_incomplete.length;
-
-    async function fetchDataAndUpdate() { // Falta agregar que solo lo haga cuando esta logeado el usuario
-        response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-        data_variables = await response_data_variables.json();
-
-        response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
-        data_user = await response_data_user.json();
-
-        data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
-
-        if(data_movements_incomplete.length != initial_value_movements){
-            initial_value_movements = data_movements_incomplete.length;
-            window.location.reload();
-        }
-
-        console.log(data_movements_incomplete.length);
-    }
-
-    fetchDataAndUpdate();
-
-    setInterval(fetchDataAndUpdate, 10000);
 </script>

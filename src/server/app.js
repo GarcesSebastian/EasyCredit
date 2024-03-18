@@ -119,6 +119,30 @@ app.post("/variables", (req, res) => {
     }
 });
 
+app.post("/user/loan", async (req, res) => {
+    if(req.body){
+        const connection = await database.getConnection();
+        const email_user = req.body.email_user;
+        const monto = req.body.monto;
+        const plazo = req.body.plazo;
+        const interes = req.body.interes;
+        const cuota = req.body.cuota;
+        const total = req.body.total;
+        const saldo = req.body.saldo;
+        const fecha = req.body.fecha;
+        const estado = req.body.estado;
+        const id_user = await connection.query("SELECT id_user FROM easycredit.users WHERE email_user = ?", [email_user]);
+        if(id_user.length > 0){
+            connection.query("INSERT INTO loans (id_user, email_user, monto, plazo, interes, cuota, total, saldo, fecha, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_user[0].id_user, email_user, monto, plazo, interes, cuota, total, saldo, fecha, estado]);
+            res.status(200).json({ message: "Loan Successful" });
+        }else{
+            res.status(400).send({ message: "Bad Request" });
+        }
+    }else{
+        res.status(400).send({ message: "Bad Request" });
+    }
+});
+
 app.get("/variables/res", (req,res) => {
     var decryptedEmail = CryptoJS.AES.decrypt(email, 'clave_secreta').toString(CryptoJS.enc.Utf8);
     var decryptedInitiated = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);

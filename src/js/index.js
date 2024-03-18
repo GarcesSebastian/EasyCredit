@@ -36,23 +36,25 @@ function changeFlag(flag, src){
 }
 
 function initFlagKey(){
-    if(localStorage.getItem("flag") === null){
-        localStorage.setItem("flag", "es")
-    }else{
-        if(localStorage.getItem("flag") == "es"){
-            if(actual_element.getAttribute("data-flag-now") != "es"){
-                changeFlag("es", "../../public/flags/espana.svg")
+    if(actual_element && list_flags){
+        if(localStorage.getItem("flag") === null){
+            localStorage.setItem("flag", "es")
+        }else{
+            if(localStorage.getItem("flag") == "es"){
+                if(actual_element.getAttribute("data-flag-now") != "es"){
+                    changeFlag("es", "../../public/flags/espana.svg")
+                }
+            }else if(localStorage.getItem("flag") == "en"){
+                if(actual_element.getAttribute("data-flag-now") != "en"){
+                    changeFlag("en", "../../public/flags/usa.svg")
+                }
             }
-        }else if(localStorage.getItem("flag") == "en"){
-            if(actual_element.getAttribute("data-flag-now") != "en"){
-                changeFlag("en", "../../public/flags/usa.svg")
-            }
+    
+            actual_element.querySelector("img").src = actual_element.getAttribute("data-flag-src");
+            list_flags.querySelectorAll("div").forEach((item) =>{
+                item.querySelector("img").src = item.getAttribute("data-flag-src");
+            });
         }
-
-        actual_element.querySelector("img").src = actual_element.getAttribute("data-flag-src");
-        list_flags.querySelectorAll("div").forEach((item) =>{
-            item.querySelector("img").src = item.getAttribute("data-flag-src");
-        });
     }
 }
 
