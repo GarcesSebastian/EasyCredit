@@ -123,17 +123,15 @@ app.post("/user/loan", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
         const email_user = req.body.email_user;
-        const monto = req.body.monto;
-        const plazo = req.body.plazo;
-        const interes = req.body.interes;
-        const cuota = req.body.cuota;
-        const total = req.body.total;
-        const saldo = req.body.saldo;
-        const fecha = req.body.fecha;
-        const estado = req.body.estado;
-        const id_user = await connection.query("SELECT id_user FROM easycredit.users WHERE email_user = ?", [email_user]);
-        if(id_user.length > 0){
-            connection.query("INSERT INTO loans (id_user, email_user, monto, plazo, interes, cuota, total, saldo, fecha, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_user[0].id_user, email_user, monto, plazo, interes, cuota, total, saldo, fecha, estado]);
+        const id_loan = req.body.id_loan;
+
+        const data_user_basic = await connection.query("SELECT * FROM easycredit.users WHERE email_user = ?", [email_user]);
+        const data_user_import = await connection.query("SELECT * FROM easycredit.registers WHERE email = ?", [email_user]);
+
+        let is_id = await bcrypt.compare(id_loan,data_user_import[0].numero_identidad);
+        
+        if(data_user_basic.length > 0 && data_user_import.length > 0 && is_id){
+            console.log({data_user_basica: data_user_basic, data_user_import: data_user_import})
             res.status(200).json({ message: "Loan Successful" });
         }else{
             res.status(400).send({ message: "Bad Request" });

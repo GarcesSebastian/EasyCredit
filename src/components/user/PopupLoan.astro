@@ -5,7 +5,8 @@ import PopupBase from "./PopupBase.astro"
 <PopupBase 
     class="relative w-[55rem] max-sm:top-0 -top-10 py-5 rounded-md z-10 bg-slate-700" 
     id="popup-center-loan" 
-    class_content="hidden h-screen fixed max-sm:h-fit max-sm:absolute" 
+    class_content="hidden h-screen fixed max-sm:h-fit max-sm:absolute"
+    id_inter_content="popup-inter-loan"
     id_background="background-popup-loan"
     id_close="close-loan"
     >
@@ -183,6 +184,8 @@ import PopupBase from "./PopupBase.astro"
     </form>
 </PopupBase>
 
-<script>
-
-</script>
+<style>
+    #popup-center-loan{
+        background-color: red !important;
+    }
+</style>

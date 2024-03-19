@@ -294,10 +294,28 @@ document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
             cuotas: input_cuotas,
             frecuencia: input_frecuencia,
             name_loan: input_name_loan,
-            email: input_email,
+            email_user: input_email,
             id_loan: input_id_loan,
             numero_telefono_loan: input_numero_telefono_loan,
             tasa_bool: tasa_fija || tasa_variable,
+        }
+
+        let response_user_loan;
+        let err;
+        let isContinue = true;
+
+        try{
+            response_user_loan = fetch("http://localhost:4000/user/loan", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers:{ 'Content-Type': 'application/json' }
+            });
+
+            console.log(response_user_loan);
+        }catch(e){
+            err = e;
+            isContinue = !isContinue;
+            console.log(err);
         }
         
         console.log(data);

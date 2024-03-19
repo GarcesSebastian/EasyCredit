@@ -3,6 +3,7 @@ interface Props{
     class: string;
     class_content: string;
     id: string;
+    id_inter_content: string;
     id_background: string;
     id_close: string;
 }
@@ -11,7 +12,7 @@ interface Props{
 <div id={Astro.props.id} class=`popup top-20 w-screen h-fit justify-center items-center p-5 drop-shadow-lg ${Astro.props.class_content}`>
     <div id={Astro.props.id_background} class="absolute w-full h-full bg-transparent cursor-pointer"></div>
 
-    <div class=`${Astro.props.class}`>
+    <div id={Astro.props.id_inter_content} class=`${Astro.props.class}`>
         
         <div id={Astro.props.id_close} class="absolute top-5 right-5 hover:bg-slate-800 cursor-pointer p-[.25rem] rounded-sm">
             <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x w-6 h-6 text-white">
