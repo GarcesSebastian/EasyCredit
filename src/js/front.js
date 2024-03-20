@@ -297,7 +297,8 @@ document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
             email_user: input_email,
             id_loan: input_id_loan,
             numero_telefono_loan: input_numero_telefono_loan,
-            tasa_bool: tasa_fija || tasa_variable,
+            tasa_variable: tasa_variable,
+            tasa_fija: tasa_fija,
         }
 
         let response_user_loan;
@@ -310,6 +311,8 @@ document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
                 body: JSON.stringify(data),
                 headers:{ 'Content-Type': 'application/json' }
             });
+
+            window.location.reload();
 
             console.log(response_user_loan);
         }catch(e){

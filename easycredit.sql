@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-03-2024 a las 03:28:35
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.0.25
+-- Tiempo de generación: 20-03-2024 a las 23:05:30
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,13 +35,6 @@ CREATE TABLE `movements` (
   `action_movement` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `movements`
---
-
-INSERT INTO `movements` (`id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`) VALUES
-(176361, 1, 'Bank Loan', '16/03/2024', 25000);
-
 -- --------------------------------------------------------
 
 --
@@ -60,7 +53,7 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
-(176361, 'Sebastian', 'sebastiangarces152@gmail.com', 0);
+(418753, 'Sebastian', 'sebastiangarces152@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -70,10 +63,14 @@ INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notif
 
 CREATE TABLE `prestamos` (
   `id_user` int(11) NOT NULL,
+  `name_loan` text NOT NULL,
+  `numero_telefono_loan` text NOT NULL,
   `tasa_interes` double NOT NULL,
   `cuotas` int(11) NOT NULL,
   `frencuencia_pago` text NOT NULL,
-  `tipo_prestamo` text NOT NULL
+  `action_prestamo` int(250) NOT NULL,
+  `tasa_variable` tinyint(1) NOT NULL,
+  `tasa_fija` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -97,7 +94,7 @@ CREATE TABLE `registers` (
 --
 
 INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`) VALUES
-(176361, 'Sebastian', '$2b$10$Fd0dpnJ30WmBFPqa/nqpMuHkdnf.L4JKaXtukuMyi9Wk6AeBzVnru', 'sebastiangarces152@gmail.com', '$2b$10$3jhMp4qiJvMOZ8akggaYoOItvIhrF.v4b.ImmFq6vl5uwI09aQBVG', '$2b$10$P5LiT9KqzFyKtpOdTfxbHeAQNXdx6efVxO0vvl3DE7ppyXyAUx.JK', 1);
+(418753, 'Sebastian', '$2b$10$Rmm.nsIKPRph2DJDoKClruzWYQ9IFNMuRB2Hf/Nxzh9oawgU29XJ6', 'sebastiangarces152@gmail.com', '$2b$10$VXGIO0mCgaLwYxDYjxrsHOXPKnNr5jyBvqRwC9nYHL8Ez0ipruoxK', '$2b$10$2Ide1NzSQg5VjI7UOePy6uoMSo9X3E6b03sY9oRsih8uoq5R5EQ.C', 1);
 
 -- --------------------------------------------------------
 
@@ -118,7 +115,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `saldo_disponible`, `ingresos_totales`) VALUES
-(176361, 'Sebastian', 'sebastiangarces152@gmail.com', 0, 0);
+(418753, 'Sebastian', 'sebastiangarces152@gmail.com', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -206,12 +203,6 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id_user`),
   ADD UNIQUE KEY `email_no_repeat` (`email_user`) USING HASH;
-
---
--- Indices de la tabla `prestamos`
---
-ALTER TABLE `prestamos`
-  ADD PRIMARY KEY (`id_user`);
 
 --
 -- Indices de la tabla `registers`

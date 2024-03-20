@@ -125,6 +125,15 @@ app.post("/user/loan", async (req, res) => {
         const email_user = req.body.email_user;
         const id_loan = req.body.id_loan;
 
+        const tasa_loan = req.body.tasa_loan;
+        const cuotas = req.body.cuotas;
+        const frecuencia = req.body.frecuencia;
+        const name_loan = req.body.name_loan;
+        const numero_telefono_loan = req.body.numero_telefono_loan;
+        const action_loan = req.body.action_loan;        
+        const tasa_fija = req.body.tasa_fija;
+        const tasa_variable = req.body.tasa_variable;
+
         const data_user_basic = await connection.query("SELECT * FROM easycredit.users WHERE email_user = ?", [email_user]);
         const data_user_import = await connection.query("SELECT * FROM easycredit.registers WHERE email = ?", [email_user]);
 
@@ -132,6 +141,9 @@ app.post("/user/loan", async (req, res) => {
         
         if(data_user_basic.length > 0 && data_user_import.length > 0 && is_id){
             console.log({data_user_basica: data_user_basic, data_user_import: data_user_import})
+            let sumary_action = action_loan + data_user_basic[0].saldo_disponible;
+            await connection.query("INSERT INTO prestamos(id_user, name_loan, numero_telefono_loan, tasa_interes, cuotas, frencuencia_pago, action_prestamo, tasa_variable, tasa_fija) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, name_loan, numero_telefono_loan, tasa_loan, cuotas, frecuencia, action_loan, tasa_variable, tasa_fija]);            
+            await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [sumary_action, sumary_action, data_user_basic[0].id_user]);
             res.status(200).json({ message: "Loan Successful" });
         }else{
             res.status(400).send({ message: "Bad Request" });
