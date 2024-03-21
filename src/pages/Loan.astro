@@ -103,71 +103,7 @@ try{
         registrarse_text={text.registrarse_text || "Registrarse"}
         iniciar_text={text.iniciar_text || "Iniciar sesión"}
     ></Header>
-    {
-        data_variables.initiated == "false" ? (
-            <Banner
-                titulo_inicio={text.titulo_inicio}
-                nombre_inicio={text.nombre_inicio}
-                descripcion_inicio={text.descripcion_inicio}
-                calcular_inicio={text.calcular_inicio}
-                titulo_item_1={text.online_title}
-                titulo_item_2={text.cuota_title}
-                titulo_item_3={text.pay_title}
-                titulo_item_4={text.tasa_title}
-            ></Banner>
-            <Info id="SectionCenter">
-                <div>
-                    <ArticleLeft
-                        id="online"
-                        title={text.online_title}
-                        description={text.online_description}
-                        image="/background/online.png"
-                    ></ArticleLeft>
-                    <ArticleRight
-                        id="cuota"
-                        title={text.cuota_title}
-                        description={text.cuota_description}
-                        image="/background/cuota.png"
-                    ></ArticleRight>
-                    <ArticleLeft
-                        id="pay"
-                        title={text.pay_title}
-                        description={text.pay_description}
-                        image="/background/pay.png"
-                    ></ArticleLeft>
-                    <ArticleRight
-                        id="tasa"
-                        title={text.tasa_title}
-                        description={text.tasa_description}
-                        image="/background/tasa.png"
-                    ></ArticleRight>
-                </div>
-            </Info>
-        ):(
-            <BannerUser
-            welcome_back_text={text.welcome_back_text}
-            have_you_text={text.have_you_text}
-            new_notifications_text={text.new_notifications_text}
-            view_all_text={text.view_all_text}
-            first_part_make_loan={text.first_part_make_loan}
-            first_loan_text={text.first_loan_text}
-            please_enter_text={text.please_enter_text}
-            make_loan_text={text.make_loan_text}
-            available_balance={text.available_balance}
-            total_income_text={text.total_income_text}
-            check_card_text={text.check_card_text}
-            content_check_card_text={text.content_check_card_text}
-            security_text={text.security_text}
-            content_security_text={text.content_security_text}
-            history_movements_text={text.history_movements_text}
-            learn_more_text={text.learn_more_text}
-            transferir_text={text.transferir_text}
-            simulate_loan_text={text.simulate_loan_text}
-            more_text={text.more_text}
-            not_found_text={text.not_found_text}
-            ></BannerUser>
-        )
-    }
+    <PopupLoan></PopupLoan>
     <Footer
         recursos_footer_titulo={text.recursos_footer_titulo}
         recursos_item_1={text.recursos_item_1}
@@ -182,12 +118,4 @@ try{
         legal_item_2={text.legal_item_2}
         rights_footer={text.rights_footer}
     ></Footer>
-    {
-        data_variables.initiated == "false" ? (
-            <ArrowFloat id="ButtonFloat"></ArrowFloat>
-        ):(
-            <div></div>
-        )
-    }
-    <PopupTransfer></PopupTransfer>
 </Layout>

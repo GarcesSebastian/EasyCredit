@@ -3,7 +3,7 @@ interface Props{
     img_url: string;
     type_loan_text: string;
     date_text: string;
-    amount: string;
+    amount: any;
     is_positive: boolean;
 }
 
@@ -28,7 +28,7 @@ const {img_url, type_loan_text, date_text, amount, is_positive} = Astro.props;
 
     <div>
         {
-        is_positive == true ? (
+        is_positive == "positivo" ? (
             <span id="positive" class="text-lime-400 font-bold text-sm">
                 +{amount} $
             </span>

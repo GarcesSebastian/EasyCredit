@@ -192,9 +192,7 @@ document.querySelector("#submit-signin")?.addEventListener("click", async () => 
 });
 
 if(document.querySelector("#background-popup-transfer") // Si existen los elementos
-    && document.querySelector("#background-popup-loan") 
     && document.querySelector("#close-transfer") 
-    && document.querySelector("#close-loan") 
     && document.querySelector("#button-transfer") 
     && document.querySelector("#button-loan")
 ){
@@ -202,16 +200,8 @@ if(document.querySelector("#background-popup-transfer") // Si existen los elemen
         document.querySelector("#popup-center").style.display = "none";
     });
     
-    document.querySelector("#background-popup-loan").addEventListener("click", () => {
-        document.querySelector("#popup-center-loan").style.display = "none";
-    });
-    
     document.querySelector("#close-transfer").addEventListener("click", () => {
         document.querySelector("#popup-center").style.display = "none";
-    });
-    
-    document.querySelector("#close-loan").addEventListener("click", () => {
-        document.querySelector("#popup-center-loan").style.display = "none";
     });
     
     document.querySelector("#button-transfer").addEventListener("click", () =>{
@@ -219,7 +209,7 @@ if(document.querySelector("#background-popup-transfer") // Si existen los elemen
     });
     
     document.querySelector("#button-loan").addEventListener("click", () =>{
-        document.querySelector("#popup-center-loan").style.display = "flex";
+        window.location.href="/Loan"
     });
 }
 
@@ -266,63 +256,147 @@ fetchDataAndUpdate();
 setInterval(fetchDataAndUpdate, 10000);
 
 
+let elements_loan = {
+    input_action_loan: document.querySelector("#input-action-loan"),
+    input_tasa_loan: document.querySelector("#input-tasa-loan"),
+    input_cuotas: document.querySelector("#input-cuotas"),
+    input_frecuencia: document.querySelector("#input-frecuencia"),
+    input_name_loan: document.querySelector("#input-name-loan"),
+    input_email: document.querySelector("#input-email"),
+    input_id_loan: document.querySelector("#input-id-loan"),
+    input_numero_telefono_loan: document.querySelector("#input-numero_telefono-loan"),
+    tasa_fija: document.querySelector("#tasa_fija"),
+    tasa_variable: document.querySelector("#tasa_variable"),
+}
+
+elements_loan.tasa_fija?.addEventListener("change", () => {
+    if(!elements_loan.tasa_fija.required){
+        elements_loan.tasa_fija.required = true;
+        elements_loan.tasa_variable.required = false;
+        elements_loan.tasa_variable.checked = false;
+    }else{
+        elements_loan.tasa_fija.checked = true;
+    }
+});
+
+elements_loan.tasa_variable?.addEventListener("change", () => {
+    if(!elements_loan.tasa_variable.required){
+        elements_loan.tasa_variable.required = true;
+        elements_loan.tasa_fija.required = false;
+        elements_loan.tasa_fija.checked = false;
+    }else{
+        elements_loan.tasa_variable.checked = true;
+    }
+});
+
+async function send_req_loan(){
+    let isContinueLoan = true;
+
+    for(let key in elements_loan){
+        if(elements_loan.hasOwnProperty(key)){
+            let item = elements_loan[key];
+            let id = item.id.toString();
+            let id_without_input = id.split("input")[1];
+            let id_with_err = "err" + id_without_input;
+            if(document.querySelector("#" + id_with_err)){
+                document.querySelector("#" + id_with_err).style.display = "none";
+                document.querySelector("#" + id_with_err).innerHTML = ""
+            }
+            item.style.borderColor = "transparent";
+        }
+    }
+
+    if(parseFloat(elements_loan.input_action_loan.value) < 500000 || parseFloat(elements_loan.input_action_loan.value) > 4000000000) {
+        let id = elements_loan.input_action_loan.id.toString();
+        let id_without_input = id.split("input")[1];
+        let id_with_err = "err" + id_without_input;
+        document.querySelector("#" + id_with_err).style.display = "initial";
+        document.querySelector("#" + id_with_err).innerHTML = "* El monto debe ser menor a 4000M y mayor a 500k."
+        elements_loan.input_action_loan.style.borderColor = "tomato";
+        isContinueLoan = false;
+    }
+
+    if(elements_loan.input_name_loan.value.length > 40){
+        let id = elements_loan.input_name_loan.id.toString();
+        let id_without_input = id.split("input")[1];
+        let id_with_err = "err" + id_without_input;
+        document.querySelector("#" + id_with_err).style.display = "initial";
+        document.querySelector("#" + id_with_err).innerHTML = "* El numero maximo de caracteres es de 40 caracteres."
+        elements_loan.input_name_loan.style.borderColor = "tomato";
+        isContinueLoan = false;
+    }
+
+    if(elements_loan.input_numero_telefono_loan.value.length != 10){
+        let id = elements_loan.input_numero_telefono_loan.id.toString();
+        let id_without_input = id.split("input")[1];
+        let id_with_err = "err" + id_without_input;
+        document.querySelector("#" + id_with_err).style.display = "initial";
+        document.querySelector("#" + id_with_err).innerHTML = "* El numero de telefono es incorrecto."
+        elements_loan.input_numero_telefono_loan.style.borderColor = "tomato";
+        isContinueLoan = false;
+    }
+
+    if(!isContinueLoan){
+        return null;
+    }
+
+    let data = {
+        action_loan: elements_loan.input_action_loan.value,
+        tasa_loan: elements_loan.input_tasa_loan.value,
+        cuotas: elements_loan.input_cuotas.value,
+        frecuencia: elements_loan.input_frecuencia.value,
+        name_loan: elements_loan.input_name_loan.value,
+        email_user: elements_loan.input_email.value,
+        id_loan: elements_loan.input_id_loan.value,
+        numero_telefono_loan: elements_loan.input_numero_telefono_loan.value,
+        tasa_variable: elements_loan.tasa_variable.checked,
+        tasa_fija: elements_loan.tasa_fija.checked,
+    }
+
+    let response_user_loan;
+    let err;
+    let isContinue = true;
+
+    try{
+        response_user_loan = await fetch("http://localhost:4000/user/loan", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers:{ 'Content-Type': 'application/json' }
+        });
+
+        let response_message = await response_user_loan.json();
+
+        if(response_message.state === "Bad Request"){
+            if(response_message.message === "Numero de Identificacion Invalido."){
+                let id = elements_loan.input_id_loan.id.toString();
+                let id_without_input = id.split("input")[1];
+                let id_with_err = "err" + id_without_input;
+                document.querySelector("#" + id_with_err).style.display = "initial";
+                document.querySelector("#" + id_with_err).innerHTML = "* " + response_message.message
+                elements_loan.input_id_loan.style.borderColor = "tomato";
+            }else if(response_message.message === "Correo Electronico no valido."){
+                let id = elements_loan.input_email.id.toString();
+                let id_without_input = id.split("input")[1];
+                let id_with_err = "err" + id_without_input;
+                document.querySelector("#" + id_with_err).style.display = "initial";
+                document.querySelector("#" + id_with_err).innerHTML = "* " + response_message.message
+                elements_loan.input_email.style.borderColor = "tomato";
+            }
+        }else{
+            window.location.reload();
+        }
+    }catch(e){
+        err = e;
+        isContinue = !isContinue;
+        console.log(err);
+    }
+    
+    console.log(data);
+}
+
 document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
     event.preventDefault();
-    let input_action_loan = document.querySelector("#input-action-loan").value;
-    let input_tasa_loan = document.querySelector("#input-tasa-loan").value;
-    let input_cuotas = document.querySelector("#input-cuotas").value;
-    let input_frecuencia = document.querySelector("#input-frecuencia").value;
-    let input_name_loan = document.querySelector("#input-name-loan").value;
-    let input_email = document.querySelector("#input-email").value;
-    let input_id_loan = document.querySelector("#input-id-loan").value;
-    let input_numero_telefono_loan = document.querySelector("#input-numero_telefono-loan").value;
-    let tasa_fija = document.querySelector("#tasa_fija").checked;
-    let tasa_variable = document.querySelector("#tasa_variable").checked;
-
-    if(input_action_loan.length > 0 && 
-        input_tasa_loan.length > 0 && 
-        input_cuotas.length > 0 && 
-        input_frecuencia.length > 0 && 
-        input_name_loan.length > 0 && 
-        input_email.length > 0 && 
-        input_id_loan.length > 0 && 
-        input_numero_telefono_loan.length > 0 && 
-        (tasa_fija || tasa_variable)){
-        let data = {
-            action_loan: input_action_loan,
-            tasa_loan: input_tasa_loan,
-            cuotas: input_cuotas,
-            frecuencia: input_frecuencia,
-            name_loan: input_name_loan,
-            email_user: input_email,
-            id_loan: input_id_loan,
-            numero_telefono_loan: input_numero_telefono_loan,
-            tasa_variable: tasa_variable,
-            tasa_fija: tasa_fija,
-        }
-
-        let response_user_loan;
-        let err;
-        let isContinue = true;
-
-        try{
-            response_user_loan = fetch("http://localhost:4000/user/loan", {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers:{ 'Content-Type': 'application/json' }
-            });
-
-            window.location.reload();
-
-            console.log(response_user_loan);
-        }catch(e){
-            err = e;
-            isContinue = !isContinue;
-            console.log(err);
-        }
-        
-        console.log(data);
-        }
+    send_req_loan();
 })
 
 function transformSrc(srcImage){

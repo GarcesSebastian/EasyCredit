@@ -1,191 +1,221 @@
 ---
-import PopupBase from "./PopupBase.astro"
+    import PopupBase from "./PopupBase.astro"
 ---
 
-<PopupBase 
-    class="relative w-[55rem] max-sm:top-0 -top-10 py-5 rounded-md z-10 bg-slate-700" 
-    id="popup-center-loan" 
-    class_content="hidden h-screen fixed max-sm:h-fit max-sm:absolute"
-    id_inter_content="popup-inter-loan"
-    id_background="background-popup-loan"
-    id_close="close-loan"
-    >
-    <form id="form-loan" class=" w-full h-full grid grid-cols-2 gap-4 p-4">
-        <div class="flex flex-col gap-2 max-sm:col-span-2">
-
-            <label for="content-prestamo" class="text-white text-lg font-bold">Informacion del Prestamo</label>
-            <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1">
-                <label for="input-action-loan" class="block mb-1 text-sm font-medium text-white relative">{"Monto de la transferencia"}</label>
-                <div class="relative mb-3">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mail-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M13.5 19h-8.5a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v3.5" />
-                            <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
-                            <path d="M19 21v1m0 -8v1" />
-                            <path d="M3 7l9 6l9 -6" />
-                        </svg>
+<section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
+    <article class="w-full flex flex-col justify-center items-center h-fit py-10 bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
+        <div class="w-full h-fit max-w-7xl max-xl:px-5">
+            <nav class="flex px-5 py-3 w-fit mb-3 -mt-8 text-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 drop-shadow-lg" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                <li class="inline-flex items-center">
+                    <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                    </svg>
+                    Home
+                    </a>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                    <svg class="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    </svg>
+                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Prestamos</span>
                     </div>
-                    <input type="number" id="input-action-loan" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Monto de transferencia"} required>
+                </li>
+                </ol>
+            </nav>
+    
+            <form id="form-loan" class="w-full h-fit grid grid-cols-2 gap-4 max-w-7xl ">
+                <div class="flex flex-col gap-2 max-md:col-span-2 drop-shadow-lg">
+                    <label for="content-prestamo" class="text-white text-lg font-bold">Informacion del Prestamo</label>
+                    <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1">
+                        <label for="input-action-loan" class="block mb-1 text-sm font-medium text-white relative">{"Monto de la transferencia"}</label>
+                        <div class="relative mb-1">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mail-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M13.5 19h-8.5a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v3.5" />
+                                    <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                                    <path d="M19 21v1m0 -8v1" />
+                                    <path d="M3 7l9 6l9 -6" />
+                                </svg>
+                            </div>
+                            <input type="number" id="input-action-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Monto de transferencia"} required>
+                        </div>
+                        <span id="err-action-loan" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
+            
+                        <label for="input-tasa-loan" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Tasa de Interes"}</label>
+                        <div class="relative mb-1">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-businessplan w-5 h-5 text-gray-500 dark:text-gray-400">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M16 6m-5 0a5 3 0 1 0 10 0a5 3 0 1 0 -10 0" />
+                                    <path d="M11 6v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" />
+                                    <path d="M11 10v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" />
+                                    <path d="M11 14v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" />
+                                    <path d="M7 9h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                                    <path d="M5 15v1m0 -8v1" />
+                                </svg>
+                            </div>
+                            <input type="text" id="input-tasa-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Tasa de Interes"} value={"Loading..."} disabled>
+                        </div>        
+            
+                        <label for="input-cuotas" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Cuotas"}</label>
+                        <div class="relative mb-1">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M13 21h-7a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3" />
+                                    <path d="M16 3v4" />
+                                    <path d="M8 3v4" />
+                                    <path d="M4 11h12.5" />
+                                    <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                                    <path d="M19 21v1m0 -8v1" />
+                                </svg>
+                            </div>
+                            <select id="input-cuotas" class="outline-none border text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" required>
+                                <option value="" disabled selected hidden>Seleccione las cuotas</option>
+                                <option value="3 cuotas">3 cuotas</option>
+                                <option value="6 cuotas">6 cuotas</option>
+                                <option value="12 cuotas">12 cuotas</option>
+                                <option value="24 cuotas">24 cuotas</option>
+                                <option value="36 cuotas">36 cuotas</option>
+                                <option value="48 cuotas">48 cuotas</option>
+                            </select>
+                        </div>
+                        <span id="err-cuotas" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
+            
+                        <label for="input-frecuencia" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Frecuencia de pagos"}</label>
+                        <div class="relative mb-1">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M13 21h-7a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3" />
+                                    <path d="M16 3v4" />
+                                    <path d="M8 3v4" />
+                                    <path d="M4 11h12.5" />
+                                    <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                                    <path d="M19 21v1m0 -8v1" />
+                                </svg>
+                            </div>
+                            <select id="input-frecuencia" class="outline-none border text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" required>
+                                <option value="" disabled selected hidden>Seleccione la frecuencia</option>
+                                <option value="3 cuotas">Mensual</option>
+                                <option value="6 cuotas">Trimestral</option>
+                                <option value="12 cuotas">Semestral</option>
+                                <option value="24 cuotas">Anual</option>
+                            </select>
+                        </div>
+                        <span id="err-frecuencia" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
+            
+                    </div>
                 </div>
-
-                <label for="input-tasa-loan" class="block mb-1 text-sm font-medium text-white relative">{"Tasa de Interes"}</label>
-                <div class="relative mb-3">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-businessplan w-5 h-5 text-gray-500 dark:text-gray-400">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M16 6m-5 0a5 3 0 1 0 10 0a5 3 0 1 0 -10 0" />
-                            <path d="M11 6v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" />
-                            <path d="M11 10v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" />
-                            <path d="M11 14v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" />
-                            <path d="M7 9h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
-                            <path d="M5 15v1m0 -8v1" />
-                        </svg>
+            
+                <div class="flex flex-col gap-2 max-md:col-span-2 drop-shadow-lg">
+                    <label for="content-prestamo" class="text-white text-lg font-bold">Informacion Personal</label>
+                    <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1">
+                        <label for="input-name-loan" class="block mb-1 text-sm font-medium text-white relative">{"Nombre Completo"}</label>
+                        <div class="relative mb-1">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id-badge-2 w-5 h-5 text-gray-500 dark:text-gray-400">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M7 12h3v4h-3z" />
+                                    <path d="M10 6h-6a1 1 0 0 0 -1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1 -1v-12a1 1 0 0 0 -1 -1h-6" />
+                                    <path d="M10 3m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                                    <path d="M14 16h2" />
+                                    <path d="M14 12h4" />
+                                </svg>
+                            </div>
+                            <input type="text" id="input-name-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Nombre"} required>
+                        </div>
+                        <span id="err-name-loan" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
+            
+                        <label for="input-email" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Correo Electronico"}</label>
+                        <div class="relative mb-1">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                                    <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
+                                    <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
+                                </svg>
+                            </div>
+                            <input type="email" id="input-email" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Correo Electronico"} required>
+                        </div>
+                        <span id="err-email" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
+            
+                        <label for="input-id-loan" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Numero de Identificacion"}</label>
+                        <div class="relative mb-1">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-map-2 w-5 h-5 text-gray-500 dark:text-gray-400">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5" />
+                                    <path d="M9 4v13" /><path d="M15 7v5.5" />
+                                    <path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z" />
+                                    <path d="M19 18v.01" />
+                                </svg>
+                            </div>
+                            <input type="number" id="input-id-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Numero de Identificacion"}>
+                        </div>        
+                        <span id="err-id-loan" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
+            
+                        <label for="input-numero_telefono-loan" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Telefono"}</label>
+                        <div class="relative mb-1">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-phone w-5 h-5 text-gray-500 dark:text-gray-400">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+                                </svg>
+                            </div>
+                            <input type="tel" name="input-numero_telefono-loan" id="input-numero_telefono-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"+57 "} required>
+                        </div>
+                        <span id="err-numero_telefono-loan" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
+            
                     </div>
-                    <input type="text" id="input-tasa-loan" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Tasa de Interes"} value={"Loading..."} disabled>
-                </div>        
-
-                <label for="input-cuotas" class="block mb-1 text-sm font-medium text-white relative">{"Cuotas"}</label>
-                <div class="relative mb-3">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M13 21h-7a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3" />
-                            <path d="M16 3v4" />
-                            <path d="M8 3v4" />
-                            <path d="M4 11h12.5" />
-                            <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
-                            <path d="M19 21v1m0 -8v1" />
-                        </svg>
-                    </div>
-                    <select id="input-cuotas" class="outline-none border text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" required>
-                        <option value="" disabled selected hidden>Seleccione las cuotas</option>
-                        <option value="3 cuotas">3 cuotas</option>
-                        <option value="6 cuotas">6 cuotas</option>
-                        <option value="12 cuotas">12 cuotas</option>
-                        <option value="24 cuotas">24 cuotas</option>
-                        <option value="36 cuotas">36 cuotas</option>
-                        <option value="48 cuotas">48 cuotas</option>
-                    </select>
                 </div>
-
-                <label for="input-frecuencia" class="block mb-1 text-sm font-medium text-white relative">{"Frecuencia de pagos"}</label>
-                <div class="relative mb-0">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M13 21h-7a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3" />
-                            <path d="M16 3v4" />
-                            <path d="M8 3v4" />
-                            <path d="M4 11h12.5" />
-                            <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
-                            <path d="M19 21v1m0 -8v1" />
-                        </svg>
+            
+                <div class="flex flex-col col-span-2 drop-shadow-lg">
+                    <label for="content-prestamo" class="text-white text-lg font-bold">Tipo de Prestamo</label>
+                    <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1 flex w-full">
+                        <div class="flex justify-around items-center gap-8 w-full">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" name="tasa_fija" id="tasa_fija" checked required class="form-checkbox text-primary-500 h-5 w-5">
+                                <label for="tasa_fija" class="text-white text-md font-bold">Tasa Fija</label>
+                            </div>
+                
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" name="tasa_variable" id="tasa_variable" class="form-checkbox text-primary-500 h-5 w-5">
+                                <label for="tasa_variable" class="text-white text-md font-bold">Tasa Variable</label>
+                            </div>
+                        </div>
                     </div>
-                    <select id="input-frecuencia" class="outline-none border text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" required>
-                        <option value="" disabled selected hidden>Seleccione la frecuencia</option>
-                        <option value="3 cuotas">Mensual</option>
-                        <option value="6 cuotas">Trimestral</option>
-                        <option value="12 cuotas">Semestral</option>
-                        <option value="24 cuotas">Anual</option>
-                    </select>
                 </div>
-            </div>
+                
+            
+                <div class="flex flex-col col-span-2 drop-shadow-lg">
+                    <label for="content-prestamo" class="text-white text-lg font-bold">Finalizar Prestamo</label>
+                    <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1 flex w-full">
+                        <div class="flex justify-center items-center w-full gap-4">
+                            <div class="justify-center items-center flex gap-2 w-full">
+                                <input id="button-confirm-loan" type="submit" value="CONFIRMAR" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-3 text-center inline-flex items-center justify-center cursor-pointer">
+                            </div>
+            
+                            <div class="justify-center items-center flex gap-2 w-full">
+                                <input id="button-simulate-loan" type="submit" value="SIMULAR" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-3 text-center inline-flex items-center justify-center cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!--Hacer popup para confirmacion y finalizacion-->
+            
         </div>
+    </article>
+</section>
 
-        <div class="flex flex-col gap-2 max-sm:col-span-2">
-            <label for="content-prestamo" class="text-white text-lg font-bold">Informacion Personal</label>
-            <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1">
-                <label for="input-name-loan" class="block mb-1 text-sm font-medium text-white relative">{"Nombre Completo"}</label>
-                <div class="relative mb-3">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id-badge-2 w-5 h-5 text-gray-500 dark:text-gray-400">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M7 12h3v4h-3z" />
-                            <path d="M10 6h-6a1 1 0 0 0 -1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1 -1v-12a1 1 0 0 0 -1 -1h-6" />
-                            <path d="M10 3m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
-                            <path d="M14 16h2" />
-                            <path d="M14 12h4" />
-                        </svg>
-                    </div>
-                    <input type="text" id="input-name-loan" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Nombre"} required>
-                </div>
-
-                <label for="input-email" class="block mb-2 text-sm font-medium text-white relative">{"Correo Electronico"}</label>
-                <div class="relative mb-3">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                            <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
-                            <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
-                        </svg>
-                    </div>
-                    <input type="email" id="input-email" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Correo Electronico"} required>
-                </div>
-
-                <label for="input-id-loan" class="block mb-1 text-sm font-medium text-white relative">{"Numero de Identificacion"}</label>
-                <div class="relative mb-3">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-map-2 w-5 h-5 text-gray-500 dark:text-gray-400">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5" />
-                            <path d="M9 4v13" /><path d="M15 7v5.5" />
-                            <path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z" />
-                            <path d="M19 18v.01" />
-                        </svg>
-                    </div>
-                    <input type="number" id="input-id-loan" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Numero de Identificacion"} required>
-                </div>        
-
-                <label for="input-numero_telefono-loan" class="block mb-1 text-sm font-medium text-white relative">{"Telefono"}</label>
-                <div class="relative mb-1">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-phone w-5 h-5 text-gray-500 dark:text-gray-400">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                        </svg>
-                    </div>
-                    <input type="number" id="input-numero_telefono-loan" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Telefono"} required>
-                </div>
-        
-            </div>
-        </div>
-
-        <div class="flex flex-col col-span-2">
-            <label for="content-prestamo" class="text-white text-lg font-bold">Tipo de Prestamo</label>
-            <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1 flex w-full">
-                <div class="flex justify-between items-center gap-8 w-full">
-                    <div class="justify-center items-center flex gap-2 w-full">
-                        <input type="checkbox" name="tasa_fija" id="tasa_fija" checked required>
-                        <label for="tasa_fija" class="text-white text-md font-bold">Tasa Fija</label>
-                    </div>
-
-                    <div class="justify-center items-center flex gap-2 w-full">
-                        <input type="checkbox" name="tasa_variable" id="tasa_variable" required>
-                        <label for="tasa_variable" class="text-white text-md font-bold">Tasa Variable</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex flex-col col-span-2">
-            <label for="content-prestamo" class="text-white text-lg font-bold">Finalizar Prestamo</label>
-            <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1 flex w-full">
-                <div class="flex justify-center items-center w-full gap-4">
-                    <div class="justify-center items-center flex gap-2 w-full">
-                        <input id="button-confirm-loan" type="submit" value="CONFIRMAR" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-2 text-center inline-flex items-center justify-center cursor-pointer">
-                    </div>
-
-                    <div class="justify-center items-center flex gap-2 w-full">
-                        <input id="button-simulate-loan" type="submit" value="SIMULAR" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-2 text-center inline-flex items-center justify-center cursor-pointer">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-</PopupBase>
 
 <style>
-    #popup-center-loan{
-        background-color: red !important;
+    .drop-shadow-lg {
+      --tw-drop-shadow: drop-shadow(0 0px 8px rgba(0, 0, 0, 0.06)) drop-shadow(0 0px 3px rgba(0, 0, 0, 0.6));
     }
 </style>
