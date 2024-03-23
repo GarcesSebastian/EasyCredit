@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-03-2024 a las 23:05:30
+-- Tiempo de generación: 23-03-2024 a las 22:16:48
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -32,8 +32,22 @@ CREATE TABLE `movements` (
   `index_movement` int(11) NOT NULL,
   `tipo_movement` text NOT NULL,
   `fecha_movement` text NOT NULL,
-  `action_movement` int(11) NOT NULL
+  `action_movement` text NOT NULL,
+  `state_movement` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `movements`
+--
+
+INSERT INTO `movements` (`id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`) VALUES
+(586358, 1, 'Transfer', '21/03/2024', '8000', 'positivo'),
+(586358, 2, 'Transfer', '21/03/2024', '8000', 'positivo'),
+(753017, 1, 'Transfer', '21/03/2024', '8000', 'negativo'),
+(586358, 3, 'Transfer', '21/03/2024', '400000', 'positivo'),
+(753017, 2, 'Transfer', '21/03/2024', '400000', 'negativo'),
+(586358, 4, 'Transfer', '21/03/2024', '12000', 'positivo'),
+(753017, 3, 'Transfer', '21/03/2024', '12000', 'negativo');
 
 -- --------------------------------------------------------
 
@@ -53,7 +67,8 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
-(418753, 'Sebastian', 'sebastiangarces152@gmail.com', 0);
+(586358, 'Sebastian', 'sebastiangarces158@gmail.com', 0),
+(753017, 'Sebxstt', 'sebastiangarces152@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -68,7 +83,7 @@ CREATE TABLE `prestamos` (
   `tasa_interes` double NOT NULL,
   `cuotas` int(11) NOT NULL,
   `frencuencia_pago` text NOT NULL,
-  `action_prestamo` int(250) NOT NULL,
+  `action_prestamo` text NOT NULL,
   `tasa_variable` tinyint(1) NOT NULL,
   `tasa_fija` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -94,7 +109,8 @@ CREATE TABLE `registers` (
 --
 
 INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`) VALUES
-(418753, 'Sebastian', '$2b$10$Rmm.nsIKPRph2DJDoKClruzWYQ9IFNMuRB2Hf/Nxzh9oawgU29XJ6', 'sebastiangarces152@gmail.com', '$2b$10$VXGIO0mCgaLwYxDYjxrsHOXPKnNr5jyBvqRwC9nYHL8Ez0ipruoxK', '$2b$10$2Ide1NzSQg5VjI7UOePy6uoMSo9X3E6b03sY9oRsih8uoq5R5EQ.C', 1);
+(586358, 'Sebastian', '$2b$10$EgkPTUYhHiD/KIvXaxBZxeMxO1DFGvK0MPADGZYJhC.xRmk468IRq', 'sebastiangarces158@gmail.com', '$2b$10$8CyC9rZGjMN9Tz8nGoio8.EIH4jlbGLAlVQOZnUGNa3Y1Gd10DS8m', '$2b$10$xnm97RrtpA/DwbQFlKdzp.R8.EQ7MX.oq.dxpWpOftmCgdPV.TQOG', 1),
+(753017, 'Sebxstt', '$2b$10$rlH0pK5OCFIJBry2jkvcL.iigcKQeFKocuPh9rBrdD90joq.TP7We', 'sebastiangarces152@gmail.com', '$2b$10$q6FhR2/8lPEnFHpuiQIlQuNKyL12pcIZlZnl1hKU9hTKRDd6cx6uq', '$2b$10$FoXn9ySvelv2RlMHtR31heiG872qD8hYyl/cCWJTstIR2cIpPssOm', 1);
 
 -- --------------------------------------------------------
 
@@ -106,16 +122,17 @@ CREATE TABLE `users` (
   `id_user` int(11) NOT NULL,
   `name_user` varchar(45) NOT NULL,
   `email_user` text NOT NULL,
-  `saldo_disponible` int(250) NOT NULL,
-  `ingresos_totales` int(250) NOT NULL
+  `ingresos_totales` text NOT NULL,
+  `saldo_disponible` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `saldo_disponible`, `ingresos_totales`) VALUES
-(418753, 'Sebastian', 'sebastiangarces152@gmail.com', 0, 0);
+INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `ingresos_totales`, `saldo_disponible`) VALUES
+(586358, 'Sebastian', 'sebastiangarces158@gmail.com', '428000', '428000'),
+(753017, 'Sebxstt', 'sebastiangarces152@gmail.com', '11560000', '11560000');
 
 -- --------------------------------------------------------
 
