@@ -60,12 +60,59 @@ import PopupBase from "./PopupBase.astro"
     </form>
 </PopupBase>
 
+<div class="w-screen h-screen fixed justify-center items-center popup top-0 p-5 drop-shadow-lg hidden">
+    <div id="" class="absolute w-full h-full bg-transparent cursor-pointer"></div>
+
+    <div id="" class="relative w-[25rem] py-5 rounded-md z-10 bg-slate-700 mb-5">
+        
+        <div id="" class="absolute top-5 right-5 hover:bg-slate-800 cursor-pointer p-[.25rem] rounded-sm">
+            <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x w-6 h-6 text-white">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M18 6l-12 12" />
+                <path d="M6 6l12 12" />
+            </svg>
+        </div>
+
+        <div class="px-5 flex flex-col justify-center items-center w-full gap-y-8">
+            <div class="w-full flex flex-col justify-center items-center gap-y-5">
+                <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currenColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-help-hexagon w-32 h-32 stroke-red-500">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M19.875 6.27c.7 .398 1.13 1.143 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z" />
+                    <path d="M12 16v.01" />
+                    <path d="M12 13a2 2 0 0 0 .914 -3.782a1.98 1.98 0 0 0 -2.414 .483" />
+                </svg>
+
+                <h1 class="text-white font-bold text-2xl text-center">
+                    Are you sure you want to continue?
+                </h1>
+            </div>
+
+            <div class="w-full flex justify-center items-center gap-x-10">
+                <input type="button" value="Continuar" class="bg-lime-500 px-5 py-3 rounded-md hover:bg-lime-600 cursor-pointer">
+                <input type="button" value="Cancelar" class="bg-red-500 px-5 py-3 rounded-md hover:bg-red-600 cursor-pointer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .drop-shadow-lg {
+      --tw-drop-shadow: drop-shadow(0 0px 8px rgba(0, 0, 0, 0.06)) drop-shadow(0 0px 3px rgba(0, 0, 0, 0.6));
+    }
+
+    .popup{
+        z-index: 10;
+        --tw-bg-opacity: .75;
+        background-color: rgba(13, 17, 23, var(--tw-bg-opacity));
+    }
+</style>
+
 <script>
 
     let elements_transfer = {
-        input_numero_identidad: document.querySelector("#input-numero-identidad-transfer"),
-        input_action: document.querySelector("#input-action-transfer"),
-        input_message: document.querySelector("#input-message-transfer"),
+        input_numero_identidad: document.querySelector("#input-numero-identidad-transfer") as HTMLElement,
+        input_action: document.querySelector("#input-action-transfer") as HTMLElement,
+        input_message: document.querySelector("#input-message-transfer") as HTMLElement,
     }
 
     async function send_req_transfer(){
@@ -78,9 +125,10 @@ import PopupBase from "./PopupBase.astro"
                 let id = item.id.toString();
                 let id_without_input = id.split("input")[1];
                 let id_with_err = "err" + id_without_input;
-                if(document.querySelector("#" + id_with_err)){
-                    document.querySelector("#" + id_with_err).style.display = "none";
-                    document.querySelector("#" + id_with_err).innerHTML = ""
+                let element_err = document.querySelector("#" + id_with_err) as HTMLElement;
+                if(element_err){
+                    element_err.style.display = "none";
+                    element_err.innerHTML = ""
                 }
                 item.style.borderColor = "transparent";
             }
@@ -90,8 +138,9 @@ import PopupBase from "./PopupBase.astro"
             let id = elements_transfer.input_action.id.toString();
             let id_without_input = id.split("input")[1];
             let id_with_err = "err" + id_without_input;
-            document.querySelector("#" + id_with_err).style.display = "initial";
-            document.querySelector("#" + id_with_err).innerHTML = "* El monto debe ser menor a 4M y mayor a 1k."
+            let element_err = document.querySelector("#" + id_with_err) as HTMLElement;
+            element_err.style.display = "initial";
+            element_err.innerHTML = "* El monto debe ser menor a 4M y mayor a 1k."
             elements_transfer.input_action.style.borderColor = "tomato";
             isContinueLoan = false;
         }
@@ -100,8 +149,9 @@ import PopupBase from "./PopupBase.astro"
             let id = elements_transfer.input_message.id.toString();
             let id_without_input = id.split("input")[1];
             let id_with_err = "err" + id_without_input;
-            document.querySelector("#" + id_with_err).style.display = "initial";
-            document.querySelector("#" + id_with_err).innerHTML = "* El numero maximo de caracteres es de 200 caracteres."
+            let element_err = document.querySelector("#" + id_with_err) as HTMLElement;
+            element_err.style.display = "initial";
+            element_err.innerHTML = "* El numero maximo de caracteres es de 200 caracteres."
             elements_transfer.input_message.style.borderColor = "tomato";
             isContinueLoan = false;
         }
@@ -137,8 +187,9 @@ import PopupBase from "./PopupBase.astro"
                     let id = elements_transfer.input_numero_identidad.id.toString();
                     let id_without_input = id.split("input")[1];
                     let id_with_err = "err" + id_without_input;
-                    document.querySelector("#" + id_with_err).style.display = "initial";
-                    document.querySelector("#" + id_with_err).innerHTML = "* " + response_message.message
+                    let element_err = document.querySelector("#" + id_with_err) as HTMLElement;
+                    element_err.style.display = "initial";
+                    element_err.innerHTML = "* " + response_message.message
                     elements_transfer.input_numero_identidad.style.borderColor = "tomato";
                 }
             }else{
