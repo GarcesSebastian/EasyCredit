@@ -373,28 +373,6 @@ elements_loan.tasa_variable?.addEventListener("change", () => {
     }
 });
 
-var ctx = document.querySelector("#myChart").getContext("2d");
-
-new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
-      }
-    }
-  }
-});
-
-
 async function send_req_loan(){
     let isContinueLoan = true;
 
