@@ -171,7 +171,7 @@ console.log(data_movements_incomplete.length);
                                 </h1>
                                 <p class="text-white">{content_check_card_text}</p>
 
-                                <button class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                <button id="button-simulate-loan" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
                                     {simulate_loan_text}
                                 </button>
                             </div>
@@ -194,7 +194,7 @@ console.log(data_movements_incomplete.length);
                             num_movements={data_movements_incomplete.length}
                             >
                             {
-                                data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: any; }) => (
+                                data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: any; state_movement: string; }) => (
                                     
                                     <CardMovementsArtcile
                                     img_url={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"}

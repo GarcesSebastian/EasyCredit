@@ -1,31 +1,110 @@
 window.addEventListener("DOMContentLoaded", async () => {
+    if(document.querySelector("#input-tasa-loan")){
+        document.querySelector("#input-tasa-loan").value = await obtenerTasa() + "%";
+    }
+
+    if(document.querySelector("#tasa-simulate-loan")){
+        document.querySelector("#tasa-simulate-loan").value = await obtenerTasa() + "%";
+    }
+});
+
+async function obtenerTasa() {
     let response_data_gobierno;
     let data_gobierno;
-    let isContinue = true;
-    let err;
     let tasa;
+    let isContinue = true;
 
-    try{
+    try {
         response_data_gobierno = await fetch("https://www.datos.gov.co/resource/Captacion.json?$query=SELECT%20tipoentidad%2C%20codigoentidad%2C%20nombreentidad%2C%20fechacorte%2C%20uca%2C%20nombre_unidad_de_captura%2C%20subcuenta%2C%20descripcion%2C%20tasa%2C%20monto%20WHERE%20((%60codigoentidad%60%20%3D%20'7')%20AND%20%60codigoentidad%60%20IS%20NOT%20NULL)%20ORDER%20BY%20fechacorte%20DESC");
         data_gobierno = await response_data_gobierno.json();
 
         data_gobierno.forEach((item) => {
-            if(item.fechacorte.split("-")[0] == (new Date().getFullYear()).toString() && item.uca == "4" && isContinue){
+            if (item.fechacorte.split("-")[0] == (new Date().getFullYear()).toString() && item.uca == "4" && isContinue) {
                 tasa = item.tasa;
-                if(document.querySelector("#input-tasa-loan")){
-                    document.querySelector("#input-tasa-loan").value = tasa + "%";
-                }
-                console.log(tasa)
+                console.log(tasa);
                 isContinue = !isContinue;
             }
         });
-    }catch(e){
-        isContinue = !isContinue;
-        err = e;
-        console.log(err)
-    }
-});
 
+        return tasa;
+    } catch (e) {
+        return null;
+    }
+}
+
+async function simulateLoan(monto, tasa, frecuencia, plazo){
+    const tasa_interes_mensual = (tasa / 100) / 12;
+    let total_pagos;
+    let frecuencia_value;
+  
+    switch (frecuencia) {
+        case 'mensual':
+            total_pagos = plazo;
+            frecuencia_value = 1;
+            break;
+        case 'trimestral':
+            total_pagos = plazo / 3;
+            frecuencia_value = 3;
+            break;
+        case 'semestral':
+            total_pagos = plazo / 6;
+            frecuencia_value = 6;
+            break;
+        case 'anual':
+            total_pagos = plazo / 12;
+            frecuencia_value = 12;
+            break;
+        default:
+            console.error('Frecuencia de pago no válida');
+            return;
+    }
+
+    let pago_restante = monto;
+    let pago_mensual = (monto * tasa_interes_mensual) / (1 - Math.pow(1 + tasa_interes_mensual, -total_pagos));
+
+    let body_table_simulate_loan = document.querySelector("#body-table-simulate-loan");
+    body_table_simulate_loan.innerHTML = '';
+
+    for(let i = 1; i <= total_pagos; i++){
+        let pago_interes = pago_restante * tasa_interes_mensual;
+        let pago_principal = pago_mensual - pago_interes;
+        let pago_total = pago_interes + pago_principal;
+        let pago_final = pago_restante - pago_principal
+
+        const currentDate = new Date();
+        currentDate.setMonth(currentDate.getMonth() + i * frecuencia_value);
+
+        const formattedDate = currentDate.toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">1</td>
+            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_restante.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_principal.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_interes.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_total.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">30</td>
+            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_final.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${i}</td>
+            <td class="text-center py-2 px-4">${formattedDate}</td>
+        `;
+        body_table_simulate_loan.appendChild(row);
+        pago_restante = pago_final;
+    }
+}
+
+let btn_simulate_loan = document.querySelector("#btn-simulate-loan");
+let form_simulate_loan = document.querySelector("#form-simulate-loan");
+    
+form_simulate_loan?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  let monto = parseFloat(document.querySelector("#monto-simulate-loan").value);
+  let tasa = parseFloat(await obtenerTasa());
+  let frecuencia = document.querySelector("#frecuencia-simulate-loan").value;
+  let plazo = parseFloat(document.querySelector("#plazo-simulate-loan").value);
+  document.querySelector("#content-table-simulate-loan").style.display = "initial";
+  simulateLoan(monto, tasa, frecuencia, plazo);
+});
 
 let actual_element = document.querySelector("#actual-flag");
 let list_flags = document.querySelector("#list-flags");
@@ -195,6 +274,7 @@ if(document.querySelector("#background-popup-transfer") // Si existen los elemen
     && document.querySelector("#close-transfer") 
     && document.querySelector("#button-transfer") 
     && document.querySelector("#button-loan")
+    && document.querySelector("#button-simulate-loan")
 ){
     document.querySelector("#background-popup-transfer").addEventListener("click", () => {
         document.querySelector("#popup-center").style.display = "none";
@@ -210,6 +290,10 @@ if(document.querySelector("#background-popup-transfer") // Si existen los elemen
     
     document.querySelector("#button-loan").addEventListener("click", () =>{
         window.location.href="/Loan"
+    });
+
+    document.querySelector("#button-simulate-loan").addEventListener("click", () =>{
+        window.location.href="/SimulateLoan"
     });
 }
 
@@ -288,6 +372,28 @@ elements_loan.tasa_variable?.addEventListener("change", () => {
         elements_loan.tasa_variable.checked = true;
     }
 });
+
+var ctx = document.querySelector("#myChart").getContext("2d");
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [{
+      label: '# of Votes',
+      data: [12, 19, 3, 5, 2, 3],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
 
 async function send_req_loan(){
     let isContinueLoan = true;
