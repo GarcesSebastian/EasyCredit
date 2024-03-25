@@ -60,7 +60,11 @@ import Layout from "../layouts/Layout.astro";
                 const fechaEjeXNormalizada = normalizarFecha(eje_x[i]);
 
                 if (fechaMovimientoNormalizada === fechaEjeXNormalizada) {
-                    movements[i] = parseInt(item.action_movement);
+                    if(item.state_movement == "negativo"){
+                        movements[i] = parseInt(item.action_movement) * -1;
+                    }else{
+                        movements[i] = parseInt(item.action_movement);
+                    }
                     break;
                 }
             }
