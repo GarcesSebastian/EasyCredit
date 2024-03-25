@@ -4,8 +4,12 @@ import cors from 'cors';
 import * as database from "./database.js";
 import bcrypt from 'bcrypt';
 import CryptoJS from 'crypto-js';
+import { createServer } from 'node:http';
+import { Server } from 'socket.io';
+import { Console } from 'node:console';
 
 const app = express();
+const server = createServer(app);
 
 //Variables globals
 let flag = "";
@@ -16,23 +20,62 @@ const port = process.env.PORT || 4000;
 
 // Configuración inicial
 app.set("port", port);
-app.listen(app.get("port"));
-console.log("Escuchando el puerto " + app.get("port"));
 
 // Middlewares
 app.use(cors({
-    origin: ["https://1rhbb29z-4321.use2.devtunnels.ms","http://localhost:4321", "http://localhost:4322", "http://localhost:5500", "http://localhost:5501", "http://localhost:" + process.env.PORT],
+    origin: (origin, callback) => {
+      const allowedOrigins = ['http://localhost:4321', "https://1rhbb29z-4321.use2.devtunnels.ms"];
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('No permitido por CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
 app.use(morgan("dev"));
 app.use(express.json());
-
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // Permite solicitudes desde cualquier origen
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Métodos permitidos
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Encabezados permitidos
     next();
 });
+
+const io = new Server(server, {
+    cors: {
+        origin: (origin, callback) => {
+        const allowedOrigins = ['http://localhost:4321', "https://1rhbb29z-4321.use2.devtunnels.ms"];
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('No permitido por CORS'));
+        }
+        },
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true
+    }
+});
+
+io.on('connection', (socket) => {
+    console.log("Cliente conectado")
+
+    socket.on("init", (id) => {
+        console.log("Cliente conectado con ID: " + id);
+        socket.join(id);
+    });
+
+    socket.on('transfer', (data) => {
+        console.log("Transferencia enviada a " + parseInt(data.numero_identidad));
+        io.to(parseInt(data.numero_identidad)).emit('movement', data)
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Cliente desconectado');
+    });
+});
+    
 
 app.post("/register/auth", async (req, res) => {
     if (req.body && req.body.email) {
@@ -296,6 +339,9 @@ app.get("/words", async (req, res) => {
         res.status(400).send({ message: "Bad Request" });
     }
 });
+
+server.listen(app.get("port"));
+console.log("Escuchando el puerto " + app.get("port"));
 
 //Functions
 

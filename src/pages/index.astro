@@ -191,3 +191,31 @@ try{
     }
     <PopupTransfer></PopupTransfer>
 </Layout>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+<script>
+    let socket = io("http://localhost:4000");
+
+    let response_data_variables: Response;
+    let response_data_user: Response;
+
+    let data_variables: any;
+    let data_user: any;
+
+    try{
+        response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+        data_variables = await response_data_variables.json();
+
+        response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+        data_user = await response_data_user.json();
+    }catch(e){
+        console.error(e);
+    }
+
+    socket.emit("init", (data_user.user_info[0].id_user as any));
+
+    socket.on('movement', (data: any) => {
+        console.log("Datos recibidos")
+        console.log(data);
+    });
+
+</script>

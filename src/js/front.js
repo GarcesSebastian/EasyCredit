@@ -315,32 +315,6 @@ if(decrypt(localStorage.getItem("W-INIT-ENT")) === "true" && decrypt(localStorag
     console.log("No esta logeado el usuario.")
 }
 
-async function fetchDataAndUpdate() { // Falta agregar que solo lo haga cuando esta logeado el usuario
-    if(decrypt(localStorage.getItem("W-INIT-ENT")) === "true" && decrypt(localStorage.getItem("W-I-D")) != "false"){
-        console.log("ajklsdjaldka")
-        response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-        data_variables = await response_data_variables.json();
-    
-        response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
-        data_user = await response_data_user.json();
-    
-        data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);
-    
-        if(data_movements_incomplete.length != initial_value_movements){
-            initial_value_movements = data_movements_incomplete.length;
-            window.location.reload();
-        }
-        console.log("Esta logeado el usuario.")
-    }else{
-        console.log("No esta logeado el usuario.")
-    }
-}
-
-fetchDataAndUpdate();
-
-setInterval(fetchDataAndUpdate, 10000);
-
-
 let elements_loan = {
     input_action_loan: document.querySelector("#input-action-loan"),
     input_tasa_loan: document.querySelector("#input-tasa-loan"),
@@ -482,6 +456,108 @@ async function send_req_loan(){
 document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
     event.preventDefault();
     send_req_loan();
+})
+
+
+let elements_transfer = {
+    input_numero_identidad: document.querySelector("#input-numero-identidad-transfer"),
+    input_action: document.querySelector("#input-action-transfer"),
+    input_message: document.querySelector("#input-message-transfer"),
+}
+
+async function send_req_transfer(){
+    let isContinueLoan = true;
+
+    for(let key in elements_transfer){
+        if(elements_transfer.hasOwnProperty(key)){
+            let item = elements_transfer[key];
+            let id = item.id.toString();
+            let id_without_input = id.split("input")[1];
+            let id_with_err = "err" + id_without_input;
+            let element_err = document.querySelector("#" + id_with_err);
+            if(element_err){
+                element_err.style.display = "none";
+                element_err.innerHTML = ""
+            }
+            item.style.borderColor = "transparent";
+        }
+    }
+
+    if(parseFloat(elements_transfer.input_action.value) < 1000 || parseFloat(elements_transfer.input_action.value) > 4000000) {
+        let id = elements_transfer.input_action.id.toString();
+        let id_without_input = id.split("input")[1];
+        let id_with_err = "err" + id_without_input;
+        let element_err = document.querySelector("#" + id_with_err);
+        element_err.style.display = "initial";
+        element_err.innerHTML = "* El monto debe ser menor a 4M y mayor a 1k."
+        elements_transfer.input_action.style.borderColor = "tomato";
+        isContinueLoan = false;
+    }
+
+    if(elements_transfer.input_message.value.length > 200){
+        let id = elements_transfer.input_message.id.toString();
+        let id_without_input = id.split("input")[1];
+        let id_with_err = "err" + id_without_input;
+        let element_err = document.querySelector("#" + id_with_err);
+        element_err.style.display = "initial";
+        element_err.innerHTML = "* El numero maximo de caracteres es de 200 caracteres."
+        elements_transfer.input_message.style.borderColor = "tomato";
+        isContinueLoan = false;
+    }
+
+    if(!isContinueLoan){
+        return null;
+    }
+
+    let email_user_origin = localStorage.getItem("W-I-D");
+
+    let data = {
+        numero_identidad: elements_transfer.input_numero_identidad.value,
+        action: elements_transfer.input_action.value,
+        message: elements_transfer.input_message.value,
+        origin: email_user_origin,
+    }
+
+    let response_user_loan;
+    let err;
+    let isContinue = true;
+
+    try{
+        response_user_loan = await fetch("http://localhost:4000/user/transfer", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers:{ 'Content-Type': 'application/json' }
+        });
+
+        let response_message = await response_user_loan.json();
+
+        if(response_message.state === "Bad Request"){
+            if(response_message.message === "Numero de Identificacion Invalido."){
+                let id = elements_transfer.input_numero_identidad.id.toString();
+                let id_without_input = id.split("input")[1];
+                let id_with_err = "err" + id_without_input;
+                let element_err = document.querySelector("#" + id_with_err);
+                element_err.style.display = "initial";
+                element_err.innerHTML = "* " + response_message.message
+                elements_transfer.input_numero_identidad.style.borderColor = "tomato";
+            }
+        }else{
+            let socket = io("http://localhost:4000");
+            socket.emit('transfer', data);
+            window.location.reload();
+        }
+    }catch(e){
+        err = e;
+        isContinue = !isContinue;
+        console.log(err);
+    }
+    
+    console.log(data);
+}
+
+document.querySelector("#form-transfer")?.addEventListener("submit", (event) =>{
+    event.preventDefault();
+    send_req_transfer();
 })
 
 function transformSrc(srcImage){
