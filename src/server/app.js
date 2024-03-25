@@ -294,5 +294,5 @@ app.get("/words", async (req, res) => {
 //Functions
 
 function getDateNow(){
-    return new Date().getUTCDate() + "/" + (new Date().getUTCMonth() < 9 ? "0" + (new Date().getUTCMonth() + 1) : (new Date().getUTCMonth() + 1)) + "/" + new Date().getFullYear();
+    return new Date().getFullYear() + "-" + (new Date().getUTCMonth() < 9 ? "0" + (new Date().getUTCMonth() + 1) : (new Date().getUTCMonth() + 1)) + "-" + new Date().getUTCDate();
 }
