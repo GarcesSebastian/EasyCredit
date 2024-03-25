@@ -317,6 +317,7 @@ if(decrypt(localStorage.getItem("W-INIT-ENT")) === "true" && decrypt(localStorag
 
 async function fetchDataAndUpdate() { // Falta agregar que solo lo haga cuando esta logeado el usuario
     if(decrypt(localStorage.getItem("W-INIT-ENT")) === "true" && decrypt(localStorage.getItem("W-I-D")) != "false"){
+        console.log("ajklsdjaldka")
         response_data_variables = await fetch(`http://localhost:4000/variables/res`);
         data_variables = await response_data_variables.json();
     

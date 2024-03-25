@@ -21,11 +21,18 @@ console.log("Escuchando el puerto " + app.get("port"));
 
 // Middlewares
 app.use(cors({
-    origin: ["http://localhost:4321", "http://localhost:4322", "http://localhost:5500", "http://localhost:5501", "http://localhost:" + process.env.PORT],
+    origin: ["https://1rhbb29z-4321.use2.devtunnels.ms","http://localhost:4321", "http://localhost:4322", "http://localhost:5500", "http://localhost:5501", "http://localhost:" + process.env.PORT],
     credentials: true
 }));
 app.use(morgan("dev"));
 app.use(express.json());
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Permite solicitudes desde cualquier origen
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Métodos permitidos
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Encabezados permitidos
+    next();
+});
 
 app.post("/register/auth", async (req, res) => {
     if (req.body && req.body.email) {
@@ -289,7 +296,6 @@ app.get("/words", async (req, res) => {
         res.status(400).send({ message: "Bad Request" });
     }
 });
-
 
 //Functions
 
