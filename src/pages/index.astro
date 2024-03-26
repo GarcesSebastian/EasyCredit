@@ -5,11 +5,17 @@ import Footer from "../components/Footer.astro"
 import Banner from "../components/Banner.astro"
 import BannerUser from "../components/user/BannerUser.astro"
 import PopupTransfer from "../components/user/PopupTransfer.astro"
-import PopupLoan from "../components/user/PopupLoan.astro"
 import Info from "../components/Info.astro"
 import ArrowFloat from "../components/ArrowFloat.astro"
 import ArticleLeft from "../components/ArticleLeft.astro"
 import ArticleRight from "../components/ArticleRight.astro"
+
+import CryptoJS from 'crypto';
+import { io } from 'socket.io-client'
+
+const socket = io("https://c2hccs03-4000.use2.devtunnels.ms");
+
+socket.emit('send_application');
 
 interface WordItem{
     word: string;
@@ -30,14 +36,13 @@ let err: any;
 let isContinue = true;
 
 try{
-    response = await fetch("http://localhost:4000/words");
+    response = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/words");
     data = await response.json();
 
-    response_variables = await fetch("http://localhost:4000/variables/res");
-    variables = await response_variables.json();
-
-    response_data_variables = await fetch("http://localhost:4000/variables/res");
+    response_data_variables = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/variables/res");
     data_variables = await response_data_variables.json();
+
+    console.log(data_variables);
 
     text = {
     titulo_inicio: (data.find((item: { word: string }) => item.word === "titulo_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
@@ -191,9 +196,10 @@ try{
     }
     <PopupTransfer></PopupTransfer>
 </Layout>
+
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
 <script>
-    let socket = io("http://localhost:4000");
+    let socket = io("https://c2hccs03-4000.use2.devtunnels.ms");
 
     let response_data_variables: Response;
     let response_data_user: Response;
@@ -202,16 +208,20 @@ try{
     let data_user: any;
 
     try{
-        response_data_variables = await fetch(`http://localhost:4000/variables/res`);
+        response_data_variables = await fetch(`https://c2hccs03-4000.use2.devtunnels.ms/variables/res`);
         data_variables = await response_data_variables.json();
 
-        response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+        response_data_user = await fetch(`https://c2hccs03-4000.use2.devtunnels.ms/user/data?email_user=${data_variables.email}`);
         data_user = await response_data_user.json();
+
+        if(CryptoJS.AES.decrypt(localStorage.getItem("W-I-D"), 'clave_secreta').toString(CryptoJS.enc.Utf8) != "false"){
+            if(data_user.user_info[0].id_user){
+                socket.emit("init", (data_user.user_info[0].id_user as any));
+            }
+        }
     }catch(e){
         console.error(e);
     }
-
-    socket.emit("init", (data_user.user_info[0].id_user as any));
 
     socket.on('movement', (data: any) => {
         console.log("Datos recibidos")

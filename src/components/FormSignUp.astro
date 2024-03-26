@@ -191,7 +191,7 @@ function inputErr(input: any, id: string, message:string) {
                 numero_telefono: numero_telefono.value,
             };
 
-            const res = await fetch("http://localhost:4000/register/auth", {
+            const res = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/register/auth", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {

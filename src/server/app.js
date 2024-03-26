@@ -6,7 +6,6 @@ import bcrypt from 'bcrypt';
 import CryptoJS from 'crypto-js';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import { Console } from 'node:console';
 
 const app = express();
 const server = createServer(app);
@@ -24,7 +23,7 @@ app.set("port", port);
 // Middlewares
 app.use(cors({
     origin: (origin, callback) => {
-      const allowedOrigins = ['http://localhost:4321', "https://1rhbb29z-4321.use2.devtunnels.ms"];
+      const allowedOrigins = ['http://localhost:4321', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true);
       } else {
@@ -46,7 +45,7 @@ app.use((req, res, next) => {
 const io = new Server(server, {
     cors: {
         origin: (origin, callback) => {
-        const allowedOrigins = ['http://localhost:4321', "https://1rhbb29z-4321.use2.devtunnels.ms"];
+        const allowedOrigins = ['http://localhost:4321', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
         if (allowedOrigins.includes(origin) || !origin) {
             callback(null, true);
         } else {
@@ -64,6 +63,10 @@ io.on('connection', (socket) => {
     socket.on("init", (id) => {
         console.log("Cliente conectado con ID: " + id);
         socket.join(id);
+    });
+
+    socket.on('send_application', () => {
+        io.emit
     });
 
     socket.on('transfer', (data) => {
