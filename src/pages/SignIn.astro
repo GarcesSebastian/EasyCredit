@@ -22,9 +22,9 @@ let text: any;
 let isContinue = true;
 
 try{
-    response = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/words");
+    response = await fetch("https://localhost:4000/words");
     data = await response.json();
-    response_variables = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/variables/res");
+    response_variables = await fetch("https://localhost:4000/variables/res");
     data_variables = await response_variables.json();
 }catch(Exception){
     isContinue != isContinue;

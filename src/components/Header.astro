@@ -26,13 +26,13 @@ let isContinue = true;
 let err: any;
 
 try{
-    response_variables = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/variables/res");
+    response_variables = await fetch("https://localhost:4000/variables/res");
     variables = await response_variables.json();
 
-    response_data_variables = await fetch(`https://c2hccs03-4000.use2.devtunnels.ms/variables/res`);
+    response_data_variables = await fetch(`https://localhost:4000/variables/res`);
     data_variables = await response_data_variables.json();
 
-    response_data_user = await fetch(`https://c2hccs03-4000.use2.devtunnels.ms/user/data?email_user=${data_variables.email}`);
+    response_data_user = await fetch(`https://localhost:4000/user/data?email_user=${data_variables.email}`);
     data_user = await response_data_user.json();
 }catch(e){
     isContinue = !isContinue;

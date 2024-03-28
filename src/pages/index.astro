@@ -13,9 +13,11 @@ import ArticleRight from "../components/ArticleRight.astro"
 import CryptoJS from 'crypto';
 import { io } from 'socket.io-client'
 
-const socket = io("https://c2hccs03-4000.use2.devtunnels.ms");
+const socket = io("https://localhost:4000");
 
-socket.emit('send_application');
+socket.on('receive_data_storage', () => {
+    console.log("Datos recibidos desde el cliente");
+});
 
 interface WordItem{
     word: string;
@@ -25,8 +27,6 @@ interface WordItem{
 
 let response: Response;
 let data: any;
-let response_variables: Response;
-let variables: any;
 let response_data_variables: Response;
 let data_variables: any;
 
@@ -36,10 +36,10 @@ let err: any;
 let isContinue = true;
 
 try{
-    response = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/words");
+    response = await fetch("https://localhost:4000/words");
     data = await response.json();
 
-    response_data_variables = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/variables/res");
+    response_data_variables = await fetch("https://localhost:4000/variables/res");
     data_variables = await response_data_variables.json();
 
     console.log(data_variables);
@@ -199,33 +199,40 @@ try{
 
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
 <script>
-    let socket = io("https://c2hccs03-4000.use2.devtunnels.ms");
+    let socket = io("https://localhost:4000");
 
-    let response_data_variables: Response;
-    let response_data_user: Response;
-
-    let data_variables: any;
-    let data_user: any;
-
-    try{
-        response_data_variables = await fetch(`https://c2hccs03-4000.use2.devtunnels.ms/variables/res`);
-        data_variables = await response_data_variables.json();
-
-        response_data_user = await fetch(`https://c2hccs03-4000.use2.devtunnels.ms/user/data?email_user=${data_variables.email}`);
-        data_user = await response_data_user.json();
-
-        if(CryptoJS.AES.decrypt(localStorage.getItem("W-I-D"), 'clave_secreta').toString(CryptoJS.enc.Utf8) != "false"){
-            if(data_user.user_info[0].id_user){
-                socket.emit("init", (data_user.user_info[0].id_user as any));
-            }
-        }
-    }catch(e){
-        console.error(e);
+    if(CryptoJS.AES.decrypt(localStorage.getItem("W-I-D"), 'clave_secreta').toString(CryptoJS.enc.Utf8) != "false"){
+        let W_I_D = CryptoJS.AES.decrypt(localStorage.getItem("W-I-D"), 'clave_secreta').toString(CryptoJS.enc.Utf8);
+        let response_data_user = await fetch(`https://localhost:4000/user/data?email_user=${W_I_D}`);
+        let data_user = await response_data_user.json();
+        socket.emit('send_data_storage', JSON.stringify(data_user.user_info[0]));
     }
 
-    socket.on('movement', (data: any) => {
-        console.log("Datos recibidos")
-        console.log(data);
-    });
+    // let response_data_variables: Response;
+    // let response_data_user: Response;
+
+    // let data_variables: any;
+    // let data_user: any;
+
+    // try{
+    //     response_data_variables = await fetch(`https://localhost:4000/variables/res`);
+    //     data_variables = await response_data_variables.json();
+
+    //     response_data_user = await fetch(`https://localhost:4000/user/data?email_user=${data_variables.email}`);
+    //     data_user = await response_data_user.json();
+
+    //     if(CryptoJS.AES.decrypt(localStorage.getItem("W-I-D"), 'clave_secreta').toString(CryptoJS.enc.Utf8) != "false"){
+    //         if(data_user.user_info[0]){
+    //             socket.emit("init", JSON.stringify((data_user.user_info[0] as any)));
+    //         }
+    //     }
+    // }catch(e){
+    //     console.error(e);
+    // }
+
+    // socket.on('movement', (data: any) => {
+    //     console.log("Datos recibidos")
+    //     console.log(data);
+    // });
 
 </script>

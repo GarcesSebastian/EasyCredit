@@ -60,16 +60,16 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
     console.log("Cliente conectado")
 
-    socket.on("init", (id) => {
-        console.log("Cliente conectado con ID: " + id);
-        socket.join(id);
+    socket.on('send_data_storage', (data) => {
+        console.log("Datos recibidos desde el servidor");
+        let data_json = JSON.parse(data);
+        socket.join(data_json.id_user);
+        console.log(socket.rooms);
+
+        io.to(753017).emit('receive_data_storage', JSON.stringify(data_json));
     });
 
-    socket.on('send_application', () => {
-        io.emit
-    });
-
-    socket.on('transfer', (data) => {
+    socket.on('transfer', (data) => {   
         console.log("Transferencia enviada a " + parseInt(data.numero_identidad));
         io.to(parseInt(data.numero_identidad)).emit('movement', data)
     });

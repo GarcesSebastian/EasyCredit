@@ -13,7 +13,7 @@ let data = {
     email: localStorage.getItem("W-I-D") || encrypt("false"),
 }
 
-fetch("https://c2hccs03-4000.use2.devtunnels.ms/variables", {
+fetch("https://localhost:4000/variables", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {

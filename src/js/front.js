@@ -149,7 +149,7 @@ if(button_logout){
             email: localStorage.getItem("W-I-D"),
         }
 
-        fetch("https://c2hccs03-4000.use2.devtunnels.ms/variables", {
+        fetch("https://localhost:4000/variables", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -191,7 +191,7 @@ if(list_flags && actual_element){
                     email: localStorage.getItem("W-I-D"),
                 }
         
-                fetch("https://c2hccs03-4000.use2.devtunnels.ms/variables", {
+                fetch("https://localhost:4000/variables", {
                     method: "POST",
                     body: JSON.stringify(data),
                     headers: {
@@ -220,7 +220,7 @@ document.querySelector("#submit-signin")?.addEventListener("click", async () => 
             password: password.value
         };
 
-        const res = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/login/auth", {
+        const res = await fetch("https://localhost:4000/login/auth", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -247,7 +247,7 @@ document.querySelector("#submit-signin")?.addEventListener("click", async () => 
                 email: localStorage.getItem("W-I-D"),
             }
 
-            fetch("https://c2hccs03-4000.use2.devtunnels.ms/variables", {
+            fetch("https://localhost:4000/variables", {
                 method: "POST",
                 body: JSON.stringify(Info),
                 headers: {
@@ -299,14 +299,12 @@ if(document.querySelector("#background-popup-transfer") // Si existen los elemen
 
 let response_data_user, data_user, response_data_variables, data_variables, data_movements_incomplete, initial_value_movements;
 
-console.log(decrypt(localStorage.getItem("W-I-D")));
-
 if(decrypt(localStorage.getItem("W-INIT-ENT")) === "true" && decrypt(localStorage.getItem("W-I-D")) != "false"){
-    response_data_variables = await fetch(`https://c2hccs03-4000.use2.devtunnels.ms/variables/res`);
+    response_data_variables = await fetch(`https://localhost:4000/variables/res`);
     data_variables = await response_data_variables.json();
 
     if(data_variables.email){
-        response_data_user = await fetch(`https://c2hccs03-4000.use2.devtunnels.ms/user/data?email_user=${data_variables.email}`);
+        response_data_user = await fetch(`https://localhost:4000/user/data?email_user=${data_variables.email}`);
         data_user = await response_data_user.json();
     
         data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);
@@ -419,7 +417,7 @@ async function send_req_loan(){
     let isContinue = true;
 
     try{
-        response_user_loan = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/user/loan", {
+        response_user_loan = await fetch("https://localhost:4000/user/loan", {
             method: "POST",
             body: JSON.stringify(data),
             headers:{ 'Content-Type': 'application/json' }
@@ -525,7 +523,7 @@ async function send_req_transfer(){
     let isContinue = true;
 
     try{
-        response_user_loan = await fetch("https://c2hccs03-4000.use2.devtunnels.ms/user/transfer", {
+        response_user_loan = await fetch("https://localhost:4000/user/transfer", {
             method: "POST",
             body: JSON.stringify(data),
             headers:{ 'Content-Type': 'application/json' }
@@ -544,7 +542,7 @@ async function send_req_transfer(){
                 elements_transfer.input_numero_identidad.style.borderColor = "tomato";
             }
         }else{
-            let socket = io("https://c2hccs03-4000.use2.devtunnels.ms");
+            let socket = io("https://localhost:4000");
             socket.emit('transfer', data);
             window.location.reload();
         }
