@@ -11,9 +11,9 @@ const app = express();
 const server = createServer(app);
 
 //Variables globals
-let flag = "";
-let initiated = "";
-let email = "";
+let flag = {};
+let initiated = {};
+let email = {};
 
 const port = process.env.PORT || 4000;
 
@@ -57,29 +57,21 @@ const io = new Server(server, {
     }
 });
 
+var users_server = []
+
 io.on('connection', (socket) => {
-    console.log("Cliente conectado")
+    socket.on('connected_server', () => {
+        console.log(socket.id)
+        users_server.push(socket.id)
+        io.to(socket.id).emit('connected_server', socket.id)
+    })
 
-    socket.on('send_data_storage', (data) => {
-        console.log("Datos recibidos desde el servidor");
-        let data_json = JSON.parse(data);
-        socket.join(data_json.id_user);
-        console.log(socket.rooms);
-
-        io.to(753017).emit('receive_data_storage', JSON.stringify(data_json));
-    });
-
-    socket.on('transfer', (data) => {   
-        console.log("Transferencia enviada a " + parseInt(data.numero_identidad));
-        io.to(parseInt(data.numero_identidad)).emit('movement', data)
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Cliente desconectado');
-    });
+    socket.on('connected', () => {
+        console.log(socket.id)
+        io.to(socket.id).emit('connected', socket.id)
+    })
 });
     
-
 app.post("/register/auth", async (req, res) => {
     if (req.body && req.body.email) {
         const connection = await database.getConnection();
@@ -151,7 +143,7 @@ app.post("/login/auth", async (req, res) => {
     }
 });
 
-app.post("/variables", (req, res) => {
+app.post("/variables", async (req, res) => {
     if(req.body){
         if(req.body.flag && req.body.initiated && req.body.email){
             flag = req.body.flag;
@@ -160,7 +152,6 @@ app.post("/variables", (req, res) => {
             if(email == 'false'){
                 var encryptedValue = CryptoJS.AES.encrypt("false", 'clave_secreta').toString();
                 initiated = encryptedValue
-                console.log("Llego")
             }
             res.status(200).json({ message: "True Request" });
         }else{
@@ -294,6 +285,19 @@ app.post("/user/transfer", async (req, res) => {
 });
   
 app.get("/variables/res", (req,res) => {
+    var decryptedEmail = CryptoJS.AES.decrypt(email, 'clave_secreta').toString(CryptoJS.enc.Utf8);
+    var decryptedInitiated = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);
+    res.json({
+        flag: flag,
+        initiated: decryptedInitiated,
+        email: decryptedEmail,
+    });
+});
+
+app.get("/variabless/res", (req,res) => {
+    const email = req.query.email;
+    console.log(email)
+
     var decryptedEmail = CryptoJS.AES.decrypt(email, 'clave_secreta').toString(CryptoJS.enc.Utf8);
     var decryptedInitiated = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);
     res.json({

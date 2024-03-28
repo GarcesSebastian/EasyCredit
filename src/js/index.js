@@ -13,7 +13,7 @@ let data = {
     email: localStorage.getItem("W-I-D") || encrypt("false"),
 }
 
-fetch("https://localhost:4000/variables", {
+fetch("http://localhost:4000/variables", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {

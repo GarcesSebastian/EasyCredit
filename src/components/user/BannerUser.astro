@@ -61,10 +61,12 @@ let isContinue = true;
 let err: any;
 
 try{
-    response_data_variables = await fetch(`https://localhost:4000/variables/res`);
+    response_data_variables = await fetch(`http://localhost:4000/variables/res`);
     data_variables = await response_data_variables.json();
 
-    response_data_user = await fetch(`https://localhost:4000/user/data?email_user=${data_variables.email}`);
+    console.log(data_variables)
+
+    response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
     data_user = await response_data_user.json();
 
     data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
@@ -75,8 +77,6 @@ try{
     console.log(e);
     err = e;
 }
-
-console.log(data_movements_incomplete.length);
 
 ---
 
