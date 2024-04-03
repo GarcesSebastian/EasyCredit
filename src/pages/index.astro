@@ -10,19 +10,24 @@ import ArrowFloat from "../components/ArrowFloat.astro"
 import ArticleLeft from "../components/ArticleLeft.astro"
 import ArticleRight from "../components/ArticleRight.astro"
 
-import { io } from 'socket.io-client';
-
-const socket = io("http://localhost:4000");
 
 let response: Response;
 let data: any;
 let response_data_variables: Response;
 let data_variables: any;
 
+let response_data_variables_2: Response;
+let data_variables_2: any;
+
 let text: any;
 
 let err: any;
 let isContinue = true;
+
+// response_data_variables = await fetch(`http://localhost:4000/variabless/res?idsession=`);
+// data_variables = await response_data_variables.json();
+
+console.log(data_variables)
 
 try{
     response = await fetch("http://localhost:4000/words");
@@ -31,7 +36,7 @@ try{
     response_data_variables = await fetch(`http://localhost:4000/variables/res`);
     data_variables = await response_data_variables.json();
 
-    console.log(data_variables)
+    //console.log(data_variables)
 
     text = {
     titulo_inicio: (data.find((item: { word: string }) => item.word === "titulo_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
@@ -196,11 +201,7 @@ try{
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
 <script>
     let socket = io("http://localhost:4000");
-    socket.emit('connected');
-
-    socket.on('connected', (data: any) => {
-        console.log(data);  
-    });
+    socket.emit('enter_client');
 
     // let response_data_variables: Response;
     // let response_data_user: Response;

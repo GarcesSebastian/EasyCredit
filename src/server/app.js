@@ -1,4 +1,5 @@
 import express from 'express';
+import session from 'express-session';
 import morgan from 'morgan';
 import cors from 'cors';
 import * as database from "./database.js";
@@ -7,6 +8,7 @@ import CryptoJS from 'crypto-js';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 
+const store = new session.MemoryStore();
 const app = express();
 const server = createServer(app);
 
@@ -15,15 +17,26 @@ let flag = {};
 let initiated = {};
 let email = {};
 
+let flag_test = {};
+let initiated_test = {};
+let email_test = {};
+
 const port = process.env.PORT || 4000;
 
 // Configuración inicial
 app.set("port", port);
 
 // Middlewares
+app.use(session({
+    secret: 'keyboard cat',
+    cookie: { maxAge: 30000},
+    resave: true,
+    saveUninitialized: false,
+    store
+}));
 app.use(cors({
     origin: (origin, callback) => {
-      const allowedOrigins = ['http://localhost:4321', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
+      const allowedOrigins = ['http://localhost:4321', 'http://localhost:4322', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true);
       } else {
@@ -57,19 +70,7 @@ const io = new Server(server, {
     }
 });
 
-var users_server = []
-
 io.on('connection', (socket) => {
-    socket.on('connected_server', () => {
-        console.log(socket.id)
-        users_server.push(socket.id)
-        io.to(socket.id).emit('connected_server', socket.id)
-    })
-
-    socket.on('connected', () => {
-        console.log(socket.id)
-        io.to(socket.id).emit('connected', socket.id)
-    })
 });
     
 app.post("/register/auth", async (req, res) => {
@@ -122,7 +123,7 @@ app.post("/register/auth", async (req, res) => {
 app.post("/login/auth", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
-        const emailExists = await connection.query("SELECT email, password FROM registers WHERE email = ?", [req.body.email]);
+        const emailExists = await connection.query("SELECT email, password, id FROM registers WHERE email = ?", [req.body.email]);
 
         if (!emailExists.length > 0) {
             res.status(400).json({ message: "Incorrect Email" });
@@ -133,7 +134,7 @@ app.post("/login/auth", async (req, res) => {
 
             if (passwordMatch) {
                 connection.query("UPDATE registers SET estado = ? WHERE email = ?", [true, req.body.email]);
-                res.status(200).json({ message: "Login Successful" });
+                res.status(200).json({ message: "Login Successful", id: emailExists[0].id});
             } else {
                 res.status(400).json({ message: "Incorrect Password" });
             }
@@ -149,11 +150,22 @@ app.post("/variables", async (req, res) => {
             flag = req.body.flag;
             initiated = req.body.initiated;
             email = req.body.email;
+            
             if(email == 'false'){
                 var encryptedValue = CryptoJS.AES.encrypt("false", 'clave_secreta').toString();
                 initiated = encryptedValue
             }
-            res.status(200).json({ message: "True Request" });
+            if(req.session.authenticated){
+                res.status(200).json({ message: "True Request", session: req.session });
+            }else{
+                req.session.authenticated = true;
+                req.session.user = {
+                    flag: req.body.flag,
+                    initiated: req.body.initiated,
+                    email: req.body.email,
+                }
+                res.status(200).json({ message: "True Request", session: req.sessionID });
+            }
         }else{
             flag = "es";
             initiated = "false";
@@ -295,16 +307,9 @@ app.get("/variables/res", (req,res) => {
 });
 
 app.get("/variabless/res", (req,res) => {
-    const email = req.query.email;
-    console.log(email)
+    const id_session = req.query.idsession;
 
-    var decryptedEmail = CryptoJS.AES.decrypt(email, 'clave_secreta').toString(CryptoJS.enc.Utf8);
-    var decryptedInitiated = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);
-    res.json({
-        flag: flag,
-        initiated: decryptedInitiated,
-        email: decryptedEmail,
-    });
+    console.log(id_session);
 });
 
 app.get("/user/data", async (req, res) => {
@@ -351,7 +356,6 @@ server.listen(app.get("port"));
 console.log("Escuchando el puerto " + app.get("port"));
 
 //Functions
-
 function getDateNow(){
     return new Date().getFullYear() + "-" + (new Date().getUTCMonth() < 9 ? "0" + (new Date().getUTCMonth() + 1) : (new Date().getUTCMonth() + 1)) + "-" + new Date().getUTCDate();
 }

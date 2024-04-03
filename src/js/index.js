@@ -2,24 +2,31 @@ let actual_element = document.querySelector("#actual-flag");
 let list_flags = document.querySelector("#list-flags");
 
 window.addEventListener("DOMContentLoaded", () =>{
-    initFlagKey();
+    initFlagKeyCook()
+    // initFlagKey();
     initFlagInitiated();
     initId();
 })
 
 let data = {
-    flag: localStorage.getItem("flag"),
+    flag: getCookie("flag"),
     initiated: localStorage.getItem("W-INIT-ENT") || encrypt("false"),
     email: localStorage.getItem("W-I-D") || encrypt("false"),
+    id: localStorage.getItem("ID-USER") || encrypt("false"),
 }
 
-fetch("http://localhost:4000/variables", {
+const res = await fetch("http://localhost:4000/variables", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
         "Content-Type": "application/json"
     }
 })
+
+const data_response = await res.json();
+
+console.log(data_response.session)
+localStorage.setItem("session", data_response.session)
 
 function changeFlag(flag, src){
     let attrSrc = actual_element.getAttribute("data-flag-src");
@@ -35,16 +42,16 @@ function changeFlag(flag, src){
     })
 }
 
-function initFlagKey(){
+function initFlagKeyCook(){
     if(actual_element && list_flags){
-        if(localStorage.getItem("flag") === null){
-            localStorage.setItem("flag", "es")
+        if(getCookie("flag") === null){
+            setCookie("flag", "es");
         }else{
-            if(localStorage.getItem("flag") == "es"){
+            if(getCookie("flag") == "es"){
                 if(actual_element.getAttribute("data-flag-now") != "es"){
                     changeFlag("es", "../../public/flags/espana.svg")
                 }
-            }else if(localStorage.getItem("flag") == "en"){
+            }else if(getCookie("flag") == "en"){
                 if(actual_element.getAttribute("data-flag-now") != "en"){
                     changeFlag("en", "../../public/flags/usa.svg")
                 }
@@ -84,3 +91,30 @@ function encrypt(value) {
     return encryptedValue;
 }
 
+function setCookie(cookieName, cookieValue) {
+    const expirationDate = new Date('9999-12-31'); // Establecer la fecha de vencimiento en el año 9999
+    document.cookie = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/`;
+}
+
+function getCookie(cookieName) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(cookieName + '=')) {
+            return cookie.substring(cookieName.length + 1);
+        }
+    }
+    return null;
+}
+
+console.log(getCookie("flag"))
+
+setInterval(() => {
+    if(getCookie("flag") === null){
+        setCookie("flag", "es");
+    }else{
+        setCookie("flag", getCookie("flag"));
+    }
+
+    console.log(getCookie("flag"));
+}, 100);

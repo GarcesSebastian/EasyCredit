@@ -144,9 +144,10 @@ if(button_logout){
         localStorage.setItem("W-I-D", encryptedEmail);
 
         let data = {
-            flag: localStorage.getItem("flag"),
+            flag: getCookie("flag"),
             initiated: localStorage.getItem("W-INIT-ENT"),
-            email: localStorage.getItem("W-I-D"),
+            email: localStorage.getItem("W-I-D"),        
+            id: localStorage.getItem("ID-USER"),
         }
 
         fetch("http://localhost:4000/variables", {
@@ -169,11 +170,13 @@ if(list_flags && actual_element){
                 if(item.getAttribute("data-flag") == "es"){
                     actual_element.setAttribute("data-flag-now", "es")
                     item.setAttribute("data-flag", "en")
-                    localStorage.setItem("flag", "es");
+                    setCookie("flag", "es")
+                    // localStorage.setItem("flag", "es");
                 }else if(item.getAttribute("data-flag") == "en"){
                     actual_element.setAttribute("data-flag-now", "en")
                     item.setAttribute("data-flag", "es")
-                    localStorage.setItem("flag", "en");
+                    setCookie("flag", "en")
+                    // localStorage.setItem("flag", "en");
                 }
         
                 let srcImage = item.querySelector("img")?.src.split("/");
@@ -186,9 +189,10 @@ if(list_flags && actual_element){
                 imgItem.src = srcNow;
         
                 let data = {
-                    flag: localStorage.getItem("flag"),
+                    flag: getCookie("flag"),
                     initiated: localStorage.getItem("W-INIT-ENT"),
-                    email: localStorage.getItem("W-I-D"),
+                    email: localStorage.getItem("W-I-D"),        
+                    id: localStorage.getItem("ID-USER"),
                 }
         
                 fetch("http://localhost:4000/variables", {
@@ -233,6 +237,7 @@ document.querySelector("#submit-signin")?.addEventListener("click", async () => 
         inputSucess(document.querySelector("#input-password"), "#err-password");
 
         if (res.ok) {
+            localStorage.setItem("ID-USER", responseJson.id)
             console.log("Logeado con éxito");
             
             let encryptedInitiated = encrypt("true");
@@ -242,9 +247,10 @@ document.querySelector("#submit-signin")?.addEventListener("click", async () => 
             localStorage.setItem("W-I-D", encryptedId);
 
             let Info = {
-                flag: localStorage.getItem("flag"),
+                flag: getCookie("flag"),
                 initiated: localStorage.getItem("W-INIT-ENT"),
-                email: localStorage.getItem("W-I-D"),
+                email: localStorage.getItem("W-I-D"),        
+                id: localStorage.getItem("ID-USER"),
             }
 
             fetch("http://localhost:4000/variables", {
@@ -614,4 +620,20 @@ function inputSucess(input, id) {
     } else {
         console.error("El elemento de error no se encontró.");
     }
+}
+
+function setCookie(cookieName, cookieValue) {
+    const expirationDate = new Date('9999-12-31'); // Establecer la fecha de vencimiento en el año 9999
+    document.cookie = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/`;
+}
+
+function getCookie(cookieName) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(cookieName + '=')) {
+            return cookie.substring(cookieName.length + 1);
+        }
+    }
+    return null;
 }

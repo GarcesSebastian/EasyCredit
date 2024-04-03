@@ -26,6 +26,8 @@
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
     "mock-aws-s3": "^4.0.2",
     "nock": "^13.5.4",
     "promise-mysql": "^5.2.0",
