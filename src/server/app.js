@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt';
 import CryptoJS from 'crypto-js';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
+import { lucia } from '/auth'
 
 const store = new session.MemoryStore();
 const app = express();
@@ -113,6 +114,18 @@ app.post("/register/auth", async (req, res) => {
             connection.query("INSERT INTO users (id_user, name_user, email_user, saldo_disponible) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "0"]);
             connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
             connection.query("INSERT INTO movements (id_user, email_user, numero_movements) VALUES (?, ?, ?)", [user_id, req.body.email, 0]);
+            
+                //Generar session
+                const session = await lucia.createSession(user_id, {});
+                const sessionCookie = lucia.createSessionCookie(session.id);
+                context.cookies.set(
+                    sessionCookie.name, 
+                    sessionCookie.value, 
+                    sessionCookie.attributes
+                );
+
+                console.log("Registrado con el id: " + session.id)
+            
             res.status(200).json({ message: "Register Successful"});
         } 
     } else {
