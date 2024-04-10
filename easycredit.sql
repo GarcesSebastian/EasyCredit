@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-03-2024 a las 22:16:48
+-- Tiempo de generación: 10-04-2024 a las 18:51:23
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -41,13 +41,8 @@ CREATE TABLE `movements` (
 --
 
 INSERT INTO `movements` (`id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`) VALUES
-(586358, 1, 'Transfer', '21/03/2024', '8000', 'positivo'),
-(586358, 2, 'Transfer', '21/03/2024', '8000', 'positivo'),
-(753017, 1, 'Transfer', '21/03/2024', '8000', 'negativo'),
-(586358, 3, 'Transfer', '21/03/2024', '400000', 'positivo'),
-(753017, 2, 'Transfer', '21/03/2024', '400000', 'negativo'),
-(586358, 4, 'Transfer', '21/03/2024', '12000', 'positivo'),
-(753017, 3, 'Transfer', '21/03/2024', '12000', 'negativo');
+(281689, 1, 'Bank Loan', '2024-04-10', '12000000', ''),
+(281689, 2, 'Bank Loan', '2024-04-10', '1200000', 'positivo');
 
 -- --------------------------------------------------------
 
@@ -67,8 +62,7 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
-(586358, 'Sebastian', 'sebastiangarces158@gmail.com', 0),
-(753017, 'Sebxstt', 'sebastiangarces152@gmail.com', 0);
+(281689, 'Sebxstt', 'sebastiangarces152@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -88,6 +82,14 @@ CREATE TABLE `prestamos` (
   `tasa_fija` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `prestamos`
+--
+
+INSERT INTO `prestamos` (`id_user`, `name_loan`, `numero_telefono_loan`, `tasa_interes`, `cuotas`, `frencuencia_pago`, `action_prestamo`, `tasa_variable`, `tasa_fija`) VALUES
+(281689, 'Sebastian Garces', '3022396265', 12.25, 12, '6 cuotas', '12000000', 0, 1),
+(281689, 'Sebastian Garces', '3022396265', 12.25, 24, '12 cuotas', '1200000', 0, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -101,16 +103,16 @@ CREATE TABLE `registers` (
   `email` text NOT NULL,
   `numero_identidad` text NOT NULL,
   `numero_telefono` text NOT NULL,
-  `estado` tinyint(1) NOT NULL
+  `estado` tinyint(1) NOT NULL,
+  `fecha_creacion` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `registers`
 --
 
-INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`) VALUES
-(586358, 'Sebastian', '$2b$10$EgkPTUYhHiD/KIvXaxBZxeMxO1DFGvK0MPADGZYJhC.xRmk468IRq', 'sebastiangarces158@gmail.com', '$2b$10$8CyC9rZGjMN9Tz8nGoio8.EIH4jlbGLAlVQOZnUGNa3Y1Gd10DS8m', '$2b$10$xnm97RrtpA/DwbQFlKdzp.R8.EQ7MX.oq.dxpWpOftmCgdPV.TQOG', 1),
-(753017, 'Sebxstt', '$2b$10$rlH0pK5OCFIJBry2jkvcL.iigcKQeFKocuPh9rBrdD90joq.TP7We', 'sebastiangarces152@gmail.com', '$2b$10$q6FhR2/8lPEnFHpuiQIlQuNKyL12pcIZlZnl1hKU9hTKRDd6cx6uq', '$2b$10$FoXn9ySvelv2RlMHtR31heiG872qD8hYyl/cCWJTstIR2cIpPssOm', 1);
+INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `fecha_creacion`) VALUES
+(281689, 'Sebxstt', '$2b$10$z4Sv71cMwJK1qnTxME7J8.7kPzM/eYGkjH1eZQlKgky36huJEu7YC', 'sebastiangarces152@gmail.com', '$2b$10$Zqy6JAed6g.PzQugzdMhn.7CIMpGbHKPRDUj10EYeAQIK6AyiBvce', '$2b$10$srMquqWAVZL8ZdXW3XlTH.CgDrmlOOv4QDrupAHObNL.kHopBgfOm', 1, '09/04/24');
 
 -- --------------------------------------------------------
 
@@ -122,6 +124,7 @@ CREATE TABLE `users` (
   `id_user` int(11) NOT NULL,
   `name_user` varchar(45) NOT NULL,
   `email_user` text NOT NULL,
+  `number_card` text NOT NULL,
   `ingresos_totales` text NOT NULL,
   `saldo_disponible` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -130,9 +133,8 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `ingresos_totales`, `saldo_disponible`) VALUES
-(586358, 'Sebastian', 'sebastiangarces158@gmail.com', '428000', '428000'),
-(753017, 'Sebxstt', 'sebastiangarces152@gmail.com', '11560000', '11560000');
+INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`) VALUES
+(281689, 'Sebxstt', 'sebastiangarces152@gmail.com', '6321 1625 3214 9692', '13200000', '13200000');
 
 -- --------------------------------------------------------
 
@@ -233,7 +235,7 @@ ALTER TABLE `registers`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`),
-  ADD UNIQUE KEY `email_no_repeat` (`email_user`) USING HASH;
+  ADD UNIQUE KEY `email_no_repeat` (`email_user`,`number_card`) USING HASH;
 
 --
 -- Indices de la tabla `words`

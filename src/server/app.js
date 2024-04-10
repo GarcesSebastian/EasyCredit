@@ -229,7 +229,7 @@ app.post("/user/loan", async (req, res) => {
                 let movements = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
                 let date_now_string = getDateNow();
                 
-                await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement) VALUES ( ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, movements.length + 1, "Bank Loan", date_now_string, action_loan]);
+                await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo"]);
                 
                 await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [sumary_action, sumary_action, data_user_basic[0].id_user]);
                 res.status(200).json({ message: "Loan Successful" });
