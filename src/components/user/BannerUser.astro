@@ -1,5 +1,6 @@
 ---
 import CardBasic from '../user/CardBasic.astro';
+import CardUser from '../user/CardUser.astro';
 import CardMovements from '../user/CardMovements.astro';
 import CardMovementsArtcile from "../user/CardMovementsArticle.astro"
 
@@ -49,7 +50,6 @@ const {
 } = Astro.props;
 
 //Hacer Try Catch
-
 let response_data_variables: Response;
 let response_data_user: Response;
 
@@ -64,25 +64,20 @@ try{
     response_data_variables = await fetch(`http://localhost:4000/variables/res`);
     data_variables = await response_data_variables.json();
 
-    console.log(data_variables)
-
-    response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+    response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${data_variables.id}`);
     data_user = await response_data_user.json();
+
+    console.log(data_user);
 
     if(data_variables.initiated === "true"){
         data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
     }
-
-
-    // console.log(data_user)
 }catch(e){
     isContinue = !isContinue;
     console.log(e);
     err = e;
 }
-
 ---
-
 {
     isContinue ? (
         <section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
@@ -114,12 +109,13 @@ try{
                             </div>
 
                             <div id="card_pays" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                                <CardBasic
-                                img_url="https://cdn-icons-png.flaticon.com/512/2769/2769569.png"
-                                balance_text={data_user.user_info[0].ingresos_totales}
-                                available_balance_text={total_income_text}
+                                <CardUser
+                                    num_id={data_user.user_info[0].number_card}
+                                    nombre={data_user.user_info[0].name_user}
+                                    date={data_user.user_register[0].fecha_creacion}
+                                    code={data_user.user_info[0].id_user}
                                 >
-                                </CardBasic>
+                                </CardUser>
                             </div>
 
                             <div id="welcome" class="flex col-span-3 row-span-1 justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
@@ -160,12 +156,13 @@ try{
                             </div>
 
                             <div id="card_pays_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                                <CardBasic
-                                img_url="https://cdn-icons-png.flaticon.com/512/2769/2769569.png"
-                                balance_text={data_user.user_info[0].ingresos_totales}
-                                available_balance_text={total_income_text}
+                                <CardUser
+                                    num_id={data_user.user_info[0].number_card}
+                                    nombre={data_user.user_info[0].name_user}
+                                    date={data_user.user_register[0].fecha_creacion}
+                                    code={data_user.user_info[0].id_user}
                                 >
-                                </CardBasic>
+                                </CardUser>
                             </div>
 
                             <div id="credit" class="flex col-span-1 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">

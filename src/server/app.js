@@ -1,5 +1,4 @@
 import express from 'express';
-import session from 'express-session';
 import morgan from 'morgan';
 import cors from 'cors';
 import * as database from "./database.js";
@@ -7,20 +6,17 @@ import bcrypt from 'bcrypt';
 import CryptoJS from 'crypto-js';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import { lucia } from '/auth'
+import cookieParser from 'cookie-parser';
 
-const store = new session.MemoryStore();
 const app = express();
 const server = createServer(app);
 
 //Variables globals
 let flag = {};
 let initiated = {};
-let email = {};
+let email = [];
+let id = {};
 
-let flag_test = {};
-let initiated_test = {};
-let email_test = {};
 
 const port = process.env.PORT || 4000;
 
@@ -28,13 +24,7 @@ const port = process.env.PORT || 4000;
 app.set("port", port);
 
 // Middlewares
-app.use(session({
-    secret: 'keyboard cat',
-    cookie: { maxAge: 30000},
-    resave: true,
-    saveUninitialized: false,
-    store
-}));
+app.use(cookieParser());
 app.use(cors({
     origin: (origin, callback) => {
       const allowedOrigins = ['http://localhost:4321', 'http://localhost:4322', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
@@ -110,22 +100,44 @@ app.post("/register/auth", async (req, res) => {
             const hashedNumero_telefono = await bcrypt.hash(req.body.numero_telefono, 10);
             const hashedNumero_identidad = await bcrypt.hash(req.body.numero_identidad, 10);
 
-            connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false]);
-            connection.query("INSERT INTO users (id_user, name_user, email_user, saldo_disponible) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "0"]);
+            let year = new Date().getFullYear().toString().split("");
+            year = year[year.length - 2] + year[year.length - 1]
+            let fecha_creacion = (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date.getDate()) + "/" + (new Date().getMonth() < 10 ? "0" + (new Date().getMonth() + 1) : new Date.getMonth() + 1) + "/" + year;
+
+            let digits_card = [];
+            let number_card = "";
+            let attemps_card = 100;
+            
+            for(let i = 0; i < 4; i++){
+                let randomDigits = Math.floor(Math.random() * 9000) + 1000;
+                digits_card.push(randomDigits);     
+                
+                if(attemps_card == 0){
+                    number_card = "No se permite"
+                    break;
+                }
+
+                if(i == 3){
+                    number_card += randomDigits
+                    let card_users = await connection.query("SELECT * FROM users WHERE number_card = ?",[number_card]);
+
+                    if(card_users.length > 0){
+                        number_card = "";
+                        digits_card = [];
+                        attemps_card --;
+                        i = -1;
+                    }
+
+                }else{
+                    number_card += randomDigits + " "
+                }
+            }
+            
+            connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false, fecha_creacion]);
+            connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0"]);
             connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
             connection.query("INSERT INTO movements (id_user, email_user, numero_movements) VALUES (?, ?, ?)", [user_id, req.body.email, 0]);
-            
-                //Generar session
-                const session = await lucia.createSession(user_id, {});
-                const sessionCookie = lucia.createSessionCookie(session.id);
-                context.cookies.set(
-                    sessionCookie.name, 
-                    sessionCookie.value, 
-                    sessionCookie.attributes
-                );
 
-                console.log("Registrado con el id: " + session.id)
-            
             res.status(200).json({ message: "Register Successful"});
         } 
     } else {
@@ -159,26 +171,22 @@ app.post("/login/auth", async (req, res) => {
 
 app.post("/variables", async (req, res) => {
     if(req.body){
-        if(req.body.flag && req.body.initiated && req.body.email){
+        if(req.body.flag && req.body.initiated && req.body.id_user){
             flag = req.body.flag;
             initiated = req.body.initiated;
-            email = req.body.email;
-            
-            if(email == 'false'){
+            id = req.body.id_user;
+
+            if(!email.find(item => item === req.body.id_user) && CryptoJS.AES.decrypt(req.body.initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8) == "true"){
+                email.push(req.body.id_user);
+            }
+
+            console.log(email);
+
+            if(id == 'false'){
                 var encryptedValue = CryptoJS.AES.encrypt("false", 'clave_secreta').toString();
                 initiated = encryptedValue
             }
-            if(req.session.authenticated){
-                res.status(200).json({ message: "True Request", session: req.session });
-            }else{
-                req.session.authenticated = true;
-                req.session.user = {
-                    flag: req.body.flag,
-                    initiated: req.body.initiated,
-                    email: req.body.email,
-                }
-                res.status(200).json({ message: "True Request", session: req.sessionID });
-            }
+            res.status(200).json({ message: "True Request"});
         }else{
             flag = "es";
             initiated = "false";
@@ -309,32 +317,55 @@ app.post("/user/transfer", async (req, res) => {
     }
 });
   
+app.get('/cookie',function(req, res){
+    res.cookie("secret" , 'cookie_value').send('Cookie is set');
+});
+
+app.get("/", async (req, res) => {
+    res.send(req.cookies);
+    // const idUser = req.query.idUser;
+
+    // if(idUser){
+    //     const connection = await database.getConnection();
+    //     const data_from_id = await connection.query("SELECT * FROM users WHERE id_user = ?",[idUser]);
+
+    //     if(data_from_id.length > 0){
+    //         console.log(data_from_id);
+    //         req.session.id = []
+    //         req.session.views = (req.session.views || 0) + 1;
+    //         req.session.id.push(idUser);
+    //         res.send(req.session);
+    //     }else{
+    //         res.send({response: "Bad Request"});
+    //     }
+    // }else{
+    //     res.send({response: "Bad Request"});
+    // }
+
+    console.log(req.cookies);
+});
+
 app.get("/variables/res", (req,res) => {
-    var decryptedEmail = CryptoJS.AES.decrypt(email, 'clave_secreta').toString(CryptoJS.enc.Utf8);
     var decryptedInitiated = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);
     res.json({
         flag: flag,
         initiated: decryptedInitiated,
-        email: decryptedEmail,
+        id: id,
     });
-});
-
-app.get("/variabless/res", (req,res) => {
-    const id_session = req.query.idsession;
-
-    console.log(id_session);
+    console.log(req.session);
 });
 
 app.get("/user/data", async (req, res) => {
-    const email_user = req.query.email_user;
+    const id_user = req.query.id_user;
 
-    if (!email_user) {
+    if (!id_user) {
         return res.status(400).send({ message: "User Email is required" });
     }
 
     const connection = await database.getConnection();
-    const data_user_info = await connection.query("SELECT * FROM easycredit.users WHERE email_user = ?", [email_user]);
-    const data_user_notifications = await connection.query("SELECT * FROM easycredit.notifications WHERE email_user = ?", [email_user]);
+    const data_user_info = await connection.query("SELECT * FROM easycredit.users WHERE id_user = ?", [id_user]);
+    const data_user_register = await connection.query("SELECT * FROM easycredit.registers WHERE id = ?", [id_user]);
+    const data_user_notifications = await connection.query("SELECT * FROM easycredit.notifications WHERE id_user = ?", [id_user]);
     let data_user_movements_incomplete;
     let data_user_movements;
     if(data_user_info[0] && data_user_info[0].id_user){
@@ -343,6 +374,7 @@ app.get("/user/data", async (req, res) => {
     }
     const data = {
         user_info: data_user_info,
+        user_register: data_user_register,
         user_notifications: data_user_notifications,
         user_movements_incomplete: data_user_movements_incomplete,
         user_movements_complete: data_user_movements,

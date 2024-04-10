@@ -146,8 +146,7 @@ if(button_logout){
         let data = {
             flag: getCookie("flag"),
             initiated: localStorage.getItem("W-INIT-ENT"),
-            email: localStorage.getItem("W-I-D"),        
-            id: localStorage.getItem("ID-USER"),
+            id_user: localStorage.getItem("ID-USER"),
         }
 
         fetch("http://localhost:4000/variables", {
@@ -191,8 +190,7 @@ if(list_flags && actual_element){
                 let data = {
                     flag: getCookie("flag"),
                     initiated: localStorage.getItem("W-INIT-ENT"),
-                    email: localStorage.getItem("W-I-D"),        
-                    id: localStorage.getItem("ID-USER"),
+                    id_user: localStorage.getItem("ID-USER"),
                 }
         
                 fetch("http://localhost:4000/variables", {
@@ -214,7 +212,8 @@ if(list_flags && actual_element){
     });
 }
 
-document.querySelector("#submit-signin")?.addEventListener("click", async () => {
+document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
     const email = document.querySelector("#input-email");
     const password = document.querySelector("#input-password");
 
@@ -249,8 +248,7 @@ document.querySelector("#submit-signin")?.addEventListener("click", async () => 
             let Info = {
                 flag: getCookie("flag"),
                 initiated: localStorage.getItem("W-INIT-ENT"),
-                email: localStorage.getItem("W-I-D"),        
-                id: localStorage.getItem("ID-USER"),
+                id_user: localStorage.getItem("ID-USER"),
             }
 
             fetch("http://localhost:4000/variables", {
@@ -275,6 +273,7 @@ document.querySelector("#submit-signin")?.addEventListener("click", async () => 
         }
     }
 });
+
 
 if(document.querySelector("#background-popup-transfer") // Si existen los elementos
     && document.querySelector("#close-transfer") 
@@ -310,7 +309,7 @@ if(decrypt(localStorage.getItem("W-INIT-ENT")) === "true" && decrypt(localStorag
     data_variables = await response_data_variables.json();
 
     if(data_variables.email){
-        response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+        response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${data_variables.id}`);
         data_user = await response_data_user.json();
     
         data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);

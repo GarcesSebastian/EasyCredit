@@ -10,24 +10,16 @@ import ArrowFloat from "../components/ArrowFloat.astro"
 import ArticleLeft from "../components/ArticleLeft.astro"
 import ArticleRight from "../components/ArticleRight.astro"
 
-
 let response: Response;
 let data: any;
 let response_data_variables: Response;
 let data_variables: any;
-
-let response_data_variables_2: Response;
-let data_variables_2: any;
 
 let text: any;
 
 let err: any;
 let isContinue = true;
 
-// response_data_variables = await fetch(`http://localhost:4000/variabless/res?idsession=`);
-// data_variables = await response_data_variables.json();
-
-console.log(data_variables)
 
 try{
     response = await fetch("http://localhost:4000/words");
@@ -35,8 +27,6 @@ try{
 
     response_data_variables = await fetch(`http://localhost:4000/variables/res`);
     data_variables = await response_data_variables.json();
-
-    //console.log(data_variables)
 
     text = {
     titulo_inicio: (data.find((item: { word: string }) => item.word === "titulo_inicio") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
@@ -94,7 +84,7 @@ try{
 
 ---
 {
-    data_variables ? (
+    isContinue ? (
         <Layout title="Sebxstt - Inicio">
             <Header
                 href_image="/"
@@ -192,9 +182,7 @@ try{
             <PopupTransfer></PopupTransfer>
         </Layout>
     ): (
-        <script>
-            window.location.reload();
-        </script>
+        Astro.redirect("/")
     )
 }
 
@@ -213,7 +201,7 @@ try{
     //     response_data_variables = await fetch(`http://localhost:4000/variables/res`);
     //     data_variables = await response_data_variables.json();
 
-    //     response_data_user = await fetch(`http://localhost:4000/user/data?email_user=${data_variables.email}`);
+    //     response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${data_variables.id}`);
     //     data_user = await response_data_user.json();
 
     //     if(CryptoJS.AES.decrypt(localStorage.getItem("W-I-D"), 'clave_secreta').toString(CryptoJS.enc.Utf8) != "false"){

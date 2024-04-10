@@ -3,7 +3,6 @@ let list_flags = document.querySelector("#list-flags");
 
 window.addEventListener("DOMContentLoaded", () =>{
     initFlagKeyCook()
-    // initFlagKey();
     initFlagInitiated();
     initId();
 })
@@ -11,22 +10,16 @@ window.addEventListener("DOMContentLoaded", () =>{
 let data = {
     flag: getCookie("flag"),
     initiated: localStorage.getItem("W-INIT-ENT") || encrypt("false"),
-    email: localStorage.getItem("W-I-D") || encrypt("false"),
-    id: localStorage.getItem("ID-USER") || encrypt("false"),
+    id_user: localStorage.getItem("ID-USER") || encrypt("false"),
 }
 
-const res = await fetch("http://localhost:4000/variables", {
+await fetch("http://localhost:4000/variables", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
         "Content-Type": "application/json"
     }
 })
-
-const data_response = await res.json();
-
-console.log(data_response.session)
-localStorage.setItem("session", data_response.session)
 
 function changeFlag(flag, src){
     let attrSrc = actual_element.getAttribute("data-flag-src");
@@ -56,7 +49,6 @@ function initFlagKeyCook(){
                     changeFlag("en", "../../public/flags/usa.svg")
                 }
             }
-    
             actual_element.querySelector("img").src = actual_element.getAttribute("data-flag-src");
             list_flags.querySelectorAll("div").forEach((item) =>{
                 item.querySelector("img").src = item.getAttribute("data-flag-src");
@@ -107,7 +99,6 @@ function getCookie(cookieName) {
     return null;
 }
 
-console.log(getCookie("flag"))
 
 setInterval(() => {
     if(getCookie("flag") === null){
@@ -115,6 +106,4 @@ setInterval(() => {
     }else{
         setCookie("flag", getCookie("flag"));
     }
-
-    console.log(getCookie("flag"));
 }, 100);

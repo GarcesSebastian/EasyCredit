@@ -2,14 +2,7 @@
 import Layout from "../layouts/Layout.astro"
 import Header from "../components/Header.astro"
 import Footer from "../components/Footer.astro"
-import Banner from "../components/Banner.astro"
-import BannerUser from "../components/user/BannerUser.astro"
-import PopupTransfer from "../components/user/PopupTransfer.astro"
 import PopupLoan from "../components/user/PopupLoan.astro"
-import Info from "../components/Info.astro"
-import ArrowFloat from "../components/ArrowFloat.astro"
-import ArticleLeft from "../components/ArticleLeft.astro"
-import ArticleRight from "../components/ArticleRight.astro"
 
 interface WordItem{
     word: string;
@@ -19,8 +12,6 @@ interface WordItem{
 
 let response: Response;
 let data: any;
-let response_variables: Response;
-let variables: any;
 let response_data_variables: Response;
 let data_variables: any;
 
@@ -32,9 +23,6 @@ let isContinue = true;
 try{
     response = await fetch("http://localhost:4000/words");
     data = await response.json();
-
-    response_variables = await fetch("http://localhost:4000/variables/res");
-    variables = await response_variables.json();
 
     response_data_variables = await fetch("http://localhost:4000/variables/res");
     data_variables = await response_data_variables.json();
