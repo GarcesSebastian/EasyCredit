@@ -77,9 +77,7 @@ try{
     not_found_text: (data.find((item: { word: string }) => item.word === "not_found_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
 };
 }catch(e){
-    err = e;
     isContinue = !isContinue;
-    console.log(err);
 }
 
 ---
@@ -182,40 +180,15 @@ try{
             <PopupTransfer></PopupTransfer>
         </Layout>
     ): (
-        Astro.redirect("/")
+        <script>
+            let isCon = false;
+            alert("Error al cargar la página, por favor intente más tarde");
+            isCon = true
+            if(isCon){
+                Astro.redirect("/")
+            }
+        </script>
     )
 }
 
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
-<script>
-    let socket = io("http://localhost:4000");
-    socket.emit('enter_client');
-
-    // let response_data_variables: Response;
-    // let response_data_user: Response;
-
-    // let data_variables: any;
-    // let data_user: any;
-
-    // try{
-    //     response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-    //     data_variables = await response_data_variables.json();
-
-    //     response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${data_variables.id}`);
-    //     data_user = await response_data_user.json();
-
-    //     if(CryptoJS.AES.decrypt(localStorage.getItem("W-I-D"), 'clave_secreta').toString(CryptoJS.enc.Utf8) != "false"){
-    //         if(data_user.user_info[0]){
-    //             socket.emit("init", JSON.stringify((data_user.user_info[0] as any)));
-    //         }
-    //     }
-    // }catch(e){
-    //     console.error(e);
-    // }
-
-    // socket.on('movement', (data: any) => {
-    //     console.log("Datos recibidos")
-    //     console.log(data);
-    // });
-
-</script>
+<!-- <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script> -->

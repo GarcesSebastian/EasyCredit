@@ -67,15 +67,11 @@ try{
     response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${data_variables.id}`);
     data_user = await response_data_user.json();
 
-    console.log(data_user);
-
     if(data_variables.initiated === "true"){
         data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
     }
 }catch(e){
     isContinue = !isContinue;
-    console.log(e);
-    err = e;
 }
 ---
 {
@@ -155,7 +151,7 @@ try{
                             <div id="card_balance_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
                                 <CardBasic
                                 img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
-                                balance_text={data_user.user_info[0].saldo_disponible}
+                                balance_text={data_user.user_info[0].saldo_disponible != undefined ? data_user.user_info[0].saldo_disponible : 0}
                                 available_balance_text={available_balance}
                                 >
                                 </CardBasic>
@@ -262,6 +258,17 @@ try{
                 }
             }
 
+
+            @media (max-width: 950px) {
+                #make_loan{
+                    grid-column: span 2 / 2 span;
+                }
+
+                #card_pays_principal{
+                    grid-column: span 2 / 2 span;
+                }
+            }
+
             @media (max-width: 830px) {
                 #welcome h1{
                     font-size: 1.7rem;
@@ -308,7 +315,14 @@ try{
 
         </style>
     ): (
-        <h1>{err}</h1>
+        <script>
+            let isCon = false;
+            alert("Error al cargar la página, por favor intente más tarde");
+            isCon = true
+            if(isCon){
+                Astro.redirect("/")
+            }
+        </script>
     )
 }
 

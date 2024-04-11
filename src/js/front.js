@@ -465,7 +465,7 @@ document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
 
 
 let elements_transfer = {
-    input_numero_identidad: document.querySelector("#input-numero-identidad-transfer"),
+    input_numero_tarjeta: document.querySelector("#input-numero-tarjeta-transfer"),
     input_action: document.querySelector("#input-action-transfer"),
     input_message: document.querySelector("#input-message-transfer"),
 }
@@ -516,8 +516,15 @@ async function send_req_transfer(){
 
     let email_user_origin = localStorage.getItem("W-I-D");
 
+    let numero_card_string = elements_transfer.input_numero_tarjeta.value.toString();
+    let arr_numero_card_string = [];
+    
+    for (var i = 0; i < numero_card_string.length; i += 4) {
+        arr_numero_card_string.push(numero_card_string.substring(i, i + 4));
+    }
+
     let data = {
-        numero_identidad: elements_transfer.input_numero_identidad.value,
+        numero_card: arr_numero_card_string,
         action: elements_transfer.input_action.value,
         message: elements_transfer.input_message.value,
         origin: email_user_origin,
@@ -538,13 +545,13 @@ async function send_req_transfer(){
 
         if(response_message.state === "Bad Request"){
             if(response_message.message === "Numero de Identificacion Invalido."){
-                let id = elements_transfer.input_numero_identidad.id.toString();
+                let id = elements_transfer.input_numero_tarjeta.id.toString();
                 let id_without_input = id.split("input")[1];
                 let id_with_err = "err" + id_without_input;
                 let element_err = document.querySelector("#" + id_with_err);
                 element_err.style.display = "initial";
                 element_err.innerHTML = "* " + response_message.message
-                elements_transfer.input_numero_identidad.style.borderColor = "tomato";
+                elements_transfer.input_numero_tarjeta.style.borderColor = "tomato";
             }
         }else{
             let socket = io("http://localhost:4000");

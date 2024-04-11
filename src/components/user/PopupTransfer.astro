@@ -15,7 +15,7 @@ import PopupBase from "./PopupBase.astro"
     </div>
 
     <form id="form-transfer" class="px-5 pt-2">
-        <label for="input-numero-identidad" class="block mb-2 ml-0 text-sm font-medium text-white relative">{"ID del Destino"}</label>
+        <label for="input-numero-identidad" class="block mb-2 ml-0 text-sm font-medium text-white relative">{"Numero de Tarjeta del destino"}</label>
         <div class="relative mb-2.5">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -27,7 +27,7 @@ import PopupBase from "./PopupBase.astro"
                     <path d="M7 16l10 0" />
                 </svg>
             </div>
-            <input type="number" id="input-numero-identidad-transfer" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={"ID del Destino"} required>
+            <input type="number" id="input-numero-tarjeta-transfer" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={"Numero de Tarjeta del destino"} required>
         </div>
         <span id="err-numero-identidad-transfer" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden">Prueba</span>
 

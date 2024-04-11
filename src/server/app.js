@@ -102,7 +102,7 @@ app.post("/register/auth", async (req, res) => {
 
             let year = new Date().getFullYear().toString().split("");
             year = year[year.length - 2] + year[year.length - 1]
-            let fecha_creacion = (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date.getDate()) + "/" + (new Date().getMonth() < 10 ? "0" + (new Date().getMonth() + 1) : new Date.getMonth() + 1) + "/" + year;
+            let fecha_creacion = (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate()) + "/" + (new Date().getMonth() < 10 ? "0" + (new Date().getMonth() + 1) : new Date.getMonth() + 1) + "/" + year;
 
             let digits_card = [];
             let number_card = "";
@@ -180,8 +180,6 @@ app.post("/variables", async (req, res) => {
                 email.push(req.body.id_user);
             }
 
-            console.log(email);
-
             if(id == 'false'){
                 var encryptedValue = CryptoJS.AES.encrypt("false", 'clave_secreta').toString();
                 initiated = encryptedValue
@@ -214,10 +212,6 @@ app.post("/user/loan", async (req, res) => {
         const data_user_basic = await connection.query("SELECT * FROM easycredit.users WHERE email_user = ?", [email_user]);
         const data_user_import = await connection.query("SELECT * FROM easycredit.registers WHERE email = ?", [email_user]);
 
-        console.log({data_user_basica: data_user_basic, data_user_import: data_user_import})
-
-
-        
         if(data_user_basic.length > 0 && data_user_import.length > 0){
             let is_id = await bcrypt.compare(id_loan,data_user_import[0].numero_identidad || 0);
             if(is_id){
@@ -248,9 +242,11 @@ app.post("/user/transfer", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
         const origin = CryptoJS.AES.decrypt(req.body.origin, 'clave_secreta').toString(CryptoJS.enc.Utf8);
-        const destino_id = req.body.numero_identidad;
+        const destino_id = req.body.numero_card;
         const action = req.body.action;
         const message = req.body.message;
+
+        let numero_card = convertCard("", destino_id);
 
         const data_user_register_origin = await connection.query("SELECT * FROM easycredit.registers WHERE email = ?", [origin]);
 
@@ -259,46 +255,40 @@ app.post("/user/transfer", async (req, res) => {
 
             if(data_user_origin.length > 0){
 
-                if(data_user_register_origin[0].id != destino_id){
+                if(data_user_origin[0].number_card != numero_card){
 
                     if(parseFloat(data_user_origin[0].saldo_disponible) >= parseFloat(action)){
-                        const data_user_register_destino = await connection.query("SELECT * FROM easycredit.registers WHERE id = ?", [destino_id]);
+                        const data_user_register_destino = await connection.query("SELECT * FROM easycredit.users WHERE number_card = ?", [numero_card]);
     
                         if(data_user_register_destino.length > 0){
-                            const data_user_destino = await connection.query("SELECT * FROM easycredit.users WHERE id_user = ?", [data_user_register_destino[0].id]);
-    
-                            if(data_user_destino.length > 0){
-                                let saldo_disponible_destino = data_user_destino[0].saldo_disponible;
-                                let saldo_enviado_destino = parseFloat(saldo_disponible_destino) + parseFloat(action);
-    
-                                let saldo_disponible_origen = data_user_origin[0].saldo_disponible;
-                                let saldo_restado_origen = parseFloat(saldo_disponible_origen) - parseFloat(action);
-                                
-                                
-                                //Actulizamos los saldos de ambos
-                                await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [saldo_enviado_destino, saldo_enviado_destino, data_user_destino[0].id_user]);
-                                await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [saldo_restado_origen, saldo_restado_origen, data_user_origin[0].id_user]);
-                                
-                                //Agregamos movimientos a ambos y notificaciones
+                            let saldo_disponible_destino = data_user_register_destino[0].saldo_disponible;
+                            let saldo_enviado_destino = parseFloat(saldo_disponible_destino) + parseFloat(action);
 
-                                //Movimiento para el destino
-                                let date_now_string_destino = getDateNow();
-                                let movements_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_destino[0].id_user]);
-                                
-                                await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_destino[0].id_user, movements_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo"]);
-                
-                                //Movimiento para el origen
-                                let date_now_string_origin = getDateNow();
-                                let movements_origin = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
-                                
-                                await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_origin[0].id_user, movements_origin.length + 1, "Transfer", date_now_string_origin, action, "negativo"]);
+                            let saldo_disponible_origen = data_user_origin[0].saldo_disponible;
+                            let saldo_restado_origen = parseFloat(saldo_disponible_origen) - parseFloat(action);
+                            
+                            
+                            //Actulizamos los saldos de ambos
+                            await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [saldo_enviado_destino, saldo_enviado_destino, data_user_register_destino[0].id_user]);
+                            await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [saldo_restado_origen, saldo_restado_origen, data_user_origin[0].id_user]);
+                            
+                            //Agregamos movimientos a ambos y notificaciones
 
-                                res.status(200).json({ message: "Transfer Successful" });
-                            }else{
-                                res.status(400).send({ state: "Bad Request", message: "No se encontro el id de destino en usuarios" });
-                            }
+                            //Movimiento para el destino
+                            let date_now_string_destino = getDateNow();
+                            let movements_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
+                            
+                            await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_register_destino[0].id_user, movements_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo"]);
+            
+                            //Movimiento para el origen
+                            let date_now_string_origin = getDateNow();
+                            let movements_origin = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
+                            
+                            await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_origin[0].id_user, movements_origin.length + 1, "Transfer", date_now_string_origin, action, "negativo"]);
+
+                            res.status(200).json({ message: "Transfer Successful" });
                         }else{
-                            res.status(400).send({ state: "Bad Request", message: "No se encontro el destino con el id" });
+                            res.status(400).send({ state: "Bad Request", message: "No se encontro el numero de tarjeta del destino en usuarios" });
                         }
                     }else{
                         res.status(400).send({ state: "Bad Request", message: "Saldo Insuficiente" });
@@ -352,7 +342,6 @@ app.get("/variables/res", (req,res) => {
         initiated: decryptedInitiated,
         id: id,
     });
-    console.log(req.session);
 });
 
 app.get("/user/data", async (req, res) => {
@@ -403,4 +392,12 @@ console.log("Escuchando el puerto " + app.get("port"));
 //Functions
 function getDateNow(){
     return new Date().getFullYear() + "-" + (new Date().getUTCMonth() < 9 ? "0" + (new Date().getUTCMonth() + 1) : (new Date().getUTCMonth() + 1)) + "-" + new Date().getUTCDate();
+}
+
+function convertCard(number_card_string, number_card_array){
+    number_card_string = "";
+    for(let i = 0; i < number_card_array.length; i++){
+        number_card_string += i != 3 ? number_card_array[i] + " " : number_card_array[i];
+    }
+    return number_card_string
 }
