@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-04-2024 a las 18:51:23
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 11-04-2024 a las 08:30:42
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,6 +24,17 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `codes`
+--
+
+CREATE TABLE `codes` (
+  `email` text NOT NULL,
+  `code` int(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `movements`
 --
 
@@ -35,14 +46,6 @@ CREATE TABLE `movements` (
   `action_movement` text NOT NULL,
   `state_movement` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `movements`
---
-
-INSERT INTO `movements` (`id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`) VALUES
-(281689, 1, 'Bank Loan', '2024-04-10', '12000000', ''),
-(281689, 2, 'Bank Loan', '2024-04-10', '1200000', 'positivo');
 
 -- --------------------------------------------------------
 
@@ -62,7 +65,8 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
-(281689, 'Sebxstt', 'sebastiangarces152@gmail.com', 0);
+(298409, 'Sebxstt', 'sebastiangarces152@gmail.com', 0),
+(934755, 'Sebastian', 'sebastiangarces158@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -81,14 +85,6 @@ CREATE TABLE `prestamos` (
   `tasa_variable` tinyint(1) NOT NULL,
   `tasa_fija` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `prestamos`
---
-
-INSERT INTO `prestamos` (`id_user`, `name_loan`, `numero_telefono_loan`, `tasa_interes`, `cuotas`, `frencuencia_pago`, `action_prestamo`, `tasa_variable`, `tasa_fija`) VALUES
-(281689, 'Sebastian Garces', '3022396265', 12.25, 12, '6 cuotas', '12000000', 0, 1),
-(281689, 'Sebastian Garces', '3022396265', 12.25, 24, '12 cuotas', '1200000', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -112,7 +108,8 @@ CREATE TABLE `registers` (
 --
 
 INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `fecha_creacion`) VALUES
-(281689, 'Sebxstt', '$2b$10$z4Sv71cMwJK1qnTxME7J8.7kPzM/eYGkjH1eZQlKgky36huJEu7YC', 'sebastiangarces152@gmail.com', '$2b$10$Zqy6JAed6g.PzQugzdMhn.7CIMpGbHKPRDUj10EYeAQIK6AyiBvce', '$2b$10$srMquqWAVZL8ZdXW3XlTH.CgDrmlOOv4QDrupAHObNL.kHopBgfOm', 1, '09/04/24');
+(298409, 'Sebxstt', '$2b$10$eHrc5Sie5Flu9/XKHXa1dOELogyA8DzUYl45phZ61cn4B17hm0PnW', 'sebastiangarces152@gmail.com', '$2b$10$noLeeabteAbgWTJcxEHXGu6dGfw5GpVylYuyUnkWwiacPpRIM2PZe', '$2b$10$F.busWAl5MwNQX42hii6DOyXODiXv48tCmgvE.Qc8MSDc5j1hy2Je', 1, '11/04/24'),
+(934755, 'Sebastian', '$2b$10$auKKZ5F0MTECtCtf.EYuceZqVoSdA3YNRCDOJFAX3Qfiksb/QL67C', 'sebastiangarces158@gmail.com', '$2b$10$2uECeYjvae6.8sAfmPFzUOfpxF5xHAe5XYbz9G2a9sBCHn7zpfT/.', '$2b$10$Tj2y78VV6.Xy5Knh2wYepuPns59AfdaxR2V9WL2oqLS6INIGYe/n.', 1, '10/04/24');
 
 -- --------------------------------------------------------
 
@@ -134,7 +131,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`) VALUES
-(281689, 'Sebxstt', 'sebastiangarces152@gmail.com', '6321 1625 3214 9692', '13200000', '13200000');
+(298409, 'Sebxstt', 'sebastiangarces152@gmail.com', '2223 9547 8930 8308', '', '0'),
+(934755, 'Sebastian', 'sebastiangarces158@gmail.com', '1596 2486 7451 5423', '', '0');
 
 -- --------------------------------------------------------
 
@@ -153,6 +151,7 @@ CREATE TABLE `words` (
 --
 
 INSERT INTO `words` (`word`, `es`, `en`) VALUES
+('', '', ''),
 ('agree_text', 'Estoy de acuerdo con el', 'I agree with the'),
 ('article_1_description', 'Realiza todos los trámites y gestiones de tu crédito libre inversión de manera conveniente y segura a través de nuestro proceso 100% en línea. Desde la solicitud hasta la aprobación, te ofrecemos una experiencia eficiente y sin complicaciones.', 'Carry out all the procedures and procedures for your free investment credit in a convenient and secure manner through our 100% online process. From application to approval, we offer you an efficient and hassle-free experience.'),
 ('article_1_titulo', 'Proceso 100% en linea', '100% online process'),
@@ -170,6 +169,9 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('continue_with_text', 'O CONTINUAR CON', 'OR CONTINUE WITH'),
 ('crear_cuenta_text', 'Crea una cuenta', 'Create an account'),
 ('descripcion_inicio', 'Explora las posibilidades con nuestro simulador de crédito. Calcula las cuotas y diseña tu plan de pago en línea de manera conveniente y sin complicaciones.', 'Explore the possibilities with our credit simulator. Calculate installments and design your payment plan online in a convenient and hassle-free way.'),
+('description_forgot_password', 'Ingresa tu correo electronico y te enviaremos un codigo de verificacion para que puedas recuperar tu contraseña.', 'Enter your email and we will send you a verification code so you can recover your password.'),
+('description_new_password', 'Ingresa tu nueva contraseña y confírmala para recuperar tu cuenta.', 'Enter your new password and confirm it to recover your account.'),
+('description_recover_code', 'Ingresa el código de verificación que te enviamos a tu correo electrónico.', 'Enter the verification code that we sent to your email.'),
 ('email_text', 'Correo electrónico', 'Email'),
 ('exists_text', 'Ya tienes una cuenta?', 'Already have an account?'),
 ('first_loan_text', 'primer préstamo', 'first loan'),
@@ -201,13 +203,35 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('registrarse_with_google', 'Inicia sesión con Google', 'Sign in with Google'),
 ('rights_footer', 'Todos los derechos reservados.', 'All Rights Reserved.'),
 ('security_text', '¡Transfiere fondos a otros usuarios de manera rápida y segura!', 'Transfer funds to other users quickly and securely!'),
+('send_code', 'Enviar Código', 'Send code'),
 ('siganos_footer_titulo', 'Síganos', 'Follow us'),
 ('siganos_item_1', 'Github', 'Github'),
 ('siganos_item_2', 'Linkedin', 'Linkedin'),
 ('simulate_loan_text', 'Simular Préstamo', 'Simulate Loan'),
+('text_amount_loan', 'Monto del Préstamo', 'Loan Amount'),
+('text_confirm', 'Confirmar', 'Confirm'),
+('text_confirm_code', 'Confirmar Codigo', 'Confirm Code'),
+('text_cuotas', 'Dues', 'Dues'),
+('text_finish_loan', 'Finalizar Préstamo', 'Finalize Loan'),
+('text_frecuencia', 'Frecuencia de pagos', 'Payment Frequency'),
+('text_information_loan', 'Información del Préstamo', 'Loan Information'),
+('text_information_personal', 'Información Personal', 'Personal information'),
+('text_name_complete', 'Nombre Completo', 'Full name'),
+('text_new_password', 'Nueva Contraseña', 'New Password'),
+('text_new_password_invert', 'Contraseña Nueva', 'New password'),
+('text_password_update', 'Contraseña actualizada correctamente', 'Password updated successfully'),
+('text_recover_code', 'Codigo de Recuperación', 'Recovery Code'),
+('text_repeat_new_password', 'Repetir Nueva Contraseña', 'Repeat New Password'),
+('text_simulate', 'Simular', 'Simulate'),
+('text_tasa_fija', 'Tasa Fija', 'Fixed rate'),
+('text_tasa_loan', 'Tasa de Interés', 'Interest rate'),
+('text_tasa_variable', 'Tasa Variable', 'Variable rate'),
 ('titulo_inicio', 'Simulador de crédito', 'Credit simulator'),
 ('total_income_text', 'Ingresos totales', 'Total Income'),
 ('transferir_text', 'Transferir', 'Transfer'),
+('type_email', 'Escribe tu correo electronico', 'Write your email'),
+('type_loan', 'Tipo de Préstamo', 'Loan Type'),
+('type_recover_code', 'Escribe tu Codigo de Recuperación', 'Write your Recovery Code'),
 ('username_text', 'Nombre de usuario', 'Username'),
 ('view_all_text', 'Ver todo', 'View all'),
 ('welcome_back_text', 'Bienvenido de nuevo ', 'Welcome back ');
@@ -215,6 +239,13 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `codes`
+--
+ALTER TABLE `codes`
+  ADD PRIMARY KEY (`email`(250)),
+  ADD UNIQUE KEY `unicos` (`code`) USING BTREE;
 
 --
 -- Indices de la tabla `notifications`

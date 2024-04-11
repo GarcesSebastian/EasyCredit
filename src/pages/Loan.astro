@@ -74,6 +74,22 @@ try{
     simulate_loan_text: (data.find((item: { word: string }) => item.word === "simulate_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     more_text: (data.find((item: { word: string }) => item.word === "more_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     not_found_text: (data.find((item: { word: string }) => item.word === "not_found_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_information_loan: (data.find((item: { word: string }) => item.word === "text_information_loan") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_information_personal: (data.find((item: { word: string }) => item.word === "text_information_personal") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    type_loan: (data.find((item: { word: string }) => item.word === "type_loan") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_finish_loan: (data.find((item: { word: string }) => item.word === "text_finish_loan") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_confirm: (data.find((item: { word: string }) => item.word === "text_confirm") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_simulate: (data.find((item: { word: string }) => item.word === "text_simulate") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_amount_loan: (data.find((item: { word: string }) => item.word === "text_amount_loan") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_tasa_loan: (data.find((item: { word: string }) => item.word === "text_tasa_loan") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_cuotas: (data.find((item: { word: string }) => item.word === "text_cuotas") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_frecuencia: (data.find((item: { word: string }) => item.word === "text_frecuencia") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_name_complete: (data.find((item: { word: string }) => item.word === "text_name_complete") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_email: (data.find((item: { word: string }) => item.word === "text_email") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_id: (data.find((item: { word: string }) => item.word === "text_id") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_phone: (data.find((item: { word: string }) => item.word === "text_phone") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_tasa_fija: (data.find((item: { word: string }) => item.word === "text_tasa_fija") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_tasa_variable: (data.find((item: { word: string }) => item.word === "text_tasa_variable") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string
 };
 }catch(e){
     err = e;
@@ -91,7 +107,24 @@ try{
         registrarse_text={text.registrarse_text || "Registrarse"}
         iniciar_text={text.iniciar_text || "Iniciar sesión"}
     ></Header>
-    <PopupLoan></PopupLoan>
+    <PopupLoan
+        text_information_loan={text.text_information_loan}
+        text_information_personal={text.text_information_personal}
+        type_loan={text.type_loan}
+        text_finish_loan={text.text_finish_loan}
+        text_confirm={text.text_confirm}
+        text_simulate={text.text_simulate}
+        text_amount_loan={text.text_amount_loan}
+        text_tasa_loan={text.text_tasa_loan}
+        text_cuotas={text.text_cuotas}
+        text_frecuencia={text.text_frecuencia}
+        text_name_complete={text.text_name_complete}
+        text_email={text.text_email}
+        text_id={text.text_id}
+        text_phone={text.text_phone}
+        text_tasa_fija={text.text_tasa_fija}
+        text_tasa_variable={text.text_tasa_variable}
+    ></PopupLoan>
     <Footer
         recursos_footer_titulo={text.recursos_footer_titulo}
         recursos_item_1={text.recursos_item_1}

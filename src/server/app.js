@@ -8,6 +8,7 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import nodemailer from 'nodemailer';
 import cookieParser from 'cookie-parser';
+import { connect } from 'node:http2';
 
 const app = express();
 const server = createServer(app);
@@ -308,11 +309,82 @@ app.post("/user/transfer", async (req, res) => {
     }
 });
 
-app.post("email/send", async (req, res) => {
+app.post("/email/send", async (req, res) => {
     if(req.body){
+        const connection = await database.getConnection();
         let email = req.body.email;
-        let message = req.body.message;
-        let subject = req.body.subject;
+        let emailExists = await connection.query("SELECT email FROM easycredit.registers WHERE email = ?", [email]);
+        if(!emailExists.length > 0){
+            res.status(400).send({ state: "Bad Request", message: "Email no registrado" });
+            return;
+        }
+
+        let attemps_code_recover = 100;
+        let randomCode;
+        let isAvailable = false;
+        let response_user_code;
+
+        while(isAvailable == false){
+            randomCode = Math.floor(100000 + Math.random() * 900000)
+            response_user_code = await connection.query("SELECT * FROM easycredit.codes WHERE code = ?",[randomCode]);
+            if(response_user_code.length > 0){
+                attemps_code_recover --;
+            }
+
+            if(response_user_code.length == 0 || attemps_code_recover == 0){
+                isAvailable = true;
+            }
+        }
+
+        if(attemps_code_recover == 0 || response_user_code.length != 0){
+            res.status(400).send({ state: "Bad Request", message: "No se pudo generar un código único" });
+            return;
+        }
+
+        let isExist = await connection.query("SELECT * FROM codes WHERE email = ?", [email]);
+
+        if(isExist.length > 0){
+            await connection.query("UPDATE codes SET code = ? WHERE email = ?", [randomCode, email]);
+        }else{
+            await connection.query("INSERT INTO codes(email, code) VALUES (?, ?)", [email, randomCode]);
+        }
+
+        const htmlMessage = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Código de Recuperación</title>
+            </head>
+            <body style="background-color: #f2f2f2; padding: 20px;">
+            
+            <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                <div style="padding: 20px;">
+                    <h1 style="color: #333; text-align: center;">Código de Recuperación</h1>
+                    <table style="margin: auto;">
+                        <tr>
+                            <!-- Aquí generamos dinámicamente las celdas para cada dígito del código -->
+                            ${randomCode
+                                .toString()
+                                .split('')
+                                .map(digit => `
+                                    <td style="border: 2px solid rgba(50, 205, 50, 0.5); border-radius: 4px; width: 40px; height: 40px; font-size: 24px; text-align: center; color: #666;">${digit}</td>
+                                `)
+                                .join('')
+                            }
+                        </tr>
+                    </table>
+                    <p style="color: #666; font-size: 16px; text-align: center; margin-top: 20px;">Utiliza este código para recuperar tu contraseña.</p>
+                </div>
+            </div>
+            
+            </body>
+            </html>
+            
+        `;
+    
+        let subject = "Recuperar Contraseña";
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -326,16 +398,54 @@ app.post("email/send", async (req, res) => {
             from: 'sebastiangarces152@gmail.com', 
             to: email, 
             subject: subject,
-            text: message
+            html: htmlMessage
         };
 
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
                 res.status(400).send({ state: "Bad Request", message: "No se pudo enviar el correo" });
+                return;
             } else {
-                res.status(200).send({ state: "Good Request", message: "Correo Enviado" });
+                res.status(200).send({ state: "Good Request", message: "Correo Enviado", code: randomCode, attemps: attemps_code_recover});
+                return;
             }
         });
+    }
+});
+
+app.post("/email/verify", async (req, res) => {
+    if(req.body){
+        const connection = await database.getConnection();
+        let code = req.body.code;
+
+        let response_user_code = await connection.query("SELECT * FROM easycredit.codes WHERE code = ?",[code]);
+
+        if(response_user_code.length > 0){
+            res.status(200).send({ state: "Good Request", message: "Código Correcto", email: response_user_code[0].email});
+        }else{
+            res.status(400).send({ state: "Bad Request", message: "Código Incorrecto" });
+        }
+    }
+});
+
+app.post("/password/change", async (req, res) => {
+    if(req.body){
+        const connection = await database.getConnection();
+        let email = req.body.email;
+        let password = req.body.password;
+
+        const user = await connection.query("SELECT password FROM registers WHERE email = ?", [email]);
+        const isSamePassword = await bcrypt.compare(password, user[0].password);
+        if (isSamePassword) {
+            return res.status(400).send({ state: "Bad Request", message: "La nueva contraseña no puede ser igual a la anterior" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await connection.query("UPDATE registers SET password = ? WHERE email = ?", [hashedPassword, email]);
+        await connection.query("DELETE FROM codes WHERE email = ?", [email]);
+
+        res.status(200).send({ state: "Good Request", message: "Contraseña Cambiada" });
     }
 });
   

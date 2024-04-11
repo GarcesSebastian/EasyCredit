@@ -17,9 +17,8 @@ let data_variables: any;
 
 let text: any;
 
-let err: any;
 let isContinue = true;
-
+let err: any;
 
 try{
     response = await fetch("http://localhost:4000/words");
@@ -78,6 +77,8 @@ try{
 };
 }catch(e){
     isContinue = !isContinue;
+    err = e;
+    console.log(err);
 }
 
 ---
@@ -180,14 +181,9 @@ try{
             <PopupTransfer></PopupTransfer>
         </Layout>
     ): (
-        <script>
-            let isCon = false;
-            alert("Error al cargar la página, por favor intente más tarde");
-            isCon = true
-            if(isCon){
-                Astro.redirect("/")
-            }
-        </script>
+        <div>
+            {err}
+        </div>
     )
 }
 

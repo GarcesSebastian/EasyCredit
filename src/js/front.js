@@ -315,6 +315,22 @@ if(
         document.querySelector("#popup-center-forward").style.display = "none";
     });
 
+    document.querySelector("#background-popup-forward-code").addEventListener("click", () => {
+        document.querySelector("#popup-center-forward-code").style.display = "none";
+    });
+
+    document.querySelector("#close-forward-code").addEventListener("click", () => {
+        document.querySelector("#popup-center-forward-code").style.display = "none";
+    });
+
+    document.querySelector("#background-popup-forward-password").addEventListener("click", () => {
+        document.querySelector("#popup-center-forward-password").style.display = "none";
+    });
+
+    document.querySelector("#close-forward-password").addEventListener("click", () => {
+        document.querySelector("#popup-center-forward-password").style.display = "none";
+    });
+
     document.querySelector("#btn-forward").addEventListener("click", () =>{
         document.querySelector("#popup-center-forward").style.display = "flex";
     });
@@ -591,13 +607,105 @@ document.querySelector("#form-transfer")?.addEventListener("submit", (event) =>{
 })
 
 async function send_code_email(){
+    const data = {
+        email: document.querySelector("#input-email-forward").value
+    };
+
+    const res = await fetch("http://localhost:4000/email/send", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
     
+    });
+
+    const responseJson = await res.json();
+    if(responseJson.state == "Good Request"){
+        document.querySelector("#popup-center-forward").style.display = "none";
+        document.querySelector("#popup-center-forward-code").style.display = "flex";
+        document.querySelector("#input-email-forward").value = "";
+    }
 }
 
-document.querySelector("#form-forward").addEventListener("submit", (event) =>{
+document.querySelector("#form-forward")?.addEventListener("submit", (event) =>{
     event.preventDefault();
     send_code_email();
 });
+
+let email_response;
+
+async function confirm_code(){
+    let data = {
+        code: document.querySelector("#input-forward-code").value
+    }
+
+    const res = await fetch("http://localhost:4000/email/verify", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const responseJson = await res.json();
+
+    if(responseJson.state == "Good Request"){
+        document.querySelector("#popup-center-forward-code").style.display = "none";
+        document.querySelector("#popup-center-forward-password").style.display = "flex";
+        email_response = responseJson.email;
+        document.querySelector("#input-forward-code").value = "";
+    }
+}
+
+document.querySelector("#form-forward-code")?.addEventListener("submit", (event) =>{
+    event.preventDefault();
+    confirm_code();
+});
+
+async function change_password(){
+    if(document.querySelector("#input-forward-password-first").value != document.querySelector("#input-forward-password-second").value){
+        console.log("Las contraseñas no coinciden.");
+    }else{
+        let data = {
+            password: document.querySelector("#input-forward-password-first").value,
+            email: email_response,
+        }
+
+        const res = await fetch("http://localhost:4000/password/change", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const responseJson = await res.json();
+
+        if(responseJson.state == "Good Request"){
+            document.querySelector("#popup-center-forward-password").style.display = "none";
+            document.querySelector("#input-forward-password-first").value = "";
+            document.querySelector("#input-forward-password-second").value = "";
+            document.querySelector("#toast-success")?.classList.remove("hidden");
+            document.querySelector("#toast-success")?.classList.add("fixed");
+            startTimer();
+        }
+    }
+}
+
+document.querySelector("#form-forward-password")?.addEventListener("submit", (event) =>{
+    event.preventDefault();
+    change_password();
+});
+
+function startTimer() {
+    if (window.getComputedStyle(document.querySelector("#toast-success")).display !== 'none') {
+        setTimeout(() => {
+            document.querySelector("#toast-success")?.classList.remove("fixed");
+            document.querySelector("#toast-success")?.classList.add("hidden");
+        }, 5000);
+    }
+}
 
 function transformSrc(srcImage){
     let src = "";

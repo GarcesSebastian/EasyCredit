@@ -1,5 +1,41 @@
 ---
-    import PopupBase from "./PopupBase.astro"
+    interface Props{
+        text_information_loan: string;
+        text_information_personal: string;
+        type_loan: string;
+        text_finish_loan: string;
+        text_confirm: string;
+        text_simulate: string;
+        text_amount_loan: string;
+        text_tasa_loan: string;
+        text_cuotas: string;
+        text_frecuencia: string;
+        text_name_complete: string;
+        text_email: string;
+        text_id: string;
+        text_phone: string;
+        text_tasa_fija: string;
+        text_tasa_variable: string;
+    }
+
+    const {
+        text_information_loan,
+        text_information_personal,
+        type_loan,
+        text_finish_loan,
+        text_confirm,
+        text_simulate,
+        text_amount_loan,
+        text_tasa_loan,
+        text_cuotas,
+        text_frecuencia,
+        text_name_complete,
+        text_email,
+        text_id,
+        text_phone,
+        text_tasa_fija,
+        text_tasa_variable
+    } = Astro.props;
 ---
 
 <section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>

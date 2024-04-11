@@ -54,6 +54,19 @@ if(isContinue){
         rights_footer: (data.find((item: { word: string }) => item.word === "rights_footer") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
         iniciar_text: (data.find((item: { word: string }) => item.word === "iniciar_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
         registrarse_text: (data.find((item: { word: string }) => item.word === "registrarse_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        description_forgot_password: (data.find((item: { word: string }) => item.word === "description_forgot_password") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        type_email: (data.find((item: { word: string }) => item.word === "type_email") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        send_code: (data.find((item: { word: string }) => item.word === "send_code") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        text_recover_code: (data.find((item: { word: string }) => item.word === "text_recover_code") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        description_recover_code: (data.find((item: { word: string }) => item.word === "description_recover_code") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        type_recover_code: (data.find((item: { word: string }) => item.word === "type_recovery_code") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        text_confirm_code: (data.find((item: { word: string }) => item.word === "text_confirm_code") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        text_new_password_invert: (data.find((item: { word: string }) => item.word === "text_new_password_invert") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        text_new_password: (data.find((item: { word: string }) => item.word === "text_new_password") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        text_repeat_new_password: (data.find((item: { word: string }) => item.word === "text_repeat_new_password") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        description_new_password: (data.find((item: { word: string }) => item.word === "description_new_password") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        text_confirm: (data.find((item: { word: string }) => item.word === "text_confirm") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+        text_password_update: (data.find((item: { word: string }) => item.word === "text_password_update") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     };
 }
 
@@ -77,6 +90,19 @@ if(isContinue){
 			forgot_password_text={text.forgot_password_text}
 			continue_with_text={text.continue_with_text}
 			registrarse_with_google={text.registrarse_with_google}
+            description_forgot_password={text.description_forgot_password}
+            type_email={text.type_email}
+            send_code={text.send_code}
+            text_recover_code={text.text_recover_code}
+            description_recover_code={text.description_recover_code}
+            type_recover_code={text.type_recovery_code}
+            text_confirm_code={text.text_confirm_code}
+            text_new_password_invert={text.text_new_password_invert}
+            text_new_password={text.text_new_password}
+            text_repeat_new_password={text.text_repeat_new_password}
+            description_new_password={text.description_new_password}
+            text_confirm={text.text_confirm}
+            text_password_update={text.text_password_update}
 		>
 		</FormLogin>
 		<Footer
