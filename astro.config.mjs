@@ -15,5 +15,6 @@ export default defineConfig({
     proxy: {
       "/api": `http://localhost:${PORT}` // Utiliza el mismo puerto configurado en tu backend
     }
-  }
+  },
+  output: "server"
 }); 

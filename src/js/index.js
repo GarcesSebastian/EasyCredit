@@ -7,20 +7,6 @@ window.addEventListener("DOMContentLoaded", () =>{
     initId();
 })
 
-let data = {
-    flag: getCookie("flag"),
-    initiated: localStorage.getItem("W-INIT-ENT") || encrypt("false"),
-    id_user: localStorage.getItem("ID-USER") || encrypt("false"),
-}
-
-await fetch("http://localhost:4000/variables", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-        "Content-Type": "application/json"
-    }
-})
-
 function changeFlag(flag, src){
     let attrSrc = actual_element.getAttribute("data-flag-src");
     let attrFlag = actual_element.getAttribute("data-flag-now");
@@ -58,22 +44,19 @@ function initFlagKeyCook(){
 }
 
 async function initFlagInitiated() {
-    if (localStorage.getItem("W-INIT-ENT") === null) {
-        let encryptedInitiated = encrypt("true");
-        localStorage.setItem("W-INIT-ENT", encryptedInitiated);
+    if (getCookie("W-INIT-ENT") === null) {
+        setCookie("W-INIT-ENT", "true");
     }
 }
 
 function initId(){
-    if (localStorage.getItem("W-I-D") === null) {
-        let encryptedData = encrypt("false");
-        localStorage.setItem("W-I-D", encryptedData);
-        localStorage.setItem("W-INIT-ENT", encryptedData);
+    if (getCookie("ID-USER") === null) {
+        setCookie("ID-USER", "false");
+        setCookie("W-INIT-ENT", "false");
     }else{
-        if(localStorage.getItem("W-I-D") == "false"){
-            let encryptedData = encrypt("false");
-            localStorage.setItem("W-I-D", encryptedData);
-            localStorage.setItem("W-INIT-ENT", encryptedData);
+        if(getCookie("ID-USER") == "false"){
+            setCookie("ID-USER", "false");
+            setCookie("W-INIT-ENT", "false");
         }
     }
 }
@@ -84,7 +67,7 @@ function encrypt(value) {
 }
 
 function setCookie(cookieName, cookieValue) {
-    const expirationDate = new Date('9999-12-31'); // Establecer la fecha de vencimiento en el año 9999
+    const expirationDate = new Date('9999-12-31'); 
     document.cookie = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/`;
 }
 

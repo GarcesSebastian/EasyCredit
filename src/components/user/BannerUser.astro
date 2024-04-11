@@ -4,6 +4,12 @@ import CardUser from '../user/CardUser.astro';
 import CardMovements from '../user/CardMovements.astro';
 import CardMovementsArtcile from "../user/CardMovementsArticle.astro"
 
+
+const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
+const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
+const flag = (Astro.cookies.get("flag") || {})?.value;
+
+
 interface Props {
     welcome_back_text: string,
     have_you_text: string,
@@ -50,33 +56,30 @@ const {
 } = Astro.props;
 
 //Hacer Try Catch
-let response_data_variables: Response;
 let response_data_user: Response;
 
-let data_variables: any;
 let data_user: any;
 let data_movements_incomplete: any;
 
 let isContinue = true;
 let err: any;
 try{
-    response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-    data_variables = await response_data_variables.json();
-
-    response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${data_variables.id}`);
+    response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
     data_user = await response_data_user.json();
-
-    if(data_variables.initiated === "true"){
+    
+    if(initiated === "true"){
         data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
     }
+
 }catch(e){
     isContinue = !isContinue;
     err = e;
     console.log(err);
 }
+
 ---
 {
-    isContinue ? (
+    isContinue && data_user && data_user.user_info[0] && data_user.user_info[0].saldo_disponible ? (
         <section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
             <article class="w-full flex flex-col justify-center items-center h-fit py-10 bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
                 <div class="w-full h-fit gap-x-5 flex flex-col justify-between items-start max-w-7xl max-xl:px-5">
@@ -115,7 +118,7 @@ try{
                             <div id="card_balance" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
                                 <CardBasic
                                 img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
-                                balance_text={data_user?.user_info[0].saldo_disponible}
+                                balance_text={data_user.user_info[0]?.saldo_disponible ?? 0}
                                 available_balance_text={available_balance}
                                 >
                                 </CardBasic>
@@ -152,7 +155,7 @@ try{
                             <div id="card_balance_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
                                 <CardBasic
                                 img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
-                                balance_text={data_user.user_info[0].saldo_disponible != undefined ? data_user.user_info[0].saldo_disponible : 0}
+                                balance_text={data_user.user_info[0]?.saldo_disponible ?? 0}
                                 available_balance_text={available_balance}
                                 >
                                 </CardBasic>

@@ -15,34 +15,32 @@ const response = await fetch("http://localhost:4000/words");
 
 const data: WordItem[] = await response.json();
 
-let response_variables = await fetch("http://localhost:4000/variables/res");
-
-let data_variables = await response_variables.json();
+const flag = (Astro.cookies.get("flag") || {})?.value;
 
 let text = {
-    exists_text: (data.find(item => item.word === "exists_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    username_text: (data.find(item => item.word === "username_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    email_text: (data.find(item => item.word === "email_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    password_text: (data.find(item => item.word === "password_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    id_number_text: (data.find(item => item.word === "id_number_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    phone_text: (data.find(item => item.word === "phone_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    agree_text: (data.find(item => item.word === "agree_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    legal_item_2: (data.find(item => item.word === "legal_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    continue_with_text: (data.find(item => item.word === "continue_with_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    registrarse_with_google: (data.find(item => item.word === "registrarse_with_google") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_footer_titulo: (data.find(item => item.word === "recursos_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_item_1: (data.find(item => item.word === "recursos_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_item_2: (data.find(item => item.word === "recursos_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_item_3: (data.find(item => item.word === "recursos_item_3") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    recursos_item_4: (data.find(item => item.word === "recursos_item_4") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    siganos_footer_titulo: (data.find(item => item.word === "siganos_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    siganos_item_1: (data.find(item => item.word === "siganos_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    siganos_item_2: (data.find(item => item.word === "siganos_item_2") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    legal_footer_titulo: (data.find(item => item.word === "legal_footer_titulo") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    legal_item_1: (data.find(item => item.word === "legal_item_1") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    rights_footer: (data.find(item => item.word === "rights_footer") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    iniciar_text: (data.find(item => item.word === "iniciar_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    registrarse_text: (data.find(item => item.word === "registrarse_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    exists_text: (data.find(item => item.word === "exists_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    username_text: (data.find(item => item.word === "username_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    email_text: (data.find(item => item.word === "email_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    password_text: (data.find(item => item.word === "password_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    id_number_text: (data.find(item => item.word === "id_number_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    phone_text: (data.find(item => item.word === "phone_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    agree_text: (data.find(item => item.word === "agree_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    legal_item_2: (data.find(item => item.word === "legal_item_2") || {})[flag === "es" ? 'es' : 'en'] as string,
+    continue_with_text: (data.find(item => item.word === "continue_with_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    registrarse_with_google: (data.find(item => item.word === "registrarse_with_google") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_footer_titulo: (data.find(item => item.word === "recursos_footer_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_1: (data.find(item => item.word === "recursos_item_1") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_2: (data.find(item => item.word === "recursos_item_2") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_3: (data.find(item => item.word === "recursos_item_3") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_4: (data.find(item => item.word === "recursos_item_4") || {})[flag === "es" ? 'es' : 'en'] as string,
+    siganos_footer_titulo: (data.find(item => item.word === "siganos_footer_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_1: (data.find(item => item.word === "siganos_item_1") || {})[flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_2: (data.find(item => item.word === "siganos_item_2") || {})[flag === "es" ? 'es' : 'en'] as string,
+    legal_footer_titulo: (data.find(item => item.word === "legal_footer_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    legal_item_1: (data.find(item => item.word === "legal_item_1") || {})[flag === "es" ? 'es' : 'en'] as string,
+    rights_footer: (data.find(item => item.word === "rights_footer") || {})[flag === "es" ? 'es' : 'en'] as string,
+    iniciar_text: (data.find(item => item.word === "iniciar_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    registrarse_text: (data.find(item => item.word === "registrarse_text") || {})[flag === "es" ? 'es' : 'en'] as string,
 };
 
 ---

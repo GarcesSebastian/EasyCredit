@@ -1,3 +1,10 @@
+const socket = io("http://localhost:4000/")
+socket.emit("client_enter", getCookie("ID-USER"));
+
+socket.on("transfer_received", () => {
+    console.log("recibido");
+});
+
 window.addEventListener("DOMContentLoaded", async () => {
     if(document.querySelector("#input-tasa-loan")){
         document.querySelector("#input-tasa-loan").value = await obtenerTasa() + "%";
@@ -137,26 +144,8 @@ let button_logout = document.querySelector("#button_logout");
 
 if(button_logout){
     button_logout.addEventListener("click", () => {
-        let encryptedInitiated = encrypt("false");
-        localStorage.setItem("W-INIT-ENT", encryptedInitiated);
-
-        let encryptedEmail = encrypt("false");
-        localStorage.setItem("W-I-D", encryptedEmail);
-
-        let data = {
-            flag: getCookie("flag"),
-            initiated: localStorage.getItem("W-INIT-ENT"),
-            id_user: localStorage.getItem("ID-USER"),
-        }
-
-        fetch("http://localhost:4000/variables", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-
+        setCookie("W-INIT-ENT", "false")
+        setCookie("ID-USER", "false")
         window.location.reload();
     });
 }
@@ -165,17 +154,14 @@ if(list_flags && actual_element){
     list_flags.querySelectorAll("div").forEach(item => {
         if(item){
             item.addEventListener("click", () => {
-    
                 if(item.getAttribute("data-flag") == "es"){
                     actual_element.setAttribute("data-flag-now", "es")
                     item.setAttribute("data-flag", "en")
                     setCookie("flag", "es")
-                    // localStorage.setItem("flag", "es");
                 }else if(item.getAttribute("data-flag") == "en"){
                     actual_element.setAttribute("data-flag-now", "en")
                     item.setAttribute("data-flag", "es")
                     setCookie("flag", "en")
-                    // localStorage.setItem("flag", "en");
                 }
         
                 let srcImage = item.querySelector("img")?.src.split("/");
@@ -186,20 +172,6 @@ if(list_flags && actual_element){
                 imgActualElement.src = src;
                 let imgItem = item.querySelector("img");
                 imgItem.src = srcNow;
-        
-                let data = {
-                    flag: getCookie("flag"),
-                    initiated: localStorage.getItem("W-INIT-ENT"),
-                    id_user: localStorage.getItem("ID-USER"),
-                }
-        
-                fetch("http://localhost:4000/variables", {
-                    method: "POST",
-                    body: JSON.stringify(data),
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                })
         
                 let svg = actual_element?.querySelector("span");
         
@@ -236,28 +208,9 @@ document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
         inputSucess(document.querySelector("#input-password"), "#err-password");
 
         if (res.ok) {
-            localStorage.setItem("ID-USER", responseJson.id)
+            setCookie("ID-USER", responseJson.id)
+            setCookie("W-INIT-ENT", "true")
             console.log("Logeado con éxito");
-            
-            let encryptedInitiated = encrypt("true");
-            localStorage.setItem("W-INIT-ENT", encryptedInitiated);
-
-            let encryptedId = encrypt(email.value);
-            localStorage.setItem("W-I-D", encryptedId);
-
-            let Info = {
-                flag: getCookie("flag"),
-                initiated: localStorage.getItem("W-INIT-ENT"),
-                id_user: localStorage.getItem("ID-USER"),
-            }
-
-            fetch("http://localhost:4000/variables", {
-                method: "POST",
-                body: JSON.stringify(Info),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
 
             window.location.href = "/"
         } else {
@@ -336,20 +289,8 @@ if(
     });
 }
 
-let response_data_user, data_user, response_data_variables, data_variables, data_movements_incomplete, initial_value_movements;
-
-if(decrypt(localStorage.getItem("W-INIT-ENT")) === "true" && decrypt(localStorage.getItem("W-I-D")) != "false"){
-    response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-    data_variables = await response_data_variables.json();
-
-    if(data_variables.email){
-        response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${data_variables.id}`);
-        data_user = await response_data_user.json();
-    
-        data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);
-    
-        initial_value_movements = data_movements_incomplete.length;
-    }
+if(getCookie("W-INIT-ENT") === "true"){
+    console.log("Usuario logeado.");
 }else{
     console.log("No esta logeado el usuario.")
 }
@@ -449,6 +390,7 @@ async function send_req_loan(){
         numero_telefono_loan: elements_loan.input_numero_telefono_loan.value,
         tasa_variable: elements_loan.tasa_variable.checked,
         tasa_fija: elements_loan.tasa_fija.checked,
+        id_client: getCookie("ID-USER")
     }
 
     let response_user_loan;
@@ -489,7 +431,6 @@ async function send_req_loan(){
         console.log(err);
     }
     
-    console.log(data);
 }
 
 document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
@@ -548,8 +489,6 @@ async function send_req_transfer(){
         return null;
     }
 
-    let email_user_origin = localStorage.getItem("W-I-D");
-
     let numero_card_string = elements_transfer.input_numero_tarjeta.value.toString();
     let arr_numero_card_string = [];
     
@@ -561,7 +500,7 @@ async function send_req_transfer(){
         numero_card: arr_numero_card_string,
         action: elements_transfer.input_action.value,
         message: elements_transfer.input_message.value,
-        origin: email_user_origin,
+        origin: getCookie("ID-USER")
     }
 
     let response_user_loan;
@@ -588,6 +527,7 @@ async function send_req_transfer(){
                 elements_transfer.input_numero_tarjeta.style.borderColor = "tomato";
             }
         }else{
+            socket.emit("transfer", (data))
             window.location.reload();
         }
     }catch(e){

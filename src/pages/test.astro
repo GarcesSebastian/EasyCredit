@@ -1,8 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const status = (Astro.cookies.get("status") || {})?.value;
+
+console.log(status);
+
 ---
 
 <Layout title="Sebxstt - Inicio">
+
+
+    {status &&
+        <p>{status}</p>
+    }
+
     <div class="w-full flex justify-center items-center gap-5 mt-5 mb-0">
         <button id="btn-create-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             Create Information
@@ -11,6 +22,12 @@ import Layout from "../layouts/Layout.astro";
         <button id="btn-delete-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             Delete Information
         </button>
+
+        <form action="/actions/set-status" method="post">
+            <button id="btn-test" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Prueba
+            </button>
+        </form>
     </div>
 
     <canvas id="grafico"></canvas>
@@ -19,13 +36,24 @@ import Layout from "../layouts/Layout.astro";
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
+    function getCookie(cookieName: any) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(cookieName + '=')) {
+                return cookie.substring(cookieName.length + 1);
+            }
+        }
+        return null;
+    }
+
     let btn_create_information = document.querySelector("#btn-create-information");
     let btn_delete_information = document.querySelector("#btn-delete-information");
 
     btn_create_information?.addEventListener("click", async () => {
         const res = await fetch("http://localhost:4000/create/information", {
             method: 'POST',
-            body: JSON.stringify({id: localStorage.getItem("ID-USER")}),
+            body: JSON.stringify({id: getCookie("ID-USER")}),
             headers: {'Content-Type': 'application/json'}
         });
 
@@ -39,7 +67,7 @@ import Layout from "../layouts/Layout.astro";
     btn_delete_information?.addEventListener("click", async () => {
         const res = await fetch("http://localhost:4000/delete/information", {
             method: 'POST',
-            body: JSON.stringify({id: localStorage.getItem("ID-USER")}),
+            body: JSON.stringify({id: getCookie("ID-USER")}),
             headers: {'Content-Type': 'application/json'}
         });
 
@@ -60,23 +88,18 @@ import Layout from "../layouts/Layout.astro";
         return fechasOrdenadas;
     }
 
-    let response_data_variables: Response;
     let response_data_user: Response;
 
-    let data_variables: any;
     let data_user: any;
 
     let isContinue = true;
     let err: any;
-
+    
     let movements: any = [];
     let eje_x: any = [];
 
     try{
-        response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-        data_variables = await response_data_variables.json();
-
-        response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${data_variables.id}`);
+        response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
         data_user = await response_data_user.json();
 
         console.log(data_user);

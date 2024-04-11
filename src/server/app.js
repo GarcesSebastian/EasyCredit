@@ -3,22 +3,12 @@ import morgan from 'morgan';
 import cors from 'cors';
 import * as database from "./database.js";
 import bcrypt from 'bcrypt';
-import CryptoJS from 'crypto-js';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import nodemailer from 'nodemailer';
-import cookieParser from 'cookie-parser';
-import { connect } from 'node:http2';
 
 const app = express();
 const server = createServer(app);
-
-//Variables globals
-let flag = {};
-let initiated = {};
-let email = [];
-let id = {};
-
 
 const port = process.env.PORT || 4000;
 
@@ -26,7 +16,6 @@ const port = process.env.PORT || 4000;
 app.set("port", port);
 
 // Middlewares
-app.use(cookieParser());
 app.use(cors({
     origin: (origin, callback) => {
       const allowedOrigins = ['http://localhost:4321', 'http://localhost:4322', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
@@ -64,8 +53,32 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
+    socket.on("client_enter", (id) => {
+        console.log("Cliente: " + id);
+        socket.join(id);
+        console.log(io.sockets.adapter.rooms);
+    })
+
+    socket.on("transfer", async (data) => {
+        const connection = await database.getConnection();
+
+        let id_origin = data.origin;
+        let id_destiny;
+        let number_card = "";
+        const response_data_user = await connection.query("SELECT * FROM users WHERE number_card = ?", [convertCard(number_card, data.numero_card)]);
+
+        if(response_data_user.length > 0){
+            id_destiny = response_data_user[0].id_user;
+        }else{
+            console.log("No entrooo");
+        }
+
+        console.log("Transferencia de " + id_origin + " a " + id_destiny);
+        io.sockets.to(id_destiny).emit("transfer_received");
+    })
 });
-    
+
+
 app.post("/register/auth", async (req, res) => {
     if (req.body && req.body.email) {
         const connection = await database.getConnection();
@@ -171,27 +184,6 @@ app.post("/login/auth", async (req, res) => {
     }
 });
 
-app.post("/variables", async (req, res) => {
-    if(req.body){
-        if(req.body.flag && req.body.initiated && req.body.id_user){
-            flag = req.body.flag;
-            initiated = req.body.initiated;
-            id = req.body.id_user;
-
-            if(id == 'false'){
-                var encryptedValue = CryptoJS.AES.encrypt("false", 'clave_secreta').toString();
-                initiated = encryptedValue
-            }
-            res.status(200).json({ message: "True Request"});
-        }else{
-            flag = "es";
-            initiated = "false";
-            email = "false";
-            res.status(400).send({ message: "Bad Request" });
-        }
-    }
-});
-
 app.post("/user/loan", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
@@ -211,22 +203,25 @@ app.post("/user/loan", async (req, res) => {
         const data_user_import = await connection.query("SELECT * FROM easycredit.registers WHERE email = ?", [email_user]);
 
         if(data_user_basic.length > 0 && data_user_import.length > 0){
-            let is_id = await bcrypt.compare(id_loan,data_user_import[0].numero_identidad || 0);
-            if(is_id){
-
-                let sumary_action = parseFloat(action_loan) + parseFloat(data_user_basic[0].saldo_disponible);
-                
-                await connection.query("INSERT INTO prestamos(id_user, name_loan, numero_telefono_loan, tasa_interes, cuotas, frencuencia_pago, action_prestamo, tasa_variable, tasa_fija) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, name_loan, numero_telefono_loan, tasa_loan, cuotas, frecuencia, action_loan, tasa_variable, tasa_fija]);            
-                
-                let movements = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
-                let date_now_string = getDateNow();
-                
-                await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo"]);
-                
-                await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [sumary_action, sumary_action, data_user_basic[0].id_user]);
-                res.status(200).json({ message: "Loan Successful" });
+            if(data_user_basic[0].id_user == req.body.id_client){
+                let is_id = await bcrypt.compare(id_loan,data_user_import[0].numero_identidad || 0);
+                if(is_id){
+                    let sumary_action = parseFloat(action_loan) + parseFloat(data_user_basic[0].saldo_disponible);
+                    
+                    await connection.query("INSERT INTO prestamos(id_user, name_loan, numero_telefono_loan, tasa_interes, cuotas, frencuencia_pago, action_prestamo, tasa_variable, tasa_fija) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, name_loan, numero_telefono_loan, tasa_loan, cuotas, frecuencia, action_loan, tasa_variable, tasa_fija]);            
+                    
+                    let movements = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
+                    let date_now_string = getDateNow();
+                    
+                    await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo"]);
+                    
+                    await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [sumary_action, sumary_action, data_user_basic[0].id_user]);
+                    res.status(200).json({ message: "Loan Successful" });
+                }else{
+                    res.status(400).send({ state: "Bad Request", message: "Numero de Identificacion Invalido." });
+                }
             }else{
-                res.status(400).send({ state: "Bad Request", message: "Numero de Identificacion Invalido." });
+                res.status(400).send({ state: "Bad Request", message: "Correo Electronico no valido." });
             }
         }else{
             res.status(400).send({ state: "Bad Request", message: "Correo Electronico no valido." });
@@ -239,14 +234,15 @@ app.post("/user/loan", async (req, res) => {
 app.post("/user/transfer", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
-        const origin = CryptoJS.AES.decrypt(req.body.origin, 'clave_secreta').toString(CryptoJS.enc.Utf8);
+        const origin = req.body.origin;
+        console.log(origin);
         const destino_id = req.body.numero_card;
         const action = req.body.action;
         const message = req.body.message;
 
         let numero_card = convertCard("", destino_id);
 
-        const data_user_register_origin = await connection.query("SELECT * FROM easycredit.registers WHERE email = ?", [origin]);
+        const data_user_register_origin = await connection.query("SELECT * FROM easycredit.registers WHERE id = ?", [origin]);
 
         if(data_user_register_origin.length > 0){
             const data_user_origin = await connection.query("SELECT * FROM easycredit.users WHERE id_user = ?", [data_user_register_origin[0].id]);
@@ -505,44 +501,6 @@ app.post("/delete/information", async (req, res) => {
     }
 });
   
-  
-app.get('/cookie',function(req, res){
-    res.cookie("secret" , 'cookie_value').send('Cookie is set');
-});
-
-app.get("/", async (req, res) => {
-    res.send(req.cookies);
-    // const idUser = req.query.idUser;
-
-    // if(idUser){
-    //     const connection = await database.getConnection();
-    //     const data_from_id = await connection.query("SELECT * FROM users WHERE id_user = ?",[idUser]);
-
-    //     if(data_from_id.length > 0){
-    //         console.log(data_from_id);
-    //         req.session.id = []
-    //         req.session.views = (req.session.views || 0) + 1;
-    //         req.session.id.push(idUser);
-    //         res.send(req.session);
-    //     }else{
-    //         res.send({response: "Bad Request"});
-    //     }
-    // }else{
-    //     res.send({response: "Bad Request"});
-    // }
-
-    console.log(req.cookies);
-});
-
-app.get("/variables/res", (req,res) => {
-    var decryptedInitiated = CryptoJS.AES.decrypt(initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8);
-    res.json({
-        flag: flag,
-        initiated: decryptedInitiated,
-        id: id,
-    });
-});
-
 app.get("/user/data", async (req, res) => {
     const id_user = req.query.id_user;
 

@@ -12,32 +12,24 @@ interface Props{
 
 const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = Astro.props;
 
-let response_data_variables: Response;
 let response_data_user: Response;
-let response_variables: Response;
 
-let data_variables: any;
 let data_user: any;
-let variables: any;
 
 let isContinue = true;
 let err: any;
 
+const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
+const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
+
 try{
-    response_variables = await fetch("http://localhost:4000/variables/res");
-    variables = await response_variables.json();
-
-    response_data_variables = await fetch(`http://localhost:4000/variables/res`);
-    data_variables = await response_data_variables.json();
-
-    response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${data_variables.id}`);
+    response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
     data_user = await response_data_user.json();
 }catch(e){
     isContinue = !isContinue;
     console.log(e);
     err = e;
 }
-
 
 ---
 
@@ -64,7 +56,7 @@ try{
                     <div class="flex items-center justify-center gap-x-5">
 
                         {
-                            variables.initiated == "false" ? (
+                            initiated == "false" ? (
                                 <a href={href_signin} class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
                                     
                                     <span class="max-lg:hidden">
