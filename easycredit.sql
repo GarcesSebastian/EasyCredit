@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-04-2024 a las 08:30:42
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.0.25
+-- Tiempo de generación: 11-04-2024 a las 10:14:12
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -47,6 +47,15 @@ CREATE TABLE `movements` (
   `state_movement` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `movements`
+--
+
+INSERT INTO `movements` (`id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`) VALUES
+(321433, 1, 'Transfer', '2024-04-11', '1000000', 'positivo'),
+(342596, 1, 'Transfer', '2024-04-11', '1000000', 'negativo'),
+(342596, 2, 'Bank Loan', '2024-04-11', '1000000', 'positivo');
+
 -- --------------------------------------------------------
 
 --
@@ -65,8 +74,8 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
-(298409, 'Sebxstt', 'sebastiangarces152@gmail.com', 0),
-(934755, 'Sebastian', 'sebastiangarces158@gmail.com', 0);
+(321433, 'Sebastian', 'sebastiangarces158@gmail.com', 0),
+(342596, 'Sebxstt', 'sebastiangarces152@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -85,6 +94,14 @@ CREATE TABLE `prestamos` (
   `tasa_variable` tinyint(1) NOT NULL,
   `tasa_fija` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `prestamos`
+--
+
+INSERT INTO `prestamos` (`id_user`, `name_loan`, `numero_telefono_loan`, `tasa_interes`, `cuotas`, `frencuencia_pago`, `action_prestamo`, `tasa_variable`, `tasa_fija`) VALUES
+(342596, 'Sebastian Garces', '3022396265', 12.18, 12, '3 cuotas', '12000000', 0, 1),
+(342596, 'Sebastian Garces', '3022396265', 12.18, 12, '3 cuotas', '1000000', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -108,8 +125,8 @@ CREATE TABLE `registers` (
 --
 
 INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `fecha_creacion`) VALUES
-(298409, 'Sebxstt', '$2b$10$eHrc5Sie5Flu9/XKHXa1dOELogyA8DzUYl45phZ61cn4B17hm0PnW', 'sebastiangarces152@gmail.com', '$2b$10$noLeeabteAbgWTJcxEHXGu6dGfw5GpVylYuyUnkWwiacPpRIM2PZe', '$2b$10$F.busWAl5MwNQX42hii6DOyXODiXv48tCmgvE.Qc8MSDc5j1hy2Je', 1, '11/04/24'),
-(934755, 'Sebastian', '$2b$10$auKKZ5F0MTECtCtf.EYuceZqVoSdA3YNRCDOJFAX3Qfiksb/QL67C', 'sebastiangarces158@gmail.com', '$2b$10$2uECeYjvae6.8sAfmPFzUOfpxF5xHAe5XYbz9G2a9sBCHn7zpfT/.', '$2b$10$Tj2y78VV6.Xy5Knh2wYepuPns59AfdaxR2V9WL2oqLS6INIGYe/n.', 1, '10/04/24');
+(321433, 'Sebastian', '$2b$10$whofB2kgUD4AA6cxUC7bTO9gfnjeG.MBFJ4A2s/t0OHfFLhKs64vm', 'sebastiangarces158@gmail.com', '$2b$10$4ClO0OgP0oldeQnQRySk/u38DMCqCt/.YGJMFvMaCHtKL/g4NdieO', '$2b$10$4zCFYrtgcB51GXkxWLVsFOdO.OnZ9ATOd9W2CaXsi.nBoLHRBOwHC', 1, '11/04/24'),
+(342596, 'Sebxstt', '$2b$10$FejbBWCf79tDU./zjbUGvO8NyhEQSRluoVB4Nbm/O6Z48eVacOhDO', 'sebastiangarces152@gmail.com', '$2b$10$P2y0W3MCDPomcaTbN8w5VO6Blslu1pWiOJ0NUyfKASnTlR.5KX6MG', '$2b$10$h1/n9o6AcVG5Mr0u8QpJCeqUcvZnMB222IcAIF9Pysu3dElX1/9.q', 1, '11/04/24');
 
 -- --------------------------------------------------------
 
@@ -131,8 +148,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`) VALUES
-(298409, 'Sebxstt', 'sebastiangarces152@gmail.com', '2223 9547 8930 8308', '', '0'),
-(934755, 'Sebastian', 'sebastiangarces158@gmail.com', '1596 2486 7451 5423', '', '0');
+(321433, 'Sebastian', 'sebastiangarces158@gmail.com', '7457 3053 3576 2853', '1000000', '1000000'),
+(342596, 'Sebxstt', 'sebastiangarces152@gmail.com', '4952 8428 8845 5558', '12000000', '12000000');
 
 -- --------------------------------------------------------
 
@@ -151,7 +168,6 @@ CREATE TABLE `words` (
 --
 
 INSERT INTO `words` (`word`, `es`, `en`) VALUES
-('', '', ''),
 ('agree_text', 'Estoy de acuerdo con el', 'I agree with the'),
 ('article_1_description', 'Realiza todos los trámites y gestiones de tu crédito libre inversión de manera conveniente y segura a través de nuestro proceso 100% en línea. Desde la solicitud hasta la aprobación, te ofrecemos una experiencia eficiente y sin complicaciones.', 'Carry out all the procedures and procedures for your free investment credit in a convenient and secure manner through our 100% online process. From application to approval, we offer you an efficient and hassle-free experience.'),
 ('article_1_titulo', 'Proceso 100% en linea', '100% online process'),
@@ -186,6 +202,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('legal_item_1', 'Política de Privacidad', 'Privacy Policy'),
 ('legal_item_2', 'Términos y Condiciones', 'Terms & Conditions'),
 ('make_loan_text', 'Hacer préstamo', 'Make loan'),
+('make_transfer', 'Hacer transferencia', 'Make transfer'),
 ('more_text', 'Más', 'More'),
 ('new_notifications_text', ' nuevas notificaciones', ' new notifications'),
 ('new_text', 'Nuevo', 'New'),
@@ -212,23 +229,30 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('text_confirm', 'Confirmar', 'Confirm'),
 ('text_confirm_code', 'Confirmar Codigo', 'Confirm Code'),
 ('text_cuotas', 'Dues', 'Dues'),
+('text_description_transfer', 'Descripción de la transferencia', 'Transfer Description'),
 ('text_finish_loan', 'Finalizar Préstamo', 'Finalize Loan'),
 ('text_frecuencia', 'Frecuencia de pagos', 'Payment Frequency'),
 ('text_information_loan', 'Información del Préstamo', 'Loan Information'),
 ('text_information_personal', 'Información Personal', 'Personal information'),
+('text_monto_transfer', 'Monto de la transferencia', 'Transfer amount'),
 ('text_name_complete', 'Nombre Completo', 'Full name'),
 ('text_new_password', 'Nueva Contraseña', 'New Password'),
 ('text_new_password_invert', 'Contraseña Nueva', 'New password'),
+('text_numero_tarjeta_destino', 'Número de Tarjeta del destino', 'Fate Card Number'),
 ('text_password_update', 'Contraseña actualizada correctamente', 'Password updated successfully'),
 ('text_recover_code', 'Codigo de Recuperación', 'Recovery Code'),
 ('text_repeat_new_password', 'Repetir Nueva Contraseña', 'Repeat New Password'),
+('text_select_cuotas', 'Seleccione las cuotas', 'Select the installments'),
+('text_select_frecuencia', 'Seleccione la frecuencia', 'Select the frequency'),
 ('text_simulate', 'Simular', 'Simulate'),
 ('text_tasa_fija', 'Tasa Fija', 'Fixed rate'),
 ('text_tasa_loan', 'Tasa de Interés', 'Interest rate'),
 ('text_tasa_variable', 'Tasa Variable', 'Variable rate'),
+('text_transfer', 'Transferencia', 'Transfer'),
 ('titulo_inicio', 'Simulador de crédito', 'Credit simulator'),
 ('total_income_text', 'Ingresos totales', 'Total Income'),
 ('transferir_text', 'Transferir', 'Transfer'),
+('type_description_transfer', 'Escribe la descripción de la transferencia aquí...', 'Write the description of the transfer here...'),
 ('type_email', 'Escribe tu correo electronico', 'Write your email'),
 ('type_loan', 'Tipo de Préstamo', 'Loan Type'),
 ('type_recover_code', 'Escribe tu Codigo de Recuperación', 'Write your Recovery Code'),
