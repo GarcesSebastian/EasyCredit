@@ -1,19 +1,27 @@
 ---
 interface Props{
-    img_url: string;
     type_loan_text: string;
     date_text: string;
     amount: any;
     is_positive: string;
 }
 
-const {img_url, type_loan_text, date_text, amount, is_positive} = Astro.props;
+const {type_loan_text, date_text, amount, is_positive} = Astro.props;
 ---
 
 <div class="flex justify-between items-center">
     <div class="flex justify-center items-center gap-x-3">
         <div>
-            <img src={img_url} alt="" class="w-12 h-12 drop-shadow-lg">
+            {
+                type_loan_text === "Bank Loan" ? (
+                    <img src={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"} alt="" class="w-12 h-12 drop-shadow-lg" />
+                ) : type_loan_text === "Transfer" ? (
+                    <img src={"https://img.icons8.com/?size=48&id=vqyoQCZ3fPp5&format=png"} alt="" class="w-12 h-12 drop-shadow-lg" />
+                ) : (
+                    <img src={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"} alt="" class="w-12 h-12 drop-shadow-lg" />
+                )
+            }
+              
         </div>
 
         <div class="flex flex-col">

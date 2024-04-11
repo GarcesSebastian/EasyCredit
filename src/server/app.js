@@ -178,10 +178,6 @@ app.post("/variables", async (req, res) => {
             initiated = req.body.initiated;
             id = req.body.id_user;
 
-            if(!email.find(item => item === req.body.id_user) && CryptoJS.AES.decrypt(req.body.initiated, 'clave_secreta').toString(CryptoJS.enc.Utf8) == "true"){
-                email.push(req.body.id_user);
-            }
-
             if(id == 'false'){
                 var encryptedValue = CryptoJS.AES.encrypt("false", 'clave_secreta').toString();
                 initiated = encryptedValue
@@ -448,6 +444,67 @@ app.post("/password/change", async (req, res) => {
         res.status(200).send({ state: "Good Request", message: "Contraseña Cambiada" });
     }
 });
+
+app.post("/create/information", async (req, res) => {
+    try {
+      if (req.body) {
+        const connection = await database.getConnection();
+        const id = req.body.id;
+  
+        function randomDate(start, end) {
+          return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+        }
+  
+        async function generateQueries(numQueries) {
+          const actionTypes = ['Bank Loan', 'Transfer'];
+          const states = ['positivo', 'negativo'];
+  
+          const query = "INSERT INTO movements (id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES (?, ?, ?, ?, ?, ?)";
+  
+          for (let i = 0; i < numQueries; i++) {
+            const id_user = id;
+            const index_movement = i + 1;
+            const tipo_movement = actionTypes[Math.floor(Math.random() * actionTypes.length)];
+            const fecha_movement = randomDate(new Date(2020, 0, 1), new Date());
+            const action_movement = Math.floor(Math.random() * 10000000) + 0;
+            const state_movement = states[Math.floor(Math.random() * states.length)];
+  
+            await connection.query(query, [id_user, index_movement, tipo_movement, fecha_movement.toISOString().slice(0, 10), action_movement, state_movement]);
+          }
+        }
+  
+        await generateQueries(20);
+  
+        res.status(200).json({ status: "Good Request",  message: "Consultas insertadas correctamente" });
+      } else {
+        res.status(400).json({ status: "Bad Request", error: "No se proporcionó ningún cuerpo en la solicitud" });
+      }
+    } catch (error) {
+      console.error("Error al procesar la solicitud:", error);
+      res.status(500).json({ status: "Bad Request", error: "Ocurrió un error al procesar la solicitud" });
+    }
+});
+
+app.post("/delete/information", async (req, res) => {
+    try {
+        if (req.body) {
+        const connection = await database.getConnection();
+        const id = req.body.id;
+
+        const query = "DELETE FROM movements WHERE id_user = ?";
+
+        await connection.query(query, [id]);
+
+        res.status(200).json({ status: "Good Request", message: "Información eliminada correctamente" });
+        } else {
+        res.status(400).json({ status: "Bad Request", error: "No se proporcionó ningún cuerpo en la solicitud" });
+        }
+    } catch (error) {
+        console.error("Error al procesar la solicitud:", error);
+        res.status(500).json({ status: "Bad Request", error: "Ocurrió un error al procesar la solicitud" });
+    }
+});
+  
   
 app.get('/cookie',function(req, res){
     res.cookie("secret" , 'cookie_value').send('Cookie is set');

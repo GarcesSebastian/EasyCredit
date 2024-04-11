@@ -85,11 +85,13 @@ try{
     text_cuotas: (data.find((item: { word: string }) => item.word === "text_cuotas") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     text_frecuencia: (data.find((item: { word: string }) => item.word === "text_frecuencia") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     text_name_complete: (data.find((item: { word: string }) => item.word === "text_name_complete") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    text_email: (data.find((item: { word: string }) => item.word === "text_email") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    text_id: (data.find((item: { word: string }) => item.word === "text_id") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    text_phone: (data.find((item: { word: string }) => item.word === "text_phone") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    email_text: (data.find((item: { word: string }) => item.word === "email_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    id_number_text: (data.find((item: { word: string }) => item.word === "id_number_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    phone_text: (data.find((item: { word: string }) => item.word === "phone_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     text_tasa_fija: (data.find((item: { word: string }) => item.word === "text_tasa_fija") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
-    text_tasa_variable: (data.find((item: { word: string }) => item.word === "text_tasa_variable") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string
+    text_tasa_variable: (data.find((item: { word: string }) => item.word === "text_tasa_variable") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_select_cuotas: (data.find((item: { word: string }) => item.word === "text_select_cuotas") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_select_frecuencia: (data.find((item: { word: string }) => item.word === "text_select_frecuencia") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
 };
 }catch(e){
     err = e;
@@ -119,11 +121,13 @@ try{
         text_cuotas={text.text_cuotas}
         text_frecuencia={text.text_frecuencia}
         text_name_complete={text.text_name_complete}
-        text_email={text.text_email}
-        text_id={text.text_id}
-        text_phone={text.text_phone}
+        email_text={text.email_text}
+        id_number_text={text.id_number_text}
+        phone_text={text.phone_text}
         text_tasa_fija={text.text_tasa_fija}
         text_tasa_variable={text.text_tasa_variable}
+        text_select_cuotas={text.text_select_cuotas}
+        text_select_frecuencia={text.text_select_frecuencia}
     ></PopupLoan>
     <Footer
         recursos_footer_titulo={text.recursos_footer_titulo}

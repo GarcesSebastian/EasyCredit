@@ -74,6 +74,12 @@ try{
     simulate_loan_text: (data.find((item: { word: string }) => item.word === "simulate_loan_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     more_text: (data.find((item: { word: string }) => item.word === "more_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
     not_found_text: (data.find((item: { word: string }) => item.word === "not_found_text") || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_transfer: (data.find((item: { word: string }) => item.word === 'text_transfer') || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_numero_tarjeta_destino: (data.find((item: { word: string }) => item.word === 'text_numero_tarjeta_destino') || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_monto_transfer: (data.find((item: { word: string }) => item.word === 'text_monto_transfer') || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    text_description_transfer: (data.find((item: { word: string }) => item.word === 'text_description_transfer') || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    type_description_transfer: (data.find((item: { word: string }) => item.word === 'type_description_transfer') || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
+    make_transfer: (data.find((item: { word: string }) => item.word === 'make_transfer') || {})[data_variables.flag === "es" ? 'es' : 'en'] as string,
 };
 }catch(e){
     isContinue = !isContinue;
@@ -178,7 +184,14 @@ try{
                     <div></div>
                 )
             }
-            <PopupTransfer></PopupTransfer>
+            <PopupTransfer
+                text_transfer={text.text_transfer}
+                text_numero_tarjeta_destino={text.text_numero_tarjeta_destino}
+                text_monto_transfer={text.text_monto_transfer}
+                text_description_transfer={text.text_description_transfer}
+                type_description_transfer={text.type_description_transfer}
+                make_transfer={text.make_transfer}
+            ></PopupTransfer>
         </Layout>
     ): (
         <div>

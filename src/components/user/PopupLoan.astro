@@ -11,11 +11,13 @@
         text_cuotas: string;
         text_frecuencia: string;
         text_name_complete: string;
-        text_email: string;
-        text_id: string;
-        text_phone: string;
+        email_text: string;
+        id_number_text: string;
+        phone_text: string;
         text_tasa_fija: string;
         text_tasa_variable: string;
+        text_select_cuotas: string;
+        text_select_frecuencia: string;
     }
 
     const {
@@ -30,11 +32,13 @@
         text_cuotas,
         text_frecuencia,
         text_name_complete,
-        text_email,
-        text_id,
-        text_phone,
+        email_text,
+        id_number_text,
+        phone_text,
         text_tasa_fija,
-        text_tasa_variable
+        text_tasa_variable,
+        text_select_cuotas,
+        text_select_frecuencia
     } = Astro.props;
 ---
 
@@ -93,9 +97,9 @@
     
             <form id="form-loan" class="w-full h-fit grid grid-cols-2 gap-4 max-w-7xl ">
                 <div class="flex flex-col gap-2 max-md:col-span-2 drop-shadow-lg">
-                    <label for="content-prestamo" class="text-white text-lg font-bold">Informacion del Prestamo</label>
+                    <label for="content-prestamo" class="text-white text-lg font-bold">{text_information_loan}</label>
                     <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1">
-                        <label for="input-action-loan" class="block mb-1 text-sm font-medium text-white relative">{"Monto de la transferencia"}</label>
+                        <label for="input-action-loan" class="block mb-1 text-sm font-medium text-white relative">{text_amount_loan}</label>
                         <div class="relative mb-1">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mail-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -106,11 +110,11 @@
                                     <path d="M3 7l9 6l9 -6" />
                                 </svg>
                             </div>
-                            <input type="number" id="input-action-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Monto de transferencia"} required>
+                            <input type="number" id="input-action-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={text_amount_loan} required>
                         </div>
                         <span id="err-action-loan" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
             
-                        <label for="input-tasa-loan" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Tasa de Interes"}</label>
+                        <label for="input-tasa-loan" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{text_tasa_loan}</label>
                         <div class="relative mb-1">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-businessplan w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -123,10 +127,10 @@
                                     <path d="M5 15v1m0 -8v1" />
                                 </svg>
                             </div>
-                            <input type="text" id="input-tasa-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Tasa de Interes"} value={"Loading..."} disabled>
+                            <input type="text" id="input-tasa-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={text_tasa_loan} value={"Loading..."} disabled>
                         </div>        
             
-                        <label for="input-cuotas" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Cuotas"}</label>
+                        <label for="input-cuotas" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{text_cuotas}</label>
                         <div class="relative mb-1">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -140,7 +144,7 @@
                                 </svg>
                             </div>
                             <select id="input-cuotas" class="outline-none border text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" required>
-                                <option value="" disabled selected hidden>Seleccione las cuotas</option>
+                                <option value="" disabled selected hidden>{text_select_cuotas}</option>
                                 <option value="3 cuotas">3 cuotas</option>
                                 <option value="6 cuotas">6 cuotas</option>
                                 <option value="12 cuotas">12 cuotas</option>
@@ -151,7 +155,7 @@
                         </div>
                         <span id="err-cuotas" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
             
-                        <label for="input-frecuencia" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Frecuencia de pagos"}</label>
+                        <label for="input-frecuencia" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{text_frecuencia}</label>
                         <div class="relative mb-1">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -165,7 +169,7 @@
                                 </svg>
                             </div>
                             <select id="input-frecuencia" class="outline-none border text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" required>
-                                <option value="" disabled selected hidden>Seleccione la frecuencia</option>
+                                <option value="" disabled selected hidden>{text_select_frecuencia}</option>
                                 <option value="3 cuotas">Mensual</option>
                                 <option value="6 cuotas">Trimestral</option>
                                 <option value="12 cuotas">Semestral</option>
@@ -178,9 +182,9 @@
                 </div>
             
                 <div class="flex flex-col gap-2 max-md:col-span-2 drop-shadow-lg">
-                    <label for="content-prestamo" class="text-white text-lg font-bold">Informacion Personal</label>
+                    <label for="content-prestamo" class="text-white text-lg font-bold">{text_information_personal}</label>
                     <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1">
-                        <label for="input-name-loan" class="block mb-1 text-sm font-medium text-white relative">{"Nombre Completo"}</label>
+                        <label for="input-name-loan" class="block mb-1 text-sm font-medium text-white relative">{text_name_complete}</label>
                         <div class="relative mb-1">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id-badge-2 w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -192,11 +196,11 @@
                                     <path d="M14 12h4" />
                                 </svg>
                             </div>
-                            <input type="text" id="input-name-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Nombre"} required>
+                            <input type="text" id="input-name-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={text_name_complete} required>
                         </div>
                         <span id="err-name-loan" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
             
-                        <label for="input-email" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Correo Electronico"}</label>
+                        <label for="input-email" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{email_text}</label>
                         <div class="relative mb-1">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
@@ -204,11 +208,11 @@
                                     <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
                                 </svg>
                             </div>
-                            <input type="email" id="input-email" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Correo Electronico"} required>
+                            <input type="email" id="input-email" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={email_text} required>
                         </div>
                         <span id="err-email" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
             
-                        <label for="input-id-loan" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Numero de Identificacion"}</label>
+                        <label for="input-id-loan" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{id_number_text}</label>
                         <div class="relative mb-1">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-map-2 w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -219,11 +223,11 @@
                                     <path d="M19 18v.01" />
                                 </svg>
                             </div>
-                            <input type="number" id="input-id-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Numero de Identificacion"}>
+                            <input type="number" id="input-id-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={id_number_text}>
                         </div>        
                         <span id="err-id-loan" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden"></span>
             
-                        <label for="input-numero_telefono-loan" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{"Telefono"}</label>
+                        <label for="input-numero_telefono-loan" class="block mb-1 mt-1.5 text-sm font-medium text-white relative">{phone_text}</label>
                         <div class="relative mb-1">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-phone w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -239,17 +243,17 @@
                 </div>
             
                 <div class="flex flex-col col-span-2 drop-shadow-lg">
-                    <label for="content-prestamo" class="text-white text-lg font-bold">Tipo de Prestamo</label>
+                    <label for="content-prestamo" class="text-white text-lg font-bold">{type_loan}</label>
                     <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1 flex w-full">
                         <div class="flex justify-around items-center gap-8 w-full">
                             <div class="flex items-center gap-2">
                                 <input type="checkbox" name="tasa_fija" id="tasa_fija" checked required class="form-checkbox text-primary-500 h-5 w-5">
-                                <label for="tasa_fija" class="text-white text-md font-bold">Tasa Fija</label>
+                                <label for="tasa_fija" class="text-white text-md font-bold">{text_tasa_fija}</label>
                             </div>
                 
                             <div class="flex items-center gap-2">
                                 <input type="checkbox" name="tasa_variable" id="tasa_variable" class="form-checkbox text-primary-500 h-5 w-5">
-                                <label for="tasa_variable" class="text-white text-md font-bold">Tasa Variable</label>
+                                <label for="tasa_variable" class="text-white text-md font-bold">{text_tasa_variable}</label>
                             </div>
                         </div>
                     </div>
@@ -257,15 +261,15 @@
                 
             
                 <div class="flex flex-col col-span-2 drop-shadow-lg">
-                    <label for="content-prestamo" class="text-white text-lg font-bold">Finalizar Prestamo</label>
+                    <label for="content-prestamo" class="text-white text-lg font-bold">{text_finish_loan}</label>
                     <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1 flex w-full">
                         <div class="flex justify-center items-center w-full gap-4">
                             <div class="justify-center items-center flex gap-2 w-full">
-                                <input id="button-confirm-loan" type="submit" value="CONFIRMAR" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-3 text-center inline-flex items-center justify-center cursor-pointer">
+                                <input id="button-confirm-loan" type="submit" value={text_confirm} class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-3 text-center inline-flex items-center justify-center cursor-pointer">
                             </div>
             
                             <div class="justify-center items-center flex gap-2 w-full">
-                                <input id="button-simulate-loan" type="submit" value="SIMULAR" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-3 text-center inline-flex items-center justify-center cursor-pointer">
+                                <input id="button-simulate-loan" type="submit" value={text_simulate} class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-md px-5 py-3 text-center inline-flex items-center justify-center cursor-pointer">
                             </div>
                         </div>
                     </div>

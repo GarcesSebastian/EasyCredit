@@ -588,8 +588,6 @@ async function send_req_transfer(){
                 elements_transfer.input_numero_tarjeta.style.borderColor = "tomato";
             }
         }else{
-            let socket = io("http://localhost:4000");
-            socket.emit('transfer', data);
             window.location.reload();
         }
     }catch(e){
@@ -597,8 +595,6 @@ async function send_req_transfer(){
         isContinue = !isContinue;
         console.log(err);
     }
-    
-    console.log(data);
 }
 
 document.querySelector("#form-transfer")?.addEventListener("submit", (event) =>{

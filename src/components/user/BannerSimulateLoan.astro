@@ -1,5 +1,25 @@
 ---
+    interface Props{
+      text_amount_loan: string,
+      text_tasa_loan: string,
+      text_cuotas: string,
+      text_frecuencia: string,
+      text_select_cuotas: string,
+      text_select_frecuencia: string,
+      simulate_loan_text: string,
+      calcular_inicio: string,
+    }
 
+    const {
+        text_amount_loan,
+        text_tasa_loan,
+        text_cuotas,
+        text_frecuencia,
+        text_select_cuotas,
+        text_select_frecuencia,
+        simulate_loan_text,
+        calcular_inicio
+    } = Astro.props;
 ---
 
 <section
@@ -63,7 +83,7 @@
       </nav>
 
       <div class="w-full px-5 flex justify-center my-3">
-        <h1 class="text-white text-3xl font-bold">Simular Prestamos</h1>
+        <h1 class="text-white text-3xl font-bold">{simulate_loan_text}</h1>
       </div>
 
       <form id="form-simulate-loan" class="w-full h-full p-5">
@@ -72,7 +92,7 @@
             class="top-left bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="monto-simulate-loan" class="w-full">
-              Monto del Préstamo</label
+              {text_amount_loan}</label
             >
             <div class="flex justify-between w-full gap-5 items-center">
               <div class="relative mb-1 w-full">
@@ -85,7 +105,7 @@
                           <path d="M19 18v.01" />
                       </svg>
                   </div>
-                  <input type="number" id="monto-simulate-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Monto del Préstamo"} required>
+                  <input type="number" id="monto-simulate-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={text_amount_loan} required>
               </div>        
   
               <svg
@@ -111,7 +131,7 @@
             class="top-left bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="tasa-simulate-loan" class="w-full">
-              Tasa de Interés</label
+              {text_tasa_loan}</label
             >
             <div
               class="input-with-icon flex justify-between w-full gap-5 items-center"
@@ -126,7 +146,7 @@
                           <path d="M19 18v.01" />
                       </svg>
                   </div>
-                  <input type="text" id="tasa-simulate-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={"Tasa de Interes"} value={"Loading..."} disabled>
+                  <input type="text" id="tasa-simulate-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" value={"Loading..."} disabled>
                 </div> 
 
               <svg
@@ -152,7 +172,7 @@
             class="top-left bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="plazo-simulate-loan" class="w-full"
-              >Plazo del Préstamo</label
+              >{text_cuotas}</label
             >
             <div class="flex justify-between w-full gap-5 items-center">
               <div class="relative mb-1 w-full">
@@ -173,14 +193,14 @@
                 class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400"
                 required
               >
-                <option value="" disabled selected>Seleccionar Plazo</option>
-                <option value="2">2 meses</option>
-                <option value="4">4 meses</option>
-                <option value="6">6 meses</option>
-                <option value="8">8 meses</option>
-                <option value="10">10 meses</option>
-                <option value="12">12 meses</option>
-              </select>
+                <option value="" disabled selected hidden>{text_select_cuotas}</option>
+                <option value="3 cuotas">3 cuotas</option>
+                <option value="6 cuotas">6 cuotas</option>
+                <option value="12 cuotas">12 cuotas</option>
+                <option value="24 cuotas">24 cuotas</option>
+                <option value="36 cuotas">36 cuotas</option>
+                <option value="48 cuotas">48 cuotas</option>
+            </select>
             </div>
             </div>
           </div>
@@ -189,7 +209,7 @@
             class="top-left bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="frecuencia-simulate-loan" class="w-full"
-              >Frecuencia de Pago</label
+              >{text_frecuencia}</label
             >
             <div class="flex justify-between w-full gap-5 items-center">
               <div class="relative mb-1 w-full">
@@ -211,7 +231,7 @@
                 required
               >
                 <option value="" disabled selected
-                  >Seleccionar Frecuencia</option
+                  >{text_select_frecuencia}</option
                 >
                 <option value="mensual">Mensual</option>
                 <option value="trimestral">Trimestral</option>
@@ -229,7 +249,7 @@
             type="submit"
             id="btn-simulate-loan"
             class="bg-yellow-400 py-2 px-3 rounded-sm text-black font-semibold hover:bg-yellow-500 w-fit cursor-pointer"
-            value="Calcular"
+            value={calcular_inicio}
           />
 
           <label for="btn-simulate-loan" class="text-red-500 font-bold hidden">

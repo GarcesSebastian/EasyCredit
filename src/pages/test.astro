@@ -3,11 +3,53 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Sebxstt - Inicio">
+    <div class="w-full flex justify-center items-center gap-5 mt-5 mb-0">
+        <button id="btn-create-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+            Create Information
+        </button>
+    
+        <button id="btn-delete-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+            Delete Information
+        </button>
+    </div>
+
     <canvas id="grafico"></canvas>
 </Layout>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+    let btn_create_information = document.querySelector("#btn-create-information");
+    let btn_delete_information = document.querySelector("#btn-delete-information");
+
+    btn_create_information?.addEventListener("click", async () => {
+        const res = await fetch("http://localhost:4000/create/information", {
+            method: 'POST',
+            body: JSON.stringify({id: localStorage.getItem("ID-USER")}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const responseJSON = await res.json();
+
+        if(responseJSON.status == "Good Request"){
+            window.location.reload();
+        }
+    });
+
+    btn_delete_information?.addEventListener("click", async () => {
+        const res = await fetch("http://localhost:4000/delete/information", {
+            method: 'POST',
+            body: JSON.stringify({id: localStorage.getItem("ID-USER")}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const responseJSON = await res.json();
+
+        if(responseJSON.status == "Good Request"){
+            window.location.reload();
+        }
+    });
+
     function ordenarFechasAsc(fechas: any) {
         let fechasDate = fechas.map((fecha: any) => new Date(fecha));
 

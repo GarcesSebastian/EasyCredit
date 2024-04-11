@@ -1,5 +1,23 @@
 ---
-import PopupBase from "./PopupBase.astro"
+    import PopupBase from "./PopupBase.astro"
+
+    interface Props{
+        text_transfer: string,
+        text_numero_tarjeta_destino: string,
+        text_monto_transfer: string,
+        text_description_transfer: string,
+        type_description_transfer: string,
+        make_transfer: string,
+    }
+
+    const {
+        text_transfer,
+        text_numero_tarjeta_destino,
+        text_monto_transfer,
+        text_description_transfer,
+        type_description_transfer,
+        make_transfer
+    } = Astro.props;
 ---
 
 <PopupBase 
@@ -11,11 +29,11 @@ import PopupBase from "./PopupBase.astro"
     id_close="close-transfer"
     >
     <div class="p-5 border-b-[1px] mb-5">
-        <h1 class="text-2xl font-bold text-white">Transferencia</h1>
+        <h1 class="text-2xl font-bold text-white">{text_transfer}</h1>
     </div>
 
     <form id="form-transfer" class="px-5 pt-2">
-        <label for="input-numero-identidad" class="block mb-2 ml-0 text-sm font-medium text-white relative">{"Numero de Tarjeta del destino"}</label>
+        <label for="input-numero-identidad" class="block mb-2 ml-0 text-sm font-medium text-white relative">{text_numero_tarjeta_destino}</label>
         <div class="relative mb-2.5">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -27,11 +45,11 @@ import PopupBase from "./PopupBase.astro"
                     <path d="M7 16l10 0" />
                 </svg>
             </div>
-            <input type="number" id="input-numero-tarjeta-transfer" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={"Numero de Tarjeta del destino"} required>
+            <input type="number" id="input-numero-tarjeta-transfer" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={text_numero_tarjeta_destino} required>
         </div>
         <span id="err-numero-identidad-transfer" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden">Prueba</span>
 
-        <label for="input-action" class="block mb-2 mt-1.5 text-sm font-medium text-white relative">{"Monto de la transferencia"}</label>
+        <label for="input-action" class="block mb-2 mt-1.5 text-sm font-medium text-white relative">{text_monto_transfer}</label>
         <div class="relative mb-2.5">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mail-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -42,19 +60,19 @@ import PopupBase from "./PopupBase.astro"
                     <path d="M3 7l9 6l9 -6" />
                 </svg>
             </div>
-            <input type="number" id="input-action-transfer" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={"Monto de transferencia"} required>
+            <input type="number" id="input-action-transfer" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={text_monto_transfer} required>
         </div>
         <span id="err-action-transfer" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden">Prueba</span>
 
-        <label for="message" class="block mb-2 mt-1.5 text-sm font-medium text-white relative">{"Descripcion de la transferencia"}</label>
+        <label for="message" class="block mb-2 mt-1.5 text-sm font-medium text-white relative">{text_description_transfer}</label>
         <div class="relative mb-2.5">
-            <textarea id="input-message-transfer" class="max-h-[9rem] min-h-[5rem] outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block justify-center items-center w-full px-4 py-3  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={"Escribe la descripcion de la transferencia aqui..."}></textarea>
+            <textarea id="input-message-transfer" class="max-h-[9rem] min-h-[5rem] outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block justify-center items-center w-full px-4 py-3  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={type_description_transfer}></textarea>
         </div>
         <span id="err-message-transfer" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden">Prueba</span>
 
         <div class="w-full flex justify-left items-center relative mt-1">
             <button id="submit-signup" type="submit" class="w-full max-w-[13rem] transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-lg px-5 py-3 text-center inline-flex items-center justify-center mb-2">
-                {"Hacer Transferencia"}
+                {make_transfer}
             </button>
         </div>
     </form>
