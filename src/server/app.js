@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import CryptoJS from 'crypto-js';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
+import nodemailer from 'nodemailer';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -304,6 +305,37 @@ app.post("/user/transfer", async (req, res) => {
         }
     }else{
         res.status(400).send({ state: "Bad Request", message: "No se encontro ningun body" });
+    }
+});
+
+app.post("email/send", async (req, res) => {
+    if(req.body){
+        let email = req.body.email;
+        let message = req.body.message;
+        let subject = req.body.subject;
+
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: "sebastiangarces152@gmail.com",
+                pass: "ocxogzwntaaacecg"
+            }
+        });
+
+        let mailOptions = {
+            from: 'sebastiangarces152@gmail.com', 
+            to: email, 
+            subject: subject,
+            text: message
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                res.status(400).send({ state: "Bad Request", message: "No se pudo enviar el correo" });
+            } else {
+                res.status(200).send({ state: "Good Request", message: "Correo Enviado" });
+            }
+        });
     }
 });
   

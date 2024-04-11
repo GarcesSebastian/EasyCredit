@@ -72,8 +72,14 @@ const {titulo, not_found, more, num_movements} = Astro.props;
 
     @media (max-width: 1024px) {
         #card_movements{
-            grid-column: span 4 / 4 span;
-            grid-row: span 1 / 1 span;
+            grid-column: span 2 / 2 span;
         }
     }
+
+    @media (max-width: 890px) {
+        #card_movements{
+            grid-column: span 4 / 4 span;
+        }
+    }
+
 </style>

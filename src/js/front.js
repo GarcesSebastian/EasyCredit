@@ -288,7 +288,7 @@ if(document.querySelector("#background-popup-transfer") // Si existen los elemen
     document.querySelector("#close-transfer").addEventListener("click", () => {
         document.querySelector("#popup-center").style.display = "none";
     });
-    
+
     document.querySelector("#button-transfer").addEventListener("click", () =>{
         document.querySelector("#popup-center").style.display = "flex";
     });
@@ -299,6 +299,24 @@ if(document.querySelector("#background-popup-transfer") // Si existen los elemen
 
     document.querySelector("#button-simulate-loan").addEventListener("click", () =>{
         window.location.href="/SimulateLoan"
+    });
+}
+
+if(
+    document.querySelector("#background-popup-forward")
+    && document.querySelector("#popup-center-forward")
+    && document.querySelector("#close-forward") 
+){
+    document.querySelector("#background-popup-forward").addEventListener("click", () => {
+        document.querySelector("#popup-center-forward").style.display = "none";
+    });
+
+    document.querySelector("#close-forward").addEventListener("click", () => {
+        document.querySelector("#popup-center-forward").style.display = "none";
+    });
+
+    document.querySelector("#btn-forward").addEventListener("click", () =>{
+        document.querySelector("#popup-center-forward").style.display = "flex";
     });
 }
 
@@ -571,6 +589,15 @@ document.querySelector("#form-transfer")?.addEventListener("submit", (event) =>{
     event.preventDefault();
     send_req_transfer();
 })
+
+async function send_code_email(){
+    
+}
+
+document.querySelector("#form-forward").addEventListener("submit", (event) =>{
+    event.preventDefault();
+    send_code_email();
+});
 
 function transformSrc(srcImage){
     let src = "";
