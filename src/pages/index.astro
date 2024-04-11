@@ -82,9 +82,9 @@ try{
     make_transfer: (data.find((item: { word: string }) => item.word === 'make_transfer') || {})[flag === "es" ? 'es' : 'en'] as string,
 };
 }catch(e){
-    isContinue = !isContinue;
+    isContinue = false;
     err = e;
-    console.log(err);
+    return Astro.redirect("/")
 }
 
 ---
@@ -195,6 +195,18 @@ try{
         </Layout>
     ): (
         <div>
+            <script>
+                function setCookie(cookieName: any, cookieValue: any) {
+                    const expirationDate = new Date('9999-12-31'); 
+                    document.cookie = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/`;
+                }
+
+                setCookie("ID-USER", "false")
+                setCookie("W-INIT-ENT", "false")
+
+                window.location.reload();
+            </script>
+
             {err}
         </div>
     )

@@ -4,7 +4,7 @@ import cors from 'cors';
 import * as database from "./database.js";
 import bcrypt from 'bcrypt';
 import { createServer } from 'node:http';
-import { Server } from 'socket.io';
+// import { Server } from 'socket.io';
 import nodemailer from 'nodemailer';
 
 const app = express();
@@ -37,47 +37,46 @@ app.use((req, res, next) => {
     next();
 });
 
-const io = new Server(server, {
-    cors: {
-        origin: (origin, callback) => {
-        const allowedOrigins = ['http://localhost:4321', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
-        if (allowedOrigins.includes(origin) || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('No permitido por CORS'));
-        }
-        },
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true
-    }
-});
+// const io = new Server(server, {
+//     cors: {
+//         origin: (origin, callback) => {
+//         const allowedOrigins = ['http://localhost:4321', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
+//         if (allowedOrigins.includes(origin) || !origin) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('No permitido por CORS'));
+//         }
+//         },
+//         methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//         credentials: true
+//     }
+// });
 
-io.on('connection', (socket) => {
-    socket.on("client_enter", (id) => {
-        console.log("Cliente: " + id);
-        socket.join(id);
-        console.log(io.sockets.adapter.rooms);
-    })
+// io.on('connection', (socket) => {
+//     socket.on("client_enter", (id) => {
+//         console.log("Cliente: " + id);
+//         socket.join(id);
+//         // console.log(io.sockets.adapter.rooms);
+//     })
 
-    socket.on("transfer", async (data) => {
-        const connection = await database.getConnection();
+//     socket.on("transfer", async (data) => {
+//         const connection = await database.getConnection();
 
-        let id_origin = data.origin;
-        let id_destiny;
-        let number_card = "";
-        const response_data_user = await connection.query("SELECT * FROM users WHERE number_card = ?", [convertCard(number_card, data.numero_card)]);
+//         let id_origin = data.origin;
+//         let id_destiny;
+//         let number_card = "";
+//         const response_data_user = await connection.query("SELECT * FROM users WHERE number_card = ?", [convertCard(number_card, data.numero_card)]);
 
-        if(response_data_user.length > 0){
-            id_destiny = response_data_user[0].id_user;
-        }else{
-            console.log("No entrooo");
-        }
+//         if(response_data_user.length > 0){
+//             id_destiny = response_data_user[0].id_user;
+//         }else{
+//             console.log("No entrooo");
+//         }
 
-        console.log("Transferencia de " + id_origin + " a " + id_destiny);
-        io.sockets.to(id_destiny).emit("transfer_received");
-    })
-});
-
+//         console.log("Transferencia de " + id_origin + " a " + id_destiny);
+//         io.sockets.to(id_destiny).emit("transfer_received");
+//     })
+// });
 
 app.post("/register/auth", async (req, res) => {
     if (req.body && req.body.email) {
@@ -85,76 +84,77 @@ app.post("/register/auth", async (req, res) => {
         const emailExists = await connection.query("SELECT email FROM registers WHERE email = ?", [req.body.email]);
 
         if (emailExists.length > 0) {
-            res.status(400).json({ message: "Email already registered" });
-        } else {
-            let user_id;
-            let isAvailable = false;
-            let attempts = 0;
-            let min = 9999;
-            let max = 999999;
-            const maxAttempts = 1000; 
+            res.status(400).json({ message: "Correo electrónico ya registrado." });
+            return;
+        }
 
-            while (!isAvailable && attempts < maxAttempts) {
-                user_id = Math.floor(Math.random() * max) + min;
+        let user_id;
+        let isAvailable = false;
+        let attempts = 0;
+        let min = 9999;
+        let max = 999999;
+        const maxAttempts = 100; 
 
-                const userIdExists = await connection.query("SELECT id FROM registers WHERE id = ?", [user_id]);
+        while (!isAvailable && attempts < maxAttempts) {
+            user_id = Math.floor(Math.random() * max) + min;
 
-                if (userIdExists.length === 0) {
-                    isAvailable = true;
-                }
-
-                attempts++;
+            const userIdExists = await connection.query("SELECT id FROM registers WHERE id = ?", [user_id]);
+            if (userIdExists.length === 0) {
+                isAvailable = true;
             }
 
-            if (!isAvailable) {
-                res.status(500).json({ message: "Unable to generate a unique ID" });
-                return;
-            }
+            attempts++;
+        }
 
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            const hashedNumero_telefono = await bcrypt.hash(req.body.numero_telefono, 10);
-            const hashedNumero_identidad = await bcrypt.hash(req.body.numero_identidad, 10);
+        if (attempts >= maxAttempts) {
+            res.status(500).json({ message: "Unable to generate a unique ID" });
+            return;
+        }
 
-            let year = new Date().getFullYear().toString().split("");
-            year = year[year.length - 2] + year[year.length - 1]
-            let fecha_creacion = (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate()) + "/" + (new Date().getMonth() < 10 ? "0" + (new Date().getMonth() + 1) : new Date.getMonth() + 1) + "/" + year;
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const hashedNumero_telefono = await bcrypt.hash(req.body.numero_telefono, 10);
+        const hashedNumero_identidad = await bcrypt.hash(req.body.numero_identidad, 10);
 
-            let digits_card = [];
-            let number_card = "";
-            let attemps_card = 100;
+        let year = new Date().getFullYear().toString().split("");
+        year = year[year.length - 2] + year[year.length - 1]
+        let fecha_creacion = (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate()) + "/" + (new Date().getMonth() < 10 ? "0" + (new Date().getMonth() + 1) : new Date.getMonth() + 1) + "/" + year;
+
+        let digits_card = [];
+        let number_card = "";
+        let attemps_card = 100;
+        
+        for(let i = 0; i < 4; i++){
+            let randomDigits = Math.floor(Math.random() * 9000) + 1000;
+            digits_card.push(randomDigits);     
             
-            for(let i = 0; i < 4; i++){
-                let randomDigits = Math.floor(Math.random() * 9000) + 1000;
-                digits_card.push(randomDigits);     
-                
-                if(attemps_card == 0){
-                    number_card = "No se permite"
-                    break;
-                }
-
-                if(i == 3){
-                    number_card += randomDigits
-                    let card_users = await connection.query("SELECT * FROM users WHERE number_card = ?",[number_card]);
-
-                    if(card_users.length > 0){
-                        number_card = "";
-                        digits_card = [];
-                        attemps_card --;
-                        i = -1;
-                    }
-
-                }else{
-                    number_card += randomDigits + " "
-                }
+            if(attemps_card == 0){
+                number_card = "No se permite"
+                break;
             }
-            
-            connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false, fecha_creacion]);
-            connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0"]);
-            connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
-            connection.query("INSERT INTO movements (id_user, email_user, numero_movements) VALUES (?, ?, ?)", [user_id, req.body.email, 0]);
 
-            res.status(200).json({ message: "Register Successful"});
-        } 
+            if(i == 3){
+                number_card += randomDigits
+                let card_users = await connection.query("SELECT * FROM users WHERE number_card = ?",[number_card]);
+
+                if(card_users.length > 0){
+                    number_card = "";
+                    digits_card = [];
+                    attemps_card --;
+                    i = -1;
+                }
+
+            }else{
+                number_card += randomDigits + " "
+            }
+        }
+        
+        connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false, fecha_creacion]);
+        connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0"]);
+        connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
+        connection.query("INSERT INTO movements (id_user, email_user, numero_movements) VALUES (?, ?, ?)", [user_id, req.body.email, 0]);
+
+        res.status(200).json({ message: "Register Successful"});
+        
     } else {
         res.status(400).json({ message: "Bad Request" });
     }
@@ -166,7 +166,7 @@ app.post("/login/auth", async (req, res) => {
         const emailExists = await connection.query("SELECT email, password, id FROM registers WHERE email = ?", [req.body.email]);
 
         if (!emailExists.length > 0) {
-            res.status(400).json({ message: "Incorrect Email" });
+            res.status(400).json({ message: "Correo electrónico incorrecto." });
         } else {
             const hashedPassword = emailExists[0].password;
 
@@ -176,7 +176,7 @@ app.post("/login/auth", async (req, res) => {
                 connection.query("UPDATE registers SET estado = ? WHERE email = ?", [true, req.body.email]);
                 res.status(200).json({ message: "Login Successful", id: emailExists[0].id});
             } else {
-                res.status(400).json({ message: "Incorrect Password" });
+                res.status(400).json({ message: "Contraseña incorrecta." });
             }
         }
     } else {
@@ -307,7 +307,7 @@ app.post("/email/send", async (req, res) => {
         let email = req.body.email;
         let emailExists = await connection.query("SELECT email FROM easycredit.registers WHERE email = ?", [email]);
         if(!emailExists.length > 0){
-            res.status(400).send({ state: "Bad Request", message: "Email no registrado" });
+            res.status(400).send({ state: "Bad Request", message: "Email no registrado." });
             return;
         }
 

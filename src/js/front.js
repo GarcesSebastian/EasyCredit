@@ -1,9 +1,9 @@
-const socket = io("http://localhost:4000/")
-socket.emit("client_enter", getCookie("ID-USER"));
+// const socket = io("http://localhost:4000/")
+// socket.emit("client_enter", getCookie("ID-USER"));
 
-socket.on("transfer_received", () => {
-    console.log("recibido");
-});
+// socket.on("transfer_received", () => {
+//     console.log("recibido");
+// });
 
 window.addEventListener("DOMContentLoaded", async () => {
     if(document.querySelector("#input-tasa-loan")){
@@ -29,7 +29,7 @@ async function obtenerTasa() {
             if (item.fechacorte.split("-")[0] == (new Date().getFullYear()).toString() && item.uca == "4" && isContinue) {
                 tasa = item.tasa;
                 console.log(tasa);
-                isContinue = !isContinue;
+                isContinue = false;
             }
         });
 
@@ -141,7 +141,6 @@ if(button_config){
 }
 
 let button_logout = document.querySelector("#button_logout");
-
 if(button_logout){
     button_logout.addEventListener("click", () => {
         setCookie("W-INIT-ENT", "false")
@@ -184,49 +183,132 @@ if(list_flags && actual_element){
     });
 }
 
+let isContinueSignUp = true;
+let isContinueSignIn = true;
+
 document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const email = document.querySelector("#input-email");
-    const password = document.querySelector("#input-password");
-
-    if (email.value.length > 0 && password.value.length > 0) {
-        const data = {
-            email: email.value,
-            password: password.value
-        };
-
-        const res = await fetch("http://localhost:4000/login/auth", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
+    if(isContinueSignIn == true){
+        const email = document.querySelector("#input-email");
+        const password = document.querySelector("#input-password");
+    
+        if (email.value.length > 0 && password.value.length > 0) {
+            const data = {
+                email: email.value,
+                password: password.value
+            };
+    
+            isContinueSignIn = false;
+    
+            const res = await fetch("http://localhost:4000/login/auth", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+    
+            const responseJson = await res.json();
+            inputSucess(document.querySelector("#input-email"), "#err-email");
+            inputSucess(document.querySelector("#input-password"), "#err-password");
+    
+            if (res.ok) {
+                setCookie("ID-USER", responseJson.id)
+                setCookie("W-INIT-ENT", "true")
+                isContinueSignIn = true;
+                window.location.href = "/"
+            } else {
+                isContinueSignIn = true;
+    
+                if (responseJson.message === "Contraseña incorrecta.") {
+                    inputErr(document.querySelector("#input-password"), "#err-password", responseJson.message);
+                }
+                
+                if(responseJson.message === "Correo electrónico incorrecto.") {
+                    inputErr(document.querySelector("#input-email"), "#err-email", responseJson.message);
+                }
+    
+                console.log("Ocurrió un error " + responseJson.message);
             }
-        });
-
-        const responseJson = await res.json();
-        inputSucess(document.querySelector("#input-email"), "#err-email");
-        inputSucess(document.querySelector("#input-password"), "#err-password");
-
-        if (res.ok) {
-            setCookie("ID-USER", responseJson.id)
-            setCookie("W-INIT-ENT", "true")
-            console.log("Logeado con éxito");
-
-            window.location.href = "/"
-        } else {
-            if (responseJson.message === "Incorrect Password") {
-                inputErr(document.querySelector("#input-password"), "#err-password", responseJson.message);
-            }
-            
-            if(responseJson.message === "Incorrect Email") {
-                inputErr(document.querySelector("#input-email"), "#err-email", responseJson.message);
-            }
-
-            console.log("Ocurrió un error " + responseJson.message);
         }
     }
 });
 
+document.querySelector("#form-signup")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if(isContinueSignUp == true){
+        const username = document.querySelector("#input-username");
+        const email = document.querySelector("#input-email");
+        const password = document.querySelector("#input-password");
+        const numero_identidad = document.querySelector("#input-numero_identidad");
+        const numero_telefono = document.querySelector("#input-numero_telefono");
+
+        inputSucess(document.querySelector("#input-email"), "#err-email");
+        inputSucess(document.querySelector("#input-password"), "#err-password");
+        inputSucess(document.querySelector("#input-username"), "#err-username");
+        inputSucess(document.querySelector("#input-numero_telefono"), "#err-numero_telefono");
+        inputSucess(document.querySelector("#input-numero_identidad"), "#err-numero_identidad");
+    
+        if ((username.value.length >= 6 && username.value.length <= 15) && email.value.length > 0 && (password.value.length >= 8 && password.value.length <= 24) && numero_telefono.value.length >= 10 && numero_identidad.value.length >= 10) {
+            const data = {
+                username: username.value,
+                email: email.value,
+                password: password.value,
+                numero_identidad: numero_identidad.value,
+                numero_telefono: numero_telefono.value,
+            };
+    
+            isContinueSignUp = false;
+    
+            const res = await fetch("http://localhost:4000/register/auth", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+    
+            const responseJson = await res.json();
+    
+            if (res.ok) {
+                isContinueSignUp = true;
+                window.location.href = "/SignIn";
+            } else {
+                isContinueSignUp = true;
+                if (responseJson.message === "Correo electrónico ya registrado.") {
+                    inputErr(document.querySelector("#input-email"), "#err-email", responseJson.message);
+                }
+
+                if(responseJson.message === "Numero de Identificacion ya registrado."){
+                    inputErr(document.querySelector("#input-numero_identidad"), "#err-numero_identidad", responseJson.message);
+                }
+
+                console.log("Ocurrió un error al intentar registrarse");
+            }
+        }else{
+            if(numero_telefono.value.length < 10){
+                inputErr(document.querySelector("#input-numero_telefono"), "#err-numero_telefono", "El numero de telefono es incorrecto.");
+                console.log("EL numero de telefono es incorrecto.");
+            }
+
+            if(numero_identidad.value.length < 10){
+                inputErr(document.querySelector("#input-numero_identidad"), "#err-numero_identidad", "El numero de identidad es incorrecto.");
+                console.log("EL numero de identidad es incorrecto.");
+            }
+            
+            if(username.value.length < 6 || username.value.length > 15){
+                inputErr(document.querySelector("#input-username"), "#err-username", "El nombre de usuario debe tener entre 6 y 15 caracteres.");
+                console.log("El nombre de usuario debe tener entre 6 y 15 caracteres.");
+            }
+
+            if(password.value.length < 8 || password.value.length > 24){
+                inputErr(document.querySelector("#input-password"), "#err-password", "La contraseña debe tener entre 8 y 24 caracteres.");
+                console.log("La contraseña debe tener entre 8 y 24 caracteres.");
+            }
+        }
+    }
+});
 
 if(document.querySelector("#background-popup-transfer") // Si existen los elementos
     && document.querySelector("#close-transfer") 
@@ -289,12 +371,6 @@ if(
     });
 }
 
-if(getCookie("W-INIT-ENT") === "true"){
-    console.log("Usuario logeado.");
-}else{
-    console.log("No esta logeado el usuario.")
-}
-
 let elements_loan = {
     input_action_loan: document.querySelector("#input-action-loan"),
     input_tasa_loan: document.querySelector("#input-tasa-loan"),
@@ -328,116 +404,130 @@ elements_loan.tasa_variable?.addEventListener("change", () => {
     }
 });
 
-async function send_req_loan(){
-    let isContinueLoan = true;
+let isContinueSendEmail = true;
+let isContinueLoanReq = true;
+let isContinueTransferReq = true;
+let isContinueSendCode = true;
+let isContinueChangePassword = true;
 
-    for(let key in elements_loan){
-        if(elements_loan.hasOwnProperty(key)){
-            let item = elements_loan[key];
-            let id = item.id.toString();
+async function send_req_loan(){
+    if(isContinueLoanReq == true){
+        let isContinueLoan = true;
+
+        for(let key in elements_loan){
+            if(elements_loan.hasOwnProperty(key)){
+                let item = elements_loan[key];
+                let id = item.id.toString();
+                let id_without_input = id.split("input")[1];
+                let id_with_err = "err" + id_without_input;
+                if(document.querySelector("#" + id_with_err)){
+                    document.querySelector("#" + id_with_err).style.display = "none";
+                    document.querySelector("#" + id_with_err).innerHTML = ""
+                }
+                item.style.borderColor = "transparent";
+            }
+        }
+    
+        if(parseFloat(elements_loan.input_action_loan.value) < 500000 || parseFloat(elements_loan.input_action_loan.value) > 4000000000) {
+            let id = elements_loan.input_action_loan.id.toString();
             let id_without_input = id.split("input")[1];
             let id_with_err = "err" + id_without_input;
-            if(document.querySelector("#" + id_with_err)){
-                document.querySelector("#" + id_with_err).style.display = "none";
-                document.querySelector("#" + id_with_err).innerHTML = ""
-            }
-            item.style.borderColor = "transparent";
+            document.querySelector("#" + id_with_err).style.display = "initial";
+            document.querySelector("#" + id_with_err).innerHTML = "* El monto debe ser menor a 4000M y mayor a 500k."
+            elements_loan.input_action_loan.style.borderColor = "tomato";
+            isContinueLoan = false;
         }
-    }
-
-    if(parseFloat(elements_loan.input_action_loan.value) < 500000 || parseFloat(elements_loan.input_action_loan.value) > 4000000000) {
-        let id = elements_loan.input_action_loan.id.toString();
-        let id_without_input = id.split("input")[1];
-        let id_with_err = "err" + id_without_input;
-        document.querySelector("#" + id_with_err).style.display = "initial";
-        document.querySelector("#" + id_with_err).innerHTML = "* El monto debe ser menor a 4000M y mayor a 500k."
-        elements_loan.input_action_loan.style.borderColor = "tomato";
-        isContinueLoan = false;
-    }
-
-    if(elements_loan.input_name_loan.value.length > 40){
-        let id = elements_loan.input_name_loan.id.toString();
-        let id_without_input = id.split("input")[1];
-        let id_with_err = "err" + id_without_input;
-        document.querySelector("#" + id_with_err).style.display = "initial";
-        document.querySelector("#" + id_with_err).innerHTML = "* El numero maximo de caracteres es de 40 caracteres."
-        elements_loan.input_name_loan.style.borderColor = "tomato";
-        isContinueLoan = false;
-    }
-
-    if(elements_loan.input_numero_telefono_loan.value.length != 10){
-        let id = elements_loan.input_numero_telefono_loan.id.toString();
-        let id_without_input = id.split("input")[1];
-        let id_with_err = "err" + id_without_input;
-        document.querySelector("#" + id_with_err).style.display = "initial";
-        document.querySelector("#" + id_with_err).innerHTML = "* El numero de telefono es incorrecto."
-        elements_loan.input_numero_telefono_loan.style.borderColor = "tomato";
-        isContinueLoan = false;
-    }
-
-    if(!isContinueLoan){
-        return null;
-    }
-
-    let data = {
-        action_loan: elements_loan.input_action_loan.value,
-        tasa_loan: elements_loan.input_tasa_loan.value,
-        cuotas: elements_loan.input_cuotas.value,
-        frecuencia: elements_loan.input_frecuencia.value,
-        name_loan: elements_loan.input_name_loan.value,
-        email_user: elements_loan.input_email.value,
-        id_loan: elements_loan.input_id_loan.value,
-        numero_telefono_loan: elements_loan.input_numero_telefono_loan.value,
-        tasa_variable: elements_loan.tasa_variable.checked,
-        tasa_fija: elements_loan.tasa_fija.checked,
-        id_client: getCookie("ID-USER")
-    }
-
-    let response_user_loan;
-    let err;
-    let isContinue = true;
-
-    try{
-        response_user_loan = await fetch("http://localhost:4000/user/loan", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers:{ 'Content-Type': 'application/json' }
-        });
-
-        let response_message = await response_user_loan.json();
-
-        if(response_message.state === "Bad Request"){
-            if(response_message.message === "Numero de Identificacion Invalido."){
-                let id = elements_loan.input_id_loan.id.toString();
-                let id_without_input = id.split("input")[1];
-                let id_with_err = "err" + id_without_input;
-                document.querySelector("#" + id_with_err).style.display = "initial";
-                document.querySelector("#" + id_with_err).innerHTML = "* " + response_message.message
-                elements_loan.input_id_loan.style.borderColor = "tomato";
-            }else if(response_message.message === "Correo Electronico no valido."){
-                let id = elements_loan.input_email.id.toString();
-                let id_without_input = id.split("input")[1];
-                let id_with_err = "err" + id_without_input;
-                document.querySelector("#" + id_with_err).style.display = "initial";
-                document.querySelector("#" + id_with_err).innerHTML = "* " + response_message.message
-                elements_loan.input_email.style.borderColor = "tomato";
-            }
-        }else{
-            window.location.reload();
-        }
-    }catch(e){
-        err = e;
-        isContinue = !isContinue;
-        console.log(err);
-    }
     
+        if(elements_loan.input_name_loan.value.length > 40){
+            let id = elements_loan.input_name_loan.id.toString();
+            let id_without_input = id.split("input")[1];
+            let id_with_err = "err" + id_without_input;
+            document.querySelector("#" + id_with_err).style.display = "initial";
+            document.querySelector("#" + id_with_err).innerHTML = "* El numero maximo de caracteres es de 40 caracteres."
+            elements_loan.input_name_loan.style.borderColor = "tomato";
+            isContinueLoan = false;
+        }
+    
+        if(elements_loan.input_numero_telefono_loan.value.length != 10){
+            let id = elements_loan.input_numero_telefono_loan.id.toString();
+            let id_without_input = id.split("input")[1];
+            let id_with_err = "err" + id_without_input;
+            document.querySelector("#" + id_with_err).style.display = "initial";
+            document.querySelector("#" + id_with_err).innerHTML = "* El numero de telefono es incorrecto."
+            elements_loan.input_numero_telefono_loan.style.borderColor = "tomato";
+            isContinueLoan = false;
+        }
+    
+        if(!isContinueLoan){
+            return null;
+        }
+    
+        let data = {
+            action_loan: elements_loan.input_action_loan.value,
+            tasa_loan: elements_loan.input_tasa_loan.value,
+            cuotas: elements_loan.input_cuotas.value,
+            frecuencia: elements_loan.input_frecuencia.value,
+            name_loan: elements_loan.input_name_loan.value,
+            email_user: elements_loan.input_email.value,
+            id_loan: elements_loan.input_id_loan.value,
+            numero_telefono_loan: elements_loan.input_numero_telefono_loan.value,
+            tasa_variable: elements_loan.tasa_variable.checked,
+            tasa_fija: elements_loan.tasa_fija.checked,
+            id_client: getCookie("ID-USER")
+        }
+    
+        let response_user_loan;
+        let err;
+        let isContinue = true;
+    
+        isContinueLoanReq = false;
+    
+        try{
+            response_user_loan = await fetch("http://localhost:4000/user/loan", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers:{ 'Content-Type': 'application/json' }
+            });
+    
+            let response_message = await response_user_loan.json();
+    
+            if(response_message.state === "Bad Request"){
+                if(response_message.message === "Numero de Identificacion Invalido."){
+                    let id = elements_loan.input_id_loan.id.toString();
+                    let id_without_input = id.split("input")[1];
+                    let id_with_err = "err" + id_without_input;
+                    document.querySelector("#" + id_with_err).style.display = "initial";
+                    document.querySelector("#" + id_with_err).innerHTML = "* " + response_message.message
+                    elements_loan.input_id_loan.style.borderColor = "tomato";
+                }else if(response_message.message === "Correo Electronico no valido."){
+                    let id = elements_loan.input_email.id.toString();
+                    let id_without_input = id.split("input")[1];
+                    let id_with_err = "err" + id_without_input;
+                    document.querySelector("#" + id_with_err).style.display = "initial";
+                    document.querySelector("#" + id_with_err).innerHTML = "* " + response_message.message
+                    elements_loan.input_email.style.borderColor = "tomato";
+                }
+            }else{
+                isContinueLoanReq = true;
+                document.querySelector("#input-action-loan").value = ""
+                document.querySelector("#input-name-loan").value = ""
+                document.querySelector("#input-email").value = ""
+                document.querySelector("#input-id-loan").value = ""
+                document.querySelector("#input-numero_telefono-loan").value = ""
+                window.location.href = "/"
+            }
+        }catch(e){
+            err = e;
+            isContinue = false;
+            console.log(err);
+        }
+    }
 }
 
 document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
     event.preventDefault();
     send_req_loan();
 })
-
 
 let elements_transfer = {
     input_numero_tarjeta: document.querySelector("#input-numero-tarjeta-transfer"),
@@ -446,94 +536,102 @@ let elements_transfer = {
 }
 
 async function send_req_transfer(){
-    let isContinueLoan = true;
+    if(isContinueTransferReq == true){
+        let isContinueLoan = true;
 
-    for(let key in elements_transfer){
-        if(elements_transfer.hasOwnProperty(key)){
-            let item = elements_transfer[key];
-            let id = item.id.toString();
-            let id_without_input = id.split("input")[1];
-            let id_with_err = "err" + id_without_input;
-            let element_err = document.querySelector("#" + id_with_err);
-            if(element_err){
-                element_err.style.display = "none";
-                element_err.innerHTML = ""
-            }
-            item.style.borderColor = "transparent";
-        }
-    }
-
-    if(parseFloat(elements_transfer.input_action.value) < 1000 || parseFloat(elements_transfer.input_action.value) > 4000000) {
-        let id = elements_transfer.input_action.id.toString();
-        let id_without_input = id.split("input")[1];
-        let id_with_err = "err" + id_without_input;
-        let element_err = document.querySelector("#" + id_with_err);
-        element_err.style.display = "initial";
-        element_err.innerHTML = "* El monto debe ser menor a 4M y mayor a 1k."
-        elements_transfer.input_action.style.borderColor = "tomato";
-        isContinueLoan = false;
-    }
-
-    if(elements_transfer.input_message.value.length > 200){
-        let id = elements_transfer.input_message.id.toString();
-        let id_without_input = id.split("input")[1];
-        let id_with_err = "err" + id_without_input;
-        let element_err = document.querySelector("#" + id_with_err);
-        element_err.style.display = "initial";
-        element_err.innerHTML = "* El numero maximo de caracteres es de 200 caracteres."
-        elements_transfer.input_message.style.borderColor = "tomato";
-        isContinueLoan = false;
-    }
-
-    if(!isContinueLoan){
-        return null;
-    }
-
-    let numero_card_string = elements_transfer.input_numero_tarjeta.value.toString();
-    let arr_numero_card_string = [];
-    
-    for (var i = 0; i < numero_card_string.length; i += 4) {
-        arr_numero_card_string.push(numero_card_string.substring(i, i + 4));
-    }
-
-    let data = {
-        numero_card: arr_numero_card_string,
-        action: elements_transfer.input_action.value,
-        message: elements_transfer.input_message.value,
-        origin: getCookie("ID-USER")
-    }
-
-    let response_user_loan;
-    let err;
-    let isContinue = true;
-
-    try{
-        response_user_loan = await fetch("http://localhost:4000/user/transfer", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers:{ 'Content-Type': 'application/json' }
-        });
-
-        let response_message = await response_user_loan.json();
-
-        if(response_message.state === "Bad Request"){
-            if(response_message.message === "Numero de Identificacion Invalido."){
-                let id = elements_transfer.input_numero_tarjeta.id.toString();
+        for(let key in elements_transfer){
+            if(elements_transfer.hasOwnProperty(key)){
+                let item = elements_transfer[key];
+                let id = item.id.toString();
                 let id_without_input = id.split("input")[1];
                 let id_with_err = "err" + id_without_input;
                 let element_err = document.querySelector("#" + id_with_err);
-                element_err.style.display = "initial";
-                element_err.innerHTML = "* " + response_message.message
-                elements_transfer.input_numero_tarjeta.style.borderColor = "tomato";
+                if(element_err){
+                    element_err.style.display = "none";
+                    element_err.innerHTML = ""
+                }
+                item.style.borderColor = "transparent";
             }
-        }else{
-            socket.emit("transfer", (data))
-            window.location.reload();
         }
-    }catch(e){
-        err = e;
-        isContinue = !isContinue;
-        console.log(err);
+    
+        if(parseFloat(elements_transfer.input_action.value) < 1000 || parseFloat(elements_transfer.input_action.value) > 4000000) {
+            let id = elements_transfer.input_action.id.toString();
+            let id_without_input = id.split("input")[1];
+            let id_with_err = "err" + id_without_input;
+            let element_err = document.querySelector("#" + id_with_err);
+            element_err.style.display = "initial";
+            element_err.innerHTML = "* El monto debe ser menor a 4M y mayor a 1k."
+            elements_transfer.input_action.style.borderColor = "tomato";
+            isContinueLoan = false;
+        }
+    
+        if(elements_transfer.input_message.value.length > 200){
+            let id = elements_transfer.input_message.id.toString();
+            let id_without_input = id.split("input")[1];
+            let id_with_err = "err" + id_without_input;
+            let element_err = document.querySelector("#" + id_with_err);
+            element_err.style.display = "initial";
+            element_err.innerHTML = "* El numero maximo de caracteres es de 200 caracteres."
+            elements_transfer.input_message.style.borderColor = "tomato";
+            isContinueLoan = false;
+        }
+    
+        if(!isContinueLoan){
+            return null;
+        }
+    
+        let numero_card_string = elements_transfer.input_numero_tarjeta.value.toString();
+        let arr_numero_card_string = [];
+        
+        for (var i = 0; i < numero_card_string.length; i += 4) {
+            arr_numero_card_string.push(numero_card_string.substring(i, i + 4));
+        }
+    
+        let data = {
+            numero_card: arr_numero_card_string,
+            action: elements_transfer.input_action.value,
+            message: elements_transfer.input_message.value,
+            origin: getCookie("ID-USER")
+        }
+    
+        let response_user_loan;
+        let err;
+        let isContinue = true;
+    
+        isContinueTransferReq = false;
+
+        try{
+            response_user_loan = await fetch("http://localhost:4000/user/transfer", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers:{ 'Content-Type': 'application/json' }
+            });
+    
+            let response_message = await response_user_loan.json();
+    
+            if(response_message.state === "Bad Request"){
+                if(response_message.message === "Numero de Identificacion Invalido."){
+                    let id = elements_transfer.input_numero_tarjeta.id.toString();
+                    let id_without_input = id.split("input")[1];
+                    let id_with_err = "err" + id_without_input;
+                    let element_err = document.querySelector("#" + id_with_err);
+                    element_err.style.display = "initial";
+                    element_err.innerHTML = "* " + response_message.message
+                    elements_transfer.input_numero_tarjeta.style.borderColor = "tomato";
+                }
+            }else{
+                // socket.emit("transfer", (data))
+                isContinueTransferReq = true;
+                document.querySelector("#input-numero-tarjeta-transfer").value = ""
+                document.querySelector("#input-action-transfer").value = ""
+                document.querySelector("#input-message-transfer").value = ""
+                window.location.reload();
+            }
+        }catch(e){
+            err = e;
+            isContinue = false;
+            console.log(err);
+        }
     }
 }
 
@@ -543,24 +641,35 @@ document.querySelector("#form-transfer")?.addEventListener("submit", (event) =>{
 })
 
 async function send_code_email(){
-    const data = {
-        email: document.querySelector("#input-email-forward").value
-    };
-
-    const res = await fetch("http://localhost:4000/email/send", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-            "Content-Type": "application/json"
-        }
+    if(isContinueSendEmail == true){
+        const data = {
+            email: document.querySelector("#input-email-forward").value
+        };
     
-    });
+        
+        isContinueSendEmail = false;
+        inputSucess(document.querySelector("#input-email-forward"), "#err-email-forward");
 
-    const responseJson = await res.json();
-    if(responseJson.state == "Good Request"){
-        document.querySelector("#popup-center-forward").style.display = "none";
-        document.querySelector("#popup-center-forward-code").style.display = "flex";
-        document.querySelector("#input-email-forward").value = "";
+        const res = await fetch("http://localhost:4000/email/send", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        
+        });
+    
+
+        const responseJson = await res.json();
+        if(responseJson.state == "Good Request"){
+            document.querySelector("#popup-center-forward").style.display = "none";
+            document.querySelector("#popup-center-forward-code").style.display = "flex";
+            document.querySelector("#input-email-forward").value = "";
+            isContinueSendEmail = true;
+        }else{
+            isContinueSendEmail = true;
+            inputErr(document.querySelector("#input-email-forward"), "#err-email-forward", responseJson.message);
+        }
     }
 }
 
@@ -572,25 +681,34 @@ document.querySelector("#form-forward")?.addEventListener("submit", (event) =>{
 let email_response;
 
 async function confirm_code(){
-    let data = {
-        code: document.querySelector("#input-forward-code").value
-    }
-
-    const res = await fetch("http://localhost:4000/email/verify", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-            "Content-Type": "application/json"
+    if(isContinueSendCode == true){
+        let data = {
+            code: document.querySelector("#input-forward-code").value
         }
-    });
+    
+        isContinueSendCode = false;
+        inputSucess(document.querySelector("#input-forward-code"), "#err-forward-code");
 
-    const responseJson = await res.json();
-
-    if(responseJson.state == "Good Request"){
-        document.querySelector("#popup-center-forward-code").style.display = "none";
-        document.querySelector("#popup-center-forward-password").style.display = "flex";
-        email_response = responseJson.email;
-        document.querySelector("#input-forward-code").value = "";
+        const res = await fetch("http://localhost:4000/email/verify", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    
+        const responseJson = await res.json();
+    
+        if(responseJson.state == "Good Request"){
+            document.querySelector("#popup-center-forward-code").style.display = "none";
+            document.querySelector("#popup-center-forward-password").style.display = "flex";
+            email_response = responseJson.email;
+            isContinueSendCode = true;
+            document.querySelector("#input-forward-code").value = "";
+        }else{
+            isContinueSendCode = true;
+            inputErr(document.querySelector("#input-forward-code"), "#err-forward-code", responseJson.message);
+        }
     }
 }
 
@@ -600,31 +718,45 @@ document.querySelector("#form-forward-code")?.addEventListener("submit", (event)
 });
 
 async function change_password(){
-    if(document.querySelector("#input-forward-password-first").value != document.querySelector("#input-forward-password-second").value){
-        console.log("Las contraseñas no coinciden.");
-    }else{
-        let data = {
-            password: document.querySelector("#input-forward-password-first").value,
-            email: email_response,
-        }
+    if(isContinueChangePassword == true){
 
-        const res = await fetch("http://localhost:4000/password/change", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
+        inputSucess(document.querySelector("#input-forward-password-first"), "#err-forward-password-first");
+        inputSucess(document.querySelector("#input-forward-password-second"), "#err-forward-password-second");
+
+        if(document.querySelector("#input-forward-password-first").value != document.querySelector("#input-forward-password-second").value){
+            inputErr(document.querySelector("#input-forward-password-first"), "#err-forward-password-first", "Las contraseñas no coinciden.");
+            inputErr(document.querySelector("#input-forward-password-second"), "#err-forward-password-second", "Las contraseñas no coinciden.");
+        }else{
+            let data = {
+                password: document.querySelector("#input-forward-password-first").value,
+                email: email_response,
             }
-        });
-
-        const responseJson = await res.json();
-
-        if(responseJson.state == "Good Request"){
-            document.querySelector("#popup-center-forward-password").style.display = "none";
-            document.querySelector("#input-forward-password-first").value = "";
-            document.querySelector("#input-forward-password-second").value = "";
-            document.querySelector("#toast-success")?.classList.remove("hidden");
-            document.querySelector("#toast-success")?.classList.add("fixed");
-            startTimer();
+    
+            isContinueChangePassword = false;
+    
+            const res = await fetch("http://localhost:4000/password/change", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+    
+            const responseJson = await res.json();
+    
+            if(responseJson.state == "Good Request"){
+                document.querySelector("#popup-center-forward-password").style.display = "none";
+                document.querySelector("#input-forward-password-first").value = "";
+                document.querySelector("#input-forward-password-second").value = "";
+                document.querySelector("#toast-success")?.classList.remove("hidden");
+                document.querySelector("#toast-success")?.classList.add("fixed");
+                isContinueChangePassword = true;
+                startTimer();
+            }else{
+                isContinueChangePassword = true;
+                inputErr(document.querySelector("#input-forward-password-first"), "#err-forward-password-first", responseJson.message);
+                inputErr(document.querySelector("#input-forward-password-second"), "#err-forward-password-second", responseJson.message);
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ const {registrarse_text,iniciar_text,exists_text,username_text,email_text,passwo
 
 ---
 
-<article class="bg-transparent relative top-20 py-10 px-5 max-w-[35rem] w-full flex flex-col justify-center items-center gap-y-6 m-5">
+<form id="form-signup" class="bg-transparent relative top-20 py-10 px-5 max-w-[35rem] w-full flex flex-col justify-center items-center gap-y-6 m-5">
 
     <div id="background-blur" class="absolute w-full h-full flex bg-[rgba(255,255,255,.02)] border border-gray-600 rounded-lg backdrop-blur-lg"></div>
 
@@ -125,7 +125,7 @@ const {registrarse_text,iniciar_text,exists_text,username_text,email_text,passwo
     </div>
 
     <div class="w-full flex justify-center items-center relative">
-        <button type="button" class="w-full text-white outline-none bg-gradient-to-r to-[#0074D3] from-[#0040A8] hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-4 text-center inline-flex items-center justify-center dark:focus:ring-[#4285F4]/55 me-2 mb-2">
+        <button type="submit" class="w-full text-white outline-none bg-gradient-to-r to-[#0074D3] from-[#0040A8] hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-4 text-center inline-flex items-center justify-center dark:focus:ring-[#4285F4]/55 me-2 mb-2">
             <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 19">
                 <path fill-rule="evenodd" d="M8.842 18.083a8.8 8.8 0 0 1-8.65-8.948 8.841 8.841 0 0 1 8.8-8.652h.153a8.464 8.464 0 0 1 5.7 2.257l-2.193 2.038A5.27 5.27 0 0 0 9.09 3.4a5.882 5.882 0 0 0-.2 11.76h.124a5.091 5.091 0 0 0 5.248-4.057L14.3 11H9V8h8.34c.066.543.095 1.09.088 1.636-.086 5.053-3.463 8.449-8.4 8.449l-.186-.002Z" clip-rule="evenodd"/>
             </svg>
@@ -133,88 +133,7 @@ const {registrarse_text,iniciar_text,exists_text,username_text,email_text,passwo
         </button>
     </div>
 
-</article>
-
-<script>
-
-
-function inputErr(input: any, id: string, message:string) {
-        if (!input) {
-            console.error("El elemento de entrada es nulo.");
-            return;
-        }
-
-        input.style.border = "1px solid tomato";
-
-        var errElement = input.parentNode.parentNode.querySelector(id);
-        
-        if (errElement) {
-            errElement.style.opacity = "1";
-            errElement.innerHTML = message;
-        } else {
-            console.error("El elemento de error no se encontró.");
-        }
-    }
-
-    function inputSucess(input: any, id:string) {
-        if (!input) {
-            console.error("El elemento de entrada es nulo.");
-            return;
-        }
-
-        input.style.border = "1px solid rgb(30,41,59)";
-
-        var errElement = input.parentNode.parentNode.querySelector(id);
-        
-        if (errElement) {
-            errElement.style.opacity = "1";
-            errElement.innerHTML = "";
-        } else {
-            console.error("El elemento de error no se encontró.");
-        }
-    }
-    
-    document.querySelector("#submit-signup")?.addEventListener("click", async () => {
-        const username = document.querySelector("#input-username") as HTMLInputElement;
-        const email = document.querySelector("#input-email") as HTMLInputElement;
-        const password = document.querySelector("#input-password") as HTMLInputElement;
-        const numero_identidad = document.querySelector("#input-numero_identidad") as HTMLInputElement;
-        const numero_telefono = document.querySelector("#input-numero_telefono") as HTMLInputElement;
-        const checkTerms = document.querySelector("#remember") as HTMLInputElement;
-
-        if (username.value.length > 0 && email.value.length > 0 && password.value.length > 0 && checkTerms.checked) {
-            const data = {
-                username: username.value,
-                email: email.value,
-                password: password.value,
-                numero_identidad: numero_identidad.value,
-                numero_telefono: numero_telefono.value,
-            };
-
-            const res = await fetch("http://localhost:4000/register/auth", {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-
-            const responseJson = await res.json();
-
-            if (res.ok) {
-                console.log("Registrado con éxito");
-                window.location.href = "/SignIn";
-            } else {
-
-                if (responseJson.message === "Email already registered") {
-                }
-
-                console.log("Ocurrió un error al intentar registrarse");
-            }
-        }
-    });
-</script>
-
+</form>
 
 <style>
     #background-blur{

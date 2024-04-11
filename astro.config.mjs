@@ -16,5 +16,5 @@ export default defineConfig({
       "/api": `http://localhost:${PORT}` // Utiliza el mismo puerto configurado en tu backend
     }
   },
-  output: "server"
+  output: "hybrid"
 }); 

@@ -7,6 +7,27 @@ window.addEventListener("DOMContentLoaded", () =>{
     initId();
 })
 
+let response_data_user;
+
+let data_user;
+
+if(getCookie("ID-USER") != "false" && getCookie("W-INIT-ENT") != "false"){
+    try{
+        response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+        data_user = await response_data_user.json();
+    }catch(e){
+        setCookie("ID-USER", "false");
+        setCookie("W-INIT-ENT", "false");
+        window.location.reload();
+    }
+}
+
+if(getCookie("W-INIT-ENT") != "true" && getCookie("ID-USER") != "false"){
+    setCookie("ID-USER", "false");
+    setCookie("W-INIT-ENT", "false");
+    window.location.reload();
+}
+
 function changeFlag(flag, src){
     let attrSrc = actual_element.getAttribute("data-flag-src");
     let attrFlag = actual_element.getAttribute("data-flag-now");
@@ -45,7 +66,8 @@ function initFlagKeyCook(){
 
 async function initFlagInitiated() {
     if (getCookie("W-INIT-ENT") === null) {
-        setCookie("W-INIT-ENT", "true");
+        setCookie("W-INIT-ENT", "false");
+        window.location.reload();
     }
 }
 
@@ -53,6 +75,7 @@ function initId(){
     if (getCookie("ID-USER") === null) {
         setCookie("ID-USER", "false");
         setCookie("W-INIT-ENT", "false");
+        window.location.reload();
     }else{
         if(getCookie("ID-USER") == "false"){
             setCookie("ID-USER", "false");

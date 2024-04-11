@@ -72,9 +72,10 @@ try{
     }
 
 }catch(e){
-    isContinue = !isContinue;
+    isContinue = false;
     err = e;
-    console.log(err);
+    console.log(e);
+    return e
 }
 
 ---
@@ -327,6 +328,18 @@ try{
         </style>
     ): (
         <div>
+            <script>
+                function setCookie(cookieName: any, cookieValue: any) {
+                    const expirationDate = new Date('9999-12-31'); 
+                    document.cookie = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/`;
+                }
+
+                setCookie("ID-USER", "false")
+                setCookie("W-INIT-ENT", "false")
+
+                window.location.reload();
+            </script>
+
             {err}
         </div>
     )

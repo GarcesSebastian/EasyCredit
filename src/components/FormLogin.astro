@@ -129,7 +129,7 @@ const {registrarse_text,
         </div>
 
         <label for="input-email-forward" class="block mb-2 ml-0 text-sm font-medium text-white relative">{type_email}</label>
-        <div class="relative mb-2.5">
+        <div class="relative mb-0">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id w-5 h-5 text-gray-500 dark:text-gray-400">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -142,9 +142,9 @@ const {registrarse_text,
             </div>
             <input type="email" id="input-email-forward" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={email_text} required>
         </div>
-        <span id="err-input-email-forward" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden">Prueba</span>
+        <span id="err-email-forward" class="relative text-sm mx-2 mb-2.5 text-[tomato] transition-all duration-500 opacity-0">Prueba</span>
 
-        <div class="w-full flex justify-center items-center relative mt-6">
+        <div class="w-full flex justify-center items-center relative mt-3">
             <button type="submit" class="w-full max-w-[13rem] transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-lg px-5 py-3 text-center inline-flex items-center justify-center mb-2">
                 {send_code}
             </button>
@@ -173,7 +173,7 @@ const {registrarse_text,
         </div>
 
         <label for="input-forward-code" class="block mb-2 ml-0 text-sm font-medium text-white relative">{type_recover_code}</label>
-        <div class="relative mb-2.5">
+        <div class="relative mb-0">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id w-5 h-5 text-gray-500 dark:text-gray-400">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -186,9 +186,9 @@ const {registrarse_text,
             </div>
             <input type="number" id="input-forward-code" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={text_recover_code} required oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6">
         </div>
-        <span id="err-input-forward-code" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden">Prueba</span>
+        <span id="err-forward-code" class="relative text-sm mx-2 mb-2.5 text-[tomato] transition-all duration-500 opacity-0">Prueba</span>
 
-        <div class="w-full flex justify-center items-center relative mt-6">
+        <div class="w-full flex justify-center items-center relative mt-3">
             <button type="submit" class="w-full max-w-[13rem] transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-lg px-5 py-3 text-center inline-flex items-center justify-center mb-2">
                 {text_confirm_code}
             </button>
@@ -217,7 +217,7 @@ const {registrarse_text,
         </div>
 
         <label for="input-forward-password-first" class="block mb-2 ml-0 text-sm font-medium text-white relative">{text_new_password}</label>
-        <div class="relative mb-2.5">
+        <div class="relative mb-0">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id w-5 h-5 text-gray-500 dark:text-gray-400">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -230,10 +230,10 @@ const {registrarse_text,
             </div>
             <input type="password" id="input-forward-password-first" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={text_new_password} required>
         </div>
-        <span id="err-input-forward-password-first" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden">Prueba</span>
+        <span id="err-forward-password-first" class="relative text-sm mx-2 mb-4 text-[tomato] transition-all duration-500 opacity-0">Prueba</span>
 
         <label for="input-forward-password-second" class="block mb-2 ml-0 text-sm font-medium text-white relative">{text_repeat_new_password}</label>
-        <div class="relative mb-2.5">
+        <div class="relative mb-0">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id w-5 h-5 text-gray-500 dark:text-gray-400">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -246,9 +246,9 @@ const {registrarse_text,
             </div>
             <input type="password" id="input-forward-password-second" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={text_repeat_new_password} required>
         </div>
-        <span id="err-input-forward-password-second" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden">Prueba</span>
+        <span id="err-forward-password-second" class="relative text-sm mx-2 mb-4 text-[tomato] transition-all duration-500 opacity-0">Prueba</span>
 
-        <div class="w-full flex justify-center items-center relative mt-6">
+        <div class="w-full flex justify-center items-center relative mt-3">
             <button type="submit" class="w-full max-w-[13rem] transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-lg px-5 py-3 text-center inline-flex items-center justify-center mb-2">
                 {text_confirm}
             </button>

@@ -28,6 +28,14 @@ try{
 }
 
 const flag = (Astro.cookies.get("flag") || {})?.value;
+const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
+
+if(initiated === 'true'){
+    console.log(initiated);
+    return Astro.redirect("/")
+}else{
+    console.log(initiated);
+}
 
 if(isContinue){
     text = {

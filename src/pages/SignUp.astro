@@ -16,6 +16,14 @@ const response = await fetch("http://localhost:4000/words");
 const data: WordItem[] = await response.json();
 
 const flag = (Astro.cookies.get("flag") || {})?.value;
+const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
+
+if(initiated === 'true'){
+    console.log(initiated);
+    return Astro.redirect("/")
+}else{
+    console.log(initiated);
+}
 
 let text = {
     exists_text: (data.find(item => item.word === "exists_text") || {})[flag === "es" ? 'es' : 'en'] as string,
