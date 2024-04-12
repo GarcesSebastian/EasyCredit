@@ -221,7 +221,7 @@ try{
                             num_movements={data_movements_incomplete.length}
                             >
                             {
-                                data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: any; state_movement: string; message: string;}) => (
+                                data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: any; state_movement: string; message: string; id_movement: number}) => (
                                     
                                     <CardMovementsArtcile
                                     type_loan_text={item.tipo_movement}
@@ -229,6 +229,7 @@ try{
                                     amount={item.action_movement}
                                     is_positive={item.state_movement}
                                     message={item.message}
+                                    id_movement={item.id_movement}
                                     />
                                 ))
                             }

@@ -234,6 +234,17 @@ document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
     }
 });
 
+let items_movements = document.querySelectorAll("#item_movement");
+items_movements.forEach((item) => {
+    item.addEventListener("click", async () => {
+        let id_movement = item.getAttribute("data-id");
+        const response_data_movement = await fetch(`http://localhost:4000/movements/one_movement?id_movement=${id_movement}`);
+        const data_movement = await response_data_movement.json();
+
+        console.log(data_movement[0]);
+    });
+});
+
 document.querySelector("#form-signup")?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -765,6 +776,36 @@ document.querySelector("#form-forward-password")?.addEventListener("submit", (ev
     event.preventDefault();
     change_password();
 });
+
+async function pullingFetch(){
+    let response_data_user, data_user, response_data_variables, data_variables, data_movements_incomplete, initial_value_movements;
+
+    if(getCookie("W-INIT-ENT") == "true" && getCookie("ID-USER") != "false"){
+        if(getCookie("ID-USER")){
+            response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+            data_user = await response_data_user.json();
+            data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);
+            initial_value_movements = data_movements_incomplete.length;
+        }
+    }
+
+    async function fetchDataAndUpdate() { 
+        if(getCookie("W-INIT-ENT") == "true" && getCookie("ID-USER") != "false"){
+            response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+            data_user = await response_data_user.json();
+            data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);
+            if(data_movements_incomplete.length != initial_value_movements){
+                initial_value_movements = data_movements_incomplete.length;
+                window.location.reload();
+            }
+        }
+    }
+
+    fetchDataAndUpdate();
+    setInterval(fetchDataAndUpdate, 5000);
+}
+
+pullingFetch();
 
 function startTimer() {
     if (window.getComputedStyle(document.querySelector("#toast-success")).display !== 'none') {

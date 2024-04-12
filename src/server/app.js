@@ -213,7 +213,14 @@ app.post("/user/loan", async (req, res) => {
                     let movements = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
                     let date_now_string = getDateNow();
                     
-                    await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo"]);
+                    let id_movement = await generateIdMovements(connection);
+
+                    if(id_movement == null){
+                        res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
+                    }
+
+                    let message_origin = `Hizo un prestamo por un monto de ${action_loan}$.`;
+                    await connection.query("INSERT INTO movements(id_movement, id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement, data_user_basic[0].id_user, movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo", message_origin]);
                     
                     await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [sumary_action, sumary_action, data_user_basic[0].id_user]);
                     res.status(200).json({ message: "Loan Successful" });
@@ -273,7 +280,6 @@ app.post("/user/transfer", async (req, res) => {
                             let movements_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
                             
                             let id_movement_destino = await generateIdMovements(connection);
-                            console.log(id_movement_destino);
 
                             if(id_movement_destino == null){
                                 res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
@@ -290,7 +296,7 @@ app.post("/user/transfer", async (req, res) => {
                             if(id_movement_origin == null){
                                 res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
                             }
-                            let message_origin = `Enviaste una transferencia al usuario con el numero de tarjeta: <span class='color-red'>${numero_card}</span> por un monto de <span class='color-red'>${action}</span>`;
+                            let message_origin = `Enviaste una transferencia al usuario con el numero de tarjeta: ${numero_card} por un monto de ${action}.`;
                             await connection.query("INSERT INTO movements(id_movement, id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_origin, data_user_origin[0].id_user, movements_origin.length + 1, "Transfer", date_now_string_origin, action, "negativo", message_origin]);
 
                             res.status(200).json({ message: "Transfer Successful" });
@@ -468,9 +474,13 @@ app.post("/create/information", async (req, res) => {
           const actionTypes = ['Bank Loan', 'Transfer'];
           const states = ['positivo', 'negativo'];
   
-          const query = "INSERT INTO movements (id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES (?, ?, ?, ?, ?, ?)";
+          const query = "INSERT INTO movements (id_movement, id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES (?, ?, ?, ?, ?, ?, ?)";
   
           for (let i = 0; i < numQueries; i++) {
+            const id_movement = await generateIdMovements(connection);
+            if(id_movement == null){
+                return res.status(404).send({message: "Invalid Id User"})
+            }
             const id_user = id;
             const index_movement = i + 1;
             const tipo_movement = actionTypes[Math.floor(Math.random() * actionTypes.length)];
@@ -478,7 +488,7 @@ app.post("/create/information", async (req, res) => {
             const action_movement = Math.floor(Math.random() * 10000000) + 0;
             const state_movement = states[Math.floor(Math.random() * states.length)];
   
-            await connection.query(query, [id_user, index_movement, tipo_movement, fecha_movement.toISOString().slice(0, 10), action_movement, state_movement]);
+            await connection.query(query, [id_movement, id_user, index_movement, tipo_movement, fecha_movement.toISOString().slice(0, 10), action_movement, state_movement]);
           }
         }
   
@@ -563,6 +573,24 @@ app.get("/user/data", async (req, res) => {
     } else {
         res.status(404).send({ message: "User not found" });
     }
+});
+
+app.get("/movements/one_movement", async (req, res) => {
+    const id_movement = req.query.id_movement;
+
+    if(!id_movement){
+        return res.status(404).send({message:"El ID de la actividad es requerido."})
+    }
+
+    const connection = await database.getConnection();
+    const data_movement = await connection.query("SELECT * FROM movements WHERE id_movement = ?", [id_movement]);
+
+    if(data_movement.length > 0){
+        return res.status(200).send(data_movement);
+    }else{
+        return res.status(404).send({message:"La actividad no existe o aún no ha sido registrada por el usuario"});
+    }
+
 });
 
 app.get("/words", async (req, res) => {
