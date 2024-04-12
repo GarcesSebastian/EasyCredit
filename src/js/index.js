@@ -105,11 +105,10 @@ function getCookie(cookieName) {
     return null;
 }
 
-
-setInterval(() => {
-    if(getCookie("flag") === null){
-        setCookie("flag", "es");
-    }else{
-        setCookie("flag", getCookie("flag"));
-    }
-}, 100);
+// setInterval(() => {
+//     if(getCookie("flag") === null){
+//         setCookie("flag", "es");
+//     }else{
+//         setCookie("flag", getCookie("flag"));
+//     }
+// }, 100);

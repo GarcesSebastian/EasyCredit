@@ -61,27 +61,33 @@ const {
 
 //Hacer Try Catch
 let response_data_user: Response;
+let response_user_exist: Response;
 
+let data_user_exist: any;
 let data_user: any;
 let data_movements_incomplete: any;
 
 let isContinue = true;
 let err: any;
-try{
-    response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
-    data_user = await response_data_user.json();
-    
-    if(initiated === "true"){
-        data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
-    }
 
+try{
+    if(initiated != "false"){
+        response_user_exist = await fetch(`http://localhost:4000/user/exists?id_user=${id_user}`);
+        data_user_exist = await response_user_exist.json();
+
+        if(data_user_exist.state == "Good Request"){
+            response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
+            data_user = await response_data_user.json();
+            
+            data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
+        }else{
+            throw new Error("Error in the request to the server");
+        }
+    }
 }catch(e){
     isContinue = false;
     err = e;
-    console.log(e);
-    return e
 }
-
 ---
 {
     isContinue && data_user && data_user.user_info[0] && data_user.user_info[0].saldo_disponible ? (
@@ -185,56 +191,8 @@ try{
                                 >
                                 </CardUser>
                             </div>
-
-
-                            <div id="graph" class="max-[450px]:max-h-[400px] flex col-span-2 justify-center items-center row-span-1 flex-col w-full rounded-xl cursor-pointer max-h-[350px] bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                                
-                                {
-                                    1 == 1 + 1 ? (
-                                        <div class="w-full flex justify-center items-center gap-5 mt-5 mb-0">
-                                            <button id="btn-create-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                                                Create Information
-                                            </button>
-                                        
-                                            <button id="btn-delete-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                                                Delete Information
-                                            </button>
-
-                                            <form action="/actions/set-status" method="post">
-                                                <button id="btn-test" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                                                    Prueba
-                                                </button>
-                                            </form>
-                                        </div>
-                                    ) : (
-                                        <span class="hidden"></span>
-                                    )
-                                }
-                                
-                                <canvas id="grafico" class="w-full h-full"></canvas>
-
-                                <!--<h1 class="text-white text-lg font-bold">
-                                    {security_text}
-                                </h1>
-                                <p class="text-white">{content_security_text}</p>
-
-                                <button id="button-transfer" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                                    {transferir_text}
-                                </button> -->
-                            </div> 
                             
-                            <div id="credit credit_first" class="flex max-[1100px]:hidden col-span-2 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
-                                <h1 class="text-white text-lg font-bold">
-                                    {check_card_text_second}
-                                </h1>
-                                <p class="text-white">{content_check_card_text_second}</p>
-
-                                <button id="button-simulate-loan" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                                    {simulate_loan_text}
-                                </button>
-                            </div>
-
-                            <div id="credit credit_second" class="credit hidden max-[1100px]:flex col-span-2 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                            <div id="credit" class="flex col-span-1 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
                                 <h1 class="text-white text-lg font-bold">
                                     {check_card_text}
                                 </h1>
@@ -263,13 +221,14 @@ try{
                             num_movements={data_movements_incomplete.length}
                             >
                             {
-                                data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: any; state_movement: string; }) => (
+                                data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: any; state_movement: string; message: string;}) => (
                                     
                                     <CardMovementsArtcile
                                     type_loan_text={item.tipo_movement}
                                     date_text={item.fecha_movement}
                                     amount={item.action_movement}
                                     is_positive={item.state_movement}
+                                    message={item.message}
                                     />
                                 ))
                             }
@@ -303,12 +262,8 @@ try{
                     grid-column: span 2 / 2 span;
                 }
 
-                #graph{
-                    grid-column: span 2 / 2 span;
-                }
-
                 #credit{
-                    grid-column: span 2 / 2 span;
+                    grid-column: span 4 / 4 span;
                 }
             }
 
@@ -335,25 +290,11 @@ try{
                 #security{
                     grid-column: span 4 / 4 span;
                 }
-
-                #graph{
-                    grid-column: span 2 / 2 span;
-                }
             }
 
             @media (max-width: 840px) {
                 #welcome h1{
                     font-size: 1.7rem;
-                }
-            }
-
-            @media (max-width: 840px) {
-                #graph{
-                    grid-column: span 4 / 4 span;
-                }
-
-                .credit{
-                    grid-column: span 4 / 4 span;
                 }
             }
 
@@ -398,18 +339,6 @@ try{
         </style>
     ): (
         <div>
-            <script>
-                function setCookie(cookieName: any, cookieValue: any) {
-                    const expirationDate = new Date('9999-12-31'); 
-                    document.cookie = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/`;
-                }
-
-                setCookie("ID-USER", "false")
-                setCookie("W-INIT-ENT", "false")
-
-                window.location.reload();
-            </script>
-
             {err}
         </div>
     )

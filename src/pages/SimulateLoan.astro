@@ -13,16 +13,31 @@ interface WordItem{
 let response: Response;
 let data: any;
 
+let response_user_exist: Response;
+let data_user_exist: any;
+
 let text: any;
 
-let err: any;
 let isContinue = true;
 
 const flag = (Astro.cookies.get("flag") || {})?.value;
+const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
+const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
 
 try{
     response = await fetch("http://localhost:4000/words");
     data = await response.json();
+
+    if(initiated != "false"){
+        response_user_exist = await fetch(`http://localhost:4000/user/exists?id_user=${id_user}`);
+        data_user_exist = await response_user_exist.json();
+
+        if(data_user_exist.state != "Good Request"){
+            throw new Error("Error in the request to the server");
+        }
+    }else{
+        throw new Error("Error in the request to the server");
+    }
 
     text = {
     titulo_inicio: (data.find((item: { word: string }) => item.word === "titulo_inicio") || {})[flag === "es" ? 'es' : 'en'] as string,
@@ -91,9 +106,10 @@ try{
     text_select_frecuencia: (data.find((item: { word: string }) => item.word === "text_select_frecuencia") || {})[flag === "es" ? 'es' : 'en'] as string,
 };
 }catch(e){
-    err = e;
     isContinue = false;
-    console.log(err);
+    Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
+    Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
+    return Astro.redirect("/")
 }
 
 ---

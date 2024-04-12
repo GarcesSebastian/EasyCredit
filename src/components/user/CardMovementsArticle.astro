@@ -4,9 +4,10 @@ interface Props{
     date_text: string;
     amount: any;
     is_positive: string;
+    message: string;
 }
 
-const {type_loan_text, date_text, amount, is_positive} = Astro.props;
+const {type_loan_text, date_text, amount, is_positive, message} = Astro.props;
 ---
 
 <div class="flex justify-between items-center">
@@ -30,6 +31,9 @@ const {type_loan_text, date_text, amount, is_positive} = Astro.props;
             </span>
             <span class="text-gray-300 text-xs font-bold">
                 {date_text}
+            </span>
+            <span>
+                {message}
             </span>
         </div>
     </div>

@@ -13,6 +13,9 @@ import ArticleRight from "../components/ArticleRight.astro"
 let response: Response;
 let data: any;
 
+let response_user_exist: Response;
+let data_user_exist: any;
+
 let text: any;
 
 let isContinue = true;
@@ -26,6 +29,15 @@ const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
 try{
     response = await fetch("http://localhost:4000/words");
     data = await response.json();
+
+    if(initiated != "false"){
+        response_user_exist = await fetch(`http://localhost:4000/user/exists?id_user=${id_user}`);
+        data_user_exist = await response_user_exist.json();
+
+        if(data_user_exist.state != "Good Request"){
+            throw new Error("Error in the request to the server");
+        }
+    }
 
     text = {
     titulo_inicio: (data.find((item: { word: string }) => item.word === "titulo_inicio") || {})[flag === "es" ? 'es' : 'en'] as string,
@@ -86,6 +98,8 @@ try{
 }catch(e){
     isContinue = false;
     err = e;
+    Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
+    Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
     return Astro.redirect("/")
 }
 
@@ -118,25 +132,25 @@ try{
                                 id="online"
                                 title={text.online_title}
                                 description={text.online_description}
-                                image="/background/online.png"
+                                image="/background/online.webp"
                             ></ArticleLeft>
                             <ArticleRight
                                 id="cuota"
                                 title={text.cuota_title}
                                 description={text.cuota_description}
-                                image="/background/cuota.png"
+                                image="/background/cuota.webp"
                             ></ArticleRight>
                             <ArticleLeft
                                 id="pay"
                                 title={text.pay_title}
                                 description={text.pay_description}
-                                image="/background/pay.png"
+                                image="/background/pay.webp"
                             ></ArticleLeft>
                             <ArticleRight
                                 id="tasa"
                                 title={text.tasa_title}
                                 description={text.tasa_description}
-                                image="/background/tasa.png"
+                                image="/background/tasa.webp"
                             ></ArticleRight>
                         </div>
                     </Info>
@@ -199,18 +213,6 @@ try{
         </Layout>
     ): (
         <div>
-            <script>
-                function setCookie(cookieName: any, cookieValue: any) {
-                    const expirationDate = new Date('9999-12-31'); 
-                    document.cookie = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/`;
-                }
-
-                setCookie("ID-USER", "false")
-                setCookie("W-INIT-ENT", "false")
-
-                window.location.reload();
-            </script>
-
             {err}
         </div>
     )

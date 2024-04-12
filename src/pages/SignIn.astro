@@ -22,19 +22,15 @@ let isContinue = true;
 try{
     response = await fetch("http://localhost:4000/words");
     data = await response.json();
-}catch(Exception){
-    isContinue != isContinue;
-    console.log(Exception)
+}catch(e){
+    isContinue = false;
 }
 
 const flag = (Astro.cookies.get("flag") || {})?.value;
 const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
 
 if(initiated === 'true'){
-    console.log(initiated);
     return Astro.redirect("/")
-}else{
-    console.log(initiated);
 }
 
 if(isContinue){
@@ -74,59 +70,67 @@ if(isContinue){
         text_confirm: (data.find((item: { word: string }) => item.word === "text_confirm") || {})[flag === "es" ? 'es' : 'en'] as string,
         text_password_update: (data.find((item: { word: string }) => item.word === "text_password_update") || {})[flag === "es" ? 'es' : 'en'] as string,
     };
+}else{
+    return Astro.redirect("/SignIn")
 }
 
 ---
 
-<Layout title="Sebxstt - Sign In">
-		<Header
-			href_image="/"
-			href_signin="./SignIn"
-			href_signup="./SignUp"
-			registrarse_text={text.registrarse_text}
-			iniciar_text={text.iniciar_text}
-		></Header>
-		<Section>
-		<FormLogin
-			registrarse_text={text.iniciar_text}
-			crear_cuenta_text={text.crear_cuenta_text}
-			new_text={text.new_text}
-			email_text={text.email_text}
-			password_text={text.password_text}
-			forgot_password_text={text.forgot_password_text}
-			continue_with_text={text.continue_with_text}
-			registrarse_with_google={text.registrarse_with_google}
-            description_forgot_password={text.description_forgot_password}
-            type_email={text.type_email}
-            send_code={text.send_code}
-            text_recover_code={text.text_recover_code}
-            description_recover_code={text.description_recover_code}
-            type_recover_code={text.type_recovery_code}
-            text_confirm_code={text.text_confirm_code}
-            text_new_password_invert={text.text_new_password_invert}
-            text_new_password={text.text_new_password}
-            text_repeat_new_password={text.text_repeat_new_password}
-            description_new_password={text.description_new_password}
-            text_confirm={text.text_confirm}
-            text_password_update={text.text_password_update}
-		>
-		</FormLogin>
-		<Footer
-        recursos_footer_titulo={text.recursos_footer_titulo}
-        recursos_item_1={text.recursos_item_1}
-        recursos_item_2={text.recursos_item_2}
-        recursos_item_3={text.recursos_item_3}
-        recursos_item_4={text.recursos_item_4}
-        siganos_footer_titulo={text.siganos_footer_titulo}
-        siganos_item_1={text.siganos_item_1}
-        siganos_item_2={text.siganos_item_2}
-        legal_footer_titulo={text.legal_footer_titulo}
-        legal_item_1={text.legal_item_1}
-        legal_item_2={text.legal_item_2}
-        rights_footer={text.rights_footer}
-    	></Footer>
-	</Section>
-</Layout>
+{
+    isContinue ? (
+        <Layout title="Sebxstt - Sign In">
+                <Header
+                    href_image="/"
+                    href_signin="./SignIn"
+                    href_signup="./SignUp"
+                    registrarse_text={text.registrarse_text}
+                    iniciar_text={text.iniciar_text}
+                ></Header>
+                <Section>
+                <FormLogin
+                    registrarse_text={text.iniciar_text}
+                    crear_cuenta_text={text.crear_cuenta_text}
+                    new_text={text.new_text}
+                    email_text={text.email_text}
+                    password_text={text.password_text}
+                    forgot_password_text={text.forgot_password_text}
+                    continue_with_text={text.continue_with_text}
+                    registrarse_with_google={text.registrarse_with_google}
+                    description_forgot_password={text.description_forgot_password}
+                    type_email={text.type_email}
+                    send_code={text.send_code}
+                    text_recover_code={text.text_recover_code}
+                    description_recover_code={text.description_recover_code}
+                    type_recover_code={text.type_recovery_code}
+                    text_confirm_code={text.text_confirm_code}
+                    text_new_password_invert={text.text_new_password_invert}
+                    text_new_password={text.text_new_password}
+                    text_repeat_new_password={text.text_repeat_new_password}
+                    description_new_password={text.description_new_password}
+                    text_confirm={text.text_confirm}
+                    text_password_update={text.text_password_update}
+                >
+                </FormLogin>
+                <Footer
+                recursos_footer_titulo={text.recursos_footer_titulo}
+                recursos_item_1={text.recursos_item_1}
+                recursos_item_2={text.recursos_item_2}
+                recursos_item_3={text.recursos_item_3}
+                recursos_item_4={text.recursos_item_4}
+                siganos_footer_titulo={text.siganos_footer_titulo}
+                siganos_item_1={text.siganos_item_1}
+                siganos_item_2={text.siganos_item_2}
+                legal_footer_titulo={text.legal_footer_titulo}
+                legal_item_1={text.legal_item_1}
+                legal_item_2={text.legal_item_2}
+                rights_footer={text.rights_footer}
+                ></Footer>
+            </Section>
+        </Layout>
+    ) : (
+        <div>{"Ha ocurrido un error, reinicie la pagina."}</div>
+    )
+}
 
 <script>
 	

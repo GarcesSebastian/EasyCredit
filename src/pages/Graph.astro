@@ -1,19 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-const status = (Astro.cookies.get("status") || {})?.value;
-
-console.log(status);
-
 ---
 
 <Layout title="Sebxstt - Inicio">
-
-
-    {status &&
-        <p>{status}</p>
-    }
-
     <div class="w-full flex justify-center items-center gap-5 mt-5 mb-0">
         <button id="btn-create-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             Create Information
@@ -22,16 +12,7 @@ console.log(status);
         <button id="btn-delete-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             Delete Information
         </button>
-
-        <form action="/actions/set-status" method="post">
-            <button id="btn-test" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                Prueba
-            </button>
-        </form>
     </div>
 
+    <canvas id="grafico"></canvas>
 </Layout>
-
-<script>
-
-</script>

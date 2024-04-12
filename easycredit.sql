@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-04-2024 a las 02:21:00
+-- Tiempo de generación: 12-04-2024 a las 07:24:25
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.0.25
 
@@ -39,39 +39,23 @@ CREATE TABLE `codes` (
 --
 
 CREATE TABLE `movements` (
+  `id_movement` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `index_movement` int(11) NOT NULL,
   `tipo_movement` text NOT NULL,
   `fecha_movement` text NOT NULL,
   `action_movement` text NOT NULL,
-  `state_movement` text NOT NULL
+  `state_movement` text NOT NULL,
+  `message` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `movements`
 --
 
-INSERT INTO `movements` (`id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`) VALUES
-(205314, 1, 'Bank Loan', '2021-04-17', '7989868', 'positivo'),
-(205314, 2, 'Bank Loan', '2020-11-19', '9835894', 'negativo'),
-(205314, 3, 'Transfer', '2023-05-20', '6736046', 'negativo'),
-(205314, 4, 'Transfer', '2021-06-07', '3903848', 'positivo'),
-(205314, 5, 'Transfer', '2022-09-09', '6651546', 'positivo'),
-(205314, 6, 'Transfer', '2021-05-06', '3990626', 'positivo'),
-(205314, 7, 'Transfer', '2022-07-19', '2213067', 'negativo'),
-(205314, 8, 'Bank Loan', '2022-07-03', '7782730', 'negativo'),
-(205314, 9, 'Transfer', '2020-12-15', '65922', 'positivo'),
-(205314, 10, 'Transfer', '2023-11-11', '9713044', 'negativo'),
-(205314, 11, 'Transfer', '2021-04-13', '8830961', 'positivo'),
-(205314, 12, 'Transfer', '2021-04-07', '3202542', 'negativo'),
-(205314, 13, 'Bank Loan', '2022-08-01', '8707566', 'positivo'),
-(205314, 14, 'Bank Loan', '2023-12-06', '1168910', 'negativo'),
-(205314, 15, 'Transfer', '2022-11-06', '5722225', 'negativo'),
-(205314, 16, 'Transfer', '2022-11-18', '994241', 'positivo'),
-(205314, 17, 'Transfer', '2023-06-05', '2904798', 'negativo'),
-(205314, 18, 'Transfer', '2020-04-10', '2701835', 'negativo'),
-(205314, 19, 'Bank Loan', '2020-04-29', '6884427', 'positivo'),
-(205314, 20, 'Bank Loan', '2020-03-08', '4750524', 'positivo');
+INSERT INTO `movements` (`id_movement`, `id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`, `message`) VALUES
+(164278057, 972463, 1, 'Transfer', '2024-04-12', '100000', 'positivo', 'Pal almuerzo'),
+(877443566, 679801, 1, 'Transfer', '2024-04-12', '100000', 'negativo', 'Enviaste una transferencia al usuario con el numero de tarjeta: <span class=\'color-red\'>5882 2431 3861 7127</span> por un monto de <span class=\'color-red\'>100000</span>');
 
 -- --------------------------------------------------------
 
@@ -91,8 +75,8 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
-(157639, 'Sebxstt', 'sebastiangarces152@gmail.com', 0),
-(205314, 'Sebxstt', 'sebastiangarces158@gmail.com', 0);
+(679801, 'Sebaas', 'sebastiangarces158@gmail.com', 0),
+(972463, 'Sebxstt', 'sebastiangarces152@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -134,8 +118,8 @@ CREATE TABLE `registers` (
 --
 
 INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `fecha_creacion`) VALUES
-(157639, 'Sebxstt', '$2b$10$cm0QV8V5IJVtahh.gW4y2em.RKR3PiQKCWeZGRgopSauYPWRlPfky', 'sebastiangarces152@gmail.com', '$2b$10$3b7sjMdTfisP3CnDnL2aluTT5PaxekDElf2ztZaxzPWN/surF71N6', '$2b$10$OEOkNmkCAS.0F.Dxlz23eeRtfNS499tOw2JgSQGFFH4rC7NXEAKqm', 1, '11/04/24'),
-(205314, 'Sebxstt', '$2b$10$Vougz4sGQjt6Vs/JKi3vPuLt2ir.ONF9gmHgmNniqMf906tHj2rDC', 'sebastiangarces158@gmail.com', '$2b$10$wAags9mKIXgBp96DDY.qK.cOXixa9ROSamVwJwQRTpeioX7ENS/0C', '$2b$10$GAFI3zlnqy/eu6H4Yrc0cOVR5gwyFExpY3lJsqaYJ2V/FevzQ7Dpa', 1, '11/04/24');
+(679801, 'Sebaas', '$2b$10$QpKuEtyQWSKyF2sw6VDQkuXjq220qunsNZsTCFRbaPkJPwCRODICe', 'sebastiangarces158@gmail.com', '$2b$10$6.5/VgjWlUqes.3Q7aeDIuH3PPgcqf5fAytp1ynitjYHfnsnguFEG', '$2b$10$oRuQ.E9WBewpC4tjsI8iM.Xqs5k4rNAHEiJia6YWjxe0PB2ttTkuG', 1, '11/04/24'),
+(972463, 'Sebxstt', '$2b$10$.mHGOGlsPEZAVw4sZuKucOdDBVwPXI.ESQj./ZXOl5euVYrb2XWty', 'sebastiangarces152@gmail.com', '$2b$10$HGb0EBGHTBm7Gf.KnnyNdeK3LffH0xpnZJ2dw7wqW7X31Styxji1a', '$2b$10$zdEPOG9QJqWkZjWbqjksmOBHLzZQPZxoLNHQGS3.QuRp/OGxvjElq', 1, '11/04/24');
 
 -- --------------------------------------------------------
 
@@ -157,8 +141,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`) VALUES
-(157639, 'Sebxstt', 'sebastiangarces152@gmail.com', '9231 1562 5340 1760', '', '0'),
-(205314, 'Sebxstt', 'sebastiangarces158@gmail.com', '6968 8952 8542 3247', '', '0');
+(679801, 'Sebaas', 'sebastiangarces158@gmail.com', '1509 7431 8371 8768', '7700000', '7700000'),
+(972463, 'Sebxstt', 'sebastiangarces152@gmail.com', '5882 2431 3861 7127', '2300000', '2300000');
 
 -- --------------------------------------------------------
 
@@ -188,9 +172,9 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('article_4_titulo', 'Tasa y cuota fijas', 'Fixed rate and fee'),
 ('available_balance', 'Saldo disponible', 'Available Balance'),
 ('calcular_inicio', 'Calcular', 'Calculate'),
-('check_card_text', '¡Simula tu credito!', 'Simulate your credit!'),
+('check_card_text', '¡Consulte nuestra opción de simulación de crédito!', 'Check out our credit simulation option!'),
 ('check_card_text_second', '¡Consulte nuestra opción de simulación de crédito!', 'Check out our credit simulation option!'),
-('content_check_card_text', '¡Calcula pagos mensuales de préstamos con nuestra herramienta de simulación de créditos y planifica tu futuro financiero con confianza!', 'Calculate monthly loan payments with our credit simulation tool and plan your financial future with confidence!'),
+('content_check_card_text', '¿Necesitas calcular tus pagos mensuales de préstamo antes de comprometerte? ¡Estás en el lugar correcto! Con nuestra herramienta de simulación de crédito, puedes explorar diferentes escenarios financieros y planificar tu futuro con confianza.', 'Do you need to calculate your monthly loan payments before committing? You are in the right place! With our credit simulation tool, you can explore different financial scenarios and plan your future with confidence.'),
 ('content_check_card_text_second', '¿Necesita calcular los pagos mensuales de su préstamo antes de comprometerse? Estás en el lugar correcto! Con nuestra herramienta de simulación de crédito, podrá explorar diferentes escenarios financieros y planificar su futuro con confianza.', 'Do you need to calculate your monthly loan payments before committing? You are in the right place! With our credit simulation tool, you can explore different financial scenarios and plan your future with confidence.'),
 ('content_security_text', '¿Necesitas enviar dinero a amigos o familiares? Con nuestra función de transferencia a otros usuarios, puedes enviar fondos de manera rápida y segura. Ya sea que estés compartiendo gastos, ayudando a un ser querido o simplemente pagando por un servicio, nuestra plataforma te permite realizar transferencias de manera conveniente y sin complicaciones. Olvídate de los largos procesos bancarios y las comisiones excesivas. Con nosotros, enviar dinero es tan fácil como pulsar un botón.', 'Do you need to send money to friends or family? With our transfer feature to other users, you can send funds quickly and securely. Whether you\'re sharing expenses, helping a loved one, or simply paying for a service, our platform allows you to make transfers conveniently and without complications. Forget about long banking processes and excessive commissions. With us, sending money is as easy as pressing a button.'),
 ('continue_with_text', 'O CONTINUAR CON', 'OR CONTINUE WITH'),
@@ -281,6 +265,12 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ALTER TABLE `codes`
   ADD PRIMARY KEY (`email`(250)),
   ADD UNIQUE KEY `unicos` (`code`) USING BTREE;
+
+--
+-- Indices de la tabla `movements`
+--
+ALTER TABLE `movements`
+  ADD PRIMARY KEY (`id_movement`);
 
 --
 -- Indices de la tabla `notifications`

@@ -272,13 +272,26 @@ app.post("/user/transfer", async (req, res) => {
                             let date_now_string_destino = getDateNow();
                             let movements_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
                             
-                            await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_register_destino[0].id_user, movements_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo"]);
+                            let id_movement_destino = await generateIdMovements(connection);
+                            console.log(id_movement_destino);
+
+                            if(id_movement_destino == null){
+                                res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
+                            }
+
+                            await connection.query("INSERT INTO movements(id_movement, id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_destino, data_user_register_destino[0].id_user, movements_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo", message]);
             
                             //Movimiento para el origen
                             let date_now_string_origin = getDateNow();
                             let movements_origin = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
-                            
-                            await connection.query("INSERT INTO movements(id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES ( ?, ?, ?, ?, ?, ?)", [data_user_origin[0].id_user, movements_origin.length + 1, "Transfer", date_now_string_origin, action, "negativo"]);
+                                                        
+                            let id_movement_origin = await generateIdMovements(connection);
+
+                            if(id_movement_origin == null){
+                                res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
+                            }
+                            let message_origin = `Enviaste una transferencia al usuario con el numero de tarjeta: <span class='color-red'>${numero_card}</span> por un monto de <span class='color-red'>${action}</span>`;
+                            await connection.query("INSERT INTO movements(id_movement, id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_origin, data_user_origin[0].id_user, movements_origin.length + 1, "Transfer", date_now_string_origin, action, "negativo", message_origin]);
 
                             res.status(200).json({ message: "Transfer Successful" });
                         }else{
@@ -501,6 +514,25 @@ app.post("/delete/information", async (req, res) => {
     }
 });
   
+app.get("/user/exists", async (req, res) => {
+
+    const id_user = req.query.id_user;
+
+    if (!id_user) {
+        return res.status(400).send({ message: "User Email is required" });
+    }
+
+    const connection = await database.getConnection();
+    const user = await connection.query("SELECT * FROM easycredit.users WHERE id_user = ?", [id_user]);
+
+    if(user.length > 0){
+        res.status(200).send({ state: "Good Request", message: "Usuario Encontrado" });
+    }else{
+        res.status(400).send({ state: "Bad Request", message: "Usuario no encontrado" });
+    }
+
+});
+
 app.get("/user/data", async (req, res) => {
     const id_user = req.query.id_user;
 
@@ -557,4 +589,21 @@ function convertCard(number_card_string, number_card_array){
         number_card_string += i != 3 ? number_card_array[i] + " " : number_card_array[i];
     }
     return number_card_string
+}
+
+async function generateIdMovements(connection){
+    let id_movement_destino = Math.floor(Math.random() * 900000000) + 100000000;
+    let exist_id_movement_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_movement = ?", [id_movement_destino]);
+    let max_attemps_id_destino = 100;
+    while(exist_id_movement_destino.length > 0 && max_attemps_id_destino > 0){
+        id_movement_destino = Math.floor(Math.random() * 900000000) + 100000000;
+        exist_id_movement_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_movement = ?", [id_movement_destino]);
+        max_attemps_id_destino --;
+    }
+
+    if(max_attemps_id_destino == 0){
+        return null;
+    }else{
+        return id_movement_destino;
+    }
 }
