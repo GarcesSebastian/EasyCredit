@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-04-2024 a las 10:14:12
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 12-04-2024 a las 02:21:00
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -52,9 +52,26 @@ CREATE TABLE `movements` (
 --
 
 INSERT INTO `movements` (`id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`) VALUES
-(321433, 1, 'Transfer', '2024-04-11', '1000000', 'positivo'),
-(342596, 1, 'Transfer', '2024-04-11', '1000000', 'negativo'),
-(342596, 2, 'Bank Loan', '2024-04-11', '1000000', 'positivo');
+(205314, 1, 'Bank Loan', '2021-04-17', '7989868', 'positivo'),
+(205314, 2, 'Bank Loan', '2020-11-19', '9835894', 'negativo'),
+(205314, 3, 'Transfer', '2023-05-20', '6736046', 'negativo'),
+(205314, 4, 'Transfer', '2021-06-07', '3903848', 'positivo'),
+(205314, 5, 'Transfer', '2022-09-09', '6651546', 'positivo'),
+(205314, 6, 'Transfer', '2021-05-06', '3990626', 'positivo'),
+(205314, 7, 'Transfer', '2022-07-19', '2213067', 'negativo'),
+(205314, 8, 'Bank Loan', '2022-07-03', '7782730', 'negativo'),
+(205314, 9, 'Transfer', '2020-12-15', '65922', 'positivo'),
+(205314, 10, 'Transfer', '2023-11-11', '9713044', 'negativo'),
+(205314, 11, 'Transfer', '2021-04-13', '8830961', 'positivo'),
+(205314, 12, 'Transfer', '2021-04-07', '3202542', 'negativo'),
+(205314, 13, 'Bank Loan', '2022-08-01', '8707566', 'positivo'),
+(205314, 14, 'Bank Loan', '2023-12-06', '1168910', 'negativo'),
+(205314, 15, 'Transfer', '2022-11-06', '5722225', 'negativo'),
+(205314, 16, 'Transfer', '2022-11-18', '994241', 'positivo'),
+(205314, 17, 'Transfer', '2023-06-05', '2904798', 'negativo'),
+(205314, 18, 'Transfer', '2020-04-10', '2701835', 'negativo'),
+(205314, 19, 'Bank Loan', '2020-04-29', '6884427', 'positivo'),
+(205314, 20, 'Bank Loan', '2020-03-08', '4750524', 'positivo');
 
 -- --------------------------------------------------------
 
@@ -74,8 +91,8 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
-(321433, 'Sebastian', 'sebastiangarces158@gmail.com', 0),
-(342596, 'Sebxstt', 'sebastiangarces152@gmail.com', 0);
+(157639, 'Sebxstt', 'sebastiangarces152@gmail.com', 0),
+(205314, 'Sebxstt', 'sebastiangarces158@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -94,14 +111,6 @@ CREATE TABLE `prestamos` (
   `tasa_variable` tinyint(1) NOT NULL,
   `tasa_fija` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `prestamos`
---
-
-INSERT INTO `prestamos` (`id_user`, `name_loan`, `numero_telefono_loan`, `tasa_interes`, `cuotas`, `frencuencia_pago`, `action_prestamo`, `tasa_variable`, `tasa_fija`) VALUES
-(342596, 'Sebastian Garces', '3022396265', 12.18, 12, '3 cuotas', '12000000', 0, 1),
-(342596, 'Sebastian Garces', '3022396265', 12.18, 12, '3 cuotas', '1000000', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -125,8 +134,8 @@ CREATE TABLE `registers` (
 --
 
 INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `fecha_creacion`) VALUES
-(321433, 'Sebastian', '$2b$10$whofB2kgUD4AA6cxUC7bTO9gfnjeG.MBFJ4A2s/t0OHfFLhKs64vm', 'sebastiangarces158@gmail.com', '$2b$10$4ClO0OgP0oldeQnQRySk/u38DMCqCt/.YGJMFvMaCHtKL/g4NdieO', '$2b$10$4zCFYrtgcB51GXkxWLVsFOdO.OnZ9ATOd9W2CaXsi.nBoLHRBOwHC', 1, '11/04/24'),
-(342596, 'Sebxstt', '$2b$10$FejbBWCf79tDU./zjbUGvO8NyhEQSRluoVB4Nbm/O6Z48eVacOhDO', 'sebastiangarces152@gmail.com', '$2b$10$P2y0W3MCDPomcaTbN8w5VO6Blslu1pWiOJ0NUyfKASnTlR.5KX6MG', '$2b$10$h1/n9o6AcVG5Mr0u8QpJCeqUcvZnMB222IcAIF9Pysu3dElX1/9.q', 1, '11/04/24');
+(157639, 'Sebxstt', '$2b$10$cm0QV8V5IJVtahh.gW4y2em.RKR3PiQKCWeZGRgopSauYPWRlPfky', 'sebastiangarces152@gmail.com', '$2b$10$3b7sjMdTfisP3CnDnL2aluTT5PaxekDElf2ztZaxzPWN/surF71N6', '$2b$10$OEOkNmkCAS.0F.Dxlz23eeRtfNS499tOw2JgSQGFFH4rC7NXEAKqm', 1, '11/04/24'),
+(205314, 'Sebxstt', '$2b$10$Vougz4sGQjt6Vs/JKi3vPuLt2ir.ONF9gmHgmNniqMf906tHj2rDC', 'sebastiangarces158@gmail.com', '$2b$10$wAags9mKIXgBp96DDY.qK.cOXixa9ROSamVwJwQRTpeioX7ENS/0C', '$2b$10$GAFI3zlnqy/eu6H4Yrc0cOVR5gwyFExpY3lJsqaYJ2V/FevzQ7Dpa', 1, '11/04/24');
 
 -- --------------------------------------------------------
 
@@ -148,8 +157,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`) VALUES
-(321433, 'Sebastian', 'sebastiangarces158@gmail.com', '7457 3053 3576 2853', '1000000', '1000000'),
-(342596, 'Sebxstt', 'sebastiangarces152@gmail.com', '4952 8428 8845 5558', '12000000', '12000000');
+(157639, 'Sebxstt', 'sebastiangarces152@gmail.com', '9231 1562 5340 1760', '', '0'),
+(205314, 'Sebxstt', 'sebastiangarces158@gmail.com', '6968 8952 8542 3247', '', '0');
 
 -- --------------------------------------------------------
 
@@ -179,8 +188,10 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('article_4_titulo', 'Tasa y cuota fijas', 'Fixed rate and fee'),
 ('available_balance', 'Saldo disponible', 'Available Balance'),
 ('calcular_inicio', 'Calcular', 'Calculate'),
-('check_card_text', '¡Consulte nuestra opción de simulación de crédito!', 'Check out our credit simulation option!'),
-('content_check_card_text', '¿Necesitas calcular tus pagos mensuales de préstamo antes de comprometerte? ¡Estás en el lugar correcto! Con nuestra herramienta de simulación de crédito, puedes explorar diferentes escenarios financieros y planificar tu futuro con confianza.', 'Do you need to calculate your monthly loan payments before committing? You are in the right place! With our credit simulation tool, you can explore different financial scenarios and plan your future with confidence.'),
+('check_card_text', '¡Simula tu credito!', 'Simulate your credit!'),
+('check_card_text_second', '¡Consulte nuestra opción de simulación de crédito!', 'Check out our credit simulation option!'),
+('content_check_card_text', '¡Calcula pagos mensuales de préstamos con nuestra herramienta de simulación de créditos y planifica tu futuro financiero con confianza!', 'Calculate monthly loan payments with our credit simulation tool and plan your financial future with confidence!'),
+('content_check_card_text_second', '¿Necesita calcular los pagos mensuales de su préstamo antes de comprometerse? Estás en el lugar correcto! Con nuestra herramienta de simulación de crédito, podrá explorar diferentes escenarios financieros y planificar su futuro con confianza.', 'Do you need to calculate your monthly loan payments before committing? You are in the right place! With our credit simulation tool, you can explore different financial scenarios and plan your future with confidence.'),
 ('content_security_text', '¿Necesitas enviar dinero a amigos o familiares? Con nuestra función de transferencia a otros usuarios, puedes enviar fondos de manera rápida y segura. Ya sea que estés compartiendo gastos, ayudando a un ser querido o simplemente pagando por un servicio, nuestra plataforma te permite realizar transferencias de manera conveniente y sin complicaciones. Olvídate de los largos procesos bancarios y las comisiones excesivas. Con nosotros, enviar dinero es tan fácil como pulsar un botón.', 'Do you need to send money to friends or family? With our transfer feature to other users, you can send funds quickly and securely. Whether you\'re sharing expenses, helping a loved one, or simply paying for a service, our platform allows you to make transfers conveniently and without complications. Forget about long banking processes and excessive commissions. With us, sending money is as easy as pressing a button.'),
 ('continue_with_text', 'O CONTINUAR CON', 'OR CONTINUE WITH'),
 ('crear_cuenta_text', 'Crea una cuenta', 'Create an account'),

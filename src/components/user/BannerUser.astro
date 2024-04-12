@@ -22,7 +22,9 @@ interface Props {
     available_balance: string,
     total_income_text: string,
     check_card_text: string,
+    check_card_text_second: string,
     content_check_card_text: string,
+    content_check_card_text_second: string,
     security_text: string,
     content_security_text: string,
     history_movements_text: string,
@@ -46,6 +48,8 @@ const {
     total_income_text,
     check_card_text,
     content_check_card_text,
+    check_card_text_second,
+    content_check_card_text_second,
     security_text,
     content_security_text,
     history_movements_text,
@@ -182,7 +186,55 @@ try{
                                 </CardUser>
                             </div>
 
-                            <div id="credit" class="flex col-span-1 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+
+                            <div id="graph" class="max-[450px]:max-h-[400px] flex col-span-2 justify-center items-center row-span-1 flex-col w-full rounded-xl cursor-pointer max-h-[350px] bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                
+                                {
+                                    1 == 1 + 1 ? (
+                                        <div class="w-full flex justify-center items-center gap-5 mt-5 mb-0">
+                                            <button id="btn-create-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                                Create Information
+                                            </button>
+                                        
+                                            <button id="btn-delete-information" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                                Delete Information
+                                            </button>
+
+                                            <form action="/actions/set-status" method="post">
+                                                <button id="btn-test" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                                    Prueba
+                                                </button>
+                                            </form>
+                                        </div>
+                                    ) : (
+                                        <span class="hidden"></span>
+                                    )
+                                }
+                                
+                                <canvas id="grafico" class="w-full h-full"></canvas>
+
+                                <!--<h1 class="text-white text-lg font-bold">
+                                    {security_text}
+                                </h1>
+                                <p class="text-white">{content_security_text}</p>
+
+                                <button id="button-transfer" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                    {transferir_text}
+                                </button> -->
+                            </div> 
+                            
+                            <div id="credit credit_first" class="flex max-[1100px]:hidden col-span-2 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <h1 class="text-white text-lg font-bold">
+                                    {check_card_text_second}
+                                </h1>
+                                <p class="text-white">{content_check_card_text_second}</p>
+
+                                <button id="button-simulate-loan" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                    {simulate_loan_text}
+                                </button>
+                            </div>
+
+                            <div id="credit credit_second" class="credit hidden max-[1100px]:flex col-span-2 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
                                 <h1 class="text-white text-lg font-bold">
                                     {check_card_text}
                                 </h1>
@@ -202,8 +254,8 @@ try{
                                 <button id="button-transfer" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
                                     {transferir_text}
                                 </button>
-                            </div>                                       
-
+                            </div> 
+                                      
                             <CardMovements
                             titulo={history_movements_text}
                             not_found={not_found_text}
@@ -251,11 +303,14 @@ try{
                     grid-column: span 2 / 2 span;
                 }
 
+                #graph{
+                    grid-column: span 2 / 2 span;
+                }
+
                 #credit{
-                    grid-column: span 4 / 4 span;
+                    grid-column: span 2 / 2 span;
                 }
             }
-
 
             @media (max-width: 950px) {
                 #make_loan{
@@ -272,18 +327,33 @@ try{
 
                 #welcome{
                     grid-column: span 2 / 2 span;
-                }
+                }  
+
             }
 
             @media (max-width: 890px) {
                 #security{
                     grid-column: span 4 / 4 span;
                 }
+
+                #graph{
+                    grid-column: span 2 / 2 span;
+                }
             }
 
-            @media (max-width: 830px) {
+            @media (max-width: 840px) {
                 #welcome h1{
                     font-size: 1.7rem;
+                }
+            }
+
+            @media (max-width: 840px) {
+                #graph{
+                    grid-column: span 4 / 4 span;
+                }
+
+                .credit{
+                    grid-column: span 4 / 4 span;
                 }
             }
 

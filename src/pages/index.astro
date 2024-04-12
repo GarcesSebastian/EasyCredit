@@ -65,7 +65,9 @@ try{
     available_balance: (data.find((item: { word: string }) => item.word === "available_balance") || {})[flag === "es" ? 'es' : 'en'] as string,
     total_income_text: (data.find((item: { word: string }) => item.word === "total_income_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     check_card_text: (data.find((item: { word: string }) => item.word === "check_card_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    check_card_text_second: (data.find((item: { word: string }) => item.word === "check_card_text_second") || {})[flag === "es" ? 'es' : 'en'] as string,
     content_check_card_text: (data.find((item: { word: string }) => item.word === "content_check_card_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    content_check_card_text_second: (data.find((item: { word: string }) => item.word === "content_check_card_text_second") || {})[flag === "es" ? 'es' : 'en'] as string,
     security_text: (data.find((item: { word: string }) => item.word === "security_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     content_security_text: (data.find((item: { word: string }) => item.word === "content_security_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     history_movements_text: (data.find((item: { word: string }) => item.word === "history_movements_text") || {})[flag === "es" ? 'es' : 'en'] as string,
@@ -140,26 +142,28 @@ try{
                     </Info>
                 ):(
                     <BannerUser
-                    welcome_back_text={text.welcome_back_text}
-                    have_you_text={text.have_you_text}
-                    new_notifications_text={text.new_notifications_text}
-                    view_all_text={text.view_all_text}
-                    first_part_make_loan={text.first_part_make_loan}
-                    first_loan_text={text.first_loan_text}
-                    please_enter_text={text.please_enter_text}
-                    make_loan_text={text.make_loan_text}
-                    available_balance={text.available_balance}
-                    total_income_text={text.total_income_text}
-                    check_card_text={text.check_card_text}
-                    content_check_card_text={text.content_check_card_text}
-                    security_text={text.security_text}
-                    content_security_text={text.content_security_text}
-                    history_movements_text={text.history_movements_text}
-                    learn_more_text={text.learn_more_text}
-                    transferir_text={text.transferir_text}
-                    simulate_loan_text={text.simulate_loan_text}
-                    more_text={text.more_text}
-                    not_found_text={text.not_found_text}
+                        welcome_back_text={text.welcome_back_text}
+                        have_you_text={text.have_you_text}
+                        new_notifications_text={text.new_notifications_text}
+                        view_all_text={text.view_all_text}
+                        first_part_make_loan={text.first_part_make_loan}
+                        first_loan_text={text.first_loan_text}
+                        please_enter_text={text.please_enter_text}
+                        make_loan_text={text.make_loan_text}
+                        available_balance={text.available_balance}
+                        total_income_text={text.total_income_text}
+                        check_card_text={text.check_card_text}
+                        check_card_text_second={text.check_card_text_second}
+                        content_check_card_text={text.content_check_card_text}
+                        content_check_card_text_second={text.content_check_card_text_second}
+                        security_text={text.security_text}
+                        content_security_text={text.content_security_text}
+                        history_movements_text={text.history_movements_text}
+                        learn_more_text={text.learn_more_text}
+                        transferir_text={text.transferir_text}
+                        simulate_loan_text={text.simulate_loan_text}
+                        more_text={text.more_text}
+                        not_found_text={text.not_found_text}
                     ></BannerUser>
                 )
             }
