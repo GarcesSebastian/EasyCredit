@@ -28,7 +28,6 @@ async function obtenerTasa() {
         data_gobierno.forEach((item) => {
             if (item.fechacorte.split("-")[0] == (new Date().getFullYear()).toString() && item.uca == "4" && isContinue) {
                 tasa = item.tasa;
-                console.log(tasa);
                 isContinue = false;
             }
         });
@@ -84,21 +83,82 @@ async function simulateLoan(monto, tasa, frecuencia, plazo){
         const formattedDate = currentDate.toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">1</td>
-            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_restante.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_principal.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_interes.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_total.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">30</td>
-            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${pago_final.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 border-r-[1px] border-slate-700">${i}</td>
-            <td class="text-center py-2 px-4">${formattedDate}</td>
+        
+        if(i == 1){
+            row.innerHTML = `
+            <td class="text-center py-2 px-4 rounded-tl-lg">1</td>
+            <td class="text-center py-2 px-4 ">${pago_restante.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${pago_principal.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${pago_interes.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${pago_total.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">30</td>
+            <td class="text-center py-2 px-4 ">${pago_final.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${i}</td>
+            <td class="text-center py-2 px-4 rounded-tr-lg">${formattedDate}</td>
         `;
+        }else if(i == total_pagos){
+            row.innerHTML = `
+            <td class="text-center py-2 px-4 rounded-bl-lg">1</td>
+            <td class="text-center py-2 px-4 ">${pago_restante.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${pago_principal.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${pago_interes.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${pago_total.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">30</td>
+            <td class="text-center py-2 px-4 ">${pago_final.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${i}</td>
+            <td class="text-center py-2 px-4 rounded-br-lg">${formattedDate}</td>
+        `;
+        }else{
+            row.innerHTML = `
+            <td class="text-center py-2 px-4 ">1</td>
+            <td class="text-center py-2 px-4 ">${pago_restante.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${pago_principal.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${pago_interes.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${pago_total.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">30</td>
+            <td class="text-center py-2 px-4 ">${pago_final.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">${i}</td>
+            <td class="text-center py-2 px-4 ">${formattedDate}</td>
+        `;
+        }
+
         body_table_simulate_loan.appendChild(row);
         pago_restante = pago_final;
     }
 }
+
+let popup_simulate_loan = document.querySelector("#popup-simulate-loan");
+let span_simulate_loan = popup_simulate_loan.querySelector("#span-simulate-loan");
+
+function showPopupInfo(message, e){
+    popup_simulate_loan.style.display = "flex";
+    popup_simulate_loan.style.top = `${e.clientY + 10}px`;
+    popup_simulate_loan.style.left = `${e.clientX + 10}px`;
+    span_simulate_loan.innerText = message;
+}
+
+function hiddenPopupInfo(){
+    popup_simulate_loan.style.display = "none";
+}
+
+let info_monto_simulate_loan = document.querySelector("#info-monto-simulate-loan");
+let tasa_monto_simulate_loan = document.querySelector("#tasa-monto-simulate-loan");
+
+info_monto_simulate_loan?.addEventListener("mouseover", (e) => {
+    showPopupInfo("El monto debe ser mayor a 500k y menor a 4000M", e);
+});
+
+info_monto_simulate_loan?.addEventListener("mouseout", (e) => {
+    hiddenPopupInfo();
+});
+
+tasa_monto_simulate_loan?.addEventListener("mouseover", (e) => {
+    showPopupInfo("La Tasa de Interes es fija, es decir, no cambia durante el plazo del préstamo.", e);
+});
+
+tasa_monto_simulate_loan?.addEventListener("mouseout", (e) => {
+    hiddenPopupInfo();
+});
 
 let btn_simulate_loan = document.querySelector("#btn-simulate-loan");
 let form_simulate_loan = document.querySelector("#form-simulate-loan");
@@ -661,6 +721,8 @@ async function send_code_email(){
             email: document.querySelector("#input-email-forward").value
         };
     
+        document.querySelector("#text-submit-code").style.display = "none"
+        document.querySelector("#loader-submit-code").style.display = "flex"
         
         isContinueSendEmail = false;
         inputSucess(document.querySelector("#input-email-forward"), "#err-email-forward");
@@ -685,6 +747,8 @@ async function send_code_email(){
             isContinueSendEmail = true;
             inputErr(document.querySelector("#input-email-forward"), "#err-email-forward", responseJson.message);
         }
+        document.querySelector("#text-submit-code").style.display = "flex"
+        document.querySelector("#loader-submit-code").style.display = "none"
     }
 }
 

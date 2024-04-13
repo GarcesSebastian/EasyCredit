@@ -400,8 +400,8 @@ app.post("/email/send", async (req, res) => {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: "sebastiangarces152@gmail.com",
-                pass: "ocxogzwntaaacecg"
+                user: "easycredit4321@gmail.com",
+                pass: "cvmovrshtbmlpusa"
             }
         });
 
@@ -414,7 +414,7 @@ app.post("/email/send", async (req, res) => {
 
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
-                res.status(400).send({ state: "Bad Request", message: "No se pudo enviar el correo" });
+                res.status(400).send({ state: "Bad Request", message: "No se pudo enviar el correo"});
                 return;
             } else {
                 res.status(200).send({ state: "Good Request", message: "Correo Enviado", code: randomCode, attemps: attemps_code_recover});

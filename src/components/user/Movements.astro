@@ -4,23 +4,41 @@
 
 <section
     id="showMore"
-    class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 flex justify-end"
+    class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden"
 >
     <article id="close" class="w-full h-full cursor-pointer "></article>
-    <article id="content" class="bg-slate-800 shadow-lg shadow-gray-900 w-[30%] p-5 flex flex-col gap-4">
+    <article id="content" class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-md:w-[55rem] p-5 flex flex-col gap-4 animate-displace">
         <header
             class="flex justify-between items-center p-4 border-b-2 border-blue-500"
         >
-            <h1 class="text-2xl">Historial de Movimientos</h1>
-            <i id="extras" class="">
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+            <h1 class="text-2xl text-white max-[490px]:text-lg">Historial de Movimientos</h1>
+            <i id="extras" class="text-white cursor-pointer">
+                <svg id="options-movements" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
             </i>
         </header>
+
+        <div id="submenu-movements" class="hidden bg-slate-700 p-1 rounded-[4px] animate-deployment">
+            <button
+              id=""
+              class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+              >Crear</button
+            >
+            <button
+              id=""
+              class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+              >Borrar</button
+            >
+            <button
+              id=""
+              class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+              >Borrar todo</button
+            >
+          </div>
 
         <main id="contentMovements" class="flex flex-col gap-3">
             <article
                 id="movement"
-                class="flex justify-around px-0 py-4 items-center rounded-lg bg-blue-600 shadow-lg"
+                class="flex justify-around py-4 items-center rounded-lg bg-blue-600 shadow-lg"
             >
                 <div id="logo">
                     <img
@@ -42,11 +60,23 @@
 </section>
 
 <script>
+
+    let menuIcon = document.getElementById("options-movements") as HTMLElement;
+    let subMenu = document.getElementById("submenu-movements") as HTMLDivElement;
+
+    menuIcon.addEventListener("click", () => {
+        if (window.getComputedStyle(subMenu).display === "none"){
+        subMenu.style.display = "flex";
+        } else {
+        subMenu.style.display = "none";
+        }
+    });
+
     let showMovements = document.querySelector(
         "#showMovements",
     ) as HTMLButtonElement;
     let close = document.getElementById("close") as HTMLElement;
-    showMovements.addEventListener("click", () => {
+    showMovements?.addEventListener("click", () => {
         let movements = document.querySelector("#showMore") as HTMLElement;
         if (window.getComputedStyle(movements).display == "none") {
             movements.style.display = "flex";
@@ -99,23 +129,7 @@
         }
     }
 
-    #showMore {
-        display: none;
-    }
-
-    #content {
-        animation: desplace 0.5s ease forwards;
-    }
-
     @media (max-width: 1024px) {
-        #close {
-            width: 40%;
-        }
-        #content {
-            width: 60%;
-            animation: desplace 0.5s ease forwards;
-        }
-
         #contentMovements #movement {
             display: flex;
             flex-direction: column;
@@ -123,44 +137,4 @@
         }
     }
 
-    @media (max-width: 1560px) {
-        #close {
-            width: 70%;
-        }
-        #content {
-            width: 30%;
-            animation: desplace 0.5s ease forwards;
-        }
-
-        #contentMovements #movement {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-    }
-
-    @media (max-width: 900px) {
-        #close {
-            width: 30%;
-        }
-        #content {
-            width: 70%;
-            animation: desplace 0.5s ease forwards;
-        }
-
-        #contentMovements #movement {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-    }
-
-    @keyframes desplace {
-        0% {
-            transform: translateX(100%);
-        }
-        100% {
-            transform: translateX(0);
-        }
-    }
 </style>

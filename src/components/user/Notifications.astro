@@ -9,13 +9,13 @@
   <div id="closeNotifications" class="w-full h-full cursor-pointer"></div>
   <div
     id="notificationsContent"
-    class="bg-slate-800 shadow-lg shadow-gray-900 w-[30%] p-5 flex flex-col gap-4"
+    class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-md:w-[55rem] p-5 flex flex-col gap-4 animate-displace"
   >
     <header
       class="flex justify-between items-center p-4 border-b-2 border-blue-500"
     >
-      <h1 class="text-2xl text-white">Notificaciones</h1>
-      <div id="moreOptions">
+      <h1 class="text-2xl text-white max-[490px]:text-lg">Notificaciones</h1>
+      <div id="moreOptions" class="cursor-pointer">
         <svg
           id="menuIcon"
           xmlns="http://www.w3.org/2000/svg"
@@ -36,8 +36,7 @@
       </div>
     </header>
 
-    <!-- Contenido que se va a ocultar -->
-    <div id="subMenu" class="hidden">
+    <div id="subMenu" class="hidden bg-slate-700 p-1 rounded-[4px] animate-deployment">
       <button
         id="btnNew"
         class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
@@ -56,7 +55,7 @@
     </div>
 
     <main
-      class="overflow-y-scroll h-full flex flex-col gap-4"
+      class="overflow-y-auto h-full flex flex-col gap-4"
       id="allNotifications"
     >
     </main>
@@ -68,16 +67,18 @@
   let subMenu = document.getElementById("subMenu") as HTMLDivElement;
 
   menuIcon.addEventListener("click", () => {
-    if (subMenu.className == "hidden") {
-      subMenu.className = "flex";
+    if (window.getComputedStyle(subMenu).display === "none"){
+      subMenu.style.display = "flex";
     } else {
-      subMenu.className = "hidden";
+      subMenu.style.display = "none";
     }
   });
 
   let btnNotification = document.querySelector(
     "#button-notifications",
   ) as HTMLSpanElement;
+
+  let btnAllNotification = document.querySelector("#btn-all-notifications") as HTMLButtonElement;
 
   let barNotifications = document.getElementById("mainContent") as HTMLElement;
   let almacenNotifications = document.getElementById(
@@ -87,8 +88,16 @@
   let closeNotifications = document.getElementById(
     "closeNotifications",
   ) as HTMLDivElement;
+  
+  btnAllNotification?.addEventListener("click", () => {
+    (document.querySelector("#list_config") as HTMLElement).style.display = "none";
+    barNotifications.style.display =
+      window.getComputedStyle(barNotifications).display === "none"
+        ? "flex"
+        : "none";
+  });
 
-  btnNotification.addEventListener("click", () => {
+  btnNotification?.addEventListener("click", () => {
     barNotifications.style.display =
       window.getComputedStyle(barNotifications).display === "none"
         ? "flex"
@@ -132,8 +141,8 @@
   borrar.addEventListener("click", () => {
     if (contenedor.children.length > 0) {
       contenedor.children[0].remove();
+      localStorage.setItem("notifications", contenedor.innerHTML);
     }
-    localStorage.setItem("notifications", contenedor.innerHTML);
   });
 
   borrarTodo.addEventListener("click", () => {
@@ -150,29 +159,6 @@
 </script>
 
 <style>
-  @keyframes despliegueSubmenu {
-    0% {
-      opacity: 0.3;
-      transform: translateY(-30px);
-    }
-    100% {
-      opacity:;
-      transform: translateY(0);
-    }
-  }
-
-  #subMenu {
-    background-color: rgb(40, 54, 75);
-    padding: 5px 0;
-    border-radius: 4px;
-    animation: despliegueSubmenu 0.3s ease-in-out;
-  }
-
-  #allNotifications {
-    overflow-y: auto;
-    height: 100%;
-  }
-
   #allNotifications::-webkit-scrollbar {
     width: 16px;
   }
@@ -193,33 +179,5 @@
     border-radius: 20px;
     border: 6px solid transparent;
     background-clip: content-box;
-  }
-
-  #notificationsContent {
-    animation: desplace 0.5s ease forwards;
-  }
-
-  @keyframes desplace {
-    0% {
-      transform: translate(100%);
-    }
-    100% {
-      transform: translate(0);
-    }
-  }
-
-  @media (max-width: 1200px) {
-    #notificationsContent {
-      width: 70%;
-    }
-    #closeNotifications {
-      width: 30%;
-    }
-  }
-
-  @media (max-width: 900px) {
-    h1 {
-      font-size: 25px;
-    }
   }
 </style>

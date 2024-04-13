@@ -1,0 +1,120 @@
+---
+
+---
+
+<section
+  class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden"
+  id="content-configurations"
+>
+  <div id="closeConfigurations" class="w-full h-full cursor-pointer"></div>
+  <div
+    class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-md:w-[55rem] p-5 flex flex-col gap-4 animate-displace"
+  >
+    <header
+      class="flex justify-between items-center p-4 border-b-2 border-blue-500"
+    >
+      <h1 class="text-2xl text-white max-[490px]:text-lg">Configuraciones</h1>
+      <div id="moreOptions" class="cursor-pointer">
+        <svg
+          id="options-configurations"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-dots"
+          ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+            d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path
+            d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path
+            d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path></svg
+        >
+      </div>
+    </header>
+
+    <div id="submenu-configurations" class="hidden bg-slate-700 p-1 rounded-[4px] animate-deployment">
+      <button
+        id=""
+        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+        >Crear</button
+      >
+      <button
+        id=""
+        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+        >Borrar</button
+      >
+      <button
+        id=""
+        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+        >Borrar todo</button
+      >
+    </div>
+
+  </div>
+</section>
+
+<script>
+  let menuIcon = document.getElementById("options-configurations") as HTMLElement;
+  let subMenu = document.getElementById("submenu-configurations") as HTMLDivElement;
+
+  menuIcon.addEventListener("click", () => {
+    if (window.getComputedStyle(subMenu).display === "none"){
+      subMenu.style.display = "flex";
+    } else {
+      subMenu.style.display = "none";
+    }
+  });
+
+  let btnNotification = document.querySelector(
+    "#button_configurations",
+  ) as HTMLSpanElement;
+  
+  let barNotifications = document.getElementById("content-configurations") as HTMLElement;
+
+  let closeConfigurations = document.getElementById(
+    "closeConfigurations",
+  ) as HTMLDivElement;
+
+  btnNotification?.addEventListener("click", () => {
+    (document.querySelector("#list_config") as HTMLElement).style.display = "none";
+    barNotifications.style.display =
+      window.getComputedStyle(barNotifications).display === "none"
+        ? "flex"
+        : "none";
+  });
+
+  closeConfigurations.addEventListener("click", () => {
+    barNotifications.style.display =
+      window.getComputedStyle(barNotifications).display === "flex"
+        ? "none"
+        : "flex";
+  });
+
+</script>
+
+<style>
+  #allNotifications::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  #allNotifications::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  #allNotifications::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+  }
+  #allNotifications::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+  }
+  #allNotifications::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+</style>

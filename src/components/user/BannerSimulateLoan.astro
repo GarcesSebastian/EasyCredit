@@ -89,7 +89,7 @@
       <form id="form-simulate-loan" class="w-full h-full p-5">
         <div class="w-full h-full grid grid-cols-2 gap-x-5 gap-y-8 max-sm:grid-cols-1">
           <div
-            class="top-left bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
+            class="bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="monto-simulate-loan" class="w-full">
               {text_amount_loan}</label
@@ -109,6 +109,7 @@
               </div>        
   
               <svg
+                id="info-monto-simulate-loan"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -128,7 +129,7 @@
           </div>
 
           <div
-            class="top-left bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
+            class="bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="tasa-simulate-loan" class="w-full">
               {text_tasa_loan}</label
@@ -150,6 +151,7 @@
                 </div> 
 
               <svg
+                id="tasa-monto-simulate-loan"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -169,7 +171,7 @@
           </div>
 
           <div
-            class="top-left bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
+            class="bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="plazo-simulate-loan" class="w-full"
               >{text_cuotas}</label
@@ -206,7 +208,7 @@
           </div>
 
           <div
-            class="top-left bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
+            class="bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="frecuencia-simulate-loan" class="w-full"
               >{text_frecuencia}</label
@@ -259,10 +261,10 @@
         </div>
       </form>
 
-      <div id="content-table-simulate-loan" class="overflow-x-auto w-full bg-slate-600 mt-10 hidden">
+      <div id="content-table-simulate-loan" class="overflow-x-auto w-full mx-5 rounded-lg mt-10 hidden">
         <div class="w-full text-white">
-          <table class="w-full h-full border-2 border-slate-800">
-            <thead class="bg-slate-800 py-1.5 w-full h-full">
+          <table class="w-full h-full border-2 border-slate-800 bg-slate-800">
+            <thead class="py-1.5 w-full h-full">
               <tr class="w-full">
                 <th class="px-3 py-2">Año</th>
                 <th class="px-3 py-2">Saldo Capital</th>
@@ -275,7 +277,7 @@
                 <th class="px-3 py-2">Fecha</th>
               </tr>
             </thead>
-            <tbody id="body-table-simulate-loan">
+            <tbody id="body-table-simulate-loan" class="bg-slate-700">
             </tbody>
           </table>
         </div>

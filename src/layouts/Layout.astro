@@ -24,6 +24,11 @@ const { title } = Astro.props;
 	<body translate="no">
 		<div class="fixed top-0 z-[-2] h-screen w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
 		<main class="flex flex-col items-center">
+			<div class="absolute bg-slate-600 rounded-lg max-w-[230px] p-2 shadow-lg shadow-gray-800 text-xs z-10 transition-all duration-300 hidden" id="popup-simulate-loan">
+				<span id="span-simulate-loan" class="text-white font-bold ">
+					El monto debe ser mayor a 500k y menor a 4M.
+				</span>
+			</div>
 			<slot />
 		</main>
 		<script src="../js/front.js"></script>
