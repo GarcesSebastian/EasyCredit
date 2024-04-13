@@ -1,4 +1,6 @@
 ---
+import Movements from './Movements.astro';
+
 interface Props{
     titulo: string,
     not_found: string,
@@ -31,7 +33,7 @@ const {titulo, not_found, more, num_movements} = Astro.props;
                 <div id="slot_card" class="flex flex-col w-full gap-4 pr-0 pb-5">
                     <slot/>
 
-                    <span class="text-white text-sm font-bold text-right hover:text-blue-500 absolute bottom-5 right-7">
+                    <span id="showMovements" class="text-white text-sm font-bold text-right hover:text-blue-500 absolute bottom-5 right-7">
                         {more}...
                     </span>
                 </div>
@@ -43,6 +45,7 @@ const {titulo, not_found, more, num_movements} = Astro.props;
         }
     </div>
 </span>
+<Movements></Movements>
 
 <style>
     .custom-scroll::-webkit-scrollbar {

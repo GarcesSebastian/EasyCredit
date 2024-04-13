@@ -1,0 +1,166 @@
+---
+
+---
+
+<section
+    id="showMore"
+    class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 flex justify-end"
+>
+    <article id="close" class="w-full h-full cursor-pointer "></article>
+    <article id="content" class="bg-slate-800 shadow-lg shadow-gray-900 w-[30%] p-5 flex flex-col gap-4">
+        <header
+            class="flex justify-between items-center p-4 border-b-2 border-blue-500"
+        >
+            <h1 class="text-2xl">Historial de Movimientos</h1>
+            <i id="extras" class="">
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+            </i>
+        </header>
+
+        <main id="contentMovements" class="flex flex-col gap-3">
+            <article
+                id="movement"
+                class="flex justify-around px-0 py-4 items-center rounded-lg bg-blue-600 shadow-lg"
+            >
+                <div id="logo">
+                    <img
+                        class="size-12"
+                        src="https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"
+                        alt=""
+                    />
+                </div>
+                <div id="data" class="text-center">
+                    <h3 class="text-xl">Transferencia</h3>
+                    <i id="date" class="text-sm">20/20/2024</i>
+                </div>
+                <div id="count">
+                    <p id="countNum" class="font-extrabold text-green-300">+ 1.000.000 $</p>
+                </div>
+            </article>
+        </main>
+    </article>
+</section>
+
+<script>
+    let showMovements = document.querySelector(
+        "#showMovements",
+    ) as HTMLButtonElement;
+    let close = document.getElementById("close") as HTMLElement;
+    showMovements.addEventListener("click", () => {
+        let movements = document.querySelector("#showMore") as HTMLElement;
+        if (window.getComputedStyle(movements).display == "none") {
+            movements.style.display = "flex";
+        } else {
+            movements.style.display = "none";
+        }
+    });
+
+    close.addEventListener("click", () => {
+        let movements = document.querySelector("#showMore") as HTMLElement;
+        if (window.getComputedStyle(movements).display == "flex") {
+            movements.style.display = "none";
+        } else {
+            movements.style.display = "flex";
+        }
+    });
+</script>
+
+<style>
+
+    .custom-scroll::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+        background: rgb(255, 255, 255, 0);
+        border-radius: 30px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+        background: #777;
+        border-radius: 30px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgb(255, 255, 255, 0);
+        border-radius: 30px;
+    }
+
+    @media (max-width: 1160px) {
+        #card_movements {
+            grid-column: span 2 / 2 span;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        #card_movements {
+            grid-column: span 4 / 4 span;
+            grid-row: span 1 / 1 span;
+        }
+    }
+
+    #showMore {
+        display: none;
+    }
+
+    #content {
+        animation: desplace 0.5s ease forwards;
+    }
+
+    @media (max-width: 1024px) {
+        #close {
+            width: 40%;
+        }
+        #content {
+            width: 60%;
+            animation: desplace 0.5s ease forwards;
+        }
+
+        #contentMovements #movement {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+    @media (max-width: 1560px) {
+        #close {
+            width: 70%;
+        }
+        #content {
+            width: 30%;
+            animation: desplace 0.5s ease forwards;
+        }
+
+        #contentMovements #movement {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+    @media (max-width: 900px) {
+        #close {
+            width: 30%;
+        }
+        #content {
+            width: 70%;
+            animation: desplace 0.5s ease forwards;
+        }
+
+        #contentMovements #movement {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+    @keyframes desplace {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
+</style>

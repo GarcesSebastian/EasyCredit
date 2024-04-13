@@ -1,0 +1,225 @@
+---
+
+---
+
+<section
+  class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden"
+  id="mainContent"
+>
+  <div id="closeNotifications" class="w-full h-full cursor-pointer"></div>
+  <div
+    id="notificationsContent"
+    class="bg-slate-800 shadow-lg shadow-gray-900 w-[30%] p-5 flex flex-col gap-4"
+  >
+    <header
+      class="flex justify-between items-center p-4 border-b-2 border-blue-500"
+    >
+      <h1 class="text-2xl text-white">Notificaciones</h1>
+      <div id="moreOptions">
+        <svg
+          id="menuIcon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-dots"
+          ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+            d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path
+            d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path
+            d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path></svg
+        >
+      </div>
+    </header>
+
+    <!-- Contenido que se va a ocultar -->
+    <div id="subMenu" class="hidden">
+      <button
+        id="btnNew"
+        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+        >Crear</button
+      >
+      <button
+        id="btnDeleteSingle"
+        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+        >Borrar</button
+      >
+      <button
+        id="btnDeleteAll"
+        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+        >Borrar todo</button
+      >
+    </div>
+
+    <main
+      class="overflow-y-scroll h-full flex flex-col gap-4"
+      id="allNotifications"
+    >
+    </main>
+  </div>
+</section>
+
+<script>
+  let menuIcon = document.getElementById("menuIcon") as HTMLElement;
+  let subMenu = document.getElementById("subMenu") as HTMLDivElement;
+
+  menuIcon.addEventListener("click", () => {
+    if (subMenu.className == "hidden") {
+      subMenu.className = "flex";
+    } else {
+      subMenu.className = "hidden";
+    }
+  });
+
+  let btnNotification = document.querySelector(
+    "#button-notifications",
+  ) as HTMLSpanElement;
+
+  let barNotifications = document.getElementById("mainContent") as HTMLElement;
+  let almacenNotifications = document.getElementById(
+    "allNotifications",
+  ) as HTMLElement;
+
+  let closeNotifications = document.getElementById(
+    "closeNotifications",
+  ) as HTMLDivElement;
+
+  btnNotification.addEventListener("click", () => {
+    barNotifications.style.display =
+      window.getComputedStyle(barNotifications).display === "none"
+        ? "flex"
+        : "none";
+  });
+
+  closeNotifications.addEventListener("click", () => {
+    barNotifications.style.display =
+      window.getComputedStyle(barNotifications).display === "flex"
+        ? "none"
+        : "flex";
+  });
+
+  let contenedor = document.getElementById("allNotifications") as HTMLElement;
+  let crear = document.getElementById("btnNew") as HTMLButtonElement;
+  let borrar = document.getElementById("btnDeleteSingle") as HTMLButtonElement;
+  let borrarTodo = document.getElementById("btnDeleteAll") as HTMLButtonElement;
+
+  crear.addEventListener("click", () => {
+    let article = document.createElement("article");
+    let h2 = document.createElement("h2");
+    let p = document.createElement("p");
+
+    h2.textContent = "Envío";
+    p.textContent = "Ladeu te ha estafado";
+
+    article.className =
+      "bg-blue-600 shadow-lg flex flex-col gap-1 rounded-lg p-4  transition duration-300 ease-in-out hover:scale-103";
+    h2.className = "text-2xl text-white";
+    p.className =
+      "text-white text-base text-15 ml-2.5 px-2.5 border-l-2 border-blue-300";
+
+    article.appendChild(h2);
+    article.appendChild(p);
+    contenedor.appendChild(article);
+
+    localStorage.setItem("notifications", contenedor.innerHTML);
+  });
+
+
+  borrar.addEventListener("click", () => {
+    if (contenedor.children.length > 0) {
+      contenedor.children[0].remove();
+    }
+    localStorage.setItem("notifications", contenedor.innerHTML);
+  });
+
+  borrarTodo.addEventListener("click", () => {
+    contenedor.innerHTML = "";
+    localStorage.setItem("notifications", contenedor.innerHTML);
+  });
+
+  var notisSaved = localStorage.getItem("notifications");
+  if (notisSaved === null) {
+    localStorage.setItem("notifications", contenedor.innerHTML);
+  } else {
+    contenedor.innerHTML = notisSaved;
+  }
+</script>
+
+<style>
+  @keyframes despliegueSubmenu {
+    0% {
+      opacity: 0.3;
+      transform: translateY(-30px);
+    }
+    100% {
+      opacity:;
+      transform: translateY(0);
+    }
+  }
+
+  #subMenu {
+    background-color: rgb(40, 54, 75);
+    padding: 5px 0;
+    border-radius: 4px;
+    animation: despliegueSubmenu 0.3s ease-in-out;
+  }
+
+  #allNotifications {
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  #allNotifications::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  #allNotifications::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  #allNotifications::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+  }
+  #allNotifications::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+  }
+  #allNotifications::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
+  #notificationsContent {
+    animation: desplace 0.5s ease forwards;
+  }
+
+  @keyframes desplace {
+    0% {
+      transform: translate(100%);
+    }
+    100% {
+      transform: translate(0);
+    }
+  }
+
+  @media (max-width: 1200px) {
+    #notificationsContent {
+      width: 70%;
+    }
+    #closeNotifications {
+      width: 30%;
+    }
+  }
+
+  @media (max-width: 900px) {
+    h1 {
+      font-size: 25px;
+    }
+  }
+</style>

@@ -1,4 +1,6 @@
 ---
+import Notifications from "./user/Notifications.astro";
+
 interface Props{
 [x: string]: any;
     href_image: string;
@@ -127,7 +129,7 @@ try{
                                 </div>
 
                                 <div class="relative">            
-                                    <span class="relative cursor-pointer bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 flex w-full h-full">
+                                    <span id="button-notifications" class="relative cursor-pointer bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-md text-sm px-5 py-2.5 flex w-full h-full">
                                         {
                                             1 == 1 ? (
                                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="7"  height="7"  viewBox="0 0 24 24"  fill="tomato"  class="absolute translate-x-[1.1rem] icon icon-tabler icons-tabler-filled icon-tabler-circle">
@@ -177,6 +179,7 @@ try{
                 </div>
             </div>
         </header>
+        <Notifications></Notifications>
 
         <style>
             #content-header{

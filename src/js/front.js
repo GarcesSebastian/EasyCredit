@@ -186,6 +186,10 @@ if(list_flags && actual_element){
 let isContinueSignUp = true;
 let isContinueSignIn = true;
 
+document.querySelector("#submit-signup-google")?.addEventListener("click", () => {
+    
+})
+
 document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
     e.preventDefault();
     if(isContinueSignIn == true){
