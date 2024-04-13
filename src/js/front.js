@@ -875,6 +875,13 @@ async function pullingFetch(){
 
 pullingFetch();
 
+let button_logout_google = document.getElementById("button_logout_google");
+
+button_logout_google?.addEventListener("click", () => {
+    setCookie("W-INIT-ENT", "false");
+    setCookie("ID-USER", "false");
+})
+
 function startTimer() {
     if (window.getComputedStyle(document.querySelector("#toast-success")).display !== 'none') {
         setTimeout(() => {

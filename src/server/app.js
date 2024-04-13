@@ -160,6 +160,93 @@ app.post("/register/auth", async (req, res) => {
     }
 });
 
+app.post("/auth/google", async (req, res) => {
+    if (req.body && req.body.email && req.body.username) {
+        const connection = await database.getConnection();
+        const emailExists = await connection.query("SELECT * FROM registers WHERE email = ?", [req.body.email]);
+
+        if (emailExists.length > 0) {
+            console.log(emailExists[0])
+
+            if(emailExists[0].numero_identidad == "google" && emailExists[0].numero_telefono == "google"){
+                if(req.body.numero_identidad && req.body.numero_telefono){
+                    const hashedNumero_telefono = await bcrypt.hash(req.body.numero_telefono, 10);
+                    const hashedNumero_identidad = await bcrypt.hash(req.body.numero_identidad, 10);
+
+                    await connection.query("UPDATE registers SET numero_identidad = ?, numero_telefono = ?, estado = ? WHERE email = ?", [hashedNumero_identidad, hashedNumero_telefono, true, req.body.email]);
+                    return res.status(200).json({ status: "Good Request", message: "Login Successful", id: emailExists[0].id });
+                }
+                return res.status(200).json({ status: "Good Request Incomplete", message: "Login Successful", id: emailExists[0].id });
+            }
+
+            return res.status(200).json({ status: "Good Request", message: "Login Successful", id: emailExists[0].id });
+        } else {
+            let user_id;
+            let isAvailable = false;
+            let attempts = 0;
+            let min = 9999;
+            let max = 999999;
+            const maxAttempts = 100; 
+    
+            while (!isAvailable && attempts < maxAttempts) {
+                user_id = Math.floor(Math.random() * max) + min;
+    
+                const userIdExists = await connection.query("SELECT id FROM registers WHERE id = ?", [user_id]);
+                if (userIdExists.length === 0) {
+                    isAvailable = true;
+                }
+    
+                attempts++;
+            }
+    
+            if (attempts >= maxAttempts) {
+                return res.status(500).json({ message: "Unable to generate a unique ID" });
+            }
+
+            let year = new Date().getFullYear().toString().split("");
+            year = year[year.length - 2] + year[year.length - 1]
+            let fecha_creacion = (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate()) + "/" + (new Date().getMonth() < 10 ? "0" + (new Date().getMonth() + 1) : new Date.getMonth() + 1) + "/" + year;
+    
+            let digits_card = [];
+            let number_card = "";
+            let attemps_card = 100;
+            
+            for(let i = 0; i < 4; i++){
+                let randomDigits = Math.floor(Math.random() * 9000) + 1000;
+                digits_card.push(randomDigits);     
+                
+                if(attemps_card == 0){
+                    number_card = "No se permite"
+                    break;
+                }
+    
+                if(i == 3){
+                    number_card += randomDigits
+                    let card_users = await connection.query("SELECT * FROM users WHERE number_card = ?",[number_card]);
+    
+                    if(card_users.length > 0){
+                        number_card = "";
+                        digits_card = [];
+                        attemps_card --;
+                        i = -1;
+                    }
+    
+                }else{
+                    number_card += randomDigits + " "
+                }
+            }
+
+            await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "google", "google", "google", true, fecha_creacion]);
+            await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0"]);
+            await connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
+        
+            return res.status(200).json({ status: "Good Request", message: "Register Successful", id: user_id});
+        }
+    } else {
+        return res.status(400).json({ status: "Bad Request", message: "Bad Request" });
+    }
+})
+
 app.post("/login/auth", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();

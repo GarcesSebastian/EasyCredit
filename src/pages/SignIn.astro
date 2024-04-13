@@ -11,6 +11,13 @@ interface WordItem{
     en: string;
 }
 
+import {getSession} from 'auth-astro/server';
+
+const session = await getSession(Astro.request);
+if(session){
+    return Astro.redirect("/")
+}
+
 let response: Response;
 
 let data: any;
@@ -85,6 +92,7 @@ if(isContinue){
                     href_signup="./SignUp"
                     registrarse_text={text.registrarse_text}
                     iniciar_text={text.iniciar_text}
+                    isGoogle={false}
                 ></Header>
                 <Section>
                 <FormLogin

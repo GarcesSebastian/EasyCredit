@@ -1,20 +1,18 @@
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
-import react from "@astrojs/react";
-const PORT = process.env.PORT || 3001;
+import auth from "auth-astro";
+import vercel from "@astrojs/vercel/serverless";
+const PORT = process.env.PORT || 4000;
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), react()],
+  integrations: [tailwind(), auth()],
   devOptions: {
-    port: 3000,
-    // Puerto para Astro
     open: true,
-    /* ... Otras opciones dev */
-
     proxy: {
-      "/api": `http://localhost:${PORT}` // Utiliza el mismo puerto configurado en tu backend
+      "/api": `http://localhost:${PORT}`
     }
   },
-  output: "hybrid"
-}); 
+  output: "server",
+  adapter: vercel()
+});

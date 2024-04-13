@@ -4,6 +4,7 @@ import Header from "../components/Header.astro"
 import Footer from "../components/Footer.astro"
 import Banner from "../components/Banner.astro"
 import BannerUser from "../components/user/BannerUser.astro"
+import PopupBase from "../components/user/PopupBase.astro"
 import PopupTransfer from "../components/user/PopupTransfer.astro"
 import Info from "../components/Info.astro"
 import ArrowFloat from "../components/ArrowFloat.astro"
@@ -20,11 +21,58 @@ let text: any;
 
 let isContinue = true;
 let err: any;
+let isGoogle = false;
+let RegisterIncomplete = false;
+
+import {getSession} from 'auth-astro/server';
+
+const session = await getSession(Astro.request);
+
+if(session){
+    let response: Response;
+    let data_response: any;
+    isGoogle = true;
+
+    try{
+        response = await fetch("http://localhost:4000/auth/google", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: session.user?.email,
+                username: session.user?.name
+            })
+        });
+
+        data_response = await response.json();
+        console.log(data_response)
+
+        if(data_response.status == "Good Request"){
+            Astro.cookies.set("ID-USER", data_response.id, {expires: new Date("9999-12-31")});
+            Astro.cookies.set("W-INIT-ENT", "true", {expires: new Date("9999-12-31")});
+        }else if(data_response.status == "Good Request Incomplete"){
+            Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
+            Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
+            RegisterIncomplete = true;
+        }
+        else{
+            isGoogle = false
+        }
+
+    }catch(e){
+        isContinue = false
+        err = e;
+        Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
+        Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
+        return Astro.redirect("/")
+    }
+
+}
 
 const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
 const flag = (Astro.cookies.get("flag") || {})?.value;
 const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
-
 
 try{
     response = await fetch("http://localhost:4000/words");
@@ -103,6 +151,8 @@ try{
     return Astro.redirect("/")
 }
 
+console.log(RegisterIncomplete)
+
 ---
 {
     isContinue ? (
@@ -113,6 +163,7 @@ try{
                 href_signup="./SignUp"
                 registrarse_text={text && text.registrarse_text ? text.registrarse_text : "Registrarse"}
                 iniciar_text={text && text.iniciar_text ? text.iniciar_text : "Iniciar sesión"}        
+                isGoogle={isGoogle}
             ></Header>
             {
                 initiated == "false" ? (
@@ -126,6 +177,7 @@ try{
                         titulo_item_3={text.pay_title}
                         titulo_item_4={text.tasa_title}
                     ></Banner>
+                    
                     <Info id="SectionCenter">
                         <div>
                             <ArticleLeft
@@ -210,6 +262,27 @@ try{
                 type_description_transfer={text.type_description_transfer}
                 make_transfer={text.make_transfer}
             ></PopupTransfer>
+            {
+                RegisterIncomplete == true ? (
+                    <PopupBase
+                        class="relative w-[30rem] -top-10 py-5 rounded-md z-10 bg-slate-700 mb-5" 
+                        id="popup-center-forward" 
+                        class_content="hidden h-screen fixed" 
+                        id_inter_content="popup-inter-forward"
+                        id_background="background-popup-forward" 
+                        id_close="close-forward"
+                    ></PopupBase>
+                ):(
+                    <PopupBase
+                        class="relative w-[30rem] -top-10 py-5 rounded-md z-10 bg-slate-700 mb-5" 
+                        id="popup-center-forward" 
+                        class_content="hidden h-screen fixed" 
+                        id_inter_content="popup-inter-forward"
+                        id_background="background-popup-forward" 
+                        id_close="close-forward"
+                    ></PopupBase>
+                )
+            }
         </Layout>
     ): (
         <div>

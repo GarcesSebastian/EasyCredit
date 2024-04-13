@@ -3,6 +3,8 @@ import Notifications from "./user/Notifications.astro";
 import Movements from './user/Movements.astro';
 import Configurations from './user/Configurations.astro';
 
+import {SignOut} from 'auth-astro/components';
+
 interface Props{
 [x: string]: any;
     href_image: string;
@@ -12,9 +14,10 @@ interface Props{
     // Props for translate
     registrarse_text: string;
     iniciar_text: string;
+    isGoogle: boolean;
 }
 
-const {href_image, href_signin, href_signup, registrarse_text, iniciar_text} = Astro.props;
+const {href_image, href_signin, href_signup, registrarse_text, iniciar_text, isGoogle} = Astro.props;
 
 let response_data_user: Response;
 let response_user_exist: Response;
@@ -25,11 +28,9 @@ let data_user: any;
 let isContinue = true;
 let err: any;
 
-// Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
 const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
 const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
 
-Astro.cookies.set("test", "prueba");
 try{
     if(initiated != "false"){
         response_user_exist = await fetch(`http://localhost:4000/user/exists?id_user=${id_user}`);
@@ -115,17 +116,25 @@ try{
                                     </span>
                                     
                                     <div id="list_config" class="transition-all duration-300 hidden cursor-pointer flex-col gap-1 w-36 absolute mt-2 bg-slate-800 h-fit p-1.5 rounded-sm">
-                                        <div id="button_configurations" class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
+                                        <div id="button_configurations" class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md">
                                             <span>
                                                 Settings
                                             </span>
                                         </div>
 
-                                        <div id="button_logout" class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md" data-flag="en" data-flag-src="../../public/flags/usa.svg">
-                                            <span>
-                                                Log out
-                                            </span>
-                                        </div>
+                                        {
+                                            isGoogle ? (
+                                                <SignOut id="button_logout_google" class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md">
+                                                    Log out
+                                                </SignOut>
+                                            ):(
+                                                <div id="button_logout" class="flex gap-x-2 justify-center items-center w-full px-2 py-2 text-white bg-gray-900 hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-md">
+                                                    <span>
+                                                        Log out
+                                                    </span>
+                                                </div>
+                                            )
+                                        }
                                     </div>
 
                                 </div>
