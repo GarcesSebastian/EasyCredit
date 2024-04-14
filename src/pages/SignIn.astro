@@ -1,0 +1,145 @@
+---
+import Layout from "../layouts/Layout.astro"
+import Header from "../components/Header.astro"
+import Section from "../components/Section.astro"
+import FormLogin from "../components/FormLogin.astro"
+import Footer from "../components/Footer.astro"
+
+interface WordItem{
+    word: string;
+    es: string;
+    en: string;
+}
+
+import {getSession} from 'auth-astro/server';
+
+const session = await getSession(Astro.request);
+if(session){
+    return Astro.redirect("/")
+}
+
+let response: Response;
+
+let data: any;
+
+let text: any;
+
+let isContinue = true;
+
+try{
+    response = await fetch("http://localhost:4000/words");
+    data = await response.json();
+}catch(e){
+    isContinue = false;
+}
+
+const flag = (Astro.cookies.get("flag") || {})?.value;
+const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
+
+if(initiated === 'true'){
+    return Astro.redirect("/")
+}
+
+if(isContinue){
+    text = {
+        crear_cuenta_text: (data.find((item: { word: string }) => item.word === "crear_cuenta_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        new_text: (data.find((item: { word: string }) => item.word === "new_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        email_text: (data.find((item: { word: string }) => item.word === "email_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        password_text: (data.find((item: { word: string }) => item.word === "password_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        forgot_password_text: (data.find((item: { word: string }) => item.word === "forgot_password_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        continue_with_text: (data.find((item: { word: string }) => item.word === "continue_with_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        registrarse_with_google: (data.find((item: { word: string }) => item.word === "registrarse_with_google") || {})[flag === "es" ? 'es' : 'en'] as string,
+        recursos_footer_titulo: (data.find((item: { word: string }) => item.word === "recursos_footer_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+        recursos_item_1: (data.find((item: { word: string }) => item.word === "recursos_item_1") || {})[flag === "es" ? 'es' : 'en'] as string,
+        recursos_item_2: (data.find((item: { word: string }) => item.word === "recursos_item_2") || {})[flag === "es" ? 'es' : 'en'] as string,
+        recursos_item_3: (data.find((item: { word: string }) => item.word === "recursos_item_3") || {})[flag === "es" ? 'es' : 'en'] as string,
+        recursos_item_4: (data.find((item: { word: string }) => item.word === "recursos_item_4") || {})[flag === "es" ? 'es' : 'en'] as string,
+        siganos_footer_titulo: (data.find((item: { word: string }) => item.word === "siganos_footer_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+        siganos_item_1: (data.find((item: { word: string }) => item.word === "siganos_item_1") || {})[flag === "es" ? 'es' : 'en'] as string,
+        siganos_item_2: (data.find((item: { word: string }) => item.word === "siganos_item_2") || {})[flag === "es" ? 'es' : 'en'] as string,
+        legal_footer_titulo: (data.find((item: { word: string }) => item.word === "legal_footer_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+        legal_item_1: (data.find((item: { word: string }) => item.word === "legal_item_1") || {})[flag === "es" ? 'es' : 'en'] as string,
+        legal_item_2: (data.find((item: { word: string }) => item.word === "legal_item_2") || {})[flag === "es" ? 'es' : 'en'] as string,
+        rights_footer: (data.find((item: { word: string }) => item.word === "rights_footer") || {})[flag === "es" ? 'es' : 'en'] as string,
+        iniciar_text: (data.find((item: { word: string }) => item.word === "iniciar_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        registrarse_text: (data.find((item: { word: string }) => item.word === "registrarse_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        description_forgot_password: (data.find((item: { word: string }) => item.word === "description_forgot_password") || {})[flag === "es" ? 'es' : 'en'] as string,
+        type_email: (data.find((item: { word: string }) => item.word === "type_email") || {})[flag === "es" ? 'es' : 'en'] as string,
+        send_code: (data.find((item: { word: string }) => item.word === "send_code") || {})[flag === "es" ? 'es' : 'en'] as string,
+        text_recover_code: (data.find((item: { word: string }) => item.word === "text_recover_code") || {})[flag === "es" ? 'es' : 'en'] as string,
+        description_recover_code: (data.find((item: { word: string }) => item.word === "description_recover_code") || {})[flag === "es" ? 'es' : 'en'] as string,
+        type_recover_code: (data.find((item: { word: string }) => item.word === "type_recovery_code") || {})[flag === "es" ? 'es' : 'en'] as string,
+        text_confirm_code: (data.find((item: { word: string }) => item.word === "text_confirm_code") || {})[flag === "es" ? 'es' : 'en'] as string,
+        text_new_password_invert: (data.find((item: { word: string }) => item.word === "text_new_password_invert") || {})[flag === "es" ? 'es' : 'en'] as string,
+        text_new_password: (data.find((item: { word: string }) => item.word === "text_new_password") || {})[flag === "es" ? 'es' : 'en'] as string,
+        text_repeat_new_password: (data.find((item: { word: string }) => item.word === "text_repeat_new_password") || {})[flag === "es" ? 'es' : 'en'] as string,
+        description_new_password: (data.find((item: { word: string }) => item.word === "description_new_password") || {})[flag === "es" ? 'es' : 'en'] as string,
+        text_confirm: (data.find((item: { word: string }) => item.word === "text_confirm") || {})[flag === "es" ? 'es' : 'en'] as string,
+        text_password_update: (data.find((item: { word: string }) => item.word === "text_password_update") || {})[flag === "es" ? 'es' : 'en'] as string,
+    };
+}else{
+    return Astro.redirect("/SignIn")
+}
+
+---
+
+{
+    isContinue ? (
+        <Layout title="Sebxstt - Sign In">
+                <Header
+                    href_image="/"
+                    href_signin="./SignIn"
+                    href_signup="./SignUp"
+                    registrarse_text={text.registrarse_text}
+                    iniciar_text={text.iniciar_text}
+                    isGoogle={false}
+                ></Header>
+                <Section>
+                <FormLogin
+                    registrarse_text={text.iniciar_text}
+                    crear_cuenta_text={text.crear_cuenta_text}
+                    new_text={text.new_text}
+                    email_text={text.email_text}
+                    password_text={text.password_text}
+                    forgot_password_text={text.forgot_password_text}
+                    continue_with_text={text.continue_with_text}
+                    registrarse_with_google={text.registrarse_with_google}
+                    description_forgot_password={text.description_forgot_password}
+                    type_email={text.type_email}
+                    send_code={text.send_code}
+                    text_recover_code={text.text_recover_code}
+                    description_recover_code={text.description_recover_code}
+                    type_recover_code={text.type_recovery_code}
+                    text_confirm_code={text.text_confirm_code}
+                    text_new_password_invert={text.text_new_password_invert}
+                    text_new_password={text.text_new_password}
+                    text_repeat_new_password={text.text_repeat_new_password}
+                    description_new_password={text.description_new_password}
+                    text_confirm={text.text_confirm}
+                    text_password_update={text.text_password_update}
+                >
+                </FormLogin>
+                <Footer
+                recursos_footer_titulo={text.recursos_footer_titulo}
+                recursos_item_1={text.recursos_item_1}
+                recursos_item_2={text.recursos_item_2}
+                recursos_item_3={text.recursos_item_3}
+                recursos_item_4={text.recursos_item_4}
+                siganos_footer_titulo={text.siganos_footer_titulo}
+                siganos_item_1={text.siganos_item_1}
+                siganos_item_2={text.siganos_item_2}
+                legal_footer_titulo={text.legal_footer_titulo}
+                legal_item_1={text.legal_item_1}
+                legal_item_2={text.legal_item_2}
+                rights_footer={text.rights_footer}
+                ></Footer>
+            </Section>
+        </Layout>
+    ) : (
+        <div>{"Ha ocurrido un error, reinicie la pagina."}</div>
+    )
+}
+
+<script>
+	
+</script>

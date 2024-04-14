@@ -1,0 +1,291 @@
+---
+import Layout from "../layouts/Layout.astro"
+import Header from "../components/Header.astro"
+import Footer from "../components/Footer.astro"
+import Banner from "../components/Banner.astro"
+import BannerUser from "../components/user/BannerUser.astro"
+import PopupBase from "../components/user/PopupBase.astro"
+import PopupTransfer from "../components/user/PopupTransfer.astro"
+import Info from "../components/Info.astro"
+import ArrowFloat from "../components/ArrowFloat.astro"
+import ArticleLeft from "../components/ArticleLeft.astro"
+import ArticleRight from "../components/ArticleRight.astro"
+
+let response: Response;
+let data: any;
+
+let response_user_exist: Response;
+let data_user_exist: any;
+
+let text: any;
+
+let isContinue = true;
+let err: any;
+let isGoogle = false;
+let RegisterIncomplete = false;
+
+import {getSession} from 'auth-astro/server';
+const session = await getSession(Astro.request);
+
+if(session){
+    let response: Response;
+    let data_response: any;
+    isGoogle = true;
+
+    try{
+        response = await fetch("http://localhost:4000/auth/google", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: session.user?.email,
+                username: session.user?.name
+            })
+        });
+
+        data_response = await response.json();
+
+        if(data_response.status == "Good Request"){
+            Astro.cookies.set("ID-USER", data_response.id, {expires: new Date("9999-12-31")});
+            Astro.cookies.set("W-INIT-ENT", "true", {expires: new Date("9999-12-31")});
+        }else if(data_response.status == "Good Request Incomplete"){
+            // Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
+            // Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
+            Astro.cookies.set("ID-USER", data_response.id, {expires: new Date("9999-12-31")});
+            Astro.cookies.set("W-INIT-ENT", "true", {expires: new Date("9999-12-31")});
+            RegisterIncomplete = true;
+        }
+        else{
+            isGoogle = false
+        }
+
+    }catch(e){
+        isContinue = false
+        err = e;
+        Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
+        Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
+        return Astro.redirect("/")
+    }
+
+}
+
+const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
+const flag = (Astro.cookies.get("flag") || {})?.value;
+const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
+
+try{
+    response = await fetch("http://localhost:4000/words");
+    data = await response.json();
+
+    if(initiated != "false"){
+        response_user_exist = await fetch(`http://localhost:4000/user/exists?id_user=${id_user}`);
+        data_user_exist = await response_user_exist.json();
+
+        if(data_user_exist.state != "Good Request"){
+            throw new Error("Error in the request to the server");
+        }
+    }
+
+    text = {
+    titulo_inicio: (data.find((item: { word: string }) => item.word === "titulo_inicio") || {})[flag === "es" ? 'es' : 'en'] as string,
+    nombre_inicio: (data.find((item: { word: string }) => item.word === "nombre_inicio") || {})[flag === "es" ? 'es' : 'en'] as string,
+    descripcion_inicio: (data.find((item: { word: string }) => item.word === "descripcion_inicio") || {})[flag === "es" ? 'es' : 'en'] as string,
+    calcular_inicio: (data.find((item: { word: string }) => item.word === "calcular_inicio") || {})[flag === "es" ? 'es' : 'en'] as string,
+    online_title: (data.find((item: { word: string }) => item.word === "article_1_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    online_description: (data.find((item: { word: string }) => item.word === "article_1_description") || {})[flag === "es" ? 'es' : 'en'] as string,
+    cuota_title: (data.find((item: { word: string }) => item.word === "article_2_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    cuota_description: (data.find((item: { word: string }) => item.word === "article_2_description") || {})[flag === "es" ? 'es' : 'en'] as string,
+    pay_title: (data.find((item: { word: string }) => item.word === "article_3_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    pay_description: (data.find((item: { word: string }) => item.word === "article_3_description") || {})[flag === "es" ? 'es' : 'en'] as string,
+    tasa_title: (data.find((item: { word: string }) => item.word === "article_4_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    tasa_description: (data.find((item: { word: string }) => item.word === "article_4_description") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_footer_titulo: (data.find((item: { word: string }) => item.word === "recursos_footer_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_1: (data.find((item: { word: string }) => item.word === "recursos_item_1") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_2: (data.find((item: { word: string }) => item.word === "recursos_item_2") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_3: (data.find((item: { word: string }) => item.word === "recursos_item_3") || {})[flag === "es" ? 'es' : 'en'] as string,
+    recursos_item_4: (data.find((item: { word: string }) => item.word === "recursos_item_4") || {})[flag === "es" ? 'es' : 'en'] as string,
+    siganos_footer_titulo: (data.find((item: { word: string }) => item.word === "siganos_footer_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_1: (data.find((item: { word: string }) => item.word === "siganos_item_1") || {})[flag === "es" ? 'es' : 'en'] as string,
+    siganos_item_2: (data.find((item: { word: string }) => item.word === "siganos_item_2") || {})[flag === "es" ? 'es' : 'en'] as string,
+    legal_footer_titulo: (data.find((item: { word: string }) => item.word === "legal_footer_titulo") || {})[flag === "es" ? 'es' : 'en'] as string,
+    legal_item_1: (data.find((item: { word: string }) => item.word === "legal_item_1") || {})[flag === "es" ? 'es' : 'en'] as string,
+    legal_item_2: (data.find((item: { word: string }) => item.word === "legal_item_2") || {})[flag === "es" ? 'es' : 'en'] as string,
+    rights_footer: (data.find((item: { word: string }) => item.word === "rights_footer") || {})[flag === "es" ? 'es' : 'en'] as string,
+    iniciar_text: (data.find((item: { word: string }) => item.word === "iniciar_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    registrarse_text: (data.find((item: { word: string }) => item.word === "registrarse_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    welcome_back_text: (data.find((item: { word: string }) => item.word === "welcome_back_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    have_you_text: (data.find((item: { word: string }) => item.word === "have_you_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    new_notifications_text: (data.find((item: { word: string }) => item.word === "new_notifications_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    view_all_text: (data.find((item: { word: string }) => item.word === "view_all_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    first_part_make_loan: (data.find((item: { word: string }) => item.word === "first_part_make_loan") || {})[flag === "es" ? 'es' : 'en'] as string,
+    first_loan_text: (data.find((item: { word: string }) => item.word === "first_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    please_enter_text: (data.find((item: { word: string }) => item.word === "please_enter_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    make_loan_text: (data.find((item: { word: string }) => item.word === "make_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    available_balance: (data.find((item: { word: string }) => item.word === "available_balance") || {})[flag === "es" ? 'es' : 'en'] as string,
+    total_income_text: (data.find((item: { word: string }) => item.word === "total_income_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    check_card_text: (data.find((item: { word: string }) => item.word === "check_card_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    check_card_text_second: (data.find((item: { word: string }) => item.word === "check_card_text_second") || {})[flag === "es" ? 'es' : 'en'] as string,
+    content_check_card_text: (data.find((item: { word: string }) => item.word === "content_check_card_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    content_check_card_text_second: (data.find((item: { word: string }) => item.word === "content_check_card_text_second") || {})[flag === "es" ? 'es' : 'en'] as string,
+    security_text: (data.find((item: { word: string }) => item.word === "security_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    content_security_text: (data.find((item: { word: string }) => item.word === "content_security_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    history_movements_text: (data.find((item: { word: string }) => item.word === "history_movements_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    learn_more_text: (data.find((item: { word: string }) => item.word === "learn_more_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    transferir_text: (data.find((item: { word: string }) => item.word === "transferir_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    simulate_loan_text: (data.find((item: { word: string }) => item.word === "simulate_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    more_text: (data.find((item: { word: string }) => item.word === "more_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    not_found_text: (data.find((item: { word: string }) => item.word === "not_found_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    text_transfer: (data.find((item: { word: string }) => item.word === 'text_transfer') || {})[flag === "es" ? 'es' : 'en'] as string,
+    text_numero_tarjeta_destino: (data.find((item: { word: string }) => item.word === 'text_numero_tarjeta_destino') || {})[flag === "es" ? 'es' : 'en'] as string,
+    text_monto_transfer: (data.find((item: { word: string }) => item.word === 'text_monto_transfer') || {})[flag === "es" ? 'es' : 'en'] as string,
+    text_description_transfer: (data.find((item: { word: string }) => item.word === 'text_description_transfer') || {})[flag === "es" ? 'es' : 'en'] as string,
+    type_description_transfer: (data.find((item: { word: string }) => item.word === 'type_description_transfer') || {})[flag === "es" ? 'es' : 'en'] as string,
+    make_transfer: (data.find((item: { word: string }) => item.word === 'make_transfer') || {})[flag === "es" ? 'es' : 'en'] as string,
+};
+}catch(e){
+    isContinue = false;
+    err = e;
+    Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
+    Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
+    return Astro.redirect("/")
+}
+
+---
+{
+    isContinue ? (
+        <Layout title="Sebxstt - Inicio">
+            <Header
+                href_image="/"
+                href_signin="./SignIn"
+                href_signup="./SignUp"
+                registrarse_text={text && text.registrarse_text ? text.registrarse_text : "Registrarse"}
+                iniciar_text={text && text.iniciar_text ? text.iniciar_text : "Iniciar sesión"}        
+                isGoogle={isGoogle}
+            ></Header>
+            {
+                initiated == "false" ? (
+                    <Banner
+                        titulo_inicio={text.titulo_inicio}
+                        nombre_inicio={text.nombre_inicio}
+                        descripcion_inicio={text.descripcion_inicio}
+                        calcular_inicio={text.calcular_inicio}
+                        titulo_item_1={text.online_title}
+                        titulo_item_2={text.cuota_title}
+                        titulo_item_3={text.pay_title}
+                        titulo_item_4={text.tasa_title}
+                    ></Banner>
+                    
+                    <Info id="SectionCenter">
+                        <div>
+                            <ArticleLeft
+                                id="online"
+                                title={text.online_title}
+                                description={text.online_description}
+                                image="/background/online.webp"
+                            ></ArticleLeft>
+                            <ArticleRight
+                                id="cuota"
+                                title={text.cuota_title}
+                                description={text.cuota_description}
+                                image="/background/cuota.webp"
+                            ></ArticleRight>
+                            <ArticleLeft
+                                id="pay"
+                                title={text.pay_title}
+                                description={text.pay_description}
+                                image="/background/pay.webp"
+                            ></ArticleLeft>
+                            <ArticleRight
+                                id="tasa"
+                                title={text.tasa_title}
+                                description={text.tasa_description}
+                                image="/background/tasa.webp"
+                            ></ArticleRight>
+                        </div>
+                    </Info>
+                ):(
+                    <BannerUser
+                        welcome_back_text={text.welcome_back_text}
+                        have_you_text={text.have_you_text}
+                        new_notifications_text={text.new_notifications_text}
+                        view_all_text={text.view_all_text}
+                        first_part_make_loan={text.first_part_make_loan}
+                        first_loan_text={text.first_loan_text}
+                        please_enter_text={text.please_enter_text}
+                        make_loan_text={text.make_loan_text}
+                        available_balance={text.available_balance}
+                        total_income_text={text.total_income_text}
+                        check_card_text={text.check_card_text}
+                        check_card_text_second={text.check_card_text_second}
+                        content_check_card_text={text.content_check_card_text}
+                        content_check_card_text_second={text.content_check_card_text_second}
+                        security_text={text.security_text}
+                        content_security_text={text.content_security_text}
+                        history_movements_text={text.history_movements_text}
+                        learn_more_text={text.learn_more_text}
+                        transferir_text={text.transferir_text}
+                        simulate_loan_text={text.simulate_loan_text}
+                        more_text={text.more_text}
+                        not_found_text={text.not_found_text}
+                    ></BannerUser>
+                )
+            }
+            <Footer
+                recursos_footer_titulo={text.recursos_footer_titulo}
+                recursos_item_1={text.recursos_item_1}
+                recursos_item_2={text.recursos_item_2}
+                recursos_item_3={text.recursos_item_3}
+                recursos_item_4={text.recursos_item_4}
+                siganos_footer_titulo={text.siganos_footer_titulo}
+                siganos_item_1={text.siganos_item_1}
+                siganos_item_2={text.siganos_item_2}
+                legal_footer_titulo={text.legal_footer_titulo}
+                legal_item_1={text.legal_item_1}
+                legal_item_2={text.legal_item_2}
+                rights_footer={text.rights_footer}
+            ></Footer>
+            {
+                initiated == "false" ? (
+                    <ArrowFloat id="ButtonFloat"></ArrowFloat>
+                ):(
+                    <div></div>
+                )
+            }
+            <PopupTransfer
+                text_transfer={text.text_transfer}
+                text_numero_tarjeta_destino={text.text_numero_tarjeta_destino}
+                text_monto_transfer={text.text_monto_transfer}
+                text_description_transfer={text.text_description_transfer}
+                type_description_transfer={text.type_description_transfer}
+                make_transfer={text.make_transfer}
+            ></PopupTransfer>
+            {
+                RegisterIncomplete == true ? (
+                    <PopupBase
+                        class="relative w-[30rem] -top-10 py-5 rounded-md z-10 bg-slate-700 mb-5" 
+                        id="popup-center-forward" 
+                        class_content="hidden h-screen fixed" 
+                        id_inter_content="popup-inter-forward"
+                        id_background="background-popup-forward" 
+                        id_close="close-forward"
+                    ></PopupBase>
+                ):(
+                    <PopupBase
+                        class="relative w-[30rem] -top-10 py-5 rounded-md z-10 bg-slate-700 mb-5" 
+                        id="popup-center-forward" 
+                        class_content="hidden h-screen fixed" 
+                        id_inter_content="popup-inter-forward"
+                        id_background="background-popup-forward" 
+                        id_close="close-forward"
+                    ></PopupBase>
+                )
+            }
+        </Layout>
+    ): (
+        <div>
+            {err}
+        </div>
+    )
+}
+

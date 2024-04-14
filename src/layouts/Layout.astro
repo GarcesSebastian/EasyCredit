@@ -1,0 +1,93 @@
+---
+import '@fontsource/poppins';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="#" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" defer></script>
+		<script src="../js/index.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body translate="no">
+		<div class="fixed top-0 z-[-2] h-screen w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+		<main class="flex flex-col items-center">
+			<div class="absolute bg-slate-600 rounded-lg max-w-[230px] p-2 shadow-lg shadow-gray-800 text-xs z-10 transition-all duration-300 hidden" id="popup-simulate-loan">
+				<span id="span-simulate-loan" class="text-white font-bold ">
+					El monto debe ser mayor a 500k y menor a 4M.
+				</span>
+			</div>
+			<slot />
+		</main>
+		<script src="../js/front.js"></script>
+		<script src="../js/graph.js"></script>
+		<script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+	</body>
+</html>
+<style is:global>
+	:root {
+
+	}
+
+	*{
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		text-decoration: none;
+	}
+
+	html {
+		font-family: 'Poppins', system-ui, sans-serif;
+		color-scheme: dark light;
+		scroll-behavior: smooth;
+	}
+
+	body{
+		min-width: 100vw;
+		min-height: 100vh;
+		overflow-x:hidden;
+	}
+
+	input[type="number"]::-webkit-inner-spin-button,
+	input[type="number"]::-webkit-outer-spin-button,
+	input[type="number"]::-webkit-clear-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	*::-webkit-scrollbar {
+		width: 16px;
+	}
+
+	*::-webkit-scrollbar-track {
+		background-color: transparent;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: #d6dee1;
+	}
+	*::-webkit-scrollbar-thumb {
+		background-color: #d6dee1;
+		border-radius: 20px;
+	}
+	*::-webkit-scrollbar-thumb {
+		background-color: #d6dee1;
+		border-radius: 20px;
+		border: 6px solid transparent;
+		background-clip: content-box;
+	}
+
+</style>
+

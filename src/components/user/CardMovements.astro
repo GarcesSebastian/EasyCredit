@@ -1,0 +1,76 @@
+---
+interface Props{
+    titulo: string,
+    not_found: string,
+    more: string,
+    num_movements: number,
+}
+
+const {titulo, not_found, more, num_movements} = Astro.props;
+---
+
+<span class="relative flex justify-start flex-col col-span-1 gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105" id="card_movements">
+    <div class="flex w-full justify-between items-center">
+        <h1 class="text-white font-bold">
+            {titulo}
+        </h1>
+    </div>
+
+    <div class="flex flex-col gap-y-1 justify-center items-start w-full">
+        {
+            num_movements > 0 ?(
+                <div id="slot_card" class="flex flex-col w-full gap-4 pr-0 pb-5">
+                    <slot/>
+
+                    <span id="showMovements" class="text-white text-sm font-bold text-right hover:text-blue-500 absolute bottom-5 right-7">
+                        {more}...
+                    </span>
+                </div>
+            ):(
+                <span class="text-gray-300">
+                    {not_found}
+                </span>
+            )
+        }
+    </div>
+</span>
+
+<style>
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+      background: rgb(255, 255, 255, 0);
+      border-radius: 30px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #777;
+      border-radius: 30px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgb(255, 255, 255, 0);
+      border-radius: 30px;
+    }
+
+    @media (max-width: 1160px) {
+        #card_movements{
+            grid-column: span 2 / 2 span;
+        }
+    }  
+
+    @media (max-width: 1024px) {
+        #card_movements{
+            grid-column: span 2 / 2 span;
+        }
+    }
+
+    @media (max-width: 890px) {
+        #card_movements{
+            grid-column: span 4 / 4 span;
+        }
+    }
+
+</style>

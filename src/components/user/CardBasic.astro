@@ -1,0 +1,44 @@
+---
+interface Props{
+    img_url: string;
+    balance_text: any;
+    available_balance_text: string;
+}
+
+const {img_url, balance_text, available_balance_text} = Astro.props;
+---
+
+<span class="flex items-end gap-x-2 justify-between w-full ">
+    <div class="flex justify-center items-center">
+        <img src={img_url} alt="" class="w-16 h-16 filter drop-shadow-lg">
+    </div>
+
+    <div class="center flex flex-col gap-y-1 justify-center text-right">
+        <h1 class="text-white font-bold">
+            ${balance_text}
+        </h1>
+
+        <span class="text-gray-300">
+            {available_balance_text}
+        </span>
+    </div>
+</span>
+
+<style>
+    .drop-shadow-lg {
+      --tw-drop-shadow: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.06)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.6));
+    }
+
+    @media (max-width: 880px) {
+        span{
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            row-gap: 1rem;
+        }
+
+        span .center{
+            text-align: center;
+        }
+    }
+</style>

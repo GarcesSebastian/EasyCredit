@@ -1,0 +1,15 @@
+---
+interface Props{
+    text_button: string;
+}
+
+const {text_button} = Astro.props;
+---
+
+<span class="flex row-span-1 gap-x-5 w-full px-3 items-center justify-left py-3 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+    <div class="flex w-full gap-y-1 justify-center items-center">
+        <button class="bg-white flex justify-center items-center text-black rounded-lg px-4 py-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+            {text_button}
+        </button>
+    </div>
+</span>

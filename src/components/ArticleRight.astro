@@ -1,0 +1,28 @@
+---
+    interface Props{
+        id: string;
+        title: string;
+        description: string;
+        image: string;
+    }
+
+    const {id, title, description, image} = Astro.props;
+---
+
+<article id={id} class="relative w-full p-8 flex flex-row-reverse justify-around items-center gap-x-5 max-md:flex-col max-md:gap-y-5 mt-20">
+    <div id="background-blur" class="absolute w-full h-full flex bg-[rgba(255,255,255,.02)] border border-gray-600 rounded-lg backdrop-blur-lg"></div>
+
+    <div class="max-w-[37rem] max-lg:max-w-[25rem] max-md:max-w-full flex flex-col gap-y-5 justify-center items-start relative">
+        <h1 class="bg-gradient-to-br from-yellow-300 to-yellow-600 bg-clip-text text-transparent text-4xl font-bold mb-4">
+            {title}
+        </h1>
+
+        <p class="text-gray-100 text-lg">
+            {description}
+        </p>
+    </div>
+
+    <div class="w-fit h-fit relative">
+        <img src={image} alt="Proceso en línea" class="w-[25rem] max-lg:w-[20rem] h-auto" />
+    </div>
+</article>

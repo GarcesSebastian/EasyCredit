@@ -1,0 +1,352 @@
+---
+import CardBasic from '../user/CardBasic.astro';
+import CardUser from '../user/CardUser.astro';
+import CardMovements from '../user/CardMovements.astro';
+import CardMovementsArtcile from "../user/CardMovementsArticle.astro"
+
+
+const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
+const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
+const flag = (Astro.cookies.get("flag") || {})?.value;
+
+
+interface Props {
+    welcome_back_text: string,
+    have_you_text: string,
+    new_notifications_text: string,
+    view_all_text: string,
+    first_part_make_loan: string,
+    first_loan_text: string,
+    please_enter_text: string,
+    make_loan_text: string,
+    available_balance: string,
+    total_income_text: string,
+    check_card_text: string,
+    check_card_text_second: string,
+    content_check_card_text: string,
+    content_check_card_text_second: string,
+    security_text: string,
+    content_security_text: string,
+    history_movements_text: string,
+    learn_more_text: string,
+    transferir_text: string,
+    simulate_loan_text: string,
+    more_text: string,
+    not_found_text: string,
+}
+
+const {
+    welcome_back_text,
+    have_you_text,
+    new_notifications_text,
+    view_all_text,
+    first_part_make_loan,
+    first_loan_text,
+    please_enter_text,
+    make_loan_text,
+    available_balance,
+    total_income_text,
+    check_card_text,
+    content_check_card_text,
+    check_card_text_second,
+    content_check_card_text_second,
+    security_text,
+    content_security_text,
+    history_movements_text,
+    transferir_text,
+    simulate_loan_text,
+    more_text,
+    not_found_text,
+} = Astro.props;
+
+//Hacer Try Catch
+let response_data_user: Response;
+let response_user_exist: Response;
+
+let data_user_exist: any;
+let data_user: any;
+let data_movements_incomplete: any;
+
+let isContinue = true;
+let err: any;
+
+try{
+    if(initiated != "false"){
+        response_user_exist = await fetch(`http://localhost:4000/user/exists?id_user=${id_user}`);
+        data_user_exist = await response_user_exist.json();
+
+        if(data_user_exist.state == "Good Request"){
+            response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
+            data_user = await response_data_user.json();
+            
+            data_movements_incomplete = data_user.user_movements_incomplete.filter((data: { id_user: any; }) => data.id_user === data_user.user_info[0].id_user);
+        }else{
+            throw new Error("Error in the request to the server");
+        }
+    }
+}catch(e){
+    isContinue = false;
+    err = e;
+}
+---
+{
+    isContinue && data_user && data_user.user_info[0] && data_user.user_info[0].saldo_disponible ? (
+        <section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
+            <article class="w-full flex flex-col justify-center items-center h-fit py-10 bg-gradient-to-r to-[#0074D3] from-[#0040A8]">
+                <div class="w-full h-fit gap-x-5 flex flex-col justify-between items-start max-w-7xl max-xl:px-5">
+                    <nav
+                        class="flex px-5 py-3 w-fit ml-0 mb-3 -mt-8 rounded-lg bg-gray-800 border-gray-700 drop-shadow-lg"
+                        aria-label="Breadcrumb"
+                    >
+                        <ol
+                        class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse"
+                        >
+                        <li class="inline-flex items-center">
+                            <a
+                            href="/"
+                            class="inline-flex items-center text-sm font-medium hover:text-blue-600 text-gray-400"
+                            >
+                            <svg
+                                class="w-3 h-3 me-2.5"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"
+                                ></path>
+                            </svg>
+                            Home
+                            </a>
+                        </li>
+                        </ol>
+                    </nav>
+
+                    <div id="content-banner-grid" class="w-full gap-7">
+                        <div id="content-grid-elements" class="grid grid-cols-4 grid-rows-2 gap-y-5 gap-x-7 w-full h-full ">
+
+                            <div id="card_balance" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <CardBasic
+                                img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
+                                balance_text={data_user.user_info[0]?.saldo_disponible ?? 0}
+                                available_balance_text={available_balance}
+                                >
+                                </CardBasic>
+                            </div>
+
+                            <div id="card_pays" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <CardUser
+                                    num_id={data_user.user_info[0].number_card}
+                                    nombre={data_user.user_info[0].name_user}
+                                    date={data_user.user_register[0].fecha_creacion}
+                                    code={data_user.user_info[0].id_user}
+                                >
+                                </CardUser>
+                            </div>
+
+                            <div id="welcome" class="flex col-span-3 row-span-1 justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <h1 class="text-4xl font-bold text-white">
+                                    {welcome_back_text}<span class="text-yellow-500">{data_user.user_info[0].name_user}</span>!
+                                </h1>
+                
+                                <div>
+                                    <span class="text-white">
+                                        <p>
+                                            {have_you_text} <span class="text-red-500 font-bold">{data_user.user_notifications[0].numero_notifications}</span> {new_notifications_text}
+                                        </p>
+                                    </span>
+                
+                                    <button id="btn-all-notifications" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                        {view_all_text}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="card_balance_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <CardBasic
+                                img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
+                                balance_text={data_user.user_info[0]?.saldo_disponible ?? 0}
+                                available_balance_text={available_balance}
+                                >
+                                </CardBasic>
+                            </div>
+
+                            <div id="make_loan" class="flex col-span-3 row-span-1 justify-around flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <h1 class="text-white text-2xl font-bold">
+                                    {first_part_make_loan} <span class="text-yellow-400">{first_loan_text}</span>? {please_enter_text}
+                                </h1>
+
+                                <button id="button-loan" class="bg-white w-fit text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                    {make_loan_text}
+                                </button>
+                            </div>
+
+                            <div id="card_pays_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <CardUser
+                                    num_id={data_user.user_info[0].number_card}
+                                    nombre={data_user.user_info[0].name_user}
+                                    date={data_user.user_register[0].fecha_creacion}
+                                    code={data_user.user_info[0].id_user}
+                                >
+                                </CardUser>
+                            </div>
+                            
+                            <div id="credit" class="flex col-span-1 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <h1 class="text-white text-lg font-bold">
+                                    {check_card_text}
+                                </h1>
+                                <p class="text-white">{content_check_card_text}</p>
+
+                                <button id="button-simulate-loan" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                    {simulate_loan_text}
+                                </button>
+                            </div>
+
+                            <div id="security" class="flex col-span-2 justify-around row-span-1 flex-col gap-3 gap-x-5 w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
+                                <h1 class="text-white text-lg font-bold">
+                                    {security_text}
+                                </h1>
+                                <p class="text-white">{content_security_text}</p>
+
+                                <button id="button-transfer" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
+                                    {transferir_text}
+                                </button>
+                            </div> 
+                                      
+                            <CardMovements
+                            titulo={history_movements_text}
+                            not_found={not_found_text}
+                            more={more_text}
+                            num_movements={data_movements_incomplete.length}
+                            >
+                            {
+                                data_movements_incomplete.map((item: { tipo_movement: string; fecha_movement: string; action_movement: any; state_movement: string; message: string; id_movement: number}) => (
+                                    
+                                    <CardMovementsArtcile
+                                    type_loan_text={item.tipo_movement}
+                                    date_text={item.fecha_movement}
+                                    amount={item.action_movement}
+                                    is_positive={item.state_movement}
+                                    message={item.message}
+                                    id_movement={item.id_movement}
+                                    />
+                                ))
+                            }
+                            </CardMovements>
+
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <style>
+            #content-banner-grid{
+                grid-template-columns: 2fr minmax(0, 22rem);
+            }
+
+            #content-grid-elements{
+                grid-template-columns: 1fr 1fr .5fr 1fr;
+            }
+
+            #card_balance{
+                display: none;
+            }
+
+            #card_pays{
+                display: none;
+            }
+
+            @media (max-width: 1160px) {
+                #security{
+                    grid-column: span 2 / 2 span;
+                }
+
+                #credit{
+                    grid-column: span 4 / 4 span;
+                }
+            }
+
+            @media (max-width: 950px) {
+                #make_loan{
+                    grid-column: span 2 / 2 span;
+                }
+
+                #card_pays_principal{
+                    grid-column: span 2 / 2 span;
+                }
+
+                #card_balance_principal{
+                    grid-column: span 2 / 2 span;
+                }
+
+                #welcome{
+                    grid-column: span 2 / 2 span;
+                }  
+
+            }
+
+            @media (max-width: 890px) {
+                #security{
+                    grid-column: span 4 / 4 span;
+                }
+            }
+
+            @media (max-width: 840px) {
+                #welcome h1{
+                    font-size: 1.7rem;
+                }
+            }
+
+            @media (max-width: 640px) {
+                #security{
+                    grid-column: span 4 / 4 span;
+                }
+
+                #credit{
+                    grid-column: span 4 / 4 span;
+                }
+            }
+
+            @media (max-width: 600px) {
+                #welcome{
+                    grid-column: span 4 / 4 span;
+                }
+
+                #make_loan{
+                    grid-column: span 4 / 4 span;
+                }
+
+                #card_balance{
+                    display: flex;
+                    grid-column: span 4 / 4 span;
+                }
+
+                #card_pays{
+                    display: flex;
+                    grid-column: span 4 / 4 span;
+                }
+
+                #card_pays_principal{
+                    display: none;
+                }
+
+                #card_balance_principal{
+                    display: none;
+                }
+            }
+
+        </style>
+    ): (
+        <div>
+            {err}
+        </div>
+    )
+}
+
+<style>
+    .drop-shadow-lg {
+      --tw-drop-shadow: drop-shadow(0 0px 8px rgba(0, 0, 0, 0.06)) drop-shadow(0 0px 3px rgba(0, 0, 0, 0.6));
+    }
+</style>

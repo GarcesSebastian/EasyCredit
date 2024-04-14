@@ -1,0 +1,58 @@
+---
+interface Props{
+    type_loan_text: string;
+    date_text: string;
+    amount: any;
+    is_positive: string;
+    message: string;
+    id_movement: number;
+}
+
+const {type_loan_text, date_text, amount, is_positive, message, id_movement} = Astro.props;
+---
+
+<div id="item_movement" class="flex justify-between items-center bg-gradient-to-r to-[#0074D3] from-[#0040A8] rounded-[.3rem] py-1 px-2 hover:scale-105 transition-all duration-300" data-id={id_movement}>
+    <div class="flex justify-center items-center gap-x-3">
+        <div>
+            {
+                type_loan_text === "Bank Loan" ? (
+                    <img src={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"} alt="" class="w-12 h-12 drop-shadow-lg" />
+                ) : type_loan_text === "Transfer" ? (
+                    <img src={"https://img.icons8.com/?size=48&id=vqyoQCZ3fPp5&format=png"} alt="" class="w-12 h-12 drop-shadow-lg" />
+                ) : (
+                    <img src={"https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"} alt="" class="w-12 h-12 drop-shadow-lg" />
+                )
+            }
+              
+        </div>
+
+        <div class="flex flex-col">
+            <span class="text-white text-sm font-bold">
+                {type_loan_text}
+            </span>
+            <span class="text-gray-300 text-xs font-bold">
+                {date_text}
+            </span>
+        </div>
+    </div>
+
+    <div>
+        {
+        is_positive == "positivo" ? (
+            <span id="positive" class="text-lime-400 font-bold text-sm">
+                +{amount}$
+            </span>
+        ): (
+            <span id="negative" class="text-red-400 font-bold text-sm">
+                -{amount}$
+            </span>
+        )
+        }
+    </div>
+</div>
+
+<style>
+    .drop-shadow-lg {
+      --tw-drop-shadow: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.4));
+    }
+</style>
