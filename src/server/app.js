@@ -18,7 +18,7 @@ app.set("port", port);
 // Middlewares
 app.use(cors({
     origin: (origin, callback) => {
-      const allowedOrigins = ['http://localhost:4321', 'http://localhost:4322', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
+      const allowedOrigins = ['http://localhost:4321', 'http://localhost:4322', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms", "http://localhost:4000/"];
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true);
       } else {

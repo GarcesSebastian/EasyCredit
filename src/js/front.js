@@ -416,6 +416,7 @@ if(
     document.querySelector("#background-popup-forward")
     && document.querySelector("#popup-center-forward")
     && document.querySelector("#close-forward") 
+    && document.querySelector("#background-popup-forward-code")
 ){
     document.querySelector("#background-popup-forward").addEventListener("click", () => {
         document.querySelector("#popup-center-forward").style.display = "none";

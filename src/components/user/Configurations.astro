@@ -1,5 +1,6 @@
 ---
-
+import ButtonConfigurations from "./Button_Configurations.astro";
+import BtnSubConfigurations from "./Btn-Sub-Configurations.astro";
 ---
 
 <section
@@ -11,62 +12,95 @@
     class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-md:w-[55rem] p-5 flex flex-col gap-4 animate-displace"
   >
     <header
-      class="flex justify-between items-center p-4 border-b-2 border-blue-500"
+      class="flex justify-between items-center p-4 bg-transparent border-b-2 border-blue-500"
     >
       <h1 class="text-2xl text-white max-[490px]:text-lg">Configuraciones</h1>
-      <div id="moreOptions" class="cursor-pointer">
-        <svg
-          id="options-configurations"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="icon icon-tabler icons-tabler-outline icon-tabler-dots"
-          ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
-            d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path
-            d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path
-            d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path></svg
-        >
-      </div>
     </header>
 
-    <div id="submenu-configurations" class="hidden bg-slate-700 p-1 rounded-[4px] animate-deployment">
-      <button
-        id=""
-        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
-        >Crear</button
-      >
-      <button
-        id=""
-        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
-        >Borrar</button
-      >
-      <button
-        id=""
-        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
-        >Borrar todo</button
-      >
+    <div id="content-information" class="pt-1 flex flex-col gap-3 overflow-y-auto overflow-x-hidden px-3">
+        <!-- Content for information -->
+        <ButtonConfigurations id="btn-settings-notifications" text="Notificaciones" />
+          <ul id="content-list-notifications" class="pl-3 flex-col gap-3 animate-deployment hidden [&>*:last-child]:mb-3">
+            <li class="flex justify-start items-center gap-3">
+              <span class="uppercase font-bold text-gray-300">
+                Recibir notificaciones por correo
+              </span>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" value="" class="sr-only peer" checked>
+                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </li>
+            <li class="flex justify-start items-center gap-3">
+              <span class="uppercase font-bold text-gray-300">
+                Recibir notificaciones por SMS
+              </span>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" value="" class="sr-only peer" checked>
+                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </li>
+          </ul>
+        <ButtonConfigurations id="btn-settings-personal" text="Informacion Personal" />
+        <div id="content-list-personal" class="hidden animate-deployment flex-col gap-3 [&>*:last-child]:mb-3">
+          <BtnSubConfigurations id="btn-settings-personal-name" text="Cambiar Nombre"/>
+          <BtnSubConfigurations id="btn-settings-personal-phone" text="Cambiar Numero de Telefono"/>
+          <BtnSubConfigurations id="btn-settings-personal-email" text="Cambiar Correo Electronico"/>
+        </div>
+        <ButtonConfigurations id="btn-settings-security" text="Informacion de Seguridad" />
+        <div id="content-list-security" class="hidden animate-deployment flex-col gap-3 [&>*:last-child]:mb-3">
+          <BtnSubConfigurations id="btn-settings-security-name" text="Cambiar Numero de Identificación"/>
+          <BtnSubConfigurations id="btn-settings-security-phone" text="Cambiar Contraseña"/>
+          <BtnSubConfigurations id="btn-settings-security-password" text="Cambiar Correo de 2FA"/>
+        </div>
+        <ButtonConfigurations id="btn-settings-2fa" text="Verificacion de dos Pasos" />
+        <ul id="content-list-2fa" class="pl-3 flex-col gap-3 animate-deployment hidden [&>*:last-child]:mb-3">
+          <li class="flex justify-start items-center gap-3">
+            <span class="uppercase font-bold text-gray-300">
+              Activar Verificacion de dos Pasos
+            </span>
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" value="" class="sr-only peer" checked>
+              <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </li>
+        </ul>
+        <ButtonConfigurations id="btn-settings-delete" text="Eliminar Cuenta" />
+        <div id="content-list-delete" class="hidden animate-deployment">
     </div>
 
   </div>
 </section>
 
 <script>
-  let menuIcon = document.getElementById("options-configurations") as HTMLElement;
-  let subMenu = document.getElementById("submenu-configurations") as HTMLDivElement;
+  let btn_settings_notifications = document.querySelector("#btn-settings-notifications");
+  let btn_settings_personal = document.querySelector("#btn-settings-personal");
+  let btn_settings_security = document.querySelector("#btn-settings-security");
+  let btn_settings_2fa = document.querySelector("#btn-settings-2fa");
+  let btn_setings_delete = document.querySelector("#btn-settings-delete");
 
-  menuIcon.addEventListener("click", () => {
-    if (window.getComputedStyle(subMenu).display === "none"){
-      subMenu.style.display = "flex";
-    } else {
-      subMenu.style.display = "none";
-    }
-  });
+  btn_settings_notifications?.addEventListener("click", () => {
+    let content_list_notifications = document.querySelector("#content-list-notifications") as HTMLDivElement;
+    content_list_notifications.style.display = window.getComputedStyle(content_list_notifications).display == "none" ? "flex" : "none";
+  })
+
+  btn_settings_personal?.addEventListener("click", () => {
+    let content_list_personal = document.querySelector("#content-list-personal") as HTMLDivElement;
+    content_list_personal.style.display = window.getComputedStyle(content_list_personal).display == "none" ? "flex" : "none";
+  })
+
+  btn_settings_security?.addEventListener("click", () => {
+    let content_list_security = document.querySelector("#content-list-security") as HTMLDivElement;
+    content_list_security.style.display = window.getComputedStyle(content_list_security).display == "none" ? "flex" : "none";
+  })
+
+  btn_settings_2fa?.addEventListener("click", () => {
+    let content_list_2fa = document.querySelector("#content-list-2fa") as HTMLDivElement;
+    content_list_2fa.style.display = window.getComputedStyle(content_list_2fa).display == "none" ? "flex" : "none";
+  })
+
+  btn_setings_delete?.addEventListener("click", () => {
+    console.log("Click")
+  })
 
   let btnNotification = document.querySelector(
     "#button_configurations",
@@ -79,7 +113,7 @@
   ) as HTMLDivElement;
 
   btnNotification?.addEventListener("click", () => {
-    (document.querySelector("#list_config") as HTMLElement).style.display = "none";
+    (document.querySelector("#list_config") as HTMLDivElement).style.display = "none";
     barNotifications.style.display =
       window.getComputedStyle(barNotifications).display === "none"
         ? "flex"
@@ -94,27 +128,3 @@
   });
 
 </script>
-
-<style>
-  #allNotifications::-webkit-scrollbar {
-    width: 16px;
-  }
-
-  #allNotifications::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-
-  #allNotifications::-webkit-scrollbar-thumb {
-    background-color: #d6dee1;
-  }
-  #allNotifications::-webkit-scrollbar-thumb {
-    background-color: #d6dee1;
-    border-radius: 20px;
-  }
-  #allNotifications::-webkit-scrollbar-thumb {
-    background-color: #d6dee1;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    background-clip: content-box;
-  }
-</style>
