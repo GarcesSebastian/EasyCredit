@@ -49,19 +49,11 @@ function initFlagKeyCook(){
         }else{
             if(getCookie("flag") == "es"){
                 if(actual_element.getAttribute("data-flag-now") != "es"){
-<<<<<<< HEAD
                     changeFlag("es", "../../flags/espana.svg")
                 }
             }else if(getCookie("flag") == "en"){
                 if(actual_element.getAttribute("data-flag-now") != "en"){
                     changeFlag("en", "../../flags/usa.svg")
-=======
-                    changeFlag("es", "../../public/flags/espana.svg")
-                }
-            }else if(getCookie("flag") == "en"){
-                if(actual_element.getAttribute("data-flag-now") != "en"){
-                    changeFlag("en", "../../public/flags/usa.svg")
->>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
                 }
             }
             actual_element.querySelector("img").src = actual_element.getAttribute("data-flag-src");
