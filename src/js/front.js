@@ -569,7 +569,10 @@ async function send_req_loan(){
     
             if(response_message.state === "Bad Request"){
                 if(response_message.message === "Numero de Identificacion Invalido."){
+<<<<<<< HEAD
                     isContinueLoanReq = true;
+=======
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
                     let id = elements_loan.input_id_loan.id.toString();
                     let id_without_input = id.split("input")[1];
                     let id_with_err = "err" + id_without_input;
@@ -577,7 +580,10 @@ async function send_req_loan(){
                     document.querySelector("#" + id_with_err).innerHTML = "* " + response_message.message
                     elements_loan.input_id_loan.style.borderColor = "tomato";
                 }else if(response_message.message === "Correo Electronico no valido."){
+<<<<<<< HEAD
                     isContinueLoanReq = true;
+=======
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
                     let id = elements_loan.input_email.id.toString();
                     let id_without_input = id.split("input")[1];
                     let id_with_err = "err" + id_without_input;
@@ -688,7 +694,10 @@ async function send_req_transfer(){
             let response_message = await response_user_loan.json();
     
             if(response_message.state === "Bad Request"){
+<<<<<<< HEAD
                 isContinueTransferReq = true;
+=======
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
                 if(response_message.message === "Numero de Identificacion Invalido."){
                     let id = elements_transfer.input_numero_tarjeta.id.toString();
                     let id_without_input = id.split("input")[1];

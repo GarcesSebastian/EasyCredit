@@ -13,6 +13,18 @@ export default defineConfig({
       "/api": `http://localhost:${PORT}`
     }
   },
+<<<<<<< HEAD
   output: "server",
   adapter: vercel()
+=======
+  output: "hybrid",
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+    maxDuration: 8,
+    imageService: true,
+    devImageService: true,
+  }),
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
 });

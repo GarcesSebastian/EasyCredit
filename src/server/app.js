@@ -2,7 +2,11 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import * as database from "./database.js";
+<<<<<<< HEAD
 import CryptoJS from 'crypto-js';
+=======
+import bcrypt from 'bcrypt';
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
 import { createServer } from 'node:http';
 // import { Server } from 'socket.io';
 import nodemailer from 'nodemailer';
@@ -18,7 +22,11 @@ app.set("port", port);
 // Middlewares
 app.use(cors({
     origin: (origin, callback) => {
+<<<<<<< HEAD
       const allowedOrigins = ['http://localhost:4321', 'http://localhost:4322', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms"];
+=======
+      const allowedOrigins = ['http://localhost:4322', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms", "https://easy-credit.vercel.app"];
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true);
       } else {
@@ -111,9 +119,15 @@ app.post("/register/auth", async (req, res) => {
             return;
         }
 
+<<<<<<< HEAD
         const hashedPassword = CryptoJS.SHA256(req.body.password).toString(CryptoJS.enc.Hex);
         const hashedNumero_telefono = CryptoJS.SHA256(req.body.numero_telefono).toString(CryptoJS.enc.Hex);
         const hashedNumero_identidad = CryptoJS.SHA256(req.body.numero_identidad).toString(CryptoJS.enc.Hex);
+=======
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const hashedNumero_telefono = await bcrypt.hash(req.body.numero_telefono, 10);
+        const hashedNumero_identidad = await bcrypt.hash(req.body.numero_identidad, 10);
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
 
         let year = new Date().getFullYear().toString().split("");
         year = year[year.length - 2] + year[year.length - 1]
@@ -170,8 +184,13 @@ app.post("/auth/google", async (req, res) => {
 
             if(emailExists[0].numero_identidad == "google" && emailExists[0].numero_telefono == "google"){
                 if(req.body.numero_identidad && req.body.numero_telefono){
+<<<<<<< HEAD
                     const hashedNumero_telefono = CryptoJS.SHA256(req.body.numero_telefono).toString(CryptoJS.enc.Hex);
                     const hashedNumero_identidad = CryptoJS.SHA256(req.body.numero_identidad).toString(CryptoJS.enc.Hex);
+=======
+                    const hashedNumero_telefono = await bcrypt.hash(req.body.numero_telefono, 10);
+                    const hashedNumero_identidad = await bcrypt.hash(req.body.numero_identidad, 10);
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
 
                     await connection.query("UPDATE registers SET numero_identidad = ?, numero_telefono = ?, estado = ? WHERE email = ?", [hashedNumero_identidad, hashedNumero_telefono, true, req.body.email]);
                     return res.status(200).json({ status: "Good Request", message: "Login Successful", id: emailExists[0].id });
@@ -255,9 +274,17 @@ app.post("/login/auth", async (req, res) => {
         if (!emailExists.length > 0) {
             res.status(400).json({ message: "Correo electrónico incorrecto." });
         } else {
+<<<<<<< HEAD
             const hashedPassword = CryptoJS.SHA256(req.body.password).toString(CryptoJS.enc.Hex);
 
             if (emailExists[0].password === hashedPassword) {
+=======
+            const hashedPassword = emailExists[0].password;
+
+            const passwordMatch = await bcrypt.compare(req.body.password, hashedPassword);
+
+            if (passwordMatch) {
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
                 connection.query("UPDATE registers SET estado = ? WHERE email = ?", [true, req.body.email]);
                 res.status(200).json({ message: "Login Successful", id: emailExists[0].id});
             } else {
@@ -289,7 +316,11 @@ app.post("/user/loan", async (req, res) => {
 
         if(data_user_basic.length > 0 && data_user_import.length > 0){
             if(data_user_basic[0].id_user == req.body.id_client){
+<<<<<<< HEAD
                 let is_id = CryptoJS.SHA256(id_loan).toString(CryptoJS.enc.Hex) == data_user_import[0].numero_identidad;
+=======
+                let is_id = await bcrypt.compare(id_loan,data_user_import[0].numero_identidad || 0);
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
                 if(is_id){
                     let sumary_action = parseFloat(action_loan) + parseFloat(data_user_basic[0].saldo_disponible);
                     
@@ -531,6 +562,7 @@ app.post("/password/change", async (req, res) => {
         let password = req.body.password;
 
         const user = await connection.query("SELECT password FROM registers WHERE email = ?", [email]);
+<<<<<<< HEAD
         const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
 
         if (user.length === 0) {
@@ -541,12 +573,24 @@ app.post("/password/change", async (req, res) => {
             return res.status(400).send({ state: "Bad Request", message: "La nueva contraseña no puede ser igual a la anterior" });
         }
 
+=======
+        const isSamePassword = await bcrypt.compare(password, user[0].password);
+        if (isSamePassword) {
+            return res.status(400).send({ state: "Bad Request", message: "La nueva contraseña no puede ser igual a la anterior" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
         await connection.query("UPDATE registers SET password = ? WHERE email = ?", [hashedPassword, email]);
         await connection.query("DELETE FROM codes WHERE email = ?", [email]);
 
         res.status(200).send({ state: "Good Request", message: "Contraseña Cambiada" });
+<<<<<<< HEAD
     } else {
         res.status(400).send({ state: "Bad Request" });
+=======
+>>>>>>> 0c2d0a61c9164fe5918923877d6d9661dc4580e8
     }
 });
 
