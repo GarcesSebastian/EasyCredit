@@ -36,7 +36,7 @@ const {num_id, date, nombre, code} = Astro.props;
     </svg>
 </div>
 <div id="contentTarget" class="flex flex-col gap-2">
-    <p class="text-lg text-white">{num_id}</p>
+    <p id="id-card" class="text-lg text-white">{num_id}</p>
     <p class="text-white">{date}</p>
 </div>
 <div id="contentTarget" class="p-1 mt-0">
@@ -44,6 +44,7 @@ const {num_id, date, nombre, code} = Astro.props;
         {nombre}
     </h2>
 </div>
+
 
 <style>
     @media(max-width 620px;){

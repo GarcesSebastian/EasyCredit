@@ -1,0 +1,81 @@
+---
+    interface Props{
+        tipo_movement: string;
+        origin: string;
+        action_movement: number;
+        state_movement: string;
+        fecha_movement: string;
+        message: string;
+        id_movement: number;
+    }
+
+    const { tipo_movement, origin, action_movement, state_movement, fecha_movement, message, id_movement } = Astro.props;
+---
+
+<article id="movement" class="bg-gradient-to-r to-[#0074D3] from-[#0040A8] shadow-lg flex flex-col rounded-lg" data-id-movement={id_movement}>
+    <div id="preview" class="flex items-center p-5 justify-between">
+        {
+            tipo_movement == "Transfer" ? (
+                <div id="logo">
+                    <img
+                    class="size-12"
+                    src="https://img.icons8.com/?size=48&id=vqyoQCZ3fPp5&format=png"
+                    alt=""
+                    />
+                </div>
+            ) : (
+                <div id="logo">
+                    <img
+                    class="size-12"
+                    src="https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"
+                    alt=""
+                    />
+                </div>
+            )
+        }
+
+        <div id="data" class="text-center">
+            <h3 class="text-xl text-white">{tipo_movement}</h3>
+        </div>
+
+        <div id="more" class="cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 9l6 6l6 -6"></path>
+            </svg>
+        </div>
+
+    </div>
+
+    <div id="info"  class="hidden flex-col gap-3 px-5 py-3 text-white border-t-2 animate-deployment">
+
+        <h3 class="flex gap-2 text-lg">
+            De:<p class="font-semibold">{origin}</p>
+        </h3>
+        
+        <h3 class="flex gap-2 text-lg">
+            Movimiento:
+            {
+                state_movement == "positivo" ? (
+                    <p class="font-bold text-green-400">
+                        +{action_movement}$
+                    </p>
+                ) : (
+                    <p class="font-bold text-red-400">
+                        -{action_movement}$
+                    </p>
+                )
+            }
+        </h3>
+
+        <h3 class="flex gap-2 text-lg">
+            Fecha del Movimiento:<p class="text-gray-200">{fecha_movement}</p>
+        </h3>
+
+        <h3 class="text-lg flex flex-col">
+            Descripcion:
+            <textarea class="bg-slate-700/50 p-3 rounded-lg h-[200px] max-h-[250px] font-bold mt-3" disabled>{message}</textarea>
+        </h3>
+
+    </div>
+</article> 

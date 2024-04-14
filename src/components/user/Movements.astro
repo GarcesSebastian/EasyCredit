@@ -3,85 +3,88 @@
 ---
 
 <section
-    id="showMore"
-    class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden"
+  id="showMore"
+  class="bg-black/50 fixed top-0 left-0 h-full w-full z-50 hidden"
 >
-    <article id="close" class="w-full h-full cursor-pointer "></article>
-    <article id="content" class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-md:w-[55rem] p-5 flex flex-col gap-4 animate-displace">
-        <header
-            class="flex justify-between items-center p-4 border-b-2 border-blue-500"
-        >
-            <h1 class="text-2xl text-white max-[490px]:text-lg">Historial de Movimientos</h1>
-            <i id="extras" class="text-white cursor-pointer">
-                <svg id="options-movements" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
-            </i>
-        </header>
+  <article id="close" class="w-full cursor-pointer"></article>
+  <article
+    id="content"
+    class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-[840px]:w-[60rem] max-[650px]:w-[80rem] p-5 flex flex-col gap-4 animate-displace"
+  >
+    <header
+      class="flex justify-between items-center p-4 border-b-2 border-blue-500 rounded-t-sm"
+    >
+      <h1 class="text-2xl text-white">Historial de Movimientos</h1>
+      <i id="extras" class="cursor-pointer">
+        <svg
+          id="menuIcon-movements"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-dots"
+          ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+            d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path
+            d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path><path
+            d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        </svg>
+      </i>
+    </header>
 
-        <div id="submenu-movements" class="hidden bg-slate-700 p-1 rounded-[4px] animate-deployment">
-            <button
-              id=""
-              class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
-              >Crear</button
-            >
-            <button
-              id=""
-              class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
-              >Borrar</button
-            >
-            <button
-              id=""
-              class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
-              >Borrar todo</button
-            >
-          </div>
+    <div id="subMenu-movements" class="hidden bg-slate-700 p-1 rounded-[4px] animate-deployment">
+      <button
+        id="btnNew"
+        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+        >Crear</button
+      >
+      <button
+        id="btnDeleteSingle"
+        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+        >Borrar</button
+      >
+      <button
+        id="btnDeleteAll"
+        class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800"
+        >Borrar todo</button
+      >
+    </div>
 
-        <main id="contentMovements" class="flex flex-col gap-3">
-            <article
-                id="movement"
-                class="flex justify-around py-4 items-center rounded-lg bg-blue-600 shadow-lg"
-            >
-                <div id="logo">
-                    <img
-                        class="size-12"
-                        src="https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"
-                        alt=""
-                    />
-                </div>
-                <div id="data" class="text-center">
-                    <h3 class="text-xl">Transferencia</h3>
-                    <i id="date" class="text-sm">20/20/2024</i>
-                </div>
-                <div id="count">
-                    <p id="countNum" class="font-extrabold text-green-300">+ 1.000.000 $</p>
-                </div>
-            </article>
-        </main>
-    </article>
+    <main
+      id="contentMovements"
+      class="flex flex-col gap-3 overflow-y-auto h-full"
+    >
+        <slot/>   
+    </main>
+  </article>
 </section>
 
 <script>
-
-    let menuIcon = document.getElementById("options-movements") as HTMLElement;
-    let subMenu = document.getElementById("submenu-movements") as HTMLDivElement;
+    let menuIcon = document.getElementById("menuIcon-movements") as HTMLElement;
+    let subMenu = document.getElementById("subMenu-movements") as HTMLDivElement;
 
     menuIcon.addEventListener("click", () => {
-        if (window.getComputedStyle(subMenu).display === "none"){
+      if (window.getComputedStyle(subMenu).display === "none"){
         subMenu.style.display = "flex";
-        } else {
+      } else {
         subMenu.style.display = "none";
-        }
+      }
     });
 
     let showMovements = document.querySelector(
-        "#showMovements",
+        "#showMovements"
     ) as HTMLButtonElement;
     let close = document.getElementById("close") as HTMLElement;
-    showMovements?.addEventListener("click", () => {
+    showMovements.addEventListener("click", () => {
         let movements = document.querySelector("#showMore") as HTMLElement;
         if (window.getComputedStyle(movements).display == "none") {
-            movements.style.display = "flex";
+        movements.style.display = "flex";
         } else {
-            movements.style.display = "none";
+        movements.style.display = "none";
         }
     });
 
@@ -89,52 +92,30 @@
         let movements = document.querySelector("#showMore") as HTMLElement;
         if (window.getComputedStyle(movements).display == "flex") {
             movements.style.display = "none";
+            info_list.forEach((info, index_info) => {
+                  if (window.getComputedStyle(info).display == "flex") {
+                      info.style.display = "none";
+                  }
+            });
         } else {
             movements.style.display = "flex";
         }
     });
+
+    let more_list = document.querySelectorAll("#more") as NodeListOf<HTMLElement>;
+    let info_list = document.querySelectorAll("#info") as NodeListOf<HTMLElement>;
+
+    more_list.forEach((element, index_element) => {
+        element.addEventListener("click", () => {
+            info_list.forEach((info, index_info) => {
+                if(index_element == index_info){
+                    if (window.getComputedStyle(info).display == "none") {
+                        info.style.display = "flex";
+                    } else {
+                        info.style.display = "none";
+                    }
+                }
+            });
+        });
+    });
 </script>
-
-<style>
-
-    .custom-scroll::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    .custom-scroll::-webkit-scrollbar-track {
-        background: rgb(255, 255, 255, 0);
-        border-radius: 30px;
-    }
-
-    .custom-scroll::-webkit-scrollbar-thumb {
-        background: #777;
-        border-radius: 30px;
-    }
-
-    .custom-scroll::-webkit-scrollbar-thumb:hover {
-        background: rgb(255, 255, 255, 0);
-        border-radius: 30px;
-    }
-
-    @media (max-width: 1160px) {
-        #card_movements {
-            grid-column: span 2 / 2 span;
-        }
-    }
-
-    @media (max-width: 1024px) {
-        #card_movements {
-            grid-column: span 4 / 4 span;
-            grid-row: span 1 / 1 span;
-        }
-    }
-
-    @media (max-width: 1024px) {
-        #contentMovements #movement {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-    }
-
-</style>

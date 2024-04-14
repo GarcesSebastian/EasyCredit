@@ -1,6 +1,7 @@
 ---
 import Notifications from "./user/Notifications.astro";
 import Movements from './user/Movements.astro';
+import Movement from './user/Movement.astro';
 import Configurations from './user/Configurations.astro';
 
 import {SignOut} from 'auth-astro/components';
@@ -189,7 +190,25 @@ try{
             </div>
         </header>
         <Notifications></Notifications>
-        <Movements></Movements>
+        <Movements>
+            {
+                data_user ? (
+                    data_user.user_movements_complete.map((item: any) => (
+                        <Movement
+                            tipo_movement = {item.tipo_movement}
+                            origin = {item.origin}
+                            action_movement = {item.action_movement}
+                            state_movement = {item.state_movement}
+                            fecha_movement = {item.fecha_movement}
+                            message = {item.message}
+                            id_movement={item.id_movement}
+                        />
+                    ))
+                ):(
+                   <span></span>
+                )
+            }
+        </Movements>
         <Configurations></Configurations>
         
         <style>

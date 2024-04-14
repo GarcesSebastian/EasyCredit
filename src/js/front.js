@@ -299,13 +299,28 @@ document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
 });
 
 let items_movements = document.querySelectorAll("#item_movement");
+let movements_list = document.querySelectorAll("#movement");
+let info_list = document.querySelectorAll("#info");
+
 items_movements.forEach((item) => {
     item.addEventListener("click", async () => {
-        let id_movement = item.getAttribute("data-id");
-        const response_data_movement = await fetch(`http://localhost:4000/movements/one_movement?id_movement=${id_movement}`);
-        const data_movement = await response_data_movement.json();
-
-        console.log(data_movement[0]);
+        let movements = document.querySelector("#showMore");
+        if (window.getComputedStyle(movements).display == "none") {
+            movements.style.display = "flex";        
+            movements_list.forEach((element, index_element) => {
+                if(item.getAttribute("data-id-movement") == element.getAttribute("data-id-movement")){
+                    info_list.forEach((info, index_info) => {
+                        if(index_element == index_info){
+                            if (window.getComputedStyle(info).display == "none") {
+                                info.style.display = "flex";
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            movements.style.display = "none";
+        }
     });
 });
 
@@ -854,7 +869,7 @@ async function pullingFetch(){
         if(getCookie("ID-USER")){
             response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
             data_user = await response_data_user.json();
-            data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);
+            data_movements_incomplete = data_user.user_movements_complete.filter((data) => data.id_user === data_user.user_info[0].id_user);
             initial_value_movements = data_movements_incomplete.length;
         }
     }
@@ -863,7 +878,7 @@ async function pullingFetch(){
         if(getCookie("W-INIT-ENT") == "true" && getCookie("ID-USER") != "false"){
             response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
             data_user = await response_data_user.json();
-            data_movements_incomplete = data_user.user_movements_incomplete.filter((data) => data.id_user === data_user.user_info[0].id_user);
+            data_movements_incomplete = data_user.user_movements_complete.filter((data) => data.id_user === data_user.user_info[0].id_user);
             if(data_movements_incomplete.length != initial_value_movements){
                 initial_value_movements = data_movements_incomplete.length;
                 window.location.reload();

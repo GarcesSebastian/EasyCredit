@@ -151,7 +151,7 @@ app.post("/register/auth", async (req, res) => {
         connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false, fecha_creacion]);
         connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0"]);
         connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
-        connection.query("INSERT INTO movements (id_user, email_user, numero_movements) VALUES (?, ?, ?)", [user_id, req.body.email, 0]);
+        // connection.query("INSERT INTO movements (id_user, id, email_user, numero_movements) VALUES (?, ?, ?)", [user_id, req.body.email, 0]);
 
         res.status(200).json({ message: "Register Successful"});
         
@@ -305,7 +305,7 @@ app.post("/user/loan", async (req, res) => {
                     }
 
                     let message_origin = `Hizo un prestamo por un monto de ${action_loan}$.`;
-                    await connection.query("INSERT INTO movements(id_movement, id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement, data_user_basic[0].id_user, movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo", message_origin]);
+                    await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement, data_user_basic[0].id_user, "Bank" ,movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo", message_origin]);
                     
                     await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [sumary_action, sumary_action, data_user_basic[0].id_user]);
                     res.status(200).json({ message: "Loan Successful" });
@@ -370,7 +370,7 @@ app.post("/user/transfer", async (req, res) => {
                                 res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
                             }
 
-                            await connection.query("INSERT INTO movements(id_movement, id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_destino, data_user_register_destino[0].id_user, movements_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo", message]);
+                            await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_destino, data_user_register_destino[0].id_user, data_user_origin[0].name_user ,movements_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo", message]);
             
                             //Movimiento para el origen
                             let date_now_string_origin = getDateNow();
@@ -381,8 +381,8 @@ app.post("/user/transfer", async (req, res) => {
                             if(id_movement_origin == null){
                                 res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
                             }
-                            let message_origin = `Enviaste una transferencia al usuario con el numero de tarjeta: ${numero_card} por un monto de ${action}.`;
-                            await connection.query("INSERT INTO movements(id_movement, id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_origin, data_user_origin[0].id_user, movements_origin.length + 1, "Transfer", date_now_string_origin, action, "negativo", message_origin]);
+                            let message_origin = `Enviaste una transferencia al usuario con el numero de tarjeta: ${numero_card} por un monto de ${action}$.`;
+                            await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_origin, data_user_origin[0].id_user, data_user_origin[0].name_user ,movements_origin.length + 1, "Transfer", date_now_string_origin, action, "negativo", message_origin]);
 
                             res.status(200).json({ message: "Transfer Successful" });
                         }else{
@@ -564,7 +564,7 @@ app.post("/create/information", async (req, res) => {
           const actionTypes = ['Bank Loan', 'Transfer'];
           const states = ['positivo', 'negativo'];
   
-          const query = "INSERT INTO movements (id_movement, id_user, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES (?, ?, ?, ?, ?, ?, ?)";
+          const query = "INSERT INTO movements (id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
   
           for (let i = 0; i < numQueries; i++) {
             const id_movement = await generateIdMovements(connection);
@@ -578,7 +578,7 @@ app.post("/create/information", async (req, res) => {
             const action_movement = Math.floor(Math.random() * 10000000) + 0;
             const state_movement = states[Math.floor(Math.random() * states.length)];
   
-            await connection.query(query, [id_movement, id_user, index_movement, tipo_movement, fecha_movement.toISOString().slice(0, 10), action_movement, state_movement]);
+            await connection.query(query, [id_movement, id_user, "Bank", index_movement, tipo_movement, fecha_movement.toISOString().slice(0, 10), action_movement, state_movement]);
           }
         }
   
