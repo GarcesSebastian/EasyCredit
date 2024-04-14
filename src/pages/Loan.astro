@@ -17,8 +17,59 @@ let response_user_exist: Response;
 let data_user_exist: any;
 
 let text: any;
+let err: any;
 
 let isContinue = true;
+let isGoogle = false;
+let RegisterIncomplete = false;
+
+import {getSession} from 'auth-astro/server';
+
+const session = await getSession(Astro.request);
+
+if(session){
+    let response: Response;
+    let data_response: any;
+    isGoogle = true;
+
+    try{
+        response = await fetch("http://localhost:4000/auth/google", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: session.user?.email,
+                username: session.user?.name
+            })
+        });
+
+        data_response = await response.json();
+        console.log(data_response)
+
+        if(data_response.status == "Good Request"){
+            Astro.cookies.set("ID-USER", data_response.id, {expires: new Date("9999-12-31")});
+            Astro.cookies.set("W-INIT-ENT", "true", {expires: new Date("9999-12-31")});
+        }else if(data_response.status == "Good Request Incomplete"){
+            // Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
+            // Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
+            Astro.cookies.set("ID-USER", data_response.id, {expires: new Date("9999-12-31")});
+            Astro.cookies.set("W-INIT-ENT", "true", {expires: new Date("9999-12-31")});
+            RegisterIncomplete = true;
+        }
+        else{
+            isGoogle = false
+        }
+
+    }catch(e){
+        isContinue = false
+        err = e;
+        Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
+        Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
+        return Astro.redirect("/")
+    }
+
+}
 
 const flag = (Astro.cookies.get("flag") || {})?.value;
 const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
@@ -121,6 +172,7 @@ try{
         href_signup="./SignUp"
         registrarse_text={text.registrarse_text || "Registrarse"}
         iniciar_text={text.iniciar_text || "Iniciar sesión"}
+        isGoogle={isGoogle}
     ></Header>
     <PopupLoan
         text_information_loan={text.text_information_loan}
