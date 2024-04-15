@@ -585,7 +585,7 @@ async function send_req_loan(){
             if(response_message.state === "Bad Request"){
                 isContinueLoanReq = true;
                 if(response_message.message === "Numero de Identificacion Invalido."){
-                    let id_without_input = id.split("input")[1];
+                    let id_without_input = elements_loan.input_id_loan.id.split("input")[1];
                     let id_with_err = "err" + id_without_input;
                     document.querySelector("#" + id_with_err).style.display = "initial";
                     document.querySelector("#" + id_with_err).innerHTML = "* " + response_message.message
@@ -702,15 +702,13 @@ async function send_req_transfer(){
     
             if(response_message.state === "Bad Request"){
                 isContinueTransferReq = true;
-                if(response_message.message === "Numero de Identificacion Invalido."){
-                    let id = elements_transfer.input_numero_tarjeta.id.toString();
-                    let id_without_input = id.split("input")[1];
-                    let id_with_err = "err" + id_without_input;
-                    let element_err = document.querySelector("#" + id_with_err);
-                    element_err.style.display = "initial";
-                    element_err.innerHTML = "* " + response_message.message
-                    elements_transfer.input_numero_tarjeta.style.borderColor = "tomato";
-                }
+                let id = elements_transfer.input_numero_tarjeta.id.toString();
+                let id_without_input = id.split("input")[1];
+                let id_with_err = "err" + id_without_input;
+                let element_err = document.querySelector("#" + id_with_err);
+                element_err.style.display = "initial";
+                element_err.innerHTML = "* " + response_message.message
+                elements_transfer.input_numero_tarjeta.style.borderColor = "tomato";
             }else{
                 // socket.emit("transfer", (data))
                 isContinueTransferReq = true;
