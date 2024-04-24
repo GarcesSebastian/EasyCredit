@@ -79,7 +79,7 @@
         "#showMovements"
     ) as HTMLButtonElement;
     let close = document.getElementById("close") as HTMLElement;
-    showMovements.addEventListener("click", () => {
+    showMovements?.addEventListener("click", () => {
         let movements = document.querySelector("#showMore") as HTMLElement;
         if (window.getComputedStyle(movements).display == "none") {
         movements.style.display = "flex";

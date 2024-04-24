@@ -7,67 +7,14 @@ import BtnSubConfigurations from "./Btn-Sub-Configurations.astro";
   class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden"
   id="content-configurations"
 >
-  <div id="closeConfigurations" class="w-full h-full cursor-pointer"></div>
   <div
-    class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-md:w-[55rem] p-5 flex flex-col gap-4 animate-displace"
+    class="bg-slate-800 shadow-lg shadow-gray-900 w-full flex flex-col gap-4 animate-displace"
   >
     <header
       class="flex justify-between items-center p-4 rounded-t-sm border-b-2 border-blue-500"
     >
       <h1 class="text-2xl text-white max-[490px]:text-lg">Configuraciones</h1>
     </header>
-
-    <div id="content-information" class="pt-1 flex flex-col gap-3 overflow-y-auto overflow-x-hidden px-3">
-        <!-- Content for information -->
-        <ButtonConfigurations id="btn-settings-notifications" text="Notificaciones" />
-          <ul id="content-list-notifications" class="pl-3 flex-col gap-3 animate-deployment hidden [&>*:last-child]:mb-3">
-            <li class="flex justify-start items-center gap-3">
-              <span class="uppercase font-bold text-gray-300">
-                Recibir notificaciones por correo
-              </span>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" class="sr-only peer" checked>
-                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              </label>
-            </li>
-            <li class="flex justify-start items-center gap-3">
-              <span class="uppercase font-bold text-gray-300">
-                Recibir notificaciones por SMS
-              </span>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" class="sr-only peer" checked>
-                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              </label>
-            </li>
-          </ul>
-        <ButtonConfigurations id="btn-settings-personal" text="Informacion Personal" />
-        <div id="content-list-personal" class="hidden animate-deployment flex-col gap-3 [&>*:last-child]:mb-3">
-          <BtnSubConfigurations id="btn-settings-personal-name" text="Cambiar Nombre"/>
-          <BtnSubConfigurations id="btn-settings-personal-phone" text="Cambiar Numero de Telefono"/>
-          <BtnSubConfigurations id="btn-settings-personal-email" text="Cambiar Correo Electronico"/>
-        </div>
-        <ButtonConfigurations id="btn-settings-security" text="Informacion de Seguridad" />
-        <div id="content-list-security" class="hidden animate-deployment flex-col gap-3 [&>*:last-child]:mb-3">
-          <BtnSubConfigurations id="btn-settings-security-name" text="Cambiar Numero de Identificación"/>
-          <BtnSubConfigurations id="btn-settings-security-phone" text="Cambiar Contraseña"/>
-          <BtnSubConfigurations id="btn-settings-security-password" text="Cambiar Correo de 2FA"/>
-        </div>
-        <ButtonConfigurations id="btn-settings-2fa" text="Verificacion de dos Pasos" />
-        <ul id="content-list-2fa" class="pl-3 flex-col gap-3 animate-deployment hidden [&>*:last-child]:mb-3">
-          <li class="flex justify-start items-center gap-3">
-            <span class="uppercase font-bold text-gray-300">
-              Activar Verificacion de dos Pasos
-            </span>
-            <label class="inline-flex items-center cursor-pointer">
-              <input type="checkbox" value="" class="sr-only peer" checked>
-              <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
-          </li>
-        </ul>
-        <ButtonConfigurations id="btn-settings-delete" text="Eliminar Cuenta" />
-        <div id="content-list-delete" class="hidden animate-deployment">
-    </div>
-
   </div>
 </section>
 
@@ -120,7 +67,7 @@ import BtnSubConfigurations from "./Btn-Sub-Configurations.astro";
         : "none";
   });
 
-  closeConfigurations.addEventListener("click", () => {
+  closeConfigurations?.addEventListener("click", () => {
     barNotifications.style.display =
       window.getComputedStyle(barNotifications).display === "flex"
         ? "none"

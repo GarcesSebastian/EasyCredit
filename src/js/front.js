@@ -38,6 +38,12 @@ async function obtenerTasa() {
     }
 }
 
+let btn_simulate_loan_offline = document.querySelector("#btn_simulate_loan_offline");
+
+btn_simulate_loan_offline?.addEventListener("click", async () => {
+    window.location.href = "/SimulateLoan";
+});
+
 async function simulateLoan(monto, tasa, frecuencia, plazo){
     const tasa_interes_mensual = (tasa / 100) / 12;
     let total_pagos;
