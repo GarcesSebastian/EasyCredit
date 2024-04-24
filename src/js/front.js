@@ -196,7 +196,7 @@ actual_element?.addEventListener("click", () =>{
 let button_config = document.querySelector("#button_config");
 let list_config = document.querySelector("#list_config");
 
-if(button_config){
+if(button_config && close_configurations){
     button_config.addEventListener("click", () =>{
         if(window.getComputedStyle(list_config).display != "none"){
             list_config.style.display = "none";

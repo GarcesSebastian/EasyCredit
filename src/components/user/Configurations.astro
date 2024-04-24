@@ -1,20 +1,81 @@
 ---
-import ButtonConfigurations from "./Button_Configurations.astro";
-import BtnSubConfigurations from "./Btn-Sub-Configurations.astro";
+import ButtonConfiguration from "./ButtonConfiguration.astro";
+import Profile from '../Profile.astro';
 ---
 
 <section
-  class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden"
+  class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end flex"
   id="content-configurations"
 >
   <div
-    class="bg-slate-800 shadow-lg shadow-gray-900 w-full flex flex-col gap-4 animate-displace"
+    class="bg-slate-800 shadow-lg shadow-gray-900 w-full flex flex-col animate-displace"
   >
     <header
-      class="flex justify-between items-center p-4 rounded-t-sm border-b-2 border-blue-500"
+      class="flex justify-start gap-4 items-center p-4 rounded-t-sm border-b-2 border-blue-500 w-full h-fit"
     >
+      <span id="close_configurations" class="w-fit h-fit p-1 cursor-pointer hover:bg-slate-700 transition-all duration-150 ease-in rounded-[3px]">
+        <svg class="icon icon-tabler icons-tabler-outline icon-tabler-x h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M18 6l-12 12" />
+          <path d="M6 6l12 12" />
+        </svg>
+      </span>
       <h1 class="text-2xl text-white max-[490px]:text-lg">Configuraciones</h1>
     </header>
+
+    <section class="w-full h-full flex bg-black/30">
+      <div class="w-[20%] h-full flex flex-col px-5 py-5 gap-4">
+        <ButtonConfiguration text="General">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+          </svg>
+        </ButtonConfiguration>
+
+        <ButtonConfiguration text="Profile">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+          </svg>
+        </ButtonConfiguration>
+
+        <ButtonConfiguration text="Notifications">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+          </svg>
+        </ButtonConfiguration>
+
+        <ButtonConfiguration text="Privacy">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+          </svg>
+        </ButtonConfiguration>
+
+        <ButtonConfiguration text="Security">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+          </svg>
+        </ButtonConfiguration>
+      </div>
+
+      <div class="flex flex-col w-[80%] h-full bg-black/50 p-5 gap-5">
+      <!--Component Setting -->
+        <Profile/>
+      </div>
+    </section>
   </div>
 </section>
 
@@ -55,9 +116,7 @@ import BtnSubConfigurations from "./Btn-Sub-Configurations.astro";
   
   let barNotifications = document.getElementById("content-configurations") as HTMLElement;
 
-  let closeConfigurations = document.getElementById(
-    "closeConfigurations",
-  ) as HTMLDivElement;
+  let close_configurations = document.getElementById("close_configurations") as HTMLElement
 
   btnNotification?.addEventListener("click", () => {
     (document.querySelector("#list_config") as HTMLDivElement).style.display = "none";
@@ -67,11 +126,8 @@ import BtnSubConfigurations from "./Btn-Sub-Configurations.astro";
         : "none";
   });
 
-  closeConfigurations?.addEventListener("click", () => {
-    barNotifications.style.display =
-      window.getComputedStyle(barNotifications).display === "flex"
-        ? "none"
-        : "flex";
+  close_configurations?.addEventListener("click", () => {
+    barNotifications.style.display = "none";
   });
 
 </script>
