@@ -6,10 +6,10 @@ interface Props{
 const {text} = Astro.props;
 ---
 
-<div class="flex justify-start gap-5 w-[90%] h-fit bg-slate-800 hover:bg-slate-700 transition-all duration-200 ease-in cursor-pointer py-2 px-2 items-center rounded-[3px]">
+<div class="flex justify-start gap-5 max-xl:gap-2 w-[100%] max-sm:w-fit h-fit bg-slate-800 hover:bg-slate-700 transition-all duration-200 ease-in cursor-pointer py-2 px-2 items-center rounded-[3px]">
     <slot/>
 
-    <span class="text-white text-xl font-semibold">
+    <span class="text-white text-xl max-xl:text-base font-semibold max-sm:hidden">
       {text}
     </span>
 </div>

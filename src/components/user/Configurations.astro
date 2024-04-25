@@ -25,9 +25,9 @@ import Notification from "../Notification.astro";
     </header>
 
     <section class="w-full h-full flex bg-black/30">
-      <div class="w-[20%] h-full flex flex-col px-5 py-5 gap-4">
+      <div class="w-[20%] max-lg:w-[30%] max-sm:w-fit max-sm:px-1.5 h-full flex flex-col px-5 py-5 gap-4">
         <ButtonConfiguration text="General">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
             <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
@@ -36,7 +36,7 @@ import Notification from "../Notification.astro";
         </ButtonConfiguration>
 
         <ButtonConfiguration text="Profile">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
             <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
@@ -45,7 +45,7 @@ import Notification from "../Notification.astro";
         </ButtonConfiguration>
 
         <ButtonConfiguration text="Notifications">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
             <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
@@ -54,7 +54,7 @@ import Notification from "../Notification.astro";
         </ButtonConfiguration>
 
         <ButtonConfiguration text="Privacy">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
             <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
@@ -63,7 +63,7 @@ import Notification from "../Notification.astro";
         </ButtonConfiguration>
 
         <ButtonConfiguration text="Security">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
             <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
@@ -72,7 +72,7 @@ import Notification from "../Notification.astro";
         </ButtonConfiguration>
       </div>
 
-      <div class="flex flex-col w-[80%] h-full bg-black/50 p-5 gap-5">
+      <div class="flex flex-col w-[80%] max-sm:w-full h-full bg-black/50 p-5 gap-5">
       <!--Component Setting -->
         <Notification/>
       </div>
