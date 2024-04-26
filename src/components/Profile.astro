@@ -1,8 +1,13 @@
 ---
+interface Props{
+  data_id: string;
+}
 
+const {data_id} = Astro.props;
 ---
 
-<div class="w-full h-fit border-b-2 border-gray-300 pb-5">
+<div class="flex flex-col overflow-y-auto" id="sub_sections_configurations"  data-id={data_id}>
+  <div class="w-full h-fit border-b-2 border-gray-300 pb-2 mb-3">
     <h1 class="text-white text-2xl font-semibold">
       <!--Titulo -->
       Profile
@@ -13,13 +18,90 @@
     </h4>
   </div>
 
-  <div>
-    <h2 class="text-white text-lg">
-      <!--Subtitulo -->
-      Basic Info
-    </h2>
-    <h4 class="text-gray-300 text-base font-light">
-      <!--Descripcion de la subconfiguracion -->
+  <div class="w-full h-fit border-b-2 border-gray-300 py-2 px-3">
+    <h3 class="text-white text-2xl font-semibold">Basic Info</h3>
+    <h4 class="text-gray-300 text-lg font-light">
       Tell us your basic info details
     </h4>
+
+    <div class="flex flex-col">
+      <div class="grid grid-cols-2 gap-6 max-sm:grid-cols-1 mt-4">
+        <div>
+          <p class="text-white text-lg">Nombre de Usuario</p>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1"
+            placeholder="Nombre de usuario"
+          />
+        </div>
+        <div>
+          <p class="text-white text-lg">Numero de identificacion</p>
+          <input
+            type="number"
+            id="user-id"
+            name="user-id"
+            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1"
+            placeholder="Numero de identificacion"
+          />
+        </div>
+        <div>
+          <p class="text-white text-lg">Correo Electronico</p>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1"
+            placeholder="Correo Electronico"
+          />
+        </div>
+        <div>
+          <p class="text-white text-lg">Teléfono</p>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1"
+            placeholder="Numero de telefono"
+          />
+        </div>
+      </div>
+      
+      <div class="flex items-center justify-center">
+        <button
+          type="button"
+          class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-md mt-4 mx-auto">update</button
+        >
+      </div>
+    </div>
+  </div>
+  <div class="w-full h-fit border-b-2 border-gray-300 py-7 px-3 flex flex-row items-center">      
+        <div class="flex justify-start items-center gap-3 w-full h-fit">
+          <div class="flex items-center justify-start w-36 mt-5">
+              <label for="dropzone-file" class="rounded-[50%] w-32 h-32 bg-blue-500 flex flex-col items-center justify-center border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                  <div class="flex flex-col items-center justify-center pt-5 pb-6 w-full">
+                      <svg class="w-8 h-8 mb-0 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                      </svg>
+                      <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold flex flex-col">Click to upload </span></p>                      
+                  </div>
+                  <input id="dropzone-file" type="file" class="hidden" />
+              </label>
+          </div>  
+          <div>
+            <h2 class="text-white text-lg">
+                <!--Subtitulo -->
+                Profile Picture
+            </h2>
+            <h4 class="text-gray-300 text-base font-light">
+                  <!--Descripcion de la subconfiguracion -->
+                  Upload your profile picture here.
+            </h4>
+          </div>
+          
+             
+        </div>
+
+  </div>
 </div>

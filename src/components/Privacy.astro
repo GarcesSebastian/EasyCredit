@@ -1,0 +1,92 @@
+---
+interface Props{
+  data_id: string;
+}
+
+const {data_id} = Astro.props;
+---
+
+<div class="pb-10 flex-col overflow-y-auto hidden" id="sub_sections_configurations"  data-id={data_id}>
+
+  <div class="w-full h-fit border-b border-gray-600 pb-5">
+    <h1 class="text-white text-2xl font-semibold">Privacy</h1>
+
+    <h4 class="text-gray-400 text-lg font-light">
+        Customize your privacy settings to protect your personal data.    
+    </h4>
+  </div>
+
+  <div class="w-full h-fit border-b border-gray-600 py-7 px-3">
+    <h2 class="text-white text-xl">Public Visibility</h2>
+    <h4 class="text-gray-400 text-base font-light">Control what information is publicly visible on your profile.</h4>
+  
+    <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-5 mt-4">
+        <label class="inline-flex items-center cursor-pointer">
+            <input type="checkbox" value="" class="sr-only peer" />
+            <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
+            <span class="ms-3 text-base font-semibold text-gray-200">Visibility of name</span>
+          </label>
+        <label class="inline-flex items-center cursor-pointer">
+            <input type="checkbox" value="" class="sr-only peer"/>
+            <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
+            <span class="ms-3 text-base font-semibold text-gray-200">Visibility of phone number</span>
+        </label>
+  
+        <label class="inline-flex items-center cursor-pointer">
+             <input type="checkbox" value="" class="sr-only peer" />
+             <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
+            <span class="ms-3 text-base font-semibold text-gray-200">Visibility of email</span>
+        </label>
+    </div>
+  </div>
+  
+
+  <div class="w-full h-fit border-b border-gray-600 py-7 px-3">
+    <h2 class="text-white text-xl">Explicit consent</h2>
+
+    <h4 class="text-gray-400 text-base font-light">
+        Please make sure you consent to the use and sharing of your personal data.
+    </h4>
+
+    <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-5 mt-4">
+
+      <label class="inline-flex items-center cursor-pointer">
+        <input type="checkbox" value="" class="sr-only peer" />
+        <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600">
+        </div>
+        <span class="ms-3 text-base font-semibold text-gray-200">Consent for data use</span>
+      </label>
+
+      <label class="inline-flex items-center cursor-pointer">
+        <input type="checkbox" value="" class="sr-only peer" />
+        <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600">
+        </div>
+        <span class="ms-3 text-base font-semibold text-gray-200">Consent to share data</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="w-full h-fit border-b border-gray-600 py-7 px-3">
+    <h2 class="text-white text-xl">Password</h2>
+    <h4 class="text-gray-400 text-base font-light">Change your current password to a new one to keep your account secure.</h4>
+  
+    <form class= "mt-4">
+      <div class="mb-4">
+        <label for="current-password" class=" text-gray-200">Current password</label>
+        <input type="password" id="current-password" name="current-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%]" required>
+      </div>
+  
+      <div class="mb-4">
+        <label for="new-password" class="text-gray-200">New password</label>
+        <input type="password" id="new-password" name="new-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%]" required>
+      </div>
+  
+      <div class="mb-8">
+        <label for="confirm-password" class=" text-gray-200">Confirm new password</label>
+        <input type="password" id="confirm-password" name="confirm-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%]" required>
+      </div>
+  
+      <button type="submit" class="bg-gradient-to-r to-[#0074D3] from-[#0040A8] hover:opacity-80 text-white px-4 py-3 rounded ">Change password</button>
+    </form>
+  </div>
+</div>

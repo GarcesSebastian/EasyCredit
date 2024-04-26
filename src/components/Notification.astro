@@ -1,8 +1,12 @@
 ---
+interface Props{
+  data_id: string;
+}
 
+const {data_id} = Astro.props;
 ---
 
-<div class="flex flex-col overflow-y-auto">
+<div class="flex-col overflow-y-auto hidden" id="sub_sections_configurations"  data-id={data_id}>
     <div class="w-full h-fit border-b-2 border-gray-300 pb-5">
         <h1 class="text-white text-2xl font-semibold">
             <!--Titulo -->
@@ -25,7 +29,7 @@
         </h4>
     
         <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-5 mt-4 w-fit">
-            <label class="inline-flex items-center cursor-pointer">
+            <label class="inline-items-center cursor-pointer">
                 <input type="checkbox" value="" class="sr-only peer">
                 <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
                 <span class="ms-3 text-base font-semibold text-gray-200">Movimientos</span>
