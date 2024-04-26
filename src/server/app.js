@@ -112,8 +112,6 @@ app.post("/register/auth", async (req, res) => {
         }
 
         const hashedPassword = CryptoJS.SHA256(req.body.password).toString(CryptoJS.enc.Hex);
-        const hashedNumero_telefono = CryptoJS.SHA256(req.body.numero_telefono).toString(CryptoJS.enc.Hex);
-        const hashedNumero_identidad = CryptoJS.SHA256(req.body.numero_identidad).toString(CryptoJS.enc.Hex);
 
         let year = new Date().getFullYear().toString().split("");
         year = year[year.length - 2] + year[year.length - 1]
@@ -148,7 +146,7 @@ app.post("/register/auth", async (req, res) => {
             }
         }
         
-        connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, hashedNumero_identidad, hashedNumero_telefono, false, fecha_creacion]);
+        connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, req.body.numero_identidad, req.body.numero_telefono, false, fecha_creacion]);
         connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0"]);
         connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
         // connection.query("INSERT INTO movements (id_user, id, email_user, numero_movements) VALUES (?, ?, ?)", [user_id, req.body.email, 0]);
@@ -170,10 +168,7 @@ app.post("/auth/google", async (req, res) => {
 
             if(emailExists[0].numero_identidad == "google" && emailExists[0].numero_telefono == "google"){
                 if(req.body.numero_identidad && req.body.numero_telefono){
-                    const hashedNumero_telefono = CryptoJS.SHA256(req.body.numero_telefono).toString(CryptoJS.enc.Hex);
-                    const hashedNumero_identidad = CryptoJS.SHA256(req.body.numero_identidad).toString(CryptoJS.enc.Hex);
-
-                    await connection.query("UPDATE registers SET numero_identidad = ?, numero_telefono = ?, estado = ? WHERE email = ?", [hashedNumero_identidad, hashedNumero_telefono, true, req.body.email]);
+                    await connection.query("UPDATE registers SET numero_identidad = ?, numero_telefono = ?, estado = ? WHERE email = ?", [req.body.numero_identidad, req.body.numero_telefono, true, req.body.email]);
                     return res.status(200).json({ status: "Good Request", message: "Login Successful", id: emailExists[0].id });
                 }
                 return res.status(200).json({ status: "Good Request Incomplete", message: "Login Successful", id: emailExists[0].id });
@@ -247,6 +242,26 @@ app.post("/auth/google", async (req, res) => {
     }
 })
 
+app.post("/update/data", async (req, res) => {
+    if(req.body){
+        const id_user = req.body.id_user;
+        const id = req.body.id;
+        const phone = req.body.phone;
+        const username = req.body.username;
+        const email = req.body.email;
+
+        const connection = await database.getConnection();
+        const res_update_registers = await connection.query("UPDATE registers SET numero_telefono = ?, numero_identidad = ?, username = ?, email = ? WHERE id = ?", [phone, id, username, email, id_user]);
+        const res_update_users = await connection.query("UPDATE users SET name_user = ?, email_user = ? WHERE id_user = ?", [username, email, id_user]);
+
+        if(res_update_registers && res_update_users){
+            res.status(200).json({ message: "Update Successful"});
+        }else{
+            res.status(400).json({ message: "Bad Request" });
+        }
+    }
+});
+
 app.post("/login/auth", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
@@ -289,7 +304,7 @@ app.post("/user/loan", async (req, res) => {
 
         if(data_user_basic.length > 0 && data_user_import.length > 0){
             if(data_user_basic[0].id_user == req.body.id_client){
-                let is_id = CryptoJS.SHA256(id_loan).toString(CryptoJS.enc.Hex) == data_user_import[0].numero_identidad;
+                let is_id = id_loan == data_user_import[0].numero_identidad;
                 if(is_id){
                     let sumary_action = parseFloat(action_loan) + parseFloat(data_user_basic[0].saldo_disponible);
                     

@@ -4,154 +4,135 @@ import Profile from '../Profile.astro';
 import Notification from "../Notification.astro";
 import Privacy from "../Privacy.astro";
 import Security from "../Security.astro";
+
+import {SignOut} from 'auth-astro/components';
+
+interface Props{
+  isGoogle: boolean,
+}
+
+const {isGoogle} = Astro.props;
+
+let response_data_user: Response;
+let response_user_exist: Response;
+
+let data_user_exist: any;
+let data_user: any;
+
+let isContinue = true;
+let err: any;
+
+const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
+const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
+
+try{
+    if(initiated != "false"){
+        response_user_exist = await fetch(`http://localhost:4000/user/exists?id_user=${id_user}`);
+        data_user_exist = await response_user_exist.json();
+
+        if(data_user_exist.state == "Good Request"){
+            response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
+            data_user = await response_data_user.json();
+        }else{
+            throw new Error("Error in the request to the server");
+        }
+    }
+}catch(e){
+    isContinue = false;
+    err = e;
+}
+
 ---
 
-<section
-  class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden"
-  id="content-configurations"
->
-  <div
-    class="bg-slate-800 shadow-lg shadow-gray-900 w-full flex flex-col animate-displace"
-  >
-    <header
-      class="flex justify-start gap-4 items-center p-4 rounded-t-sm border-b-2 border-blue-500 w-full h-fit"
-    >
-      <span id="close_configurations" class="w-fit h-fit p-1 cursor-pointer hover:bg-slate-700 transition-all duration-150 ease-in rounded-[3px]">
-        <svg class="icon icon-tabler icons-tabler-outline icon-tabler-x h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M18 6l-12 12" />
-          <path d="M6 6l12 12" />
-        </svg>
-      </span>
-      <h1 class="text-2xl text-white max-[490px]:text-lg">Configuraciones</h1>
-    </header>
-
-    <section class="w-full h-full flex bg-black/30">
-      <div class="w-[20%] max-lg:w-[30%] max-sm:w-fit max-sm:px-1.5 h-full flex flex-col px-5 py-5 gap-4">
-        <ButtonConfiguration text="Profile" data_text="profile">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+{
+  isContinue ? (
+  <section class="bg-black/50 fixed top-0 -right-full h-full w-full z-50 justify-end flex transition-all duration-500 ease-in" id="content-configurations">
+    <div class="bg-slate-800 shadow-lg shadow-gray-900 w-full flex flex-col">
+      <header class="flex justify-start gap-4 items-center p-4 rounded-t-sm border-b-2 border-blue-500 w-full h-fit" >
+        <span id="close_configurations" class="w-fit h-fit p-1 cursor-pointer hover:bg-slate-700 transition-all duration-150 ease-in rounded-[3px]">
+          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-x h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-            <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
           </svg>
-        </ButtonConfiguration>
+        </span>
+        <h1 class="text-2xl text-white max-[490px]:text-lg">Configuraciones</h1>
+      </header>
 
-        <ButtonConfiguration text="Notifications" data_text="notification">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-bell h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
-            <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
-          </svg>
-        </ButtonConfiguration>
+      <section class="w-full h-full flex bg-black/30">
+        <div class="w-[20%] max-lg:w-[30%] max-sm:w-fit max-sm:px-1.5 h-full flex flex-col px-5 py-5 gap-4">
+          <ButtonConfiguration text="Profile" data_text="profile" id_button="sub_btn_configurations">
+            <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+              <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+              <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+            </svg>
+          </ButtonConfiguration>
 
-        <ButtonConfiguration text="Privacy" data_text="privacy">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-lock-square h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M8 11m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z" />
-            <path d="M10 11v-2a2 2 0 1 1 4 0v2" />
-            <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
-          </svg>
-        </ButtonConfiguration>
+          <ButtonConfiguration text="Notifications" data_text="notification" id_button="sub_btn_configurations">
+            <svg class="icon icon-tabler icons-tabler-outline icon-tabler-bell h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+              <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+            </svg>
+          </ButtonConfiguration>
 
-        <ButtonConfiguration text="Security" data_text="security">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-            <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
-          </svg>
-        </ButtonConfiguration>
+          <ButtonConfiguration text="Privacy" data_text="privacy" id_button="sub_btn_configurations">
+            <svg class="icon icon-tabler icons-tabler-outline icon-tabler-lock-square h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M8 11m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z" />
+              <path d="M10 11v-2a2 2 0 1 1 4 0v2" />
+              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+            </svg>
+          </ButtonConfiguration>
 
-        <ButtonConfiguration text="Log out" data_text="logout">
-          <svg class="icon icon-tabler icons-tabler-outline icon-tabler-logout-2 h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
-            <path d="M15 12h-12l3 -3" />
-            <path d="M6 15l-3 -3" />
-          </svg>
-        </ButtonConfiguration>
-      </div>
+          <ButtonConfiguration text="Security" data_text="security" id_button="sub_btn_configurations">
+            <svg class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+              <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+              <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+            </svg>
+          </ButtonConfiguration>
+          
+          {
+            isGoogle ? (
+                <SignOut id="button_logout_google">
+                  <ButtonConfiguration text="Log out" data_text="logout" id_button="button_logout_google">
+                    <svg class="icon icon-tabler icons-tabler-outline icon-tabler-logout-2 h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
+                      <path d="M15 12h-12l3 -3" />  
+                      <path d="M6 15l-3 -3" />
+                    </svg>
+                  </ButtonConfiguration>
+                </SignOut>
+            ):(
+              <ButtonConfiguration text="Log out" data_text="logout" id_button="button_logout">
+                <svg class="icon icon-tabler icons-tabler-outline icon-tabler-logout-2 h-8 max-lg:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
+                  <path d="M15 12h-12l3 -3" />
+                  <path d="M6 15l-3 -3" />
+                </svg>
+              </ButtonConfiguration>
+            )
+          }
+        </div>
 
-      <div class="flex flex-col w-[80%] max-sm:w-full h-full bg-black/50 p-5 gap-5">
-      <!--Component Setting -->
-        <Profile data_id="profile"/>
-        <Security data_id="security"/>
-        <Privacy data_id="privacy"/>
-        <Notification data_id="notification"/>
-      </div>
-    </section>
-  </div>
-</section>
-
-<script>
-  let btn_settings_notifications = document.querySelector("#btn-settings-notifications");
-  let btn_settings_personal = document.querySelector("#btn-settings-personal");
-  let btn_settings_security = document.querySelector("#btn-settings-security");
-  let btn_settings_2fa = document.querySelector("#btn-settings-2fa");
-  let btn_setings_delete = document.querySelector("#btn-settings-delete");
-
-  btn_settings_notifications?.addEventListener("click", () => {
-    let content_list_notifications = document.querySelector("#content-list-notifications") as HTMLDivElement;
-    content_list_notifications.style.display = window.getComputedStyle(content_list_notifications).display == "none" ? "flex" : "none";
-  })
-
-  btn_settings_personal?.addEventListener("click", () => {
-    let content_list_personal = document.querySelector("#content-list-personal") as HTMLDivElement;
-    content_list_personal.style.display = window.getComputedStyle(content_list_personal).display == "none" ? "flex" : "none";
-  })
-
-  btn_settings_security?.addEventListener("click", () => {
-    let content_list_security = document.querySelector("#content-list-security") as HTMLDivElement;
-    content_list_security.style.display = window.getComputedStyle(content_list_security).display == "none" ? "flex" : "none";
-  })
-
-  btn_settings_2fa?.addEventListener("click", () => {
-    let content_list_2fa = document.querySelector("#content-list-2fa") as HTMLDivElement;
-    content_list_2fa.style.display = window.getComputedStyle(content_list_2fa).display == "none" ? "flex" : "none";
-  })
-
-  btn_setings_delete?.addEventListener("click", () => {
-    console.log("Click")
-  })
-
-  let btnNotification = document.querySelector(
-    "#button_configurations",
-  ) as HTMLSpanElement;
-  
-  let barNotifications = document.getElementById("content-configurations") as HTMLElement;
-
-  let close_configurations = document.getElementById("close_configurations") as HTMLElement
-
-  btnNotification?.addEventListener("click", () => {
-    (document.querySelector("#list_config") as HTMLDivElement).style.display = "none";
-    barNotifications.style.display =
-      window.getComputedStyle(barNotifications).display === "none"
-        ? "flex"
-        : "none";
-  });
-
-  close_configurations?.addEventListener("click", () => {
-    barNotifications.style.display = "none";
-  });
-
-  let sub_btn_configurations = document.querySelectorAll("#sub_btn_configurations");
-  let sub_sections_configurations = document.querySelectorAll("#sub_sections_configurations");
-
-  sub_btn_configurations?.forEach((element) => {
-    element.addEventListener("click", () => {
-      let attr = element.getAttribute("data-text");
-      sub_sections_configurations.forEach((item: any) => {
-        let attrItem = item.getAttribute("data-id");
-        if(attr == "logout"){
-          console.log("logged out")
-        }else if(attrItem == attr){
-          item.style.display = "flex";
-        }else{
-          item.style.display = "none";
-        }
-      });
-    });
-  });
-
-</script>
+        <div class="flex flex-col w-[80%] max-sm:w-full h-full bg-black/50 p-5 gap-5">
+          <Profile data_id="profile" username={data_user?.user_register[0]?.username} id={data_user?.user_register[0]?.numero_identidad} phone={data_user?.user_register[0]?.numero_telefono} email={data_user?.user_register[0]?.email}/>
+          <Security data_id="security"/>
+          <Privacy data_id="privacy"/>
+          <Notification data_id="notification"/>
+        </div>
+      </section>
+    </div>
+  </section>
+  ): (
+    <div>
+      {err}
+    </div>
+  )
+}

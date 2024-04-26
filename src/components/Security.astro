@@ -363,7 +363,7 @@ const {data_id} = Astro.props;
 </style>
 <script>
     function openAuthentication(input: any, contenetor: any) {
-        input.addEventListener("change", () => {
+        input?.addEventListener("change", () => {
             if (window.getComputedStyle(contenetor).display == "none") {
                 contenetor.style.display = "flex";
             } else {
@@ -386,7 +386,7 @@ const {data_id} = Astro.props;
     let activateTwoStep = document.getElementById(
         "activateTwoStep",
     ) as HTMLInputElement;
-    activateTwoStep.addEventListener("change", () => {
+    activateTwoStep?.addEventListener("change", () => {
         if (activateTwoStep.checked) {
             abrirModal.style.opacity = "1";
             abrirModal.disabled = false;
@@ -396,13 +396,13 @@ const {data_id} = Astro.props;
         }
     });
 
-    abrirModal.addEventListener("click", () => {
+    abrirModal?.addEventListener("click", () => {
         if (window.getComputedStyle(modal).display == "none") {
             modal.style.display = "flex";
         }
     });
 
-    cerrarModal.addEventListener("click", () => {
+    cerrarModal?.addEventListener("click", () => {
         if (window.getComputedStyle(modal).display == "flex") {
             modal.style.display = "none";
         }

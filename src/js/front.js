@@ -194,17 +194,53 @@ actual_element?.addEventListener("click", () =>{
 });
 
 let button_config = document.querySelector("#button_config");
-let list_config = document.querySelector("#list_config");
+let contentConfig = document.getElementById("content-configurations");
+let close_configurations = document.getElementById("close_configurations")
 
-if(button_config && close_configurations){
-    button_config.addEventListener("click", () =>{
-        if(window.getComputedStyle(list_config).display != "none"){
-            list_config.style.display = "none";
-        }else{
-            list_config.style.display = "flex";
-        }
+close_configurations?.addEventListener("click", () => {
+    contentConfig.style.right = "-100%";
+});
+
+button_config?.addEventListener("click", () =>{
+    console.log(window.getComputedStyle(contentConfig).right);
+    contentConfig.style.right = window.getComputedStyle(contentConfig).right === 0 ? "-100%" : "0%";
+});
+
+let btnNotification = document.querySelector("#button-notifications");
+let contentNotifications = document.getElementById("mainContent");
+let closeNotifications = document.getElementById( "closeNotifications");
+
+btnNotification?.addEventListener("click", () => {
+    contentNotifications.style.display = window.getComputedStyle(contentNotifications).display === "none" ? "flex" : "none";
+});
+
+closeNotifications.addEventListener("click", () => {
+    contentNotifications.style.display = window.getComputedStyle(contentNotifications).display === "flex" ? "none" : "flex";
+});
+
+let menuIcon = document.getElementById("menuIcon");
+let subMenu = document.getElementById("subMenu");
+
+menuIcon.addEventListener("click", () => {
+    subMenu.style.display = window.getComputedStyle(subMenu).display === "none" ? "flex" : "none";
+});
+
+let sub_btn_configurations = document.querySelectorAll("#sub_btn_configurations");
+let sub_sections_configurations = document.querySelectorAll("#sub_sections_configurations");
+
+sub_btn_configurations?.forEach((element) => {
+  element.addEventListener("click", () => {
+    let attr = element.getAttribute("data-text");
+    sub_sections_configurations.forEach((item) => {
+      let attrItem = item.getAttribute("data-id");
+      if(attrItem == attr){
+        item.style.display = "flex";
+      }else{
+        item.style.display = "none";
+      }
     });
-}
+  });
+});
 
 let button_logout = document.querySelector("#button_logout");
 if(button_logout){
@@ -402,6 +438,64 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
                 inputErr(document.querySelector("#input-password"), "#err-password", "La contraseña debe tener entre 8 y 24 caracteres.");
                 console.log("La contraseña debe tener entre 8 y 24 caracteres.");
             }
+        }
+    }
+});
+
+let form_update = document.querySelector("#form_update");
+
+form_update?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    let inputs = e.target.querySelectorAll("input");
+
+    inputSucess(inputs[0], "#err-username-update");
+    inputSucess(inputs[1], "#err-id-update");
+    inputSucess(inputs[2], "#err-phone-update");
+    inputSucess(inputs[3], "#err-email-update");
+
+    if ((inputs[0].value.length >= 6 && inputs[0].value.length <= 15) && inputs[3].value.length > 0 && inputs[2].value.length >= 10 && inputs[1].value.length >= 10) {
+        const data = {
+            id_user: getCookie("ID-USER"),
+            username: inputs[0].value,
+            id: inputs[1].value,
+            phone: inputs[2].value,
+            email: inputs[3].value,
+        }
+
+        const response_update_data = await fetch("http://localhost:4000/update/data", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const update_data = await response_update_data.json();
+
+        if(update_data.message === "Update Successful") {
+            document.querySelector("#toast-update")?.classList.remove("hidden");
+            document.querySelector("#toast-update")?.classList.add("fixed");
+            startTimer("#toast-update");
+        }else{
+            alert("Se ha encontrado un error.");
+            window.location.reload();
+        }
+    }else{
+        if(inputs[3].value.length <= 0){
+            inputErr(inputs[3], "#err-email-update", "El correo electrónico es incorrecto.");
+        }
+
+        if(inputs[2].value.length < 10){
+            inputErr(inputs[2], "#err-phone-update", "El numero de telefono es incorrecto.");
+        }
+
+        if(inputs[1].value.length < 10){
+            inputErr(inputs[1], "#err-id-update", "El numero de identidad es incorrecto.");
+        }
+        
+        if(inputs[0].value.length < 6 || inputs[0].value.length > 15){
+            inputErr(inputs[0], "#err-username-update", "El nombre de usuario debe tener entre 6 y 15 caracteres.");
         }
     }
 });
@@ -851,7 +945,7 @@ async function change_password(){
                 document.querySelector("#toast-success")?.classList.remove("hidden");
                 document.querySelector("#toast-success")?.classList.add("fixed");
                 isContinueChangePassword = true;
-                startTimer();
+                startTimer("#toast-success");
             }else{
                 isContinueChangePassword = true;
                 inputErr(document.querySelector("#input-forward-password-first"), "#err-forward-password-first", responseJson.message);
@@ -903,11 +997,11 @@ button_logout_google?.addEventListener("click", () => {
     setCookie("ID-USER", "false");
 })
 
-function startTimer() {
-    if (window.getComputedStyle(document.querySelector("#toast-success")).display !== 'none') {
+function startTimer(id) {
+    if (window.getComputedStyle(document.querySelector(id)).display !== 'none') {
         setTimeout(() => {
-            document.querySelector("#toast-success")?.classList.remove("fixed");
-            document.querySelector("#toast-success")?.classList.add("hidden");
+            document.querySelector(id)?.classList.remove("fixed");
+            document.querySelector(id)?.classList.add("hidden");
         }, 5000);
     }
 }

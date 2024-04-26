@@ -25,6 +25,7 @@ let isGoogle = false;
 let RegisterIncomplete = false;
 
 import {getSession} from 'auth-astro/server';
+import SpanNotification from "@/components/user/SpanNotification.astro"
 
 const session = await getSession(Astro.request);
 
@@ -51,8 +52,6 @@ if(session){
             Astro.cookies.set("ID-USER", data_response.id, {expires: new Date("9999-12-31")});
             Astro.cookies.set("W-INIT-ENT", "true", {expires: new Date("9999-12-31")});
         }else if(data_response.status == "Good Request Incomplete"){
-            // Astro.cookies.set("ID-USER", "false", {expires: new Date("9999-12-31")});
-            // Astro.cookies.set("W-INIT-ENT", "false", {expires: new Date("9999-12-31")});
             Astro.cookies.set("ID-USER", data_response.id, {expires: new Date("9999-12-31")});
             Astro.cookies.set("W-INIT-ENT", "true", {expires: new Date("9999-12-31")});
             RegisterIncomplete = true;
@@ -60,6 +59,9 @@ if(session){
         else{
             isGoogle = false
         }
+
+        console.log(RegisterIncomplete)
+
 
     }catch(e){
         isContinue = false
@@ -263,23 +265,13 @@ try{
             ></PopupTransfer>
             {
                 RegisterIncomplete == true ? (
-                    <PopupBase
-                        class="relative w-[30rem] -top-10 py-5 rounded-md z-10 bg-slate-700 mb-5" 
-                        id="popup-center-forward" 
-                        class_content="hidden h-screen fixed" 
-                        id_inter_content="popup-inter-forward"
-                        id_background="background-popup-forward" 
-                        id_close="close-forward"
-                    ></PopupBase>
+                    <SpanNotification
+                        message="Completa el formulario de registro en Configuraciones."
+                        class_toast="fixed"
+                        id_toast="ToastRegistration"
+                    />
                 ):(
-                    <PopupBase
-                        class="relative w-[30rem] -top-10 py-5 rounded-md z-10 bg-slate-700 mb-5" 
-                        id="popup-center-forward" 
-                        class_content="hidden h-screen fixed" 
-                        id_inter_content="popup-inter-forward"
-                        id_background="background-popup-forward" 
-                        id_close="close-forward"
-                    ></PopupBase>
+                    <span class="hidden"></span>
                 )
             }
         </Layout>

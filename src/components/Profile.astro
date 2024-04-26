@@ -1,19 +1,34 @@
 ---
+import SpanNotification from './user/SpanNotification.astro';
+
 interface Props{
   data_id: string;
+  username: string;
+  id: string;
+  email: string;
+  phone: string;
 }
 
-const {data_id} = Astro.props;
+const {data_id, username, id, email, phone} = Astro.props;
+
+import {getSession} from 'auth-astro/server';
+const session = await getSession(Astro.request);
+let img_profile: any;
+console.log(session);
+
+if(session){
+  img_profile = session.user?.image;
+}else{
+  img_profile = "false"
+}
 ---
 
-<div class="flex flex-col overflow-y-auto" id="sub_sections_configurations"  data-id={data_id}>
+<div class="flex flex-col overflow-y-auto pb-10" id="sub_sections_configurations" data-id={data_id}>
   <div class="w-full h-fit border-b-2 border-gray-300 pb-2 mb-3">
     <h1 class="text-white text-2xl font-semibold">
-      <!--Titulo -->
       Profile
     </h1>
     <h4 class="text-gray-300 text-lg font-light">
-      <!--Descripcion de la configuracion -->
       Manage your profile settings
     </h4>
   </div>
@@ -24,84 +39,106 @@ const {data_id} = Astro.props;
       Tell us your basic info details
     </h4>
 
-    <div class="flex flex-col">
+    <form id="form_update" class="flex flex-col">
       <div class="grid grid-cols-2 gap-6 max-sm:grid-cols-1 mt-4">
         <div>
           <p class="text-white text-lg">Nombre de Usuario</p>
           <input
             type="text"
-            id="username"
-            name="username"
-            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1"
+            id="username-update"
+            name="username-update"
+            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
             placeholder="Nombre de usuario"
+            value={username}
           />
+          <span id="err-username-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
         </div>
+
         <div>
           <p class="text-white text-lg">Numero de identificacion</p>
           <input
             type="number"
-            id="user-id"
-            name="user-id"
-            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1"
-            placeholder="Numero de identificacion"
+            id="id-update"
+            name="id-update"
+            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
+            placeholder={"Numero de identificacion"}
+            value={id}
           />
+          <span id="err-id-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
         </div>
+        
+        <div>
+          <p class="text-white text-lg">Teléfono</p>
+          <input
+            type="number"
+            id="phone-update"
+            name="phone-update"
+            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
+            placeholder="Numero de telefono"
+            value={phone}
+          />
+          <span id="err-phone-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
+        </div>
+        
         <div>
           <p class="text-white text-lg">Correo Electronico</p>
           <input
             type="email"
-            id="email"
-            name="email"
-            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1"
+            id="email-update"
+            name="email-update"
+            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
             placeholder="Correo Electronico"
+            value={email}
           />
-        </div>
-        <div>
-          <p class="text-white text-lg">Teléfono</p>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1"
-            placeholder="Numero de telefono"
-          />
+          <span id="err-email-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
         </div>
       </div>
       
-      <div class="flex items-center justify-center">
+      <div class="flex items-center justify-center my-3">
         <button
-          type="button"
+          id="update_btn"
+          type="submit"
           class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-md mt-4 mx-auto">update</button
         >
       </div>
-    </div>
+    </form>
   </div>
-  <div class="w-full h-fit border-b-2 border-gray-300 py-7 px-3 flex flex-row items-center">      
-        <div class="flex justify-start items-center gap-3 w-full h-fit">
-          <div class="flex items-center justify-start w-36 mt-5">
-              <label for="dropzone-file" class="rounded-[50%] w-32 h-32 bg-blue-500 flex flex-col items-center justify-center border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                  <div class="flex flex-col items-center justify-center pt-5 pb-6 w-full">
-                      <svg class="w-8 h-8 mb-0 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                      </svg>
-                      <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold flex flex-col">Click to upload </span></p>                      
-                  </div>
-                  <input id="dropzone-file" type="file" class="hidden" />
-              </label>
-          </div>  
-          <div>
-            <h2 class="text-white text-lg">
-                <!--Subtitulo -->
-                Profile Picture
-            </h2>
-            <h4 class="text-gray-300 text-base font-light">
-                  <!--Descripcion de la subconfiguracion -->
-                  Upload your profile picture here.
-            </h4>
-          </div>
-          
-             
-        </div>
 
+  <div class="w-full h-fit border-b-2 border-gray-300 py-7 px-3 flex flex-row items-center">      
+      <div class="flex max-[450px]:flex-col justify-start items-center gap-3 w-full h-fit">
+        <div class="flex items-center justify-start w-36 mt-5">
+          <label for="dropzone-file" class="relative rounded-[50%] w-32 h-32 flex flex-col items-center justify-center border-2 border-dashed cursor-pointer hover:bg-bray-800 bg-gray-700 border-gray-600 hover:border-gray-500 hover:bg-gray-600">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6 w-full z-10">
+                <svg class="h-10 mb-0 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                </svg>
+            </div>
+            <!-- Imagen por defecto -->
+            {
+              img_profile != "false" ? (
+                <img src={img_profile} class="w-full h-full object-cover rounded-[50%] absolute"/>
+              ) : (
+                <span class="hidden"></span>
+              )
+            }
+            <input id="dropzone-file" type="file" class="hidden" />
+        </label>
+        
+        </div>  
+        <div class="max-[450px]:w-full flex flex-col">
+          <h2 class="text-white text-lg">
+              Profile Picture
+          </h2>
+          <h4 class="text-gray-300 text-base font-light">
+                Upload your profile picture here.
+          </h4>
+        </div>
+      </div>
   </div>
 </div>
+
+<SpanNotification
+  message="Informacion de actualizada con exito."
+  class_toast="hidden"
+  id_toast='toast-update'
+/>
