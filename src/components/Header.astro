@@ -1,5 +1,6 @@
 ---
 import Notifications from "./user/Notifications.astro";
+import Notification from './user/Notification.astro';
 import Movements from './user/Movements.astro';
 import Movement from './user/Movement.astro';
 import Configurations from './user/Configurations.astro';
@@ -37,6 +38,7 @@ try{
         if(data_user_exist.state == "Good Request"){
             response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
             data_user = await response_data_user.json();
+            console.log(data_user.user_notifications)
         }else{
             throw new Error("Error in the request to the server");
         }
@@ -53,17 +55,7 @@ try{
         <header class="fixed w-screen h-20 flex flex-col justify-center items-center">
             <div id="content-header" class="w-full max-w-7xl max-xl:px-5 max-md:gap-y-5 grid py-2 z-15 bg-transparent">
                 <a href={href_image} class="flex justify-left items-center cursor-pointer">
-                    <svg id="icon-header" class="icon icon-tabler icon-tabler-steam w-16 h-16" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" fill="white" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M12 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                        <path d="M4 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                        <path d="M20 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                        <path d="M12 20m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
-                        <path d="M5.5 5.5l3 3"/>
-                        <path d="M15.5 15.5l3 3"/>
-                        <path d="M18.5 5.5l-3 3"/>
-                        <path d="M8.5 15.5l-3 3"/>
-                    </svg>
+                    <img src="../../public/icons/logo-nobackground-best.png" class="h-20">
                 </a>
             
                 <div class="flex gap-x-5 justify-end items-center px-3">
@@ -163,7 +155,25 @@ try{
                 </div>
             </div>
         </header>
-        <Notifications></Notifications>
+        <Notifications>
+            {
+                data_user ? (
+                    data_user.user_notifications.map((item: any) => (
+                        <Notification
+                            tipo_notification = {item.tipo_notification}
+                            origin = {item.origin}
+                            action_notification = {item.action_notification}
+                            state_notification = {item.state_notification}
+                            fecha_notification = {item.fecha_notification}
+                            message = {item.message}
+                            id_notification={item.id_notification}
+                        />
+                    ))
+                ):(
+                   <span></span>
+                )
+            }
+        </Notifications>
         <Movements>
             {
                 data_user ? (

@@ -1,9 +1,5 @@
-// const socket = io("http://localhost:4000/")
-// socket.emit("client_enter", getCookie("ID-USER"));
-
-// socket.on("transfer_received", () => {
-//     console.log("recibido");
-// });
+import {emailNotificationsElements, smsNotificationsElements} from "./localStorage";
+import * as Notifications from './Notifications'
 
 window.addEventListener("DOMContentLoaded", async () => {
     if(document.querySelector("#input-tasa-loan")){
@@ -166,7 +162,6 @@ tasa_monto_simulate_loan?.addEventListener("mouseout", (e) => {
     hiddenPopupInfo();
 });
 
-let btn_simulate_loan = document.querySelector("#btn-simulate-loan");
 let form_simulate_loan = document.querySelector("#form-simulate-loan");
     
 form_simulate_loan?.addEventListener("submit", async (event) => {
@@ -202,7 +197,6 @@ close_configurations?.addEventListener("click", () => {
 });
 
 button_config?.addEventListener("click", () =>{
-    console.log(window.getComputedStyle(contentConfig).right);
     contentConfig.style.right = window.getComputedStyle(contentConfig).right === 0 ? "-100%" : "0%";
 });
 
@@ -664,6 +658,7 @@ async function send_req_loan(){
             numero_telefono_loan: elements_loan.input_numero_telefono_loan.value,
             tasa_variable: elements_loan.tasa_variable.checked,
             tasa_fija: elements_loan.tasa_fija.checked,
+            date: new Date().toLocaleDateString(),
             id_client: getCookie("ID-USER")
         }
     
@@ -705,6 +700,15 @@ async function send_req_loan(){
                 document.querySelector("#input-email").value = ""
                 document.querySelector("#input-id-loan").value = ""
                 document.querySelector("#input-numero_telefono-loan").value = ""
+
+                if(emailNotificationsElements.check_email_loans.checked){
+                    Notifications.sendLoanNotificationEmail(data);
+                }
+
+                if(smsNotificationsElements.check_sms_loans.checked){
+                    Notifications.sendLoanNotificationsEA(data);
+                }
+
                 window.location.href = "/"
             }
         }catch(e){
@@ -815,6 +819,9 @@ async function send_req_transfer(){
                 document.querySelector("#input-numero-tarjeta-transfer").value = ""
                 document.querySelector("#input-action-transfer").value = ""
                 document.querySelector("#input-message-transfer").value = ""
+                if(emailNotificationsElements.check_email_transfers.checked){
+                    Notifications.sendTransferNotificationEmail(data);
+                }
                 window.location.reload();
             }
         }catch(e){
@@ -842,7 +849,7 @@ async function send_code_email(){
         isContinueSendEmail = false;
         inputSucess(document.querySelector("#input-email-forward"), "#err-email-forward");
 
-        const res = await fetch("http://localhost:4000/email/send", {
+        const res = await fetch("http://localhost:4000/email/send_code", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -959,6 +966,23 @@ document.querySelector("#form-forward-password")?.addEventListener("submit", (ev
     event.preventDefault();
     change_password();
 });
+
+async function send_movements_daily(){
+    const get_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+    const data_user = await get_data_user.json();
+    const fecha_update = data_user.user_info[0].fecha_update.split("/");
+    console.log(fecha_update);
+
+    if(fecha_update[0] == (new Date().getDate() < 9 ? "0" + (new Date().getDate()) : "" + new Date().getDate()) 
+    && fecha_update[1] == ((new Date().getMonth() + 1) < 9 ? "0" + (new Date().getMonth() + 1) : "" + (new Date().getMonth() + 1)) 
+    && fecha_update[2] == ("" + (new Date().getFullYear() % 100)))
+    {
+        Notifications.sendMovementNotificationEmail(data_user);
+        console.log("enviado");
+    }
+}
+
+send_movements_daily();
 
 async function pullingFetch(){
     let response_data_user, data_user, response_data_variables, data_variables, data_movements_incomplete, initial_value_movements;

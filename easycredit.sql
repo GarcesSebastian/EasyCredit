@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-04-2024 a las 07:24:25
+-- Tiempo de generación: 28-04-2024 a las 06:24:57
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.0.25
 
@@ -41,6 +41,7 @@ CREATE TABLE `codes` (
 CREATE TABLE `movements` (
   `id_movement` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
+  `origin` text NOT NULL,
   `index_movement` int(11) NOT NULL,
   `tipo_movement` text NOT NULL,
   `fecha_movement` text NOT NULL,
@@ -53,9 +54,13 @@ CREATE TABLE `movements` (
 -- Volcado de datos para la tabla `movements`
 --
 
-INSERT INTO `movements` (`id_movement`, `id_user`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`, `message`) VALUES
-(164278057, 972463, 1, 'Transfer', '2024-04-12', '100000', 'positivo', 'Pal almuerzo'),
-(877443566, 679801, 1, 'Transfer', '2024-04-12', '100000', 'negativo', 'Enviaste una transferencia al usuario con el numero de tarjeta: <span class=\'color-red\'>5882 2431 3861 7127</span> por un monto de <span class=\'color-red\'>100000</span>');
+INSERT INTO `movements` (`id_movement`, `id_user`, `origin`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`, `message`) VALUES
+(352112060, 972387, 'Vidroid GM', 1, 'Transfer', '2024-04-27', '120000', 'positivo', '¡Hola que tal!'),
+(430292191, 750713, 'Bank', 1, 'Bank Loan', '2024-04-27', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
+(470164926, 691739, 'Bank', 1, 'Bank Loan', '2024-04-27', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
+(559642221, 972387, 'Vidroid GM', 2, 'Transfer', '2024-04-27', '1200000', 'positivo', 'Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?'),
+(812236316, 691739, 'Vidroid GM', 3, 'Transfer', '2024-04-27', '1200000', 'negativo', 'Enviaste una transferencia al usuario con el numero de tarjeta: 9514 4130 6809 4190 por un monto de 1200000$.'),
+(936896006, 691739, 'Vidroid GM', 2, 'Transfer', '2024-04-27', '120000', 'negativo', 'Enviaste una transferencia al usuario con el numero de tarjeta: 9514 4130 6809 4190 por un monto de 120000$.');
 
 -- --------------------------------------------------------
 
@@ -64,19 +69,28 @@ INSERT INTO `movements` (`id_movement`, `id_user`, `index_movement`, `tipo_movem
 --
 
 CREATE TABLE `notifications` (
+  `id_notification` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `name_user` varchar(45) NOT NULL,
-  `email_user` text NOT NULL,
-  `numero_notifications` int(11) NOT NULL
+  `origin` text NOT NULL,
+  `index_notification` int(11) NOT NULL,
+  `tipo_notification` text NOT NULL,
+  `fecha_notification` text NOT NULL,
+  `action_notification` text NOT NULL,
+  `state_notification` text NOT NULL,
+  `message` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `notifications`
 --
 
-INSERT INTO `notifications` (`id_user`, `name_user`, `email_user`, `numero_notifications`) VALUES
-(679801, 'Sebaas', 'sebastiangarces158@gmail.com', 0),
-(972463, 'Sebxstt', 'sebastiangarces152@gmail.com', 0);
+INSERT INTO `notifications` (`id_notification`, `id_user`, `origin`, `index_notification`, `tipo_notification`, `fecha_notification`, `action_notification`, `state_notification`, `message`) VALUES
+(145759136, 691739, 'Vidroid GM', 2, 'Transfer', '2024-04-27', '1200000', 'negativo', 'Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?'),
+(468994930, 691739, 'Vidroid GM', 1, 'Transfer', '2024-04-27', '120000', 'negativo', '¡Hola que tal!'),
+(600977053, 972387, 'Vidroid GM', 1, 'Transfer', '2024-04-27', '120000', 'positivo', '¡Hola que tal!'),
+(736595752, 691739, 'Bank', 1, 'Bank Loan', '2024-04-27', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
+(856826283, 972387, 'Vidroid GM', 2, 'Transfer', '2024-04-27', '1200000', 'positivo', 'Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?'),
+(891823053, 750713, 'Bank', 1, 'Bank Loan', '2024-04-27', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.');
 
 -- --------------------------------------------------------
 
@@ -95,6 +109,15 @@ CREATE TABLE `prestamos` (
   `tasa_variable` tinyint(1) NOT NULL,
   `tasa_fija` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `prestamos`
+--
+
+INSERT INTO `prestamos` (`id_user`, `name_loan`, `numero_telefono_loan`, `tasa_interes`, `cuotas`, `frencuencia_pago`, `action_prestamo`, `tasa_variable`, `tasa_fija`) VALUES
+(750713, 'Sebastian Andres Garces Gomez', '1234567890', 12.25, 24, '6 cuotas', '12000000', 0, 1),
+(691739, 'Sebastian Andres Garces Gomez', '1234567890', 12.25, 12, '3 cuotas', '12000000', 0, 1),
+(691739, 'Sebastian Andres Garces Gomez', '1234567890', 12.25, 12, '6 cuotas', '12000000', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -118,8 +141,9 @@ CREATE TABLE `registers` (
 --
 
 INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `fecha_creacion`) VALUES
-(679801, 'Sebaas', '$2b$10$QpKuEtyQWSKyF2sw6VDQkuXjq220qunsNZsTCFRbaPkJPwCRODICe', 'sebastiangarces158@gmail.com', '$2b$10$6.5/VgjWlUqes.3Q7aeDIuH3PPgcqf5fAytp1ynitjYHfnsnguFEG', '$2b$10$oRuQ.E9WBewpC4tjsI8iM.Xqs5k4rNAHEiJia6YWjxe0PB2ttTkuG', 1, '11/04/24'),
-(972463, 'Sebxstt', '$2b$10$.mHGOGlsPEZAVw4sZuKucOdDBVwPXI.ESQj./ZXOl5euVYrb2XWty', 'sebastiangarces152@gmail.com', '$2b$10$HGb0EBGHTBm7Gf.KnnyNdeK3LffH0xpnZJ2dw7wqW7X31Styxji1a', '$2b$10$zdEPOG9QJqWkZjWbqjksmOBHLzZQPZxoLNHQGS3.QuRp/OGxvjElq', 1, '11/04/24');
+(691739, 'Vidroid GM', 'google', 'sebastiangarces152@gmail.com', '1234567890', '1234567890', 1, '27/04/24'),
+(750713, 'Sebastian', 'google', 'sebastiangarces250@gmail.com', '1234567890', '1234567890', 1, '27/04/24'),
+(972387, 'Sebastian', 'google', 'sebastiangarces158@gmail.com', '1234567890', '1234567890', 1, '27/04/24');
 
 -- --------------------------------------------------------
 
@@ -133,16 +157,18 @@ CREATE TABLE `users` (
   `email_user` text NOT NULL,
   `number_card` text NOT NULL,
   `ingresos_totales` text NOT NULL,
-  `saldo_disponible` text NOT NULL
+  `saldo_disponible` text NOT NULL,
+  `fecha_update` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`) VALUES
-(679801, 'Sebaas', 'sebastiangarces158@gmail.com', '1509 7431 8371 8768', '7700000', '7700000'),
-(972463, 'Sebxstt', 'sebastiangarces152@gmail.com', '5882 2431 3861 7127', '2300000', '2300000');
+INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`, `fecha_update`) VALUES
+(691739, 'Vidroid GM', 'sebastiangarces152@gmail.com', '3432 2254 8457 4926', '10680000', '10680000', '30/04/24'),
+(750713, 'Sebastian', 'sebastiangarces250@gmail.com', '8056 9071 5374 5807', '12000000', '12000000', '30/04/24'),
+(972387, 'Sebastian', 'sebastiangarces158@gmail.com', '9514 4130 6809 4190', '1320000', '1320000', '30/04/24');
 
 -- --------------------------------------------------------
 
@@ -223,7 +249,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('text_amount_loan', 'Monto del Préstamo', 'Loan Amount'),
 ('text_confirm', 'Confirmar', 'Confirm'),
 ('text_confirm_code', 'Confirmar Codigo', 'Confirm Code'),
-('text_cuotas', 'Dues', 'Dues'),
+('text_cuotas', 'Cuotas', 'Dues'),
 ('text_description_transfer', 'Descripción de la transferencia', 'Transfer Description'),
 ('text_finish_loan', 'Finalizar Préstamo', 'Finalize Loan'),
 ('text_frecuencia', 'Frecuencia de pagos', 'Payment Frequency'),
@@ -276,8 +302,7 @@ ALTER TABLE `movements`
 -- Indices de la tabla `notifications`
 --
 ALTER TABLE `notifications`
-  ADD PRIMARY KEY (`id_user`),
-  ADD UNIQUE KEY `email_no_repeat` (`email_user`) USING HASH;
+  ADD PRIMARY KEY (`id_notification`);
 
 --
 -- Indices de la tabla `registers`
@@ -298,6 +323,16 @@ ALTER TABLE `users`
 --
 ALTER TABLE `words`
   ADD PRIMARY KEY (`word`(700)) USING BTREE;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `registers` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

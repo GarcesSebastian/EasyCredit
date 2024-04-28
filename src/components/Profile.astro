@@ -14,7 +14,6 @@ const {data_id, username, id, email, phone} = Astro.props;
 import {getSession} from 'auth-astro/server';
 const session = await getSession(Astro.request);
 let img_profile: any;
-console.log(session);
 
 if(session){
   img_profile = session.user?.image;
@@ -23,26 +22,26 @@ if(session){
 }
 ---
 
-<div class="flex flex-col overflow-y-auto pb-10" id="sub_sections_configurations" data-id={data_id}>
+<div class="flex flex-col overflow-y-auto overflow-x-hidden pb-10" id="sub_sections_configurations" data-id={data_id}>
   <div class="w-full h-fit border-b-2 border-gray-300 pb-2 mb-3">
     <h1 class="text-white text-2xl font-semibold">
       Profile
     </h1>
-    <h4 class="text-gray-300 text-lg font-light">
+    <h4 class="text-gray-300 text-base font-light">
       Manage your profile settings
     </h4>
   </div>
 
   <div class="w-full h-fit border-b-2 border-gray-300 py-2 px-3">
-    <h3 class="text-white text-2xl font-semibold">Basic Info</h3>
-    <h4 class="text-gray-300 text-lg font-light">
+    <h3 class="text-white text-base">Basic Info</h3>
+    <h4 class="text-gray-300 text-base font-light">
       Tell us your basic info details
     </h4>
 
     <form id="form_update" class="flex flex-col">
       <div class="grid grid-cols-2 gap-6 max-sm:grid-cols-1 mt-4">
         <div>
-          <p class="text-white text-lg">Nombre de Usuario</p>
+          <p class="text-white text-base">Nombre de Usuario</p>
           <input
             type="text"
             id="username-update"
@@ -55,7 +54,7 @@ if(session){
         </div>
 
         <div>
-          <p class="text-white text-lg">Numero de identificacion</p>
+          <p class="text-white text-base">Numero de identificacion</p>
           <input
             type="number"
             id="id-update"
@@ -68,7 +67,7 @@ if(session){
         </div>
         
         <div>
-          <p class="text-white text-lg">Teléfono</p>
+          <p class="text-white text-base">Teléfono</p>
           <input
             type="number"
             id="phone-update"
@@ -81,7 +80,7 @@ if(session){
         </div>
         
         <div>
-          <p class="text-white text-lg">Correo Electronico</p>
+          <p class="text-white text-base">Correo Electronico</p>
           <input
             type="email"
             id="email-update"
@@ -126,7 +125,7 @@ if(session){
         
         </div>  
         <div class="max-[450px]:w-full flex flex-col">
-          <h2 class="text-white text-lg">
+          <h2 class="text-white text-lg font-semibold">
               Profile Picture
           </h2>
           <h4 class="text-gray-300 text-base font-light">

@@ -147,9 +147,7 @@ app.post("/register/auth", async (req, res) => {
         }
         
         connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, req.body.numero_identidad, req.body.numero_telefono, false, fecha_creacion]);
-        connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0"]);
-        connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
-        // connection.query("INSERT INTO movements (id_user, id, email_user, numero_movements) VALUES (?, ?, ?)", [user_id, req.body.email, 0]);
+        connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update) VALUES (?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_creacion]);
 
         res.status(200).json({ message: "Register Successful"});
         
@@ -164,8 +162,6 @@ app.post("/auth/google", async (req, res) => {
         const emailExists = await connection.query("SELECT * FROM registers WHERE email = ?", [req.body.email]);
 
         if (emailExists.length > 0) {
-            console.log(emailExists[0])
-
             if(emailExists[0].numero_identidad == "google" && emailExists[0].numero_telefono == "google"){
                 if(req.body.numero_identidad && req.body.numero_telefono){
                     await connection.query("UPDATE registers SET numero_identidad = ?, numero_telefono = ?, estado = ? WHERE email = ?", [req.body.numero_identidad, req.body.numero_telefono, true, req.body.email]);
@@ -232,8 +228,7 @@ app.post("/auth/google", async (req, res) => {
             }
 
             await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "google", "google", "google", true, fecha_creacion]);
-            await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible) VALUES (?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0"]);
-            await connection.query("INSERT INTO notifications (id_user, name_user, email_user, numero_notifications) VALUES (?, ?, ?, ?)", [user_id, req.body.username, req.body.email, 0]);
+            await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update) VALUES (?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_creacion]);
         
             return res.status(200).json({ status: "Good Request", message: "Register Successful", id: user_id});
         }
@@ -311,9 +306,11 @@ app.post("/user/loan", async (req, res) => {
                     await connection.query("INSERT INTO prestamos(id_user, name_loan, numero_telefono_loan, tasa_interes, cuotas, frencuencia_pago, action_prestamo, tasa_variable, tasa_fija) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, name_loan, numero_telefono_loan, tasa_loan, cuotas, frecuencia, action_loan, tasa_variable, tasa_fija]);            
                     
                     let movements = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
+                    let notifications = await connection.query("SELECT * FROM easycredit.notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
                     let date_now_string = getDateNow();
                     
                     let id_movement = await generateIdMovements(connection);
+                    let id_notification = await generateIdNotifications(connection);
 
                     if(id_movement == null){
                         res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
@@ -321,7 +318,8 @@ app.post("/user/loan", async (req, res) => {
 
                     let message_origin = `Hizo un prestamo por un monto de ${action_loan}$.`;
                     await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement, data_user_basic[0].id_user, "Bank" ,movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo", message_origin]);
-                    
+                    await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification, data_user_basic[0].id_user, "Bank" ,notifications.length + 1, "Bank Loan", date_now_string, action_loan, "positivo", message_origin]);
+
                     await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [sumary_action, sumary_action, data_user_basic[0].id_user]);
                     res.status(200).json({ message: "Loan Successful" });
                 }else{
@@ -342,7 +340,6 @@ app.post("/user/transfer", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
         const origin = req.body.origin;
-        console.log(origin);
         const destino_id = req.body.numero_card;
         const action = req.body.action;
         const message = req.body.message;
@@ -378,26 +375,32 @@ app.post("/user/transfer", async (req, res) => {
                             //Movimiento para el destino
                             let date_now_string_destino = getDateNow();
                             let movements_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
+                            let notifications_destino = await connection.query("SELECT * FROM easycredit.notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
                             
                             let id_movement_destino = await generateIdMovements(connection);
+                            let id_notification_destino = await generateIdNotifications(connection);
 
-                            if(id_movement_destino == null){
-                                res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
+                            if(id_movement_destino == null || id_notification_destino == null){
+                                res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del destino" });
                             }
 
                             await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_destino, data_user_register_destino[0].id_user, data_user_origin[0].name_user ,movements_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo", message]);
-            
+                            await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification_destino, data_user_register_destino[0].id_user, data_user_origin[0].name_user ,notifications_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo", message]);
+
                             //Movimiento para el origen
                             let date_now_string_origin = getDateNow();
                             let movements_origin = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
+                            let notifications_origin = await connection.query("SELECT * FROM easycredit.notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
                                                         
                             let id_movement_origin = await generateIdMovements(connection);
+                            let id_notification_origin = await generateIdNotifications(connection);
 
-                            if(id_movement_origin == null){
+                            if(id_movement_origin == null || id_notification_origin == null){
                                 res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
                             }
                             let message_origin = `Enviaste una transferencia al usuario con el numero de tarjeta: ${numero_card} por un monto de ${action}$.`;
                             await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_origin, data_user_origin[0].id_user, data_user_origin[0].name_user ,movements_origin.length + 1, "Transfer", date_now_string_origin, action, "negativo", message_origin]);
+                            await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification_origin, data_user_origin[0].id_user, data_user_origin[0].name_user ,notifications_destino.length + 1, "Transfer", date_now_string_destino, action, "negativo", message]);
 
                             res.status(200).json({ message: "Transfer Successful" });
                         }else{
@@ -420,7 +423,7 @@ app.post("/user/transfer", async (req, res) => {
     }
 });
 
-app.post("/email/send", async (req, res) => {
+app.post("/email/send_code", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
         let email = req.body.email;
@@ -524,6 +527,222 @@ app.post("/email/send", async (req, res) => {
     }
 });
 
+app.post("/email/send_loan", async (req, res) => {
+    if(req.body){
+        const {htmlMessage, subject, email} = req.body;
+
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: "easycredit4321@gmail.com",
+                pass: "cvmovrshtbmlpusa"
+            }
+        });
+
+        let mailOptions = {
+            from: 'sebastiangarces152@gmail.com', 
+            to: email, 
+            subject: subject,
+            html: htmlMessage
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                res.status(400).send({ state: "Bad Request", message: "No se pudo enviar el correo"});
+                return;
+            } else {
+                res.status(200).send({ state: "Good Request", message: "Correo Enviado"});
+                return;
+            }
+        });
+    }
+});
+
+app.post("/email/send_transfer", async (req, res) => {
+    if(req.body){
+        const {action, origin, message, numero_card, subject} = req.body;
+        let numero_card_formatted = "";
+        console.log(numero_card);
+
+        for(let i = 0; i < numero_card.length; i++){
+            if(i != numero_card.length - 1){
+                numero_card_formatted += numero_card[i] + "-";
+                continue;
+            }
+            numero_card_formatted += numero_card[i];
+        }
+
+        const connection = await database.getConnection();
+        const data_user_origin = await connection.query("SELECT * FROM users WHERE id_user = ?", [origin]);
+
+        const name_origin = data_user_origin[0].name_user;
+        const email = data_user_origin[0].email_user;
+
+        const htmlMessage = `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Notificación de Transferencia</title>
+            <style>
+                body {
+                    background-color: #f2f2f2;
+                    padding: 20px;
+                    font-family: Arial, sans-serif;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .header h1 {
+                    color: #333;
+                }
+                .details {
+                    margin-bottom: 20px;
+                }
+                .details table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .details table td {
+                    padding: 10px;
+                    border-bottom: 1px solid #ddd;
+                    font-weight: bold;
+                    color: #666;
+                }
+                .details table td:first-child {
+                    width: 30%; /* Ancho de la primera columna */
+                }
+                .details table td:last-child {
+                    text-align: right;
+                    font-weight: normal;
+                    color: #333;
+                }
+                .thanks {
+                    text-align: center;
+                    color: #666;
+                    font-size: 16px;
+                    margin-top: 20px;
+                    padding-bottom: 20px;
+                }
+            </style>
+        </head>
+        <body style="background-color: #f2f2f2; padding: 20px;">
+        
+        <div class="container">
+            <div class="header">
+                <h1>Notificación de Transferencia</h1>
+                <p>Estimado <strong>${name_origin}</strong>,</p>
+                <p>Se ha realizado una transferencia desde su cuenta hacia el número de tarjeta <span style="font-weight: bold;">${numero_card_formatted}</span>.</p>
+            </div>
+            
+            <div class="details">
+                <h2 style="color: #333; font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">Detalles de la Transferencia</h2>
+                <table>
+                    <tr>
+                        <td><strong>Acción:</strong></td>
+                        <td>${action}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Origen:</strong></td>
+                        <td>${name_origin}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mensaje:</strong></td>
+                        <td>${message}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Número de Tarjeta:</strong></td>
+                        <td>${numero_card_formatted}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <p class="thanks">¡Gracias por elegir EasyCredit!</p>
+        </div>
+        
+        </body>
+        </html>
+        
+        
+        `;
+
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: "easycredit4321@gmail.com",
+                pass: "cvmovrshtbmlpusa"
+            }
+        });
+
+        let mailOptions = {
+            from: 'sebastiangarces152@gmail.com', 
+            to: email, 
+            subject: subject,
+            html: htmlMessage
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                res.status(400).send({ state: "Bad Request", message: "No se pudo enviar el correo"});
+                return;
+            } else {
+                res.status(200).send({ state: "Good Request", message: "Correo Enviado"});
+                return;
+            }
+        });
+    }
+});
+
+app.post("/email/send_movement", async (req, res) => {
+    if(req.body){
+        const {htmlMessage, subject, email} = req.body;
+        const connection = await database.getConnection();
+
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: "easycredit4321@gmail.com",
+                pass: "cvmovrshtbmlpusa"
+            }
+        });
+
+        let mailOptions = {
+            from: 'sebastiangarces152@gmail.com', 
+            to: email, 
+            subject: subject,
+            html: htmlMessage
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                res.status(400).send({ state: "Bad Request", message: "No se pudo enviar el correo"});
+                return;
+            } else {
+                res.status(200).send({ state: "Good Request", message: "Correo Enviado"});
+                return;
+            }
+        });
+
+        let date = new Date();
+        date.setDate(date.getDate() + 3);
+        date = date.toLocaleDateString().split("-");
+        date[0] = date[0] % 100;
+        date = date.reverse().join("/")
+
+        await connection.query("UPDATE users SET fecha_update = ? WHERE email_user = ?", [date, email]);
+    }
+});
+
 app.post("/email/verify", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
@@ -604,7 +823,6 @@ app.post("/create/information", async (req, res) => {
         res.status(400).json({ status: "Bad Request", error: "No se proporcionó ningún cuerpo en la solicitud" });
       }
     } catch (error) {
-      console.error("Error al procesar la solicitud:", error);
       res.status(500).json({ status: "Bad Request", error: "Ocurrió un error al procesar la solicitud" });
     }
 });
@@ -624,7 +842,6 @@ app.post("/delete/information", async (req, res) => {
         res.status(400).json({ status: "Bad Request", error: "No se proporcionó ningún cuerpo en la solicitud" });
         }
     } catch (error) {
-        console.error("Error al procesar la solicitud:", error);
         res.status(500).json({ status: "Bad Request", error: "Ocurrió un error al procesar la solicitud" });
     }
 });
@@ -713,7 +930,7 @@ console.log("Escuchando el puerto " + app.get("port"));
 
 //Functions
 function getDateNow(){
-    return new Date().getFullYear() + "-" + (new Date().getUTCMonth() < 9 ? "0" + (new Date().getUTCMonth() + 1) : (new Date().getUTCMonth() + 1)) + "-" + new Date().getUTCDate();
+    return new Date().getFullYear() + "-" + (new Date().getUTCMonth() < 9 ? "0" + (new Date().getUTCMonth() + 1) : (new Date().getUTCMonth() + 1)) + "-" + (new Date().getUTCDate() - 1);
 }
 
 function convertCard(number_card_string, number_card_array){
@@ -738,5 +955,22 @@ async function generateIdMovements(connection){
         return null;
     }else{
         return id_movement_destino;
+    }
+}
+
+async function generateIdNotifications(connection){
+    let id_notification_destino = Math.floor(Math.random() * 900000000) + 100000000;
+    let exist_id_notification_destino = await connection.query("SELECT * FROM easycredit.notifications WHERE id_notification = ?", [id_notification_destino]);
+    let max_attemps_id_destino = 100;
+    while(exist_id_notification_destino.length > 0 && max_attemps_id_destino > 0){
+        id_notification_destino = Math.floor(Math.random() * 900000000) + 100000000;
+        exist_id_notification_destino = await connection.query("SELECT * FROM easycredit.notifications WHERE id_notification = ?", [id_notification_destino]);
+        max_attemps_id_destino --;
+    }
+
+    if(max_attemps_id_destino == 0){
+        return null;
+    }else{
+        return id_notification_destino;
     }
 }
