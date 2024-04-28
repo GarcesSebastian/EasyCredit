@@ -12,49 +12,62 @@
     const { tipo_notification, origin, action_notification, state_notification, fecha_notification, message, id_notification } = Astro.props;
 ---
 
-<article id="movement" class="bg-gradient-to-r to-[#0074D3] from-[#0040A8] shadow-lg flex flex-col rounded-lg" data-id-movement={id_notification}>
-    <div id="preview" class="flex items-center p-5 justify-between">
+<article id="movement" class="bg-gradient-to-r to-[#0074D3] from-[#0040A8] shadow-lg flex flex-col rounded-lg">
+    <div id="preview" class="flex items-center p-5 justify-between gap-3">
         {
             tipo_notification == "Transfer" ? (
-                <div id="logo">
+                <div id="logo" class="h-full">
                     <img
-                    class="size-12"
+                    class="size-14"
                     src="https://img.icons8.com/?size=48&id=vqyoQCZ3fPp5&format=png"
                     alt=""
                     />
                 </div>
+
+                <div id="data" class="flex flex-col justify-center items-start w-[90%] gap-1">
+                    <h3 class="text-xl text-white">{tipo_notification}</h3>
+
+                    <p>
+                        Haz recibido una transferencia de <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">{action_notification}$</span>.
+                    </p>
+
+                    <span class="w-full h-fit flex justify-between items-end mt-2">
+                        <button id="item_movement" data-id-movement={id_notification} type="button" class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
+                            mostrar
+                        </button>
+
+                        <h3 class="w-full text-wrap px-2 h-full flex items-center justify-end">
+                            {fecha_notification}
+                        </h3>
+                    </span>
+                </div>
             ) : (
-                <div id="logo">
+                <div id="logo" class="h-full">
                     <img
-                    class="size-12"
+                    class="size-14"
                     src="https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png"
                     alt=""
                     />
                 </div>
+
+                <div id="data" class="flex flex-col justify-center items-start w-[90%] gap-1">
+                    <h3 class="text-xl text-white">{tipo_notification}</h3>
+
+                    <p>
+                        Usted hizo un prestamo al <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">{action_notification}$</span>.
+                    </p>
+
+                    <span class="w-full h-fit flex justify-between items-end mt-2">
+                        <button id="item_movement" type="button" data-id-movement={id_notification} class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
+                            mostrar
+                        </button>
+
+                        <h3 class="w-full h-full text-wrap px-2 flex items-center justify-end">
+                            {fecha_notification}
+                        </h3>
+                    </span>
+                </div>
             )
         }
-
-        <div id="data" class="text-center">
-            <h3 class="text-xl text-white">{tipo_notification}</h3>
-        </div>
-
-        <div id="more" class="cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M6 9l6 6l6 -6"></path>
-            </svg>
-        </div>
-
-    </div>
-
-    <div id="info"  class="hidden flex-col gap-3 px-5 py-3 text-white border-t-2 animate-deployment">
-
-        <h3 class="text-lg flex flex-col">
-            <textarea class="bg-slate-700/50 p-3 rounded-lg h-[200px] max-h-[250px] font-bold mt-3" disabled>{message}</textarea>
-        </h3>
-
-        <h3 class="flex gap-2 text-lg px-1">
-            <p class="text-gray-200">{fecha_notification}</p>
-        </h3>
     </div>
 </article> 

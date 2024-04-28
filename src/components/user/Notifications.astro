@@ -2,10 +2,17 @@
 
 ---
 
-<section class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden" id="mainContent">
-  <div id="closeNotifications" class="w-full h-full cursor-pointer"></div>
-  <div id="notificationsContent" class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-md:w-[55rem] p-5 flex flex-col gap-4 animate-displace">
+<section class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end flex" id="mainContent">
+  <div id="closeNotifications" class="w-full h-full cursor-pointer max-md:hidden"></div>
+  <div id="notificationsContent" class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-md:w-full p-5 flex flex-col gap-4 animate-displace">
     <header class="flex justify-between items-center p-4 border-b-2 border-blue-500 rounded-t-sm">
+      <span id="close_notifications" class="w-fit h-fit p-1 cursor-pointer hover:bg-slate-700 transition-all duration-150 ease-in rounded-[3px] hidden max-md:flex">
+        <svg class="icon icon-tabler icons-tabler-outline icon-tabler-x h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M18 6l-12 12" />
+          <path d="M6 6l12 12" />
+        </svg>
+      </span>
       <h1 class="text-2xl text-white max-[490px]:text-lg">Notificaciones</h1>
       <div id="moreOptions" class="cursor-pointer">
         <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots">

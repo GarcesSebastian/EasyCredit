@@ -202,13 +202,18 @@ button_config?.addEventListener("click", () =>{
 
 let btnNotification = document.querySelector("#button-notifications");
 let contentNotifications = document.getElementById("mainContent");
-let closeNotifications = document.getElementById( "closeNotifications");
+let closeNotifications = document.getElementById("closeNotifications");
+let close_notifications = document.getElementById("close_notifications"); 
 
 btnNotification?.addEventListener("click", () => {
     contentNotifications.style.display = window.getComputedStyle(contentNotifications).display === "none" ? "flex" : "none";
 });
 
 closeNotifications.addEventListener("click", () => {
+    contentNotifications.style.display = window.getComputedStyle(contentNotifications).display === "flex" ? "none" : "flex";
+});
+
+close_notifications.addEventListener("click", () => {
     contentNotifications.style.display = window.getComputedStyle(contentNotifications).display === "flex" ? "none" : "flex";
 });
 
