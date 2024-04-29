@@ -14,8 +14,6 @@ let smsNotificationsElements = {
     check_sms_others: document.querySelector("#check_sms_others")
 }
 
-console.log(emailNotificationsElements, smsNotificationsElements);
-
 window.addEventListener("DOMContentLoaded", () => {
     //Check Notifications Email
     if (localStorage.getItem("emailNotifications")) {
@@ -63,12 +61,15 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    //Check Notifications EasyCredit
+    if(localStorage.getItem("easyCreditNotifications") == null) {
+        localStorage.setItem("easyCreditNotifications", 0);
+    }
 });
 
 //Eventos de los checkbox
 for(let key in emailNotificationsElements) {
     emailNotificationsElements[key].addEventListener("change", (e) => {
-        console.log("jaskdla");
         let emailNotifications = JSON.parse(localStorage.getItem("emailNotifications"));
         emailNotificationsElements[key].checked = e.target.checked;
         const index = Object.keys(emailNotificationsElements).indexOf(key);

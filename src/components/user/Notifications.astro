@@ -1,8 +1,12 @@
 ---
+interface Props{
+  length_notification: number;
+}
 
+const {length_notification} = Astro.props;
 ---
 
-<section class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end flex" id="mainContent">
+<section class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden" id="mainContent">
   <div id="closeNotifications" class="w-full h-full cursor-pointer max-md:hidden"></div>
   <div id="notificationsContent" class="bg-slate-800 shadow-lg shadow-gray-900 w-[45rem] max-md:w-full p-5 flex flex-col gap-4 animate-displace">
     <header class="flex justify-between items-center p-4 border-b-2 border-blue-500 rounded-t-sm">
@@ -14,24 +18,35 @@
         </svg>
       </span>
       <h1 class="text-2xl text-white max-[490px]:text-lg">Notificaciones</h1>
-      <div id="moreOptions" class="cursor-pointer">
-        <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots">
+      <span id="options_notifications" class="cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots">
           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
           <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
           <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
           <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
           </svg>
-      </div>
+      </span>
     </header>
 
-    <div id="subMenu" class="hidden bg-slate-700 p-1 rounded-[4px] animate-deployment">
-      <button id="btnNew" class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800" >Crear</button>
-      <button id="btnDeleteSingle" class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800">Borrar</button>
-      <button id="btnDeleteAll" class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800" >Borrar todo</button>
+    <div id="content_options_notifications" class="w-full hidden justify-end -mt-2 animate-deployment">
+      <div class="flex flex-col w-full bg-slate-700 p-1 rounded-[4px]">
+        <button id="btnDeleteAll" class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800" >Borrar todo</button>
+      </div>
     </div>
 
     <main class="overflow-y-auto h-full flex flex-col gap-4" id="allNotifications">
-      <slot/> 
+      {
+        length_notification === 0 ? (
+          <div class="flex flex-col items-center justify-center gap-4">
+            <h2 class="text-white text-lg">No se encontraron notificaciones</h2>
+          </div>
+        ) : (
+          <div id="notification_hidden" class="flex-col items-center justify-center gap-4 hidden">
+            <h2 class="text-white text-lg">No se encontraron notificaciones</h2>
+          </div>
+          <slot/> 
+        )
+      }
     </main>
   </div>
 </section>

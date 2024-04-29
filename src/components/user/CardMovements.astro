@@ -26,6 +26,10 @@ const {titulo, not_found, more, num_movements} = Astro.props;
                         {more}...
                     </span>
                 </div>
+
+                <span id="not_found_movements" class="text-gray-300 hidden">
+                    {not_found}
+                </span>
             ):(
                 <span class="text-gray-300">
                     {not_found}

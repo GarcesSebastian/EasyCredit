@@ -12,31 +12,57 @@
     const { tipo_notification, origin, action_notification, state_notification, fecha_notification, message, id_notification } = Astro.props;
 ---
 
-<article id="movement" class="bg-gradient-to-r to-[#0074D3] from-[#0040A8] shadow-lg flex flex-col rounded-lg">
-    <div id="preview" class="flex items-center p-5 justify-between gap-3">
+<article id="notification" class="bg-gradient-to-r to-[#0074D3] from-[#0040A8] shadow-lg flex flex-col rounded-lg" data-notification={id_notification}>
+    <div id="preview" class="flex items-center p-5 justify-between gap-3 relative">
         {
-            tipo_notification == "Transfer" ? (
+            tipo_notification == "Transfer" && state_notification == "positivo" ? (
                 <div id="logo" class="h-full">
                     <img
                     class="size-14"
                     src="https://img.icons8.com/?size=48&id=vqyoQCZ3fPp5&format=png"
                     alt=""
                     />
-                </div>
+                </div>                
 
                 <div id="data" class="flex flex-col justify-center items-start w-[90%] gap-1">
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
-                    <p>
+                    <p class="text-white">
                         Haz recibido una transferencia de <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">{action_notification}$</span>.
                     </p>
 
                     <span class="w-full h-fit flex justify-between items-end mt-2">
-                        <button id="item_movement" data-id-movement={id_notification} type="button" class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
+                        <button id="item_notification" data-id-movement={id_notification} type="button" class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
                             mostrar
                         </button>
 
-                        <h3 class="w-full text-wrap px-2 h-full flex items-center justify-end">
+                        <h3 class="w-full text-wrap px-2 h-full flex items-center justify-end text-white">
+                            {fecha_notification}
+                        </h3>
+                    </span>
+                </div>
+            ) : tipo_notification == "Transfer" && state_notification == "negativo" ? (
+                <div id="logo" class="h-full">
+                    <img
+                    class="size-14"
+                    src="https://img.icons8.com/?size=48&id=vqyoQCZ3fPp5&format=png"
+                    alt=""
+                    />
+                </div>                
+
+                <div id="data" class="flex flex-col justify-center items-start w-[90%] gap-1">
+                    <h3 class="text-xl text-white">{tipo_notification}</h3>
+
+                    <p class="text-white">
+                        Haz enviado una transferencia a <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">{action_notification}$</span>.
+                    </p>
+
+                    <span class="w-full h-fit flex justify-between items-end mt-2">
+                        <button id="item_notification" data-id-movement={id_notification} type="button" class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
+                            mostrar
+                        </button>
+
+                        <h3 class="w-full text-wrap px-2 h-full flex items-center justify-end text-white">
                             {fecha_notification}
                         </h3>
                     </span>
@@ -53,21 +79,28 @@
                 <div id="data" class="flex flex-col justify-center items-start w-[90%] gap-1">
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
-                    <p>
+                    <p class="text-white">
                         Usted hizo un prestamo al <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">{action_notification}$</span>.
                     </p>
 
                     <span class="w-full h-fit flex justify-between items-end mt-2">
-                        <button id="item_movement" type="button" data-id-movement={id_notification} class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
+                        <button id="item_notification" type="button" data-id-movement={id_notification} class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
                             mostrar
                         </button>
 
-                        <h3 class="w-full h-full text-wrap px-2 flex items-center justify-end">
+                        <h3 class="w-full h-full text-wrap px-2 flex items-center justify-end text-white">
                             {fecha_notification}
                         </h3>
                     </span>
                 </div>
             )
         }
+        <span id="delete_notification" class="absolute top-4 right-4 cursor-pointer hover:bg-slate-800/40 transition-colors duration-100 ease-in p-0.5 rounded-sm" data-notification={id_notification}>
+            <svg class="icon icon-tabler icons-tabler-outline icon-tabler-x h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M18 6l-12 12" />
+                <path d="M6 6l12 12" />
+            </svg>
+        </span>
     </div>
 </article> 

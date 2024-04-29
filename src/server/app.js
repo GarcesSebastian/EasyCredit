@@ -845,6 +845,36 @@ app.post("/delete/information", async (req, res) => {
         res.status(500).json({ status: "Bad Request", error: "Ocurrió un error al procesar la solicitud" });
     }
 });
+
+app.post("/delete/notification", async (req, res) => {
+    if(req.body){
+        const {id} = req.body;
+        const connection = await database.getConnection();
+        const response_delete_notification = await connection.query("DELETE FROM notifications WHERE id_notification = ?", [id]);
+
+        if(response_delete_notification){
+            res.status(200).send({ state: "Good Request", message: "Notificación Eliminada" });
+        }else{
+            res.status(400).send({ state: "Bad Request", message: "No se pudo eliminar la notificación" });
+        
+        }
+    }
+});
+
+app.post("/delete/movement", async (req, res) => {
+    if(req.body){
+        const {id} = req.body;
+        const connection = await database.getConnection();
+        const response_delete_movement = await connection.query("DELETE FROM movements WHERE id_movement = ?", [id]);
+
+        if(response_delete_movement){
+            res.status(200).send({ state: "Good Request", message: "Movimiento Eliminado" });
+        }else{
+            res.status(400).send({ state: "Bad Request", message: "No se pudo eliminar el movimiento" });
+        
+        }
+    }
+});
   
 app.get("/user/exists", async (req, res) => {
 

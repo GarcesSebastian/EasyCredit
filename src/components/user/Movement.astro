@@ -68,14 +68,17 @@
             }
         </h3>
 
-        <h3 class="flex gap-2 text-lg">
-            Fecha del Movimiento:<p class="text-gray-200">{fecha_movement}</p>
+        <h3 class="flex gap-2 text-base">
+            Fecha:<p class="text-gray-200 text-md w-full">{fecha_movement}</p>
         </h3>
 
         <h3 class="text-lg flex flex-col">
             Descripcion:
             <textarea class="bg-slate-700/50 p-3 rounded-lg h-[200px] max-h-[250px] font-bold mt-3" disabled>{message}</textarea>
         </h3>
-
+                
+        <button id="delete_movement" data-id-movement={id_movement} type="button" class="focus:outline-none text-white w-full font-bold bg-red-400 hover:bg-red-500 focus:ring-4 focus:ring-white rounded-[3px] text-md px-5 py-2.5">
+            Borrar
+        </button>
     </div>
 </article> 
