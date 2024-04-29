@@ -1167,6 +1167,10 @@ document.querySelector("#form-forward-password")?.addEventListener("submit", (ev
 async function send_movements_daily(){
     const get_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
     const data_user = await get_data_user.json();
+    if(!data_user || !data_user.user_info[0] || !data_user.user_info[0].fecha_update){
+        return;
+    }
+
     const fecha_update = data_user.user_info[0].fecha_update.split("/");
 
     if(fecha_update[0] == (new Date().getDate() < 9 ? "0" + (new Date().getDate()) : "" + new Date().getDate()) 
@@ -1228,10 +1232,16 @@ function verifyNoticiations(){
     let length_notifications_storage = localStorage.getItem("easyCreditNotifications");
     let length_notifications = document.querySelectorAll("#notification").length;
 
+    let point_red = document.querySelector("#point_red");
+
+    if(!point_red){
+        return;
+    }
+
     if(length_notifications_storage != length_notifications){
-        document.querySelector("#point_red").style.display = "flex";
+        point_red.style.display = "flex";
     }else{
-        document.querySelector("#point_red").style.display = "none";
+        point_red.style.display = "none";
     }
     console.log("Verify");
 
