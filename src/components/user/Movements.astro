@@ -18,7 +18,21 @@ const {length_movement} = Astro.props;
         </svg>
       </span>
       <h1 class="text-2xl text-white max-[490px]:text-lg">Historial de Movimientos</h1>
+      <span id="options_movements" class="cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+          <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+          <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+          </svg>
+      </span>
     </header>
+
+    <div id="content_options_movements" class="w-full hidden justify-end -mt-2 animate-deployment">
+      <div class="flex flex-col w-full bg-slate-700 p-1 rounded-[4px]">
+        <button id="delete_all_movements" class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800" >Borrar todo</button>
+      </div>
+    </div>
 
     <main id="contentMovements" class="flex flex-col gap-3 overflow-y-auto h-full">
       {

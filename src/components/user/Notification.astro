@@ -5,11 +5,10 @@
         action_notification: number;
         state_notification: string;
         fecha_notification: string;
-        message: string;
         id_notification: number;
     }
 
-    const { tipo_notification, origin, action_notification, state_notification, fecha_notification, message, id_notification } = Astro.props;
+    const { tipo_notification, origin, action_notification, state_notification, fecha_notification, id_notification } = Astro.props;
 ---
 
 <article id="notification" class="bg-gradient-to-r to-[#0074D3] from-[#0040A8] shadow-lg flex flex-col rounded-lg" data-notification={id_notification}>

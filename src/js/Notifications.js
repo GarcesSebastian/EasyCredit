@@ -333,23 +333,15 @@ async function sendMovementNotificationEmail(data){
 
 }
 async function sendLoanNotificationsEA(data){
-    const action = data.action_loan;
-    const name = data.name_loan;
     const specifics_loan = {
-        name: data.name_loan,
-        email: data.email_user,
-        telefono: data.numero_telefono_loan,
-        id_loan: data.id_loan,
         amount: data.action_loan,
-        tasa: data.tasa_loan,
-        cuotas: data.cuotas,
-        frecuencia: data.frecuencia,
-        tasa_variable: data.tasa_variable,
-        tasa_fija: data.tasa_fija,
-        date: data.date
+        date: data.date,
+        origin: "Bank",
+        tipo: "Bank Loan",
+        state: "positivo"
     }
 
-    const tasaVariable = data.tasa_variable ? "Tasa Variable" : "Tasa Fija";
+    
 }
 
 export {

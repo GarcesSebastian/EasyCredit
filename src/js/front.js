@@ -44,7 +44,8 @@ btn_simulate_loan_offline?.addEventListener("click", async () => {
     window.location.href = "/SimulateLoan";
 });
 
-async function simulateLoan(monto, tasa, frecuencia, plazo){
+function simulateLoan(monto, tasa, frecuencia, plazo){
+    console.log(monto, tasa, frecuencia, plazo)
     const tasa_interes_mensual = (tasa / 100) / 12;
     let total_pagos;
     let frecuencia_value;
@@ -78,6 +79,7 @@ async function simulateLoan(monto, tasa, frecuencia, plazo){
     body_table_simulate_loan.innerHTML = '';
 
     for(let i = 1; i <= total_pagos; i++){
+        console.log(i)
         let pago_interes = pago_restante * tasa_interes_mensual;
         let pago_principal = pago_mensual - pago_interes;
         let pago_total = pago_interes + pago_principal;
@@ -205,17 +207,25 @@ button_config?.addEventListener("click", () =>{
 });
 
 let btnNotification = document.querySelector("#button-notifications");
+let btn_all_notifications = document.querySelector("#btn-all-notifications");
+
+let btns_notification = [
+    btnNotification,
+    btn_all_notifications
+]
+
 let contentNotifications = document.getElementById("mainContent");
 let closeNotifications = document.getElementById("closeNotifications");
 let close_notifications = document.getElementById("close_notifications"); 
 
-btnNotification?.addEventListener("click", () => {
-    contentNotifications.style.display = window.getComputedStyle(contentNotifications).display === "none" ? "flex" : "none";
-    if(contentNotifications.style.display == "flex"){
-        verifyNoticiations();
-        document.querySelector("#point_red").style.display = "none";
-        localStorage.setItem("easyCreditNotifications", document.querySelectorAll("#notification").length);
-    }
+btns_notification?.forEach(element => {
+    element?.addEventListener('click', () => {
+        contentNotifications.style.display = window.getComputedStyle(contentNotifications).display === "none" ? "flex" : "none";
+        if(contentNotifications.style.display == "flex"){
+            localStorage.setItem("easyCreditNotifications", document.querySelectorAll("#notification").length);
+            verifyNoticiations();
+        }
+    });
 });
 
 closeNotifications.addEventListener("click", () => {
@@ -344,7 +354,48 @@ document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
 let items_movements = document.querySelectorAll("#item_movement");
 let movements_list = document.querySelectorAll("#movement");
 let item_movement = document.querySelectorAll("#item_movement");
-let info_list = document.querySelectorAll("#info");
+let options_movements = document.querySelector("#options_movements");
+let content_options_movements = document.querySelector("#content_options_movements");
+let delete_all_movements = document.querySelector("#delete_all_movements");
+let delete_movements = document.querySelectorAll("#delete_movement");
+
+delete_all_movements.addEventListener("click", async () => {
+    let movements_id = [];
+    movements_list.forEach(item => {
+        movements_id.push(item.getAttribute("data-id-movement"));
+    });
+
+    const response_delete_all_movements = await fetch("http://localhost:4000/delete/allmovements", {
+        method: "POST",
+        body: JSON.stringify({id_movements: movements_id}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const delete_all_movements = await response_delete_all_movements.json();
+
+    if(delete_all_movements.state == "Good Request"){
+        movements_list.forEach(item => {
+            item.remove();
+        });
+
+        item_movement.forEach((item) => {
+            item.remove();
+        });
+
+        initial_value_movements = 0;
+        document.querySelector("#slot_card").style.display = "none";
+        document.querySelector("#not_found_movements").style.display = "flex";
+        document.querySelector("#movement_hidden").style.display = "flex";
+    }else{
+        console.log(delete_all_movements.message);
+    }
+});
+
+options_movements?.addEventListener("click", () => {
+    content_options_movements.style.display = window.getComputedStyle(content_options_movements).display === "none" ? "flex" : "none";
+})
 
 items_movements.forEach((item) => {
     item.addEventListener("click", async () => {
@@ -363,76 +414,6 @@ items_movements.forEach((item) => {
         }
     });
 });
-
-let item_notification = document.querySelectorAll("#delete_notification");
-let items_notifications = document.querySelectorAll("#item_notification");
-let notifications_list = document.querySelectorAll("#notification");
-let options_notifications = document.querySelector("#options_notifications");
-let content_options_notifications = document.querySelector("#content_options_notifications");
-
-options_notifications?.addEventListener("click", () => {
-    content_options_notifications.style.display = window.getComputedStyle(content_options_notifications).display === "none" ? "flex" : "none";
-});
-
-items_notifications.forEach((item) => {
-    item.addEventListener("click", async () => {
-        let movements = document.querySelector("#showMore");
-        if (window.getComputedStyle(movements).display == "none") {
-            movements.style.display = "flex";        
-            movements_list.forEach((element, index_element) => {
-                if(item.getAttribute("data-id-movement") == element.getAttribute("data-id-movement")){
-                    info_list.forEach((info, index_info) => {
-                        if(index_element == index_info){
-                            if (window.getComputedStyle(info).display == "none") {
-                                info.style.display = "flex";
-                            }
-                        }
-                    });
-                }
-            });
-        } else {
-            movements.style.display = "none";
-        }
-    });
-});
-
-item_notification.forEach((item, index) => {
-    item.addEventListener("click", () => {
-        let attrItem = item.getAttribute("data-notification");
-        notifications_list.forEach(async (element, index_element) => {
-            let attrElement = element.getAttribute("data-notification");
-            if(attrItem == attrElement){
-                const response_delete_notification = await fetch("http://localhost:4000/delete/notification", {
-                    method: "POST",
-                    body: JSON.stringify({id: element.getAttribute("data-notification")}),
-                    headers:{
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                const delete_notification = await response_delete_notification.json();
-
-                if(delete_notification.state == "Good Request"){
-                    console.log(delete_notification.message);
-                    console.log(notifications_list.length)
-                    notifications_list[index_element].remove();
-                    notifications_list = document.querySelectorAll("#notification");
-                    console.log(notifications_list.length)
-                    document.querySelector("#point_red").style.display = "none";
-                    localStorage.setItem("easyCreditNotifications", (notifications_list.length) || 0);
-                    if(notifications_list.length <= 0){
-                        document.querySelector("#notification_hidden").style.display = "flex";
-                        document.querySelector("#point_red").style.display = "none";
-                    }
-                }else{
-                    console.log(delete_notification.message);
-                }
-            }
-        });
-    });
-});
-
-let delete_movements = document.querySelectorAll("#delete_movement");
 
 delete_movements.forEach((item, index) => {
     item.addEventListener("click", () => {
@@ -475,6 +456,82 @@ delete_movements.forEach((item, index) => {
             }else{
                 console.log("nono")
                 console.log(index == index_element, index, index_element)
+            }
+        });
+    });
+});
+
+let item_notification = document.querySelectorAll("#delete_notification");
+let items_notifications = document.querySelectorAll("#item_notification");
+let notifications_list = document.querySelectorAll("#notification");
+let options_notifications = document.querySelector("#options_notifications");
+let content_options_notifications = document.querySelector("#content_options_notifications");
+let delete_all_notifications = document.querySelector("#delete_all_notifications");
+
+delete_all_notifications.addEventListener("click", async () => {
+    let notifications_id = [];
+    notifications_list.forEach(item => {
+        notifications_id.push(item.getAttribute("data-notification"));
+    });
+
+    const response_delete_all_notifications = await fetch("http://localhost:4000/delete/allnotifications", {
+        method: "POST",
+        body: JSON.stringify({id_notifications: notifications_id}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const delete_all_notifications = await response_delete_all_notifications.json();
+
+    if(delete_all_notifications.state == "Good Request"){
+        notifications_list.forEach(item => {
+            item.remove();
+        });
+        localStorage.setItem("easyCreditNotifications", 0);
+        document.querySelector("#notification_hidden").style.display = "flex";
+    }else{
+        console.log(delete_all_notifications.message);
+    }
+});
+
+options_notifications?.addEventListener("click", () => {
+    content_options_notifications.style.display = window.getComputedStyle(content_options_notifications).display === "none" ? "flex" : "none";
+});
+
+items_notifications.forEach((item) => {
+    item.addEventListener("click", async () => {
+        document.querySelector("#showMore").style.display = window.getComputedStyle(document.querySelector("#showMore")).display === "none" ? "flex" : "none";
+    });
+});
+
+item_notification.forEach((item, index) => {
+    item.addEventListener("click", () => {
+        let attrItem = item.getAttribute("data-notification");
+        notifications_list.forEach(async (element, index_element) => {
+            let attrElement = element.getAttribute("data-notification");
+            if(attrItem == attrElement){
+                const response_delete_notification = await fetch("http://localhost:4000/delete/notification", {
+                    method: "POST",
+                    body: JSON.stringify({id: element.getAttribute("data-notification")}),
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const delete_notification = await response_delete_notification.json();
+
+                if(delete_notification.state == "Good Request"){
+                    notifications_list[index_element].remove();
+                    notifications_list = document.querySelectorAll("#notification");
+                    document.querySelector("#point_red").style.display = "none";
+                    localStorage.setItem("easyCreditNotifications", (notifications_list.length) || 0);
+                    if(notifications_list.length <= 0){
+                        document.querySelector("#notification_hidden").style.display = "flex";
+                    }
+                }else{
+                    console.log(delete_notification.message);
+                }
             }
         });
     });
@@ -721,7 +778,7 @@ async function send_req_loan(){
 
         for(let key in elements_loan){
             if(elements_loan.hasOwnProperty(key)){
-                let item = elements_loan[key];ú
+                let item = elements_loan[key];
                 let id = item.id.toString();
                 let id_without_input = id.split("input")[1];
                 let id_with_err = "err" + id_without_input;
@@ -839,10 +896,30 @@ async function send_req_loan(){
     }
 }
 
-document.querySelector("#form-loan")?.addEventListener("submit", (event) =>{
+function simulate_loan(){
+    let cuotas = elements_loan.input_cuotas.selectedIndex;
+    let monto = elements_loan.input_action_loan.value;
+    let frecuencia = elements_loan.input_frecuencia.selectedIndex;
+    let tasa = elements_loan.input_tasa_loan.value;
+
+    console.log(cuotas, monto, frecuencia);
+    window.location.href = `/SimulateLoan?monto=${monto}&frecuencia=${frecuencia}&cuotas=${cuotas}&tasa=${tasa.split("%")[0]}`
+}
+
+document.querySelector("#button-simulate-loan")?.addEventListener("click", () => {
+    //simulate_loan();
+});
+
+document.querySelector("#form-loan")?.addEventListener("submit", (event) => {
     event.preventDefault();
-    send_req_loan();
-})
+
+    let submitter = event.submitter;
+    if(submitter.id == "button-simulate-loan"){
+        simulate_loan();
+    }else{
+        send_req_loan();
+    }
+});
 
 let elements_transfer = {
     input_numero_tarjeta: document.querySelector("#input-numero-tarjeta-transfer"),
@@ -1156,6 +1233,12 @@ function verifyNoticiations(){
     }else{
         document.querySelector("#point_red").style.display = "none";
     }
+    console.log("Verify");
+
+    let number_notifications = document.querySelector("#number_notifications");
+    if(number_notifications){
+        number_notifications.innerText = length_notifications - length_notifications_storage;
+    }
 }
 
 function transformSrc(srcImage){
@@ -1229,3 +1312,5 @@ function getCookie(cookieName) {
     }
     return null;
 }
+
+export {simulateLoan}

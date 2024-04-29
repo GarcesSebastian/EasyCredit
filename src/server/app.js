@@ -758,6 +758,12 @@ app.post("/email/verify", async (req, res) => {
     }
 });
 
+app.post("/EA/send_loan", async (req, res) => {
+    if(req.body){
+
+    }
+});
+
 app.post("/password/change", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
@@ -871,8 +877,43 @@ app.post("/delete/movement", async (req, res) => {
             res.status(200).send({ state: "Good Request", message: "Movimiento Eliminado" });
         }else{
             res.status(400).send({ state: "Bad Request", message: "No se pudo eliminar el movimiento" });
-        
         }
+    }
+});
+
+app.post("/delete/allnotifications", async (req, res) => {
+    if(req.body){
+        const {id_notifications} = req.body;
+
+        const connection = await database.getConnection();
+
+        for(let i = 0; i < id_notifications.length; i++){
+            const response_delete_notification = await connection.query("DELETE FROM notifications WHERE id_notification = ?", [id_notifications[i]]);
+
+            if(!response_delete_notification){
+                return res.status(400).send({ state: "Bad Request", message: "No se pudieron eliminar las notificaciones" });
+            }
+        }
+
+        return res.status(200).send({ state: "Good Request", message: "Notificaciones Eliminados" });
+    }
+});
+
+app.post("/delete/allmovements", async (req, res) => {
+    if(req.body){
+        const {id_movements} = req.body;
+
+        const connection = await database.getConnection();
+
+        for(let i = 0; i < id_movements.length; i++){
+            const response_delete_movement = await connection.query("DELETE FROM movements WHERE id_movement = ?", [id_movements[i]]);
+
+            if(!response_delete_movement){
+                return res.status(400).send({ state: "Bad Request", message: "No se pudieron eliminar los movimientos" });
+            }
+        }
+
+        return res.status(200).send({ state: "Good Request", message: "Movimientos Eliminados" });
     }
 });
   
