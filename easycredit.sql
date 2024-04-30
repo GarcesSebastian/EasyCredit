@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-04-2024 a las 06:24:57
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.0.25
+-- Tiempo de generación: 30-04-2024 a las 14:54:07
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -55,12 +55,7 @@ CREATE TABLE `movements` (
 --
 
 INSERT INTO `movements` (`id_movement`, `id_user`, `origin`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`, `message`) VALUES
-(352112060, 972387, 'Vidroid GM', 1, 'Transfer', '2024-04-27', '120000', 'positivo', '¡Hola que tal!'),
-(430292191, 750713, 'Bank', 1, 'Bank Loan', '2024-04-27', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
-(470164926, 691739, 'Bank', 1, 'Bank Loan', '2024-04-27', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
-(559642221, 972387, 'Vidroid GM', 2, 'Transfer', '2024-04-27', '1200000', 'positivo', 'Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?'),
-(812236316, 691739, 'Vidroid GM', 3, 'Transfer', '2024-04-27', '1200000', 'negativo', 'Enviaste una transferencia al usuario con el numero de tarjeta: 9514 4130 6809 4190 por un monto de 1200000$.'),
-(936896006, 691739, 'Vidroid GM', 2, 'Transfer', '2024-04-27', '120000', 'negativo', 'Enviaste una transferencia al usuario con el numero de tarjeta: 9514 4130 6809 4190 por un monto de 120000$.');
+(625122631, 698671, 'Bank', 1, 'Bank Loan', '2024-04-29', '120000000', 'positivo', 'Hizo un prestamo por un monto de 120000000$.');
 
 -- --------------------------------------------------------
 
@@ -77,20 +72,9 @@ CREATE TABLE `notifications` (
   `fecha_notification` text NOT NULL,
   `action_notification` text NOT NULL,
   `state_notification` text NOT NULL,
-  `message` text NOT NULL
+  `message` text NOT NULL,
+  `isActive` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `notifications`
---
-
-INSERT INTO `notifications` (`id_notification`, `id_user`, `origin`, `index_notification`, `tipo_notification`, `fecha_notification`, `action_notification`, `state_notification`, `message`) VALUES
-(145759136, 691739, 'Vidroid GM', 2, 'Transfer', '2024-04-27', '1200000', 'negativo', 'Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?'),
-(468994930, 691739, 'Vidroid GM', 1, 'Transfer', '2024-04-27', '120000', 'negativo', '¡Hola que tal!'),
-(600977053, 972387, 'Vidroid GM', 1, 'Transfer', '2024-04-27', '120000', 'positivo', '¡Hola que tal!'),
-(736595752, 691739, 'Bank', 1, 'Bank Loan', '2024-04-27', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
-(856826283, 972387, 'Vidroid GM', 2, 'Transfer', '2024-04-27', '1200000', 'positivo', 'Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?, Hola que tal como estás?'),
-(891823053, 750713, 'Bank', 1, 'Bank Loan', '2024-04-27', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.');
 
 -- --------------------------------------------------------
 
@@ -115,9 +99,7 @@ CREATE TABLE `prestamos` (
 --
 
 INSERT INTO `prestamos` (`id_user`, `name_loan`, `numero_telefono_loan`, `tasa_interes`, `cuotas`, `frencuencia_pago`, `action_prestamo`, `tasa_variable`, `tasa_fija`) VALUES
-(750713, 'Sebastian Andres Garces Gomez', '1234567890', 12.25, 24, '6 cuotas', '12000000', 0, 1),
-(691739, 'Sebastian Andres Garces Gomez', '1234567890', 12.25, 12, '3 cuotas', '12000000', 0, 1),
-(691739, 'Sebastian Andres Garces Gomez', '1234567890', 12.25, 12, '6 cuotas', '12000000', 0, 1);
+(698671, 'Sebastian Garces', '1234567890', 12.25, 12, 'mensual', '120000000', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -141,9 +123,7 @@ CREATE TABLE `registers` (
 --
 
 INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `fecha_creacion`) VALUES
-(691739, 'Vidroid GM', 'google', 'sebastiangarces152@gmail.com', '1234567890', '1234567890', 1, '27/04/24'),
-(750713, 'Sebastian', 'google', 'sebastiangarces250@gmail.com', '1234567890', '1234567890', 1, '27/04/24'),
-(972387, 'Sebastian', 'google', 'sebastiangarces158@gmail.com', '1234567890', '1234567890', 1, '27/04/24');
+(698671, 'Vidroid GM', 'google', 'sebastiangarces152@gmail.com', '1234567890', '1234567890', 1, '30/04/24');
 
 -- --------------------------------------------------------
 
@@ -158,17 +138,16 @@ CREATE TABLE `users` (
   `number_card` text NOT NULL,
   `ingresos_totales` text NOT NULL,
   `saldo_disponible` text NOT NULL,
-  `fecha_update` text NOT NULL
+  `fecha_update` text NOT NULL,
+  `fecha_activity` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`, `fecha_update`) VALUES
-(691739, 'Vidroid GM', 'sebastiangarces152@gmail.com', '3432 2254 8457 4926', '10680000', '10680000', '30/04/24'),
-(750713, 'Sebastian', 'sebastiangarces250@gmail.com', '8056 9071 5374 5807', '12000000', '12000000', '30/04/24'),
-(972387, 'Sebastian', 'sebastiangarces158@gmail.com', '9514 4130 6809 4190', '1320000', '1320000', '30/04/24');
+INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`, `fecha_update`, `fecha_activity`) VALUES
+(698671, 'Vidroid GM', 'sebastiangarces152@gmail.com', '1237 4611 9659 5162', '', '120000000', 'NaN', '2024-04-30T12:58:00.095Z');
 
 -- --------------------------------------------------------
 
