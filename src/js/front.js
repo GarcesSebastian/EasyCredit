@@ -827,7 +827,7 @@ async function send_req_loan(){
         let data = {
             action_loan: elements_loan.input_action_loan.value,
             tasa_loan: elements_loan.input_tasa_loan.value,
-            cuotas: elements_loan.input_cuotas.value,
+            cuotas: Number(elements_loan.input_cuotas.value),
             frecuencia: elements_loan.input_frecuencia.value,
             name_loan: elements_loan.input_name_loan.value,
             email_user: elements_loan.input_email.value,

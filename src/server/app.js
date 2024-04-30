@@ -294,8 +294,8 @@ app.post("/user/loan", async (req, res) => {
         const tasa_fija = req.body.tasa_fija;
         const tasa_variable = req.body.tasa_variable;
 
-        const data_user_basic = await connection.query("SELECT * FROM easycredit.users WHERE email_user = ?", [email_user]);
-        const data_user_import = await connection.query("SELECT * FROM easycredit.registers WHERE email = ?", [email_user]);
+        const data_user_basic = await connection.query("SELECT * FROM users WHERE email_user = ?", [email_user]);
+        const data_user_import = await connection.query("SELECT * FROM registers WHERE email = ?", [email_user]);
 
         if(data_user_basic.length > 0 && data_user_import.length > 0){
             if(data_user_basic[0].id_user == req.body.id_client){
@@ -305,8 +305,8 @@ app.post("/user/loan", async (req, res) => {
                     
                     await connection.query("INSERT INTO prestamos(id_user, name_loan, numero_telefono_loan, tasa_interes, cuotas, frencuencia_pago, action_prestamo, tasa_variable, tasa_fija) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, name_loan, numero_telefono_loan, tasa_loan, cuotas, frecuencia, action_loan, tasa_variable, tasa_fija]);            
                     
-                    let movements = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
-                    let notifications = await connection.query("SELECT * FROM easycredit.notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
+                    let movements = await connection.query("SELECT * FROM movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
+                    let notifications = await connection.query("SELECT * FROM notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
                     let date_now_string = getDateNow();
                     
                     let id_movement = await generateIdMovements(connection);
@@ -320,7 +320,7 @@ app.post("/user/loan", async (req, res) => {
                     await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement, data_user_basic[0].id_user, "Bank" ,movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo", message_origin]);
                     await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification, data_user_basic[0].id_user, "Bank" ,notifications.length + 1, "Bank Loan", date_now_string, action_loan, "positivo", message_origin]);
 
-                    await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [sumary_action, sumary_action, data_user_basic[0].id_user]);
+                    await connection.query("UPDATE users SET saldo_disponible=?  WHERE id_user = ?", [sumary_action, data_user_basic[0].id_user]);
                     res.status(200).json({ message: "Loan Successful" });
                 }else{
                     res.status(400).send({ state: "Bad Request", message: "Numero de Identificacion Invalido." });
@@ -346,17 +346,17 @@ app.post("/user/transfer", async (req, res) => {
 
         let numero_card = convertCard("", destino_id);
 
-        const data_user_register_origin = await connection.query("SELECT * FROM easycredit.registers WHERE id = ?", [origin]);
+        const data_user_register_origin = await connection.query("SELECT * FROM registers WHERE id = ?", [origin]);
 
         if(data_user_register_origin.length > 0){
-            const data_user_origin = await connection.query("SELECT * FROM easycredit.users WHERE id_user = ?", [data_user_register_origin[0].id]);
+            const data_user_origin = await connection.query("SELECT * FROM users WHERE id_user = ?", [data_user_register_origin[0].id]);
 
             if(data_user_origin.length > 0){
 
                 if(data_user_origin[0].number_card != numero_card){
 
                     if(parseFloat(data_user_origin[0].saldo_disponible) >= parseFloat(action)){
-                        const data_user_register_destino = await connection.query("SELECT * FROM easycredit.users WHERE number_card = ?", [numero_card]);
+                        const data_user_register_destino = await connection.query("SELECT * FROM users WHERE number_card = ?", [numero_card]);
     
                         if(data_user_register_destino.length > 0){
                             let saldo_disponible_destino = data_user_register_destino[0].saldo_disponible;
@@ -367,15 +367,15 @@ app.post("/user/transfer", async (req, res) => {
                             
                             
                             //Actulizamos los saldos de ambos
-                            await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [saldo_enviado_destino, saldo_enviado_destino, data_user_register_destino[0].id_user]);
-                            await connection.query("UPDATE users SET saldo_disponible=? ,ingresos_totales=?  WHERE id_user = ?", [saldo_restado_origen, saldo_restado_origen, data_user_origin[0].id_user]);
+                            await connection.query("UPDATE users SET saldo_disponible=?  WHERE id_user = ?", [saldo_enviado_destino, data_user_register_destino[0].id_user]);
+                            await connection.query("UPDATE users SET saldo_disponible=?  WHERE id_user = ?", [saldo_restado_origen, data_user_origin[0].id_user]);
                             
                             //Agregamos movimientos a ambos y notificaciones
 
                             //Movimiento para el destino
                             let date_now_string_destino = getDateNow();
-                            let movements_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
-                            let notifications_destino = await connection.query("SELECT * FROM easycredit.notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
+                            let movements_destino = await connection.query("SELECT * FROM movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
+                            let notifications_destino = await connection.query("SELECT * FROM notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
                             
                             let id_movement_destino = await generateIdMovements(connection);
                             let id_notification_destino = await generateIdNotifications(connection);
@@ -389,8 +389,8 @@ app.post("/user/transfer", async (req, res) => {
 
                             //Movimiento para el origen
                             let date_now_string_origin = getDateNow();
-                            let movements_origin = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
-                            let notifications_origin = await connection.query("SELECT * FROM easycredit.notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
+                            let movements_origin = await connection.query("SELECT * FROM movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
+                            let notifications_origin = await connection.query("SELECT * FROM notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
                                                         
                             let id_movement_origin = await generateIdMovements(connection);
                             let id_notification_origin = await generateIdNotifications(connection);
@@ -427,7 +427,7 @@ app.post("/email/send_code", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
         let email = req.body.email;
-        let emailExists = await connection.query("SELECT email FROM easycredit.registers WHERE email = ?", [email]);
+        let emailExists = await connection.query("SELECT email FROM registers WHERE email = ?", [email]);
         if(!emailExists.length > 0){
             res.status(400).send({ state: "Bad Request", message: "Email no registrado." });
             return;
@@ -440,7 +440,7 @@ app.post("/email/send_code", async (req, res) => {
 
         while(isAvailable == false){
             randomCode = Math.floor(100000 + Math.random() * 900000)
-            response_user_code = await connection.query("SELECT * FROM easycredit.codes WHERE code = ?",[randomCode]);
+            response_user_code = await connection.query("SELECT * FROM codes WHERE code = ?",[randomCode]);
             if(response_user_code.length > 0){
                 attemps_code_recover --;
             }
@@ -748,7 +748,7 @@ app.post("/email/verify", async (req, res) => {
         const connection = await database.getConnection();
         let code = req.body.code;
 
-        let response_user_code = await connection.query("SELECT * FROM easycredit.codes WHERE code = ?",[code]);
+        let response_user_code = await connection.query("SELECT * FROM codes WHERE code = ?",[code]);
 
         if(response_user_code.length > 0){
             res.status(200).send({ state: "Good Request", message: "Código Correcto", email: response_user_code[0].email});
@@ -926,7 +926,7 @@ app.get("/user/exists", async (req, res) => {
     }
 
     const connection = await database.getConnection();
-    const user = await connection.query("SELECT * FROM easycredit.users WHERE id_user = ?", [id_user]);
+    const user = await connection.query("SELECT * FROM users WHERE id_user = ?", [id_user]);
 
     if(user.length > 0){
         res.status(200).send({ state: "Good Request", message: "Usuario Encontrado" });
@@ -944,14 +944,14 @@ app.get("/user/data", async (req, res) => {
     }
 
     const connection = await database.getConnection();
-    const data_user_info = await connection.query("SELECT * FROM easycredit.users WHERE id_user = ?", [id_user]);
-    const data_user_register = await connection.query("SELECT * FROM easycredit.registers WHERE id = ?", [id_user]);
-    const data_user_notifications = await connection.query("SELECT * FROM easycredit.notifications WHERE id_user = ?", [id_user]);
+    const data_user_info = await connection.query("SELECT * FROM users WHERE id_user = ?", [id_user]);
+    const data_user_register = await connection.query("SELECT * FROM registers WHERE id = ?", [id_user]);
+    const data_user_notifications = await connection.query("SELECT * FROM notifications WHERE id_user = ?", [id_user]);
     let data_user_movements_incomplete;
     let data_user_movements;
     if(data_user_info[0] && data_user_info[0].id_user){
-        data_user_movements_incomplete = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ? LIMIT 4", [data_user_info[0].id_user]);
-        data_user_movements = await connection.query("SELECT * FROM easycredit.movements WHERE id_user = ?", [data_user_info[0].id_user]);
+        data_user_movements_incomplete = await connection.query("SELECT * FROM movements WHERE id_user = ? LIMIT 4", [data_user_info[0].id_user]);
+        data_user_movements = await connection.query("SELECT * FROM movements WHERE id_user = ?", [data_user_info[0].id_user]);
     }
     const data = {
         user_info: data_user_info,
@@ -988,7 +988,7 @@ app.get("/movements/one_movement", async (req, res) => {
 
 app.get("/words", async (req, res) => {
     const connection = await database.getConnection();
-    const words = await connection.query("SELECT * FROM easycredit.words ORDER BY word ASC");
+    const words = await connection.query("SELECT * FROM words ORDER BY word ASC");
     if(words.length > 0){
         res.json(words);
     }else{
@@ -1014,11 +1014,11 @@ function convertCard(number_card_string, number_card_array){
 
 async function generateIdMovements(connection){
     let id_movement_destino = Math.floor(Math.random() * 900000000) + 100000000;
-    let exist_id_movement_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_movement = ?", [id_movement_destino]);
+    let exist_id_movement_destino = await connection.query("SELECT * FROM movements WHERE id_movement = ?", [id_movement_destino]);
     let max_attemps_id_destino = 100;
     while(exist_id_movement_destino.length > 0 && max_attemps_id_destino > 0){
         id_movement_destino = Math.floor(Math.random() * 900000000) + 100000000;
-        exist_id_movement_destino = await connection.query("SELECT * FROM easycredit.movements WHERE id_movement = ?", [id_movement_destino]);
+        exist_id_movement_destino = await connection.query("SELECT * FROM movements WHERE id_movement = ?", [id_movement_destino]);
         max_attemps_id_destino --;
     }
 
@@ -1031,11 +1031,11 @@ async function generateIdMovements(connection){
 
 async function generateIdNotifications(connection){
     let id_notification_destino = Math.floor(Math.random() * 900000000) + 100000000;
-    let exist_id_notification_destino = await connection.query("SELECT * FROM easycredit.notifications WHERE id_notification = ?", [id_notification_destino]);
+    let exist_id_notification_destino = await connection.query("SELECT * FROM notifications WHERE id_notification = ?", [id_notification_destino]);
     let max_attemps_id_destino = 100;
     while(exist_id_notification_destino.length > 0 && max_attemps_id_destino > 0){
         id_notification_destino = Math.floor(Math.random() * 900000000) + 100000000;
-        exist_id_notification_destino = await connection.query("SELECT * FROM easycredit.notifications WHERE id_notification = ?", [id_notification_destino]);
+        exist_id_notification_destino = await connection.query("SELECT * FROM notifications WHERE id_notification = ?", [id_notification_destino]);
         max_attemps_id_destino --;
     }
 
