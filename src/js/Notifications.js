@@ -1,3 +1,5 @@
+import {emailNotificationsElements, smsNotificationsElements} from "./localStorage";
+
 async function sendLoanNotificationEmail(data){
     const action = data.action_loan;
     const name = data.name_loan;
@@ -332,6 +334,221 @@ async function sendMovementNotificationEmail(data){
 
 
 }
+
+async function sendActivityNotificationEmail(id_user, activityType) {
+
+    if(emailNotificationsElements.check_email_others.checked != true){
+        return;
+    }
+
+    const subject = `Notificación de Actividad en tu Cuenta`;
+
+    let htmlMessage = "";
+
+    switch (activityType) {
+        case "Nuevo Registro":
+            htmlMessage = generateNewRegistrationEmail();
+            break;
+        case "Publicación de Contenido":
+            htmlMessage = generateContentPublicationEmail();
+            break;
+        case "Oferta Especial":
+            htmlMessage = generateSpecialOfferEmail();
+            break;
+        default:
+            htmlMessage = generateDefaultEmail();
+    }
+
+    const emailData = {
+        id_user,
+        subject,
+        htmlMessage
+    };
+
+    try {
+        const response = await fetch("http://localhost:4000/email/send_simulated_activity", {
+            method: "POST",
+            body: JSON.stringify(emailData),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const result = await response.json();
+        if (result.state !== "Good Request") {
+            console.log("Error sending simulated activity email");
+        }
+    } catch (error) {
+        console.error("Error sending simulated activity email:", error.message);
+    }
+}
+
+function generateNewRegistrationEmail() {
+    const content = `
+        <div class="container">
+            <div class="header">
+                <h1 style="color: #007bff;">Notificación</h1>
+            </div>
+            <div class="message">
+                <p>Hola,</p>
+                <p>¡Gracias por unirte a nuestra plataforma! Te damos la bienvenida a nuestra comunidad.</p>
+                <p>Empieza a disfrutar de los beneficios exclusivos que ofrecemos:</p>
+                <ol id="ul">
+                    <li>Acceso a contenido premium</li>
+                    <li>Oportunidades de participación en eventos</li>
+                    <li>Actualizaciones periódicas sobre nuevas funciones</li>
+                </ol>
+                <p>Para comenzar a explorar, <a href="#" style="color: #007bff; text-decoration: none;">inicia sesión en tu cuenta</a>.</p>
+            </div>
+            <p class="thanks" style="color: #666;">¡Gracias por elegirnos!</p>
+        </div>
+    `;
+    return generateEmailTemplate(content);
+}
+
+function generateContentPublicationEmail() {
+    const content = `
+        <div class="container">
+            <div class="header">
+                <h1 style="color: #007bff;">Notificación</h1>
+            </div>
+            <div class="message">
+                <p>Hola,</p>
+                <p>¡Descubre lo último en nuestra plataforma!</p>
+                <p>Hemos añadido contenido fresco y emocionante que no te puedes perder.</p>
+                <ol id="ul">
+                    <li>Ve el nuevo contenido</li>
+                </ol>
+            </div>
+            <p class="thanks" style="color: #666;">¡Gracias por elegirnos!</p>
+        </div>
+    `;
+    return generateEmailTemplate(content);
+}
+
+function generateSpecialOfferEmail() {
+    const content = `
+        <div class="container">
+            <div class="header">
+                <h1 style="color: #dc3545;">Notificación</h1>
+            </div>
+            <div class="message">
+                <p>Hola,</p>
+                <p>¡Oferta Especial por Tiempo Limitado!</p>
+                <p>No te pierdas nuestra oferta exclusiva para usuarios nuevos.</p>
+                <p>Usa el siguiente código al registrarte: <strong style="color: #dc3545;">SPECIAL50</strong></p>
+                <p>Regístrate <a href="#" style="color: #dc3545; text-decoration: none;">aquí</a> para aprovechar esta oferta.</p>
+            </div>
+            <p class="thanks" style="color: #666;">¡Gracias por elegirnos!</p>
+        </div>
+    `;
+    return generateEmailTemplate(content);
+}
+
+function generateDefaultEmail() {
+    const content = `
+        <div class="container">
+            <div class="header">
+                <h1 style="color: #007bff;">Notificación</h1>
+            </div>
+            <div class="message">
+                <p>Hola,</p>
+                <p>Queríamos informarte sobre una actualización reciente en nuestra plataforma.</p>
+                <p>Para obtener más detalles, <a href="#" style="color: #007bff; text-decoration: none;">inicia sesión en tu cuenta</a>.</p>
+            </div>
+            <p class="thanks" style="color: #666;">¡Gracias por elegirnos!</p>
+        </div>
+    `;
+    return generateEmailTemplate(content);
+}
+
+function generateEmailTemplate(content) {
+    const template = `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Notificación</title>
+            <style>
+                body {
+                    background-color: #f8f9fa;
+                    font-family: 'Trebuchet MS', 'Lucida Sans', Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .header h1 {
+                    color: #007bff;
+                }
+                .message {
+                    color: #333;
+                    line-height: 1.5;
+                }
+                .thanks {
+                    text-align: center;
+                    color: #666;
+                    font-size: 16px;
+                    margin-top: 20px;
+                    padding-bottom: 20px;
+                }
+                a {
+                    color: #007bff;
+                    text-decoration: none;
+                    font-weight: bold;
+                }
+                #ul {
+                    counter-reset: li;
+                    list-style: none;
+                    padding: 0;
+                }
+                #ul li {
+                    position: relative;
+                    padding: .4em .4em .4em 2em;
+                    margin: .5em 0;
+                    background: #ddd;
+                    color: #444;
+                    transition: all .3s ease-out;
+                }
+                #ul li:before {
+                    content: counter(li);
+                    counter-increment: li;
+                    position: absolute;
+                    left: .4em;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: #fa8072;
+                    height: 1.5em;
+                    width: 1.5em;
+                    line-height: 1.5em;
+                    text-align: center;
+                    color: #fff;
+                    font-weight: bold;
+                }
+                #ul li:hover {
+                    background: #eee;
+                }
+            </style>
+        </head>
+        <body>
+            ${content}
+        </body>
+        </html>
+    `;
+    return template;
+}
+
 async function sendLoanNotificationsEA(data){
     const specifics_loan = {
         amount: data.action_loan,
@@ -348,5 +565,6 @@ export {
     sendLoanNotificationEmail, 
     sendTransferNotificationEmail, 
     sendMovementNotificationEmail,
-    sendLoanNotificationsEA
+    sendLoanNotificationsEA,
+    sendActivityNotificationEmail
 };

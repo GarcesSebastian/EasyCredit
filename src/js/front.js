@@ -836,7 +836,8 @@ async function send_req_loan(){
             tasa_variable: elements_loan.tasa_variable.checked,
             tasa_fija: elements_loan.tasa_fija.checked,
             date: new Date().toLocaleDateString(),
-            id_client: getCookie("ID-USER")
+            id_client: getCookie("ID-USER"),
+            is_active: smsNotificationsElements.check_sms_loans.checked
         }
     
         let response_user_loan;
@@ -983,7 +984,8 @@ async function send_req_transfer(){
             numero_card: arr_numero_card_string,
             action: elements_transfer.input_action.value,
             message: elements_transfer.input_message.value,
-            origin: getCookie("ID-USER")
+            origin: getCookie("ID-USER"),
+            is_active: smsNotificationsElements.check_sms_transfers.checked
         }
     
         let response_user_loan;

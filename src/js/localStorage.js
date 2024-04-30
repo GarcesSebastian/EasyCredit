@@ -1,3 +1,5 @@
+import { sendActivityNotificationEmail } from "./Notifications";
+
 //Variables de estados
 
 let emailNotificationsElements = {
@@ -14,7 +16,7 @@ let smsNotificationsElements = {
     check_sms_others: document.querySelector("#check_sms_others")
 }
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
     //Check Notifications Email
     if (localStorage.getItem("emailNotifications")) {
         let emailNotifications = JSON.parse(localStorage.getItem("emailNotifications"));
@@ -65,6 +67,54 @@ window.addEventListener("DOMContentLoaded", () => {
     if(localStorage.getItem("easyCreditNotifications") == null) {
         localStorage.setItem("easyCreditNotifications", 0);
     }
+
+    //Check Others Activity Notification EasyCredit
+    if(localStorage.getItem("activityNotifications") == null){
+        localStorage.setItem("activityNotifications", "false");
+    }
+
+    if(localStorage.getItem("activityNotifications") == "false"){
+        let data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+        let response_data_user = await data_user.json();
+
+        let fecha_activity = response_data_user.user_info[0].fecha_activity;
+        localStorage.setItem("activityNotifications", fecha_activity);
+    }
+
+
+    setInterval( async () => {
+        const newDate = new Date();
+        let nowDate = new Date(localStorage.getItem("activityNotifications"));
+
+        // console.log(formattHour(newDate));
+        // console.log(formattHour(nowDate));
+
+        if(formattHour(newDate) == formattHour(nowDate) || newDate.getTime() > nowDate.getTime()){
+
+            let data = {
+                id_user: getCookie("ID-USER"),
+                fecha_activity: new Date(new Date().getTime() + 10 * 60000)
+            }
+
+            const set_fecha_activity = await fetch("http://localhost:4000/update/date", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            });
+
+            const response_set_fecha_activity = await set_fecha_activity.json();
+
+            if(response_set_fecha_activity.state == "Good Request"){
+                let list_options = ["Nuevo Registro", "Publicación de Contenido", "Oferta Especial", "Default"]
+                sendActivityNotificationEmail(getCookie("ID-USER"), list_options[Math.floor(Math.random() * (list_options.length - 1 - 0 + 1)) + 0]);
+                localStorage.setItem("activityNotifications", data.fecha_activity);
+            }else{
+                console.log(response_set_fecha_activity.message)
+            }
+        }
+    }, 1000);
 });
 
 //Eventos de los checkbox
@@ -86,6 +136,21 @@ for(let key in smsNotificationsElements) {
         smsNotifications[Object.keys(smsNotifications)[index]] = e.target.checked;
         localStorage.setItem("smsNotifications", JSON.stringify(smsNotifications));
     });
+}
+
+function formattHour(date){
+    return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+}
+
+function getCookie(cookieName) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(cookieName + '=')) {
+            return cookie.substring(cookieName.length + 1);
+        }
+    }
+    return null;
 }
 
 export {emailNotificationsElements, smsNotificationsElements};
