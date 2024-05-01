@@ -1,5 +1,6 @@
 ---
 import {SignIn} from 'auth-astro/components';
+import ValidateEmail from './user/ValidateEmail.astro';
 
 interface Props{
     registrarse_text: string;
@@ -134,8 +135,9 @@ const {registrarse_text,iniciar_text,exists_text,username_text,email_text,passwo
             {registrarse_with_google}
         </SignIn>
     </div>
-
 </form>
+
+<ValidateEmail />
 
 <style>
     #background-blur{

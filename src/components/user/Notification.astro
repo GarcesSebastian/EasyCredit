@@ -6,9 +6,12 @@
         state_notification: string;
         fecha_notification: string;
         id_notification: number;
+        length_movements: number;
+        income_accumulated: string;
     }
 
-    const { tipo_notification, origin, action_notification, state_notification, fecha_notification, id_notification } = Astro.props;
+    let { tipo_notification, origin, action_notification, state_notification, fecha_notification, id_notification, length_movements, income_accumulated } = Astro.props;
+    income_accumulated = Number(income_accumulated.split("$")[0]) > 0 ? income_accumulated : "";
 ---
 
 <article id="notification" class="bg-gradient-to-r to-[#0074D3] from-[#0040A8] shadow-lg flex flex-col rounded-lg" data-notification={id_notification}>
@@ -63,6 +66,37 @@
 
                         <h3 class="w-full text-wrap px-2 h-full flex items-center justify-end text-white">
                             {fecha_notification}
+                        </h3>
+                    </span>
+                </div>
+            ) : tipo_notification == "Movement" ? ( 
+                <div id="logo" class="h-full">
+                    <img
+                    class="size-14"
+                    src="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
+                    alt=""
+                    />
+                </div>
+
+                <div id="data" class="flex flex-col justify-center items-start w-[90%] gap-1">
+                    <h3 class="text-xl text-white">{tipo_notification}</h3>
+
+                    <p class="text-white">
+                        El numero de movimientos registrados en tu cuenta es de <span class="font-bold">{length_movements}</span>. El saldo disponible es de <span class="font-bold">{action_notification}$</span>. 
+                        {
+                            Number(income_accumulated.split("$")[0]) > 0 ? (
+                                "El monto acumulado de ingresos es de "
+                            ) : (
+                                "No se han registrado ingresos en tu cuenta."
+                            )
+
+                        }
+                        <span class="font-bold">{income_accumulated}</span>
+                    </p>
+
+                    <span class="w-full h-fit flex justify-between items-end mt-2">
+                        <h3 class="w-full h-full text-wrap px-2 flex items-center justify-end text-white">
+                            {fecha_notification.split(" ")[0]}
                         </h3>
                     </span>
                 </div>

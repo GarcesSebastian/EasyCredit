@@ -11,7 +11,8 @@ const app = express();
 const server = createServer(app);
 
 const port = process.env.PORT || 4000;
-const minutes = 10;
+const minutesActivity = 10;
+const minutesUpdate = 10;
 
 // Configuración inicial
 app.set("port", port);
@@ -114,10 +115,9 @@ app.post("/register/auth", async (req, res) => {
 
         const hashedPassword = CryptoJS.SHA256(req.body.password).toString(CryptoJS.enc.Hex);
 
-        let year = new Date().getFullYear().toString().split("");
-        year = year[year.length - 2] + year[year.length - 1]
-        let fecha_creacion = (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate()) + "/" + (new Date().getMonth() < 10 ? "0" + (new Date().getMonth() + 1) : new Date.getMonth() + 1) + "/" + year;
-        let fecha_activity = new Date(new Date().getTime() + minutes * 60000);
+        let fecha_activity = new Date(new Date().getTime() + minutesActivity * 60000);
+        let fecha_update = new Date(new Date().getTime() + minutesUpdate * 60000);
+        let fecha_creacion = new Date();
 
         let digits_card = [];
         let number_card = "";
@@ -149,7 +149,7 @@ app.post("/register/auth", async (req, res) => {
         }
         
         connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, req.body.numero_identidad, req.body.numero_telefono, false, fecha_creacion]);
-        connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_creacion, fecha_activity]);
+        connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity]);
 
         res.status(200).json({ message: "Register Successful"});
         
@@ -196,10 +196,9 @@ app.post("/auth/google", async (req, res) => {
                 return res.status(500).json({ message: "Unable to generate a unique ID" });
             }
 
-            let year = new Date().getFullYear().toString().split("");
-            year = year[year.length - 2] + year[year.length - 1]
-            let fecha_creacion = (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate()) + "/" + (new Date().getMonth() < 10 ? "0" + (new Date().getMonth() + 1) : new Date.getMonth() + 1) + "/" + year;
-            let fecha_activity = new Date(new Date().getTime() + minutes * 60000);
+            let fecha_activity = new Date(new Date().getTime() + minutesActivity * 60000);
+            let fecha_update = new Date(new Date().getTime() + minutesUpdate * 60000);
+            let fecha_creacion = new Date();
 
             let digits_card = [];
             let number_card = "";
@@ -231,7 +230,7 @@ app.post("/auth/google", async (req, res) => {
             }
 
             await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "google", "google", "google", true, fecha_creacion]);
-            await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_creacion, fecha_activity]);
+            await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity]);
         
             return res.status(200).json({ status: "Good Request", message: "Register Successful", id: user_id});
         }
@@ -262,12 +261,19 @@ app.post("/update/data", async (req, res) => {
 
 app.post("/update/date", async (req, res) => {
     if(req.body){
-        const {fecha_activity, id_user} = req.body;
+        const {fecha_activity, fecha_update, id_user} = req.body;
 
         const connection = await database.getConnection();
-        const res_update_users = await connection.query("UPDATE users SET fecha_activity = ? WHERE id_user = ?", [fecha_activity, id_user]);
+        let res_update_users;
+        if(fecha_activity){
+            res_update_users = await connection.query("UPDATE users SET fecha_activity = ? WHERE id_user = ?", [fecha_activity, id_user]);
+        }
 
-        if(res_update_users){
+        if(fecha_update){
+            res_update_users = await connection.query("UPDATE users SET fecha_update = ? WHERE id_user = ?", [fecha_update, id_user]);
+        }
+
+        if(res_update_users || res_update_users){
             res.status(200).json({ state: "Good Request", message: "Update Successful"});
         }else{
             res.status(400).json({ state: "Good Request", message: "Bad Update" });
@@ -756,10 +762,6 @@ app.post("/email/send_movement", async (req, res) => {
         });
 
         let date = new Date();
-        date.setDate(date.getDate() + 3);
-        date = date.toLocaleDateString().split("-");
-        date[0] = date[0] % 100;
-        date = date.reverse().join("/")
 
         await connection.query("UPDATE users SET fecha_update = ? WHERE email_user = ?", [date, email]);
     }
@@ -820,9 +822,34 @@ app.post("/email/verify", async (req, res) => {
     }
 });
 
-app.post("/EA/send_loan", async (req, res) => {
+app.post("/EA/movement", async (req, res) => {
     if(req.body){
+        const {id_user, origin, tipo_notification} = req.body;
+        
+        const connection = await database.getConnection();
+        const id_notification = await generateIdNotifications(connection);
 
+        const notifications_user_complete = await connection.query("SELECT * FROM notifications WHERE id_user = ? AND tipo_notification = ?", [id_user, "Movement"]);
+        console.log(notifications_user_complete)
+        const movements_complete_user = await connection.query("SELECT * FROM movements WHERE id_user = ?", [id_user]);
+        let movements_positive = movements_complete_user.filter((item) => item.state_movement == "positivo");
+        movements_positive = movements_complete_user.map((item) => Number(item.action_movement));
+        movements_positive = movements_positive.reduce((a, b) => a + b, 0);
+        const fecha_notification = new Date();
+
+        console.log(id_notification, id_user, origin, notifications_user_complete.length + 1, tipo_notification, fecha_notification, movements_positive, notifications_user_complete.length + "", "none")
+
+        if(id_notification == null){
+            return res.status(404).send({message: "Invalid Id User"})
+        }
+
+        const set_notification = await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification, id_user, origin, notifications_user_complete.length + 1, tipo_notification, fecha_notification, movements_positive, notifications_user_complete.length + "", "none", true]);
+        
+        if(set_notification){
+            res.status(200).json({ status: "Good Request", message: "Movimiento insertado correctamente" });
+        }else{
+            res.status(400).json({ status: "Bad Request", message: "No se pudo insertar el movimiento" });
+        }
     }
 });
 

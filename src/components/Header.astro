@@ -42,7 +42,7 @@ try{
             data_user = await response_data_user.json();
 
             notifications_not_is_active = data_user.user_notifications.filter((item: any) => item.isActive == "1");
-            console.log(notifications_not_is_active)
+            notifications_not_is_active = notifications_not_is_active.sort((a: any, b: any) => a.index_notification - b.index_notification);
         }else{
             throw new Error("Error in the request to the server");
         }
@@ -162,10 +162,12 @@ try{
                         <Notification
                             tipo_notification = {item.tipo_notification}
                             origin = {item.origin}
-                            action_notification = {item.action_notification}
+                            action_notification = {data_user.user_info[0].saldo_disponible}
                             state_notification = {item.state_notification}
                             fecha_notification = {item.fecha_notification}
                             id_notification={item.id_notification}
+                            length_movements={Number(item.state_notification)}
+                            income_accumulated={item.action_notification + "$."}
                         />
                     ))
                 ):(

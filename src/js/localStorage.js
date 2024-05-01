@@ -1,4 +1,4 @@
-import { sendActivityNotificationEmail } from "./Notifications";
+import * as Notifications from "./Notifications";
 
 //Variables de estados
 
@@ -73,21 +73,36 @@ window.addEventListener("DOMContentLoaded", async () => {
         localStorage.setItem("activityNotifications", "false");
     }
 
-    if(localStorage.getItem("activityNotifications") == "false"){
+    //Check Movements Activity Notification
+    if(localStorage.getItem("updateNotifications") == null) {
+        localStorage.setItem("updateNotifications", "false");
+    }
+
+    if(localStorage.getItem("activityNotifications") == "false" || localStorage.getItem("updateNotifications") == "false"){
         let data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
         let response_data_user = await data_user.json();
 
-        let fecha_activity = response_data_user.user_info[0].fecha_activity;
-        localStorage.setItem("activityNotifications", fecha_activity);
+        if(localStorage.getItem("activityNotifications") == "false" && response_data_user.user_info[0].fecha_activity){
+            let fecha_activity = response_data_user.user_info[0].fecha_activity;
+            localStorage.setItem("activityNotifications", fecha_activity);
+        }
+
+        if(localStorage.getItem("updateNotifications") == "false" && response_data_user.user_info[0].fecha_update){
+            let fecha_update = response_data_user.user_info[0].fecha_update;
+            localStorage.setItem("updateNotifications", fecha_update);
+        }
+    }else{
+        console.log("false")
     }
 
 
     setInterval( async () => {
         const newDate = new Date();
         let nowDate = new Date(localStorage.getItem("activityNotifications"));
+        let updateDate = new Date(localStorage.getItem("updateNotifications"));
 
-        // console.log(formattHour(newDate));
-        // console.log(formattHour(nowDate));
+        console.log(formattHour(newDate));
+        console.log(formattHour(updateDate));
 
         if(formattHour(newDate) == formattHour(nowDate) || newDate.getTime() > nowDate.getTime()){
 
@@ -106,13 +121,41 @@ window.addEventListener("DOMContentLoaded", async () => {
 
             const response_set_fecha_activity = await set_fecha_activity.json();
 
-            if(response_set_fecha_activity.state == "Good Request"){
+            if(response_set_fecha_activity.state == "Good Request" && emailNotificationsElements.check_email_movement.checked == true){
                 let list_options = ["Nuevo Registro", "Publicación de Contenido", "Oferta Especial", "Default"]
-                sendActivityNotificationEmail(getCookie("ID-USER"), list_options[Math.floor(Math.random() * (list_options.length - 1 - 0 + 1)) + 0]);
-                localStorage.setItem("activityNotifications", data.fecha_activity);
+                Notifications.sendActivityNotificationEmail(getCookie("ID-USER"), list_options[Math.floor(Math.random() * (list_options.length - 1 - 0 + 1)) + 0]);
             }else{
                 console.log(response_set_fecha_activity.message)
             }
+            localStorage.setItem("activityNotifications", data.fecha_activity);
+        }
+
+        if(formattHour(newDate) == formattHour(updateDate) || newDate.getTime() > updateDate.getTime()){
+
+            let data = {
+                id_user: getCookie("ID-USER"),
+                fecha_update: new Date(new Date().getTime() + 10 * 60000)
+            }
+
+            const set_fecha_update = await fetch("http://localhost:4000/update/date", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            });
+
+            const response_set_fecha_update = await set_fecha_update.json();
+
+            if(response_set_fecha_update.state == "Good Request" && smsNotificationsElements.check_sms_movement.checked == true){
+                let response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+                let data_user = await response_data_user.json();
+
+                Notifications.sendMovementNotificationEA(data_user);
+            }else{
+                console.log(response_set_fecha_update.message)
+            }
+            localStorage.setItem("updateNotifications", data.fecha_update);
         }
     }, 1000);
 });

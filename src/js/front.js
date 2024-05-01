@@ -733,6 +733,21 @@ if(
     });
 }
 
+//Validar que existen los elementos validate
+if(document.querySelector("#background-popup-validate") && document.querySelector("#close-validate") && document.querySelector("#btn-validate")){
+    document.querySelector("#background-popup-validate")?.addEventListener("click", () => {
+        document.querySelector("#popup-center-validate")?.style.display = "none";
+    });
+    
+    document.querySelector("#close-validate")?.addEventListener("click", () => {
+        document.querySelector("#popup-center-validate")?.style.display = "none";
+    });
+    
+    document.querySelector("#btn-validate")?.addEventListener("click", () =>{
+        document.querySelector("#popup-center-validate")?.style.display = "flex";
+    });
+}
+
 let elements_loan = {
     input_action_loan: document.querySelector("#input-action-loan"),
     input_tasa_loan: document.querySelector("#input-tasa-loan"),
@@ -1165,26 +1180,6 @@ document.querySelector("#form-forward-password")?.addEventListener("submit", (ev
     event.preventDefault();
     change_password();
 });
-
-async function send_movements_daily(){
-    const get_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
-    const data_user = await get_data_user.json();
-    if(!data_user || !data_user.user_info[0] || !data_user.user_info[0].fecha_update){
-        return;
-    }
-
-    const fecha_update = data_user.user_info[0].fecha_update.split("/");
-
-    if(fecha_update[0] == (new Date().getDate() < 9 ? "0" + (new Date().getDate()) : "" + new Date().getDate()) 
-    && fecha_update[1] == ((new Date().getMonth() + 1) < 9 ? "0" + (new Date().getMonth() + 1) : "" + (new Date().getMonth() + 1)) 
-    && fecha_update[2] == ("" + (new Date().getFullYear() % 100)))
-    {
-        Notifications.sendMovementNotificationEmail(data_user);
-        console.log("enviado");
-    }
-}
-
-send_movements_daily();
 
 async function pullingFetch(){
     if(getCookie("W-INIT-ENT") == "true" && getCookie("ID-USER") != "false"){

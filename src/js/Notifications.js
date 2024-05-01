@@ -335,6 +335,31 @@ async function sendMovementNotificationEmail(data){
 
 }
 
+async function sendMovementNotificationEA(data){
+    const emailData = {
+        id_user: getCookie("ID-USER"),
+        origin: "Bank",
+        tipo_notification: "Movement",
+    }
+
+    const response_send_email = await fetch("http://localhost:4000/EA/movement", {
+        method: "POST",
+        body: JSON.stringify(emailData),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const response = await response_send_email.json();
+    if(response.state !== "Good Request"){
+        console.log("Error sending email");
+        return;
+    }
+
+    console.log("Email sent successfully");
+
+}
+
 async function sendActivityNotificationEmail(id_user, activityType) {
 
     if(emailNotificationsElements.check_email_others.checked != true){
@@ -549,22 +574,21 @@ function generateEmailTemplate(content) {
     return template;
 }
 
-async function sendLoanNotificationsEA(data){
-    const specifics_loan = {
-        amount: data.action_loan,
-        date: data.date,
-        origin: "Bank",
-        tipo: "Bank Loan",
-        state: "positivo"
+function getCookie(cookieName) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(cookieName + '=')) {
+            return cookie.substring(cookieName.length + 1);
+        }
     }
-
-    
+    return null;
 }
 
 export {
     sendLoanNotificationEmail, 
     sendTransferNotificationEmail, 
     sendMovementNotificationEmail,
-    sendLoanNotificationsEA,
+    sendMovementNotificationEA,
     sendActivityNotificationEmail
 };
