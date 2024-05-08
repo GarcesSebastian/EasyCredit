@@ -44,19 +44,19 @@ const {data_id} = Astro.props;
     <form id="form-change-password-settings" class= "mt-4 flex flex-col gap-2">
       <div class="">
         <label for="current-password" class=" text-gray-200">Current password</label>
-        <input type="password" id="current-password" name="current-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%]" required>
+        <input type="password" id="current-password" name="current-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%] max-[980px]:w-full" required>
       </div>
       <span id="err-current-password" class="relative text-sm text-[tomato] transition-all duration-500 opacity-0"></span>
 
       <div class="">
         <label for="new-password" class="text-gray-200">New password</label>
-        <input type="password" id="new-password" name="new-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%]" required>
+        <input type="password" id="new-password" name="new-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%] max-[980px]:w-full" required>
       </div>
       <span id="err-new-password" class="relative text-sm text-[tomato] transition-all duration-500 opacity-0"></span>
 
       <div class="">
         <label for="confirm-password" class=" text-gray-200">Confirm new password</label>
-        <input type="password" id="confirm-password" name="confirm-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%]" required>
+        <input type="password" id="confirm-password" name="confirm-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%] max-[980px]:w-full" required>
       </div>
       <span id="err-confirm-password" class="relative text-sm text-[tomato] transition-all duration-500 opacity-0"></span>
 

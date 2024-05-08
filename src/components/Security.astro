@@ -9,11 +9,9 @@ const {data_id} = Astro.props;
 <div class="flex-col overflow-y-auto hidden" id="sub_sections_configurations"  data-id={data_id}>
     <div class="w-full h-fit border-b-2 border-gray-300 pb-5">
         <h1 class="text-white text-2xl font-semibold">
-            <!--Titulo -->
             Security
         </h1>
         <h4 class="text-gray-300 text-lg font-light">
-            <!--Descripcion de la configuracion -->
             The security settings offer options such as password change, two-step
             authentication, activity log, among others. This is to protect user data
             and ensure a secure environment in the application.
@@ -22,194 +20,89 @@ const {data_id} = Astro.props;
 
     <div class="w-full h-fit border-b-2 border-gray-300 py-7 px-3">
         <h2 class="text-white text-lg">
-            <!--Subtitulo -->
             Two-step Authentication
         </h2>
         <h4 class="text-gray-300 text-base font-light">
-            <!--Descripcion de la subconfiguracion -->
             Use two-step authentication to improve your account security
         </h4>
 
         <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-5 mt-4 w-fit">
             <label class="inline-flex items-center cursor-pointer">
-                <input
-                    type="checkbox"
-                    id="activateTwoStep"
-                    class="sr-only peer"
-                />
-                <div
-                    class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"
-                >
+                <input type="checkbox" id="activateTwoStep" class="sr-only peer"/>
+                <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600">
                 </div>
-                <span class="ms-3 text-base font-semibold text-gray-200"
-                    >Activate Two-Step Authentication</span
-                >
+                <span class="ms-3 text-base font-semibold text-gray-200">Activate Two-Step Authentication</span>
             </label>
-            <button
-                type="button"
-                disabled
-                id="configureTwoStep"
-                class="bg-cyan-600 p-2 rounded opacity-50"
-                >Configure Two-Step Authentication</button
-            >
+            <button type="button" disabled id="configureTwoStep" class="bg-cyan-600 p-2 rounded opacity-50">
+                Configure Two-Step Authentication
+            </button>
         </div>
 
-        <div
-            id="twoStepConfiguration"
-            class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50"
-        >
-            <div
-                class="bg-zinc-800 p-8 rounded-lg shadow-lg flex flex-col items-center gap-4 animate-deployment"
-            >
-                <!-- Contenido del modal -->
+        <form id="twoStepConfiguration" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
+            <div class="bg-zinc-800 p-8 rounded-lg shadow-lg flex flex-col items-center gap-4 animate-deployment">
                 <h2 class="text-3xl font-semibold mb-4">
                     Two-Step Configuration
                 </h2>
-                <div class="flex flex-col gap-5">
-                    <div
-                        class="flex flex-col gap-4 p-5 rounded-lg bg-stone-600"
-                    >
+                <div class="flex flex-col gap-5 w-full">
+                    <div class="flex flex-col gap-4 w-full p-5 rounded-lg bg-stone-600">
                         <label class="inline-flex items-center cursor-pointer">
-                            <input
-                                type="checkbox"
-                                value=""
-                                id="activateCodeAuthentication"
-                                class="sr-only peer"
-                            />
-                            <div
-                                class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"
-                            >
+                            <input type="checkbox" value="" id="activateCodeAuthentication" class="sr-only peer"/>
+                            <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600">
                             </div>
-                            <span
-                                class="ms-3 text-base font-semibold text-gray-200"
-                                >Code Authentication</span
-                            >
+                            <span class="ms-3 text-base font-semibold text-gray-200">
+                                Code Authentication
+                            </span>
                         </label>
 
-                        <!-- input para el codigo -->
-                        <label
-                            id="codeAutentication"
-                            class="p-2 hidden flex-col items-center animate-deployment"
-                        >
-                            <input
-                                type="email"
-                                class="p-2 border-2 rounded-lg"
-                                placeholder="Email"
-                            />
+                        <label id="codeAutentication" class="p-0 hidden flex-col items-center animate-deployment">
+                            <input type="email" id="email" class="outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Correo Electronico" required />
                         </label>
                     </div>
 
-                    <div
-                        class="flex flex-col gap-4 p-5 rounded-lg bg-stone-600"
-                    >
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input
-                                type="checkbox"
-                                value=""
-                                id="activateKeywordAuthentication"
-                                class="sr-only peer"
-                            />
-                            <div
-                                class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"
-                            >
-                            </div>
-                            <span
-                                class="ms-3 text-base font-semibold text-gray-200"
-                                >keyword authentication</span
-                            >
-                        </label>
-
-                        <!-- input para la palabra -->
-                        <label
-                            id="keywordAutentication"
-                            class="p-2 flex-col items-center hidden animate-deployment"
-                        >
-                            <input
-                                type="text"
-                                class="p-2 border-2 rounded-lg"
-                                placeholder="Keyword"
-                            />
-                        </label>
-                    </div>
                 </div>
-                <button
-                    id="confirmConfiguration"
-                    class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
-                    >Confirmar</button
-                >
+                <button id="confirmConfiguration" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md">
+                    Confirmar
+                </button>
             </div>
-        </div>
+        </form>
     </div>
 
     <div class="w-full h-fit py-7 px-3 flex flex-col gap-3">
         <h2 class="text-white text-lg">
-            <!--Subtitulo -->
             Activity Register
         </h2>
         <h4 class="text-gray-300 text-base font-light">
-            <!--Descripcion de la subconfiguracion -->
             Check which devices your account is on and configure which ones they
             have access to.
         </h4>
-        <section id="activityRegister" class="flex gap-5">
-            <!-- dispositivos -->
-            <article
-                class="flex flex-col gap-3 p-3 px-4 bg-slate-800/50 rounded"
-            >
+        <section id="activityRegister" class="flex gap-5 max-[800px]:flex-col">
+            <article class="flex flex-col gap-3 p-3 px-4 bg-slate-800/50 rounded">
                 <h3 class="text-xl text-center text-white">Your Devices</h3>
-                <div
-                    class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg"
-                >
-                    <i
-                        ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="50"
-                            height="50"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="white"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile"
-                            ><path stroke="none" d="M0 0h24v24H0z" fill="none"
-                            ></path><path
-                                d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z"
-                            ></path><path d="M11 4h2"></path><path
-                                d="M12 17v.01"></path></svg
-                        ></i
-                    >
+                <div class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z"></path>
+                            <path d="M11 4h2"></path>
+                            <path d="M12 17v.01"></path>
+                            </svg>
+                        </i>
                     <p class="border-l-2 pl-2">A14</p>
                 </div>
-                <div
-                    class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg text-center"
-                >
-                    <i
-                        ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="50"
-                            height="50"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="white"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-device-desktop"
-                            ><path stroke="none" d="M0 0h24v24H0z" fill="none"
-                            ></path><path
-                                d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10z"
-                            ></path><path d="M7 20h10"></path><path d="M9 16v4"
-                            ></path><path d="M15 16v4"></path></svg
-                        ></i
-                    >
+                <div class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg text-center">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-desktop">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none">
+                            </path><path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10z">
+                            </path><path d="M7 20h10"></path><path d="M9 16v4">
+                            </path><path d="M15 16v4"></path>
+                        </svg>
+                    </i>
                     <p class="border-l-2 pl-2">ASDASCW5635</p>
                 </div>
-                <div
-                    class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg text-center"
-                >
-                    <i
-                        ><svg
+                <div class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg text-center">
+                    <i>
+                        <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="50"
                             height="50"
@@ -354,13 +247,6 @@ const {data_id} = Astro.props;
         </section>
     </div>
 </div>
-<style>
-    @media (max-width: 800px) {
-        #activityRegister {
-            flex-direction: column;
-        }
-    }
-</style>
 <script>
     function openAuthentication(input: any, contenetor: any) {
         input?.addEventListener("change", () => {
@@ -372,20 +258,11 @@ const {data_id} = Astro.props;
         });
     }
 
-    let modal = document.getElementById(
-        "twoStepConfiguration",
-    ) as HTMLDivElement;
-    let abrirModal = document.getElementById(
-        "configureTwoStep",
-    ) as HTMLButtonElement;
-    let cerrarModal = document.getElementById(
-        "confirmConfiguration",
-    ) as HTMLButtonElement;
+    let modal = document.getElementById("twoStepConfiguration") as HTMLDivElement;
+    let abrirModal = document.getElementById("configureTwoStep") as HTMLButtonElement;
+    let cerrarModal = document.getElementById("confirmConfiguration") as HTMLButtonElement;
 
-    //activate two step
-    let activateTwoStep = document.getElementById(
-        "activateTwoStep",
-    ) as HTMLInputElement;
+    let activateTwoStep = document.getElementById("activateTwoStep") as HTMLInputElement;
     activateTwoStep?.addEventListener("change", () => {
         if (activateTwoStep.checked) {
             abrirModal.style.opacity = "1";
@@ -408,24 +285,12 @@ const {data_id} = Astro.props;
         }
     });
 
-    //eleccion de la autenticacion
-    let activateCodeAuthentication = document.getElementById(
-        "activateCodeAuthentication",
-    ) as HTMLInputElement;
-    let inputCodeAuthentication = document.getElementById(
-        "codeAutentication",
-    ) as HTMLLabelElement;
+    let activateCodeAuthentication = document.getElementById("activateCodeAuthentication") as HTMLInputElement;
+    let inputCodeAuthentication = document.getElementById("codeAutentication") as HTMLLabelElement;
 
-    let activateKeywordAuthentication = document.getElementById(
-        "activateKeywordAuthentication",
-    ) as HTMLInputElement;
-    let inputKeywordAuthentication = document.getElementById(
-        "keywordAutentication",
-    ) as HTMLLabelElement;
+    let activateKeywordAuthentication = document.getElementById("activateKeywordAuthentication") as HTMLInputElement;
+    let inputKeywordAuthentication = document.getElementById("keywordAutentication") as HTMLLabelElement;
 
     openAuthentication(activateCodeAuthentication, inputCodeAuthentication);
-    openAuthentication(
-        activateKeywordAuthentication,
-        inputKeywordAuthentication,
-    );
+    openAuthentication(activateKeywordAuthentication,inputKeywordAuthentication);
 </script>
