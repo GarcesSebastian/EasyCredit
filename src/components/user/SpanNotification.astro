@@ -25,11 +25,17 @@
 </div>
 
 <script>
-    const buttonCloseNotifications = document.getElementById('button-close-notifications');
+    const buttonCloseNotifications = document.querySelectorAll('#button-close-notifications');
 
-    buttonCloseNotifications?.addEventListener('click', () => {
-        document.querySelector(".toast-success")?.classList.remove("fixed");
-        document.querySelector(".toast-success")?.classList.add("hidden");
+    buttonCloseNotifications.forEach((item, index) => {
+        item.addEventListener('click', ()=>{
+            document.querySelectorAll(".toast-success")?.forEach((element, indexElement) => {
+                if(indexElement == index){
+                    element.classList.remove("fixed");
+                    element.classList.add("hidden");
+                }
+            });
+        })
     });
 </script>
 

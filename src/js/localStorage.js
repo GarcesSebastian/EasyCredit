@@ -101,8 +101,8 @@ window.addEventListener("DOMContentLoaded", async () => {
         let nowDate = new Date(localStorage.getItem("activityNotifications"));
         let updateDate = new Date(localStorage.getItem("updateNotifications"));
 
-        console.log(formattHour(newDate));
-        console.log(formattHour(updateDate));
+        // console.log(formattHour(newDate));
+        // console.log(formattHour(updateDate));
 
         if(formattHour(newDate) == formattHour(nowDate) || newDate.getTime() > nowDate.getTime()){
 

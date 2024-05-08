@@ -362,6 +362,46 @@ app.post("/user/loan", async (req, res) => {
     }
 });
 
+app.post("/validate/data", async (req, res) => {
+    if(req.body){
+        let {email, numero_identidad, numero_telefono} = req.body;
+
+        const connection = await database.getConnection();
+        let validate_email = await connection.query("SELECT email FROM registers WHERE email = ?",[email]);
+
+        if(validate_email.length > 0){
+            return res.status(400).send({ state: "Bad Request", message: "Correo electrónico ya registrado."});
+        }
+
+        let validate_numero_identidad = await connection.query("SELECT numero_identidad FROM registers WHERE numero_identidad = ?",[numero_identidad]);
+
+        if(validate_numero_identidad.length > 0){
+            return res.status(400).send({ state: "Bad Request", message: "Numero de Identificacion ya registrado."});
+        }
+
+        return res.status(200).send({stage: "Good Request", message: "Los datos no estan siendo usados."});
+    }
+});
+
+app.post("/validate/code", async (req, res) => {
+    if(req.body){
+        let { code } = req.body;
+
+        console.log(code)
+
+        const connection = await database.getConnection();
+
+        let validate_code = await connection.query("SELECT * FROM codes WHERE code = ?",[Number(code)]);
+
+        if(validate_code.length > 0){
+            await connection.query("DELETE FROM codes WHERE code = ?",[Number(code)])
+            res.status(200).send({state: "Good Request", message: "Codigo Correcto"});
+        }else{
+            res.status(400).send({state: "Bad Request", message: "El codigo no existe."});
+        }
+    }
+});
+
 app.post("/user/transfer", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
@@ -455,11 +495,16 @@ app.post("/email/send_code", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
         let email = req.body.email;
-        let emailExists = await connection.query("SELECT email FROM registers WHERE email = ?", [email]);
-        if(!emailExists.length > 0){
-            res.status(400).send({ state: "Bad Request", message: "Email no registrado." });
-            return;
+        let notIsEmail = req.body.isEmail;
+
+        if(notIsEmail == false || notIsEmail == undefined){
+            let emailExists = await connection.query("SELECT email FROM registers WHERE email = ?", [email]);
+            if(!emailExists.length > 0){
+                res.status(400).send({ state: "Bad Request", message: "Email no registrado." });
+                return;
+            }
         }
+
 
         let attemps_code_recover = 100;
         let randomCode;
@@ -504,6 +549,110 @@ app.post("/email/send_code", async (req, res) => {
             <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
                 <div style="padding: 20px;">
                     <h1 style="color: #333; text-align: center;">Código de Recuperación</h1>
+                    <table style="margin: auto;">
+                        <tr>
+                            <!-- Aquí generamos dinámicamente las celdas para cada dígito del código -->
+                            ${randomCode
+                                .toString()
+                                .split('')
+                                .map(digit => `
+                                    <td style="border: 2px solid rgba(50, 205, 50, 0.5); border-radius: 4px; width: 40px; height: 40px; font-size: 24px; text-align: center; color: #666;">${digit}</td>
+                                `)
+                                .join('')
+                            }
+                        </tr>
+                    </table>
+                    <p style="color: #666; font-size: 16px; text-align: center; margin-top: 20px;">Utiliza este código para recuperar tu contraseña.</p>
+                </div>
+            </div>
+            
+            </body>
+            </html>
+            
+        `;
+    
+        let subject = "Recuperar Contraseña";
+
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: "easycredit4321@gmail.com",
+                pass: "cvmovrshtbmlpusa"
+            }
+        });
+
+        let mailOptions = {
+            from: 'sebastiangarces152@gmail.com', 
+            to: email, 
+            subject: subject,
+            html: htmlMessage
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                res.status(400).send({ state: "Bad Request", message: "No se pudo enviar el correo"});
+                return;
+            } else {
+                res.status(200).send({ state: "Good Request", message: "Correo Enviado"});
+                return;
+            }
+        });
+    }
+});
+
+app.post("/email/validate/send_code", async (req, res) => {
+    if(req.body){
+        const connection = await database.getConnection();
+        let email = req.body.email;
+        let emailExists = await connection.query("SELECT email FROM registers WHERE email = ?", [email]);
+        if(!emailExists.length > 0){
+            res.status(400).send({ state: "Bad Request", message: "Email no registrado." });
+            return;
+        }
+
+        let attemps_code_recover = 100;
+        let randomCode;
+        let isAvailable = false;
+        let response_user_code;
+
+        while(isAvailable == false){
+            randomCode = Math.floor(100000 + Math.random() * 900000)
+            response_user_code = await connection.query("SELECT * FROM codes WHERE code = ?",[randomCode]);
+            if(response_user_code.length > 0){
+                attemps_code_recover --;
+            }
+
+            if(response_user_code.length == 0 || attemps_code_recover == 0){
+                isAvailable = true;
+            }
+        }
+
+        if(attemps_code_recover == 0 || response_user_code.length != 0){
+            res.status(400).send({ state: "Bad Request", message: "No se pudo generar un código único" });
+            return;
+        }
+
+        let isExist = await connection.query("SELECT * FROM codes WHERE email = ?", [email]);
+
+        if(isExist.length > 0){
+            await connection.query("UPDATE codes SET code = ? WHERE email = ?", [randomCode, email]);
+        }else{
+            await connection.query("INSERT INTO codes(email, code) VALUES (?, ?)", [email, randomCode]);
+        }
+
+        const htmlMessage = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Código de Validacion</title>
+            </head>
+            <body style="background-color: #f2f2f2; padding: 20px;">
+            
+            <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                <div style="padding: 20px;">
+                    <h1 style="color: #333; text-align: center;">Código de Validacion</h1>
                     <table style="margin: auto;">
                         <tr>
                             <!-- Aquí generamos dinámicamente las celdas para cada dígito del código -->
@@ -876,6 +1025,34 @@ app.post("/password/change", async (req, res) => {
         res.status(200).send({ state: "Good Request", message: "Contraseña Cambiada" });
     } else {
         res.status(400).send({ state: "Bad Request" });
+    }
+});
+
+app.post("/password/change/settings", async (req, res) => {
+    if(req.body){
+        const {current, password, id} = req.body;
+        const connection = await database.getConnection();
+
+        const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+        const hashedCurrent = CryptoJS.SHA256(current).toString(CryptoJS.enc.Hex);
+
+        const data_user = await connection.query("SELECT * FROM registers WHERE id = ?", [id]);
+        
+        if(!data_user.length > 0){
+            return res.status(400).send({state: "Bad Request", message: "El ID no existe."})
+        }
+
+        if(data_user[0].password != hashedCurrent){
+            return res.status(400).send({ state: "Bad Request", message: "Contraseña incorrecta." });
+        }
+
+        if(data_user[0].password == hashedPassword){
+            return res.status(400).send({ state: "Bad Request", message: "La nueva contraseña no puede ser igual a la anterior." });
+        }
+        
+        await connection.query("UPDATE registers SET password = ? WHERE id = ?", [hashedPassword, id]);
+
+        res.status(200).send({ state: "Good Request", message: "Contraseña Cambiada" });
     }
 });
 

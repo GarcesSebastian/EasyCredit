@@ -16,6 +16,26 @@ function inputErr(input, id, message) {
     }
 }
 
+function inputErrArray(input, id, message){
+    if (!input) {
+        console.error("El elemento de entrada es nulo.");
+        return;
+    }
+
+    input.forEach(item => {
+        item.style.border = "1px solid tomato";
+
+        var errElement = document.querySelector(id);
+        
+        if (errElement) {
+            errElement.style.opacity = "1";
+            errElement.innerHTML = message;
+        } else {
+            console.error("El elemento de error no se encontró.");
+        }
+    });
+}
+
 function inputSucess(input, id) {
     if (!input) {
         console.error("El elemento de entrada es nulo.");

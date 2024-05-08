@@ -1,3 +1,4 @@
+import e from "cors";
 import {emailNotificationsElements, smsNotificationsElements} from "./localStorage";
 import * as Notifications from './Notifications'
 
@@ -297,11 +298,8 @@ if(list_flags && actual_element){
 }
 
 let isContinueSignUp = true;
+let isContinueSignUpCode = true;
 let isContinueSignIn = true;
-
-document.querySelector("#submit-signup-google")?.addEventListener("click", () => {
-    
-})
 
 document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -540,7 +538,7 @@ item_notification.forEach((item, index) => {
 document.querySelector("#form-signup")?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    if(isContinueSignUp == true){
+    if(isContinueSignUpCode == true){
         const username = document.querySelector("#input-username");
         const email = document.querySelector("#input-email");
         const password = document.querySelector("#input-password");
@@ -555,16 +553,14 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
     
         if ((username.value.length >= 6 && username.value.length <= 15) && email.value.length > 0 && (password.value.length >= 8 && password.value.length <= 24) && numero_telefono.value.length >= 10 && numero_identidad.value.length >= 10) {
             const data = {
-                username: username.value,
                 email: email.value,
-                password: password.value,
                 numero_identidad: numero_identidad.value,
                 numero_telefono: numero_telefono.value,
             };
     
-            isContinueSignUp = false;
+            isContinueSignUpCode = false;
     
-            const res = await fetch("http://localhost:4000/register/auth", {
+            const res = await fetch("http://localhost:4000/validate/data", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -575,10 +571,24 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
             const responseJson = await res.json();
     
             if (res.ok) {
-                isContinueSignUp = true;
-                window.location.href = "/SignIn";
+                isContinueSignUpCode = true;
+                document.querySelector("#popup-center-validate").style.display = "flex";
+
+                const res_code = await fetch("http://localhost:4000/email/send_code", {
+                    method: 'POST',
+                    body: JSON.stringify({email: data.email, isEmail: true}),
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const responseJson_code = await res_code.json();
+
+                if(!res_code.ok){
+                    inputErr(document.querySelector("#input-email"), "#err-email", responseJson_code.message);
+                }
             } else {
-                isContinueSignUp = true;
+                isContinueSignUpCode = true;
                 if (responseJson.message === "Correo electrónico ya registrado.") {
                     inputErr(document.querySelector("#input-email"), "#err-email", responseJson.message);
                 }
@@ -587,7 +597,6 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
                     inputErr(document.querySelector("#input-numero_identidad"), "#err-numero_identidad", responseJson.message);
                 }
 
-                console.log("Ocurrió un error al intentar registrarse");
             }
         }else{
             if(numero_telefono.value.length < 10){
@@ -612,6 +621,82 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
         }
     }
 });
+
+const form = document.getElementById('form-validate');
+let formInputs = document.querySelectorAll('#validate_email_input');
+const inputs = [...formInputs];
+
+form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if(isContinueSignUp == true){
+
+        let value = "";
+        inputs.forEach(item => {
+            value += item.value;
+        })
+
+        inputSuccessArray(inputs, "#err-validate-code");
+
+        isContinueSignUp = false;
+
+        const validate_code = await fetch("http://localhost:4000/validate/code", {
+            method: 'POST',
+            body: JSON.stringify({code: value}),
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const res_validate_code = await validate_code.json();
+
+        if(res_validate_code.state == "Bad Request"){
+            isContinueSignUp = true;
+            inputErrArray(inputs, "#err-validate-code", res_validate_code.message);
+            return;
+        }
+
+        const username = document.querySelector("#input-username");
+        const email = document.querySelector("#input-email");
+        const password = document.querySelector("#input-password");
+        const numero_identidad = document.querySelector("#input-numero_identidad");
+        const numero_telefono = document.querySelector("#input-numero_telefono");
+
+        const data = {
+            username: username.value,
+            email: email.value,
+            password: password.value,
+            numero_identidad: numero_identidad.value,
+            numero_telefono: numero_telefono.value,
+        };
+
+        const res = await fetch("http://localhost:4000/register/auth", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const responseJson = await res.json();
+
+        if (res.ok) {
+            isContinueSignUp = true;
+            window.location.href = "/SignIn";
+        } else {
+            isContinueSignUp = true;
+            if (responseJson.message === "Correo electrónico ya registrado.") {
+                inputErr(document.querySelector("#input-email"), "#err-email", responseJson.message);
+            }
+
+            if(responseJson.message === "Numero de Identificacion ya registrado."){
+                inputErr(document.querySelector("#input-numero_identidad"), "#err-numero_identidad", responseJson.message);
+            }
+        }
+    }
+
+    console.log(Number(value))
+})
 
 let form_update = document.querySelector("#form_update");
 
@@ -730,21 +815,6 @@ if(
 
     document.querySelector("#btn-forward").addEventListener("click", () =>{
         document.querySelector("#popup-center-forward").style.display = "flex";
-    });
-}
-
-//Validar que existen los elementos validate
-if(document.querySelector("#background-popup-validate") && document.querySelector("#close-validate") && document.querySelector("#btn-validate")){
-    document.querySelector("#background-popup-validate")?.addEventListener("click", () => {
-        document.querySelector("#popup-center-validate")?.style.display = "none";
-    });
-    
-    document.querySelector("#close-validate")?.addEventListener("click", () => {
-        document.querySelector("#popup-center-validate")?.style.display = "none";
-    });
-    
-    document.querySelector("#btn-validate")?.addEventListener("click", () =>{
-        document.querySelector("#popup-center-validate")?.style.display = "flex";
     });
 }
 
@@ -898,10 +968,6 @@ async function send_req_loan(){
                     Notifications.sendLoanNotificationEmail(data);
                 }
 
-                if(smsNotificationsElements.check_sms_loans.checked){
-                    Notifications.sendLoanNotificationsEA(data);
-                }
-
                 window.location.href = "/"
             }
         }catch(e){
@@ -921,11 +987,6 @@ function simulate_loan(){
     console.log(cuotas, monto, frecuencia);
     window.location.href = `/SimulateLoan?monto=${monto}&frecuencia=${frecuencia}&cuotas=${cuotas}&tasa=${tasa.split("%")[0]}`
 }
-
-document.querySelector("#button-simulate-loan")?.addEventListener("click", () => {
-    //simulate_loan();
-});
-
 document.querySelector("#form-loan")?.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -936,6 +997,58 @@ document.querySelector("#form-loan")?.addEventListener("submit", (event) => {
         send_req_loan();
     }
 });
+
+let form_change_password_settings = document.querySelector("#form-change-password-settings");
+
+form_change_password_settings?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const current_password = document.querySelector("#current-password");
+    const new_password = document.querySelector("#new-password");
+    const confirm_password = document.querySelector("#confirm-password");
+
+    inputSucess(document.querySelector("#current-password"), "#err-current-password");
+    inputSucess(document.querySelector("#new-password"), "#err-new-password");
+    inputSucess(document.querySelector("#confirm-password"), "#err-confirm-password");
+
+    if(new_password.value != confirm_password.value){
+        inputErr(document.querySelector("#new-password"), "#err-new-password", "Las contraseñas no concuerdan.");
+        inputErr(document.querySelector("#confirm-password"), "#err-confirm-password", "Las contraseñas no concuerdan.");
+    }
+
+    let data = {
+        current: current_password.value,
+        password: new_password.value,
+        id: getCookie("ID-USER")
+    }
+
+    const res_change_password = await fetch("http://localhost:4000/password/change/settings", {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers:{
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const change_password = await res_change_password.json();
+
+    if(res_change_password.ok){
+        document.querySelector("#change-password-success")?.classList.remove("hidden");
+        document.querySelector("#change-password-success")?.classList.add("fixed");
+    }else{
+        if(change_password.message == "Contraseña incorrecta."){
+            inputErr(document.querySelector("#current-password"), "#err-current-password", change_password.message);
+        }
+
+        if(change_password.message == "La nueva contraseña no puede ser igual a la anterior."){
+            inputErr(document.querySelector("#current-password"), "#err-current-password", change_password.message);
+            inputErr(document.querySelector("#new-password"), "#err-new-password", change_password.message);
+            inputErr(document.querySelector("#confirm-password"), "#err-confirm-password", change_password.message);
+        }
+
+    }
+
+})
 
 let elements_transfer = {
     input_numero_tarjeta: document.querySelector("#input-numero-tarjeta-transfer"),
@@ -1284,6 +1397,46 @@ function inputErr(input, id, message) {
     } else {
         console.error("El elemento de error no se encontró.");
     }
+}
+
+function inputErrArray(input, id, message){
+    if (!input) {
+        console.error("El elemento de entrada es nulo.");
+        return;
+    }
+
+    input.forEach(item => {
+        item.style.border = "1px solid tomato";
+
+        var errElement = document.querySelector(id);
+        
+        if (errElement) {
+            errElement.style.opacity = "1";
+            errElement.innerHTML = message;
+        } else {
+            console.error("El elemento de error no se encontró.");
+        }
+    });
+}
+
+function inputSuccessArray(input, id){
+    if (!input) {
+        console.error("El elemento de entrada es nulo.");
+        return;
+    }
+
+    input.forEach(item => {
+        item.style.border = "1px solid rgb(30,41,59)";
+
+        var errElement = document.querySelector(id);
+        
+        if (errElement) {
+            errElement.style.opacity = "1";
+            errElement.innerHTML = "";
+        } else {
+            console.error("El elemento de error no se encontró.");
+        }
+    });
 }
 
 function inputSucess(input, id) {
