@@ -31,9 +31,6 @@
       isSimulateLoan = true;
     }
 
-    console.log(monto, cuotas, frecuencia, isSimulateLoan);
-
-
 ---
 
 <section class="relative top-20 w-screen min-h-full flex flex-col justify-center items-center" {...Astro.props}>
@@ -68,18 +65,18 @@
         <div class="w-full h-full grid grid-cols-2 gap-x-5 gap-y-8 max-sm:grid-cols-1">
           <div class="bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold">
             <label for="monto-simulate-loan" class="w-full">
-              {text_amount_loan}
+              {text_amount_loan} *
             </label>
             <div class="flex justify-between w-full gap-5 items-center">
               <div class="relative mb-1 w-full">
                   <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                      <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-map-2 w-5 h-5 text-gray-500 dark:text-gray-400">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                          <path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5" />
-                          <path d="M9 4v13" /><path d="M15 7v5.5" />
-                          <path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z" />
-                          <path d="M19 18v.01" />
-                      </svg>
+                    <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mail-dollar w-5 h-5 text-gray-400">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M13.5 19h-8.5a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v3.5" />
+                      <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                      <path d="M19 21v1m0 -8v1" />
+                      <path d="M3 7l9 6l9 -6" />
+                    </svg>
                   </div>
                   <input type="number" id="monto-simulate-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={text_amount_loan} required>
               </div>        
@@ -115,13 +112,15 @@
             >
               <div class="relative mb-1 w-full">
                   <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                      <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-map-2 w-5 h-5 text-gray-500 dark:text-gray-400">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                          <path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5" />
-                          <path d="M9 4v13" /><path d="M15 7v5.5" />
-                          <path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z" />
-                          <path d="M19 18v.01" />
-                      </svg>
+                    <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-businessplan w-5 h-5 text-gray-400">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M16 6m-5 0a5 3 0 1 0 10 0a5 3 0 1 0 -10 0" />
+                      <path d="M11 6v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" />
+                      <path d="M11 10v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" />
+                      <path d="M11 14v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" />
+                      <path d="M7 9h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                      <path d="M5 15v1m0 -8v1" />
+                    </svg>
                   </div>
                   <input type="text" id="tasa-simulate-loan" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4 bg-slate-900 border-slate-900 placeholder-gray-400" value={"Loading..."} disabled>
                 </div> 
@@ -150,7 +149,7 @@
             class="bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="plazo-simulate-loan" class="w-full"
-              >{text_cuotas}</label
+              >{text_cuotas} *</label
             >
             <div class="flex justify-between w-full gap-5 items-center">
               <div class="relative mb-1 w-full">
@@ -187,7 +186,7 @@
             class="bg-slate-800 flex flex-col justify-center items-center p-7 gap-y-3 shadow-lg shadow-gray-900 rounded-lg text-white font-bold"
           >
             <label for="frecuencia-simulate-loan" class="w-full"
-              >{text_frecuencia}</label
+              >{text_frecuencia} *</label
             >
             <div class="flex justify-between w-full gap-5 items-center">
               <div class="relative mb-1 w-full">

@@ -6,6 +6,7 @@ import CryptoJS from 'crypto-js';
 import { createServer } from 'node:http';
 // import { Server } from 'socket.io';
 import nodemailer from 'nodemailer';
+import bodyParser from 'body-parser';
 
 const app = express();
 const server = createServer(app);
@@ -18,6 +19,8 @@ const minutesUpdate = 10;
 app.set("port", port);
 
 // Middlewares
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors({
     origin: (origin, callback) => {
       const allowedOrigins = ['http://localhost:4321', 'http://localhost:4322', "https://1rhbb29z-4321.use2.devtunnels.ms", "https://c2hccs03-4321.use2.devtunnels.ms", "https://easy-credit.vercel.app"];
@@ -1025,6 +1028,22 @@ app.post("/password/change", async (req, res) => {
         res.status(200).send({ state: "Good Request", message: "Contraseña Cambiada" });
     } else {
         res.status(400).send({ state: "Bad Request" });
+    }
+});
+
+app.post("/save/image_profile", async (req, res) => {
+    if(req.body){
+        const {image, id} = req.body;
+
+        const connection = await database.getConnection();
+
+        const save_image = await connection.query("UPDATE users SET image_profile = ? WHERE id_user = ?", [image, id]);
+
+        if(save_image){
+            return res.status(200).send({state: "Good Request", message: "Imagen Guardada con exito"});
+        }else{
+            return res.status(400).send({state: "Bad Request", message: "Ha ocurrido un error al intentar guardar la imagen"});
+        }
     }
 });
 

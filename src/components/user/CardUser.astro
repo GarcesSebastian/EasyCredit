@@ -17,6 +17,7 @@ if(session){
 }else{
   img_profile = "false"
 }
+
 ---
 
 <div id="contentTarget" class="flex items-center justify-between w-full mb-3 -mt-2">
@@ -24,11 +25,22 @@ if(session){
         img_profile != "false" ? (
           <img src={img_profile} id="image_profile" class="w-12 h-12 object-cover rounded-[50%]"/>
         ) : (
-          <img id="image_profile" src="" class="w-12 h-12 object-cover rounded-[50%]"/>
+          <img id="image_profile" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png" class="w-12 h-12 object-cover rounded-[50%]"/>
         )
       }
-    <img src="../../icons/logo-nobackground-best.png" class="h-16">
+    <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="fill"  stroke="white"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-steam h-12">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M12 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+      <path d="M4 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+      <path d="M20 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+      <path d="M12 20m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+      <path d="M5.5 5.5l3 3" />
+      <path d="M15.5 15.5l3 3" />
+      <path d="M18.5 5.5l-3 3" />
+      <path d="M8.5 15.5l-3 3" />
+  </svg>
 </div>
+
 <div id="contentTarget" class="flex flex-col gap-2">
     <p id="id-card" class="text-lg text-white">{num_id}</p>
     <p class="text-white">{date}</p>
@@ -38,7 +50,6 @@ if(session){
         {nombre}
     </h2>
 </div>
-
 
 <style>
     @media(max-width 620px;){
@@ -51,3 +62,7 @@ if(session){
         }
     }
 </style>
+
+<script>
+
+</script>

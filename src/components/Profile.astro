@@ -143,41 +143,5 @@ if(session){
 />
 
 <script>
-  const _SaveImage = (img: string) => {
-    localStorage.setItem("img", img);
-  };
 
-  const loadImageFromStorage = () => {
-    const imgDataUrl = localStorage.getItem("img");
-    console.log(imgDataUrl)
-    if (imgDataUrl) {
-      image_profile.forEach((item: any) => {
-          item.src = imgDataUrl;
-      })
-    }
-  };
-
-  const dropzoneFile = document.querySelector("#dropzone-file") as HTMLInputElement;
-  const image_profile = document.querySelectorAll("#image_profile");
-
-  window.addEventListener("load", () => {
-    loadImageFromStorage();
-  });
-
-  dropzoneFile?.addEventListener("change", (event) => {
-    const inputElement = event.target as HTMLInputElement;
-    const file = inputElement?.files?.[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageDataUrl = e.target?.result as string;
-        _SaveImage(imageDataUrl);
-        image_profile.forEach((item: any) => {
-          item.src = imageDataUrl;
-        })
-      };
-      reader.readAsDataURL(file);
-    }
-  });
 </script>

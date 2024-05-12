@@ -197,7 +197,12 @@ actual_element?.addEventListener("click", () =>{
 
 let button_config = document.querySelector("#button_config");
 let contentConfig = document.getElementById("content-configurations");
+let button_promo = document.querySelector("#button_promo");
 let close_configurations = document.getElementById("close_configurations")
+
+button_promo?.addEventListener("click", () => {
+    document.querySelector("#content-code-promo").style.display = window.getComputedStyle(document.querySelector("#content-code-promo")).display == "none" ? "flex" : "none";
+});
 
 close_configurations?.addEventListener("click", () => {
     contentConfig.style.right = "-100%";
@@ -296,6 +301,75 @@ if(list_flags && actual_element){
         }
     });
 }
+
+const _SaveImage = async (img) => {
+    const data = {
+        image: img,
+        id: getCookie("ID-USER")
+    }
+
+    const res_save_image = await fetch("http://localhost:4000/save/image_profile", {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers:{
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const save_image = await res_save_image.json();
+
+    if(res_save_image.ok){
+        localStorage.setItem("img", img);
+    }else{
+        console.log(save_image.message)
+    }
+};
+
+const loadImageFromStorage = async () => {
+    const res_get_image = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+    const get_image = await res_get_image.json();
+    let image = document.querySelector("#image_profile");
+
+    if(image.src != "http://localhost:4321/"){
+        return;
+    }
+
+    let image_value = get_image.user_info[0].image_profile;
+
+    if(image_value){
+        console.log(image_value.length)
+        image_profile.forEach((item) => {
+            item.src = image_value;
+        })
+    }
+};
+
+const dropzoneFile = document.querySelector("#dropzone-file");
+const image_profile = document.querySelectorAll("#image_profile");
+
+window.addEventListener("load", () => {
+    if(getCookie("ID-USER") != "false"){
+        loadImageFromStorage();
+    }
+});
+
+dropzoneFile?.addEventListener("change", (event) => {
+const inputElement = event.target;
+const file = inputElement?.files?.[0];
+
+if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+    const imageDataUrl = e.target?.result;
+    console.log(imageDataUrl.length)
+    _SaveImage(imageDataUrl);
+    image_profile.forEach((item) => {
+        item.src = imageDataUrl;
+    })
+    };
+    reader.readAsDataURL(file);
+}
+});
 
 let isContinueSignUp = true;
 let isContinueSignUpCode = true;
