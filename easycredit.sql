@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-05-2024 a las 02:46:03
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 13-05-2024 a las 05:18:25
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,8 +29,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `codes` (
   `email` text NOT NULL,
-  `code` int(6) NOT NULL,
-  `type` text NOT NULL
+  `code` text NOT NULL,
+  `type` text NOT NULL,
+  `action` int(11) NOT NULL,
+  `used` longtext NOT NULL,
+  `expired` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -50,20 +53,6 @@ CREATE TABLE `movements` (
   `state_movement` text NOT NULL,
   `message` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `movements`
---
-
-INSERT INTO `movements` (`id_movement`, `id_user`, `origin`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`, `message`) VALUES
-(175499058, 924832, 'Bank', 3, 'Bank Loan', '2024-05-11', '1200000', 'positivo', 'Hizo un prestamo por un monto de 1200000$.'),
-(233748643, 924832, 'Bank', 1, 'Bank Loan', '2024-05-11', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
-(312170298, 924832, 'Bank', 4, 'Bank Loan', '2024-05-11', '120000000', 'positivo', 'Hizo un prestamo por un monto de 120000000$.'),
-(358601610, 924832, 'Bank', 5, 'Bank Loan', '2024-05-11', '120000000', 'positivo', 'Hizo un prestamo por un monto de 120000000$.'),
-(443095110, 924832, 'Bank', 7, 'Bank Loan', '2024-05-11', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
-(625955911, 924832, 'Bank', 8, 'Bank Loan', '2024-05-11', '1200000', 'positivo', 'Hizo un prestamo por un monto de 1200000$.'),
-(660988074, 924832, 'Bank', 2, 'Bank Loan', '2024-05-11', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
-(936519759, 924832, 'Bank', 6, 'Bank Loan', '2024-05-11', '1200000', 'positivo', 'Hizo un prestamo por un monto de 1200000$.');
 
 -- --------------------------------------------------------
 
@@ -256,8 +245,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 -- Indices de la tabla `codes`
 --
 ALTER TABLE `codes`
-  ADD PRIMARY KEY (`email`(250)),
-  ADD UNIQUE KEY `unicos` (`code`) USING BTREE;
+  ADD PRIMARY KEY (`email`(250));
 
 --
 -- Indices de la tabla `movements`
