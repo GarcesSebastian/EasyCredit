@@ -405,6 +405,52 @@ app.post("/validate/code", async (req, res) => {
     }
 });
 
+app.post("/promo/validate", async (req, res) => {
+    if(req.body){
+        let { code, id } = req.body;
+
+        code = code.toString().toUpperCase();
+
+        console.log(code)
+
+        const connection = await database.getConnection();
+
+        let validate_code = await connection.query("SELECT * FROM codes WHERE code = ? AND type = ?",[code, "promotion"]);
+
+        if(validate_code.length > 0){
+
+            let codes_use = [];
+
+            let date_now = new Date();
+
+            if(date_now > new Date(validate_code[0].expired)){
+                return res.status(400).send({state: "Bad Request", message: "El codigo ya expiro."});
+            }
+
+            if(validate_code[0].used){
+                codes_use = [...JSON.parse(validate_code[0].used)];
+            }
+
+            let isUsed = codes_use.includes(id);
+
+            console.log(codes_use, isUsed)
+
+            if(isUsed){
+                return res.status(400).send({state: "Bad Request", message: "El codigo ya fue usado."});
+            }
+            
+            codes_use.push(id);
+            await connection.query("UPDATE codes SET used = ? WHERE code = ?", [JSON.stringify(codes_use), code]);
+
+            const data_user = await connection.query("SELECT * FROM users WHERE id_user = ?", [id]);
+            await connection.query("UPDATE users SET saldo_disponible = ? WHERE id_user = ?", [parseFloat(data_user[0].saldo_disponible) + parseFloat(validate_code[0].action), id]);
+            res.status(200).send({state: "Good Request", message: "Codigo Correcto"});
+        }else{
+            res.status(400).send({state: "Bad Request", message: "El codigo no existe."});
+        }
+    }
+});
+
 app.post("/user/transfer", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();

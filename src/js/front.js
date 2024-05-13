@@ -1,4 +1,3 @@
-import e from "cors";
 import {emailNotificationsElements, smsNotificationsElements} from "./localStorage";
 import * as Notifications from './Notifications'
 
@@ -173,6 +172,11 @@ let form_simulate_loan = document.querySelector("#form-simulate-loan");
     
 form_simulate_loan?.addEventListener("submit", async (event) => {
   event.preventDefault();
+  let value_simulate = document.querySelector("#tasa-simulate-loan")?.value;
+  let value_loan = document.querySelector("#input-tasa-loan")?.value;
+
+  console.log(value_simulate, value_loan)
+
   let monto = parseFloat(document.querySelector("#monto-simulate-loan").value);
   let tasa = parseFloat(await obtenerTasa());
   let frecuencia = document.querySelector("#frecuencia-simulate-loan").value;
@@ -192,6 +196,41 @@ actual_element?.addEventListener("click", () =>{
     }else{
         svg.style.transform = "rotate(90deg)";
         list_flags.style.display = "none";
+    }
+});
+
+let content_code_promo = document.querySelector("#content-code-promo");
+let err_code_promo = document.querySelector("#err-code-promo");
+
+const date_now = new Date();
+console.log(date_now)
+
+content_code_promo?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    let code = document.querySelector("#input-code-promo").value;
+
+    const data = {
+        code: code,
+        id: getCookie("ID-USER")
+    }
+
+    inputSucess(document.querySelector("#input-code-promo"), "#err-code-promo");
+
+    const res_code_promo = await fetch("http://localhost:4000/promo/validate", {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers:{
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const code_promo = await res_code_promo.json();
+
+    if(res_code_promo.ok){
+        window.location.reload();
+    }else{
+        inputErr(document.querySelector("#input-code-promo"), "#err-code-promo", code_promo.message);
     }
 });
 
@@ -354,21 +393,21 @@ window.addEventListener("load", () => {
 });
 
 dropzoneFile?.addEventListener("change", (event) => {
-const inputElement = event.target;
-const file = inputElement?.files?.[0];
+    const inputElement = event.target;
+    const file = inputElement?.files?.[0];
 
-if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-    const imageDataUrl = e.target?.result;
-    console.log(imageDataUrl.length)
-    _SaveImage(imageDataUrl);
-    image_profile.forEach((item) => {
-        item.src = imageDataUrl;
-    })
-    };
-    reader.readAsDataURL(file);
-}
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+        const imageDataUrl = e.target?.result;
+        console.log(imageDataUrl.length)
+        _SaveImage(imageDataUrl);
+        image_profile.forEach((item) => {
+            item.src = imageDataUrl;
+        })
+        };
+        reader.readAsDataURL(file);
+    }
 });
 
 let isContinueSignUp = true;
@@ -1063,6 +1102,11 @@ function simulate_loan(){
 }
 document.querySelector("#form-loan")?.addEventListener("submit", (event) => {
     event.preventDefault();
+
+    let value_simulate = document.querySelector("#tasa-simulate-loan")?.value;
+    let value_loan = document.querySelector("#input-tasa-loan")?.value;
+
+    console.log(value_simulate, value_loan)
 
     let submitter = event.submitter;
     if(submitter.id == "button-simulate-loan"){
