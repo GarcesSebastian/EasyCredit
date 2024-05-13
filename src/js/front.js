@@ -171,18 +171,19 @@ tasa_monto_simulate_loan?.addEventListener("mouseout", (e) => {
 let form_simulate_loan = document.querySelector("#form-simulate-loan");
     
 form_simulate_loan?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  let value_simulate = document.querySelector("#tasa-simulate-loan")?.value;
-  let value_loan = document.querySelector("#input-tasa-loan")?.value;
+    event.preventDefault();
+    let value_simulate = document.querySelector("#tasa-simulate-loan")?.value;
 
-  console.log(value_simulate, value_loan)
+    if(value_simulate == "Loading..."){
+        document.querySelector("#content-warning-rate").style.display = "flex"
+    }
 
-  let monto = parseFloat(document.querySelector("#monto-simulate-loan").value);
-  let tasa = parseFloat(await obtenerTasa());
-  let frecuencia = document.querySelector("#frecuencia-simulate-loan").value;
-  let plazo = parseFloat(document.querySelector("#plazo-simulate-loan").value);
-  document.querySelector("#content-table-simulate-loan").style.display = "initial";
-  simulateLoan(monto, tasa, frecuencia, plazo);
+    let monto = parseFloat(document.querySelector("#monto-simulate-loan").value);
+    let tasa = parseFloat(await obtenerTasa());
+    let frecuencia = document.querySelector("#frecuencia-simulate-loan").value;
+    let plazo = parseFloat(document.querySelector("#plazo-simulate-loan").value);
+    document.querySelector("#content-table-simulate-loan").style.display = "initial";
+    simulateLoan(monto, tasa, frecuencia, plazo);
 });
 
 let actual_element = document.querySelector("#actual-flag");
@@ -1091,6 +1092,13 @@ async function send_req_loan(){
     }
 }
 
+let close_warning_loan = document.querySelector("#close-warning-loan");
+let content_warning_loan_rate = document.querySelector("#content-warning-loan-rate");
+
+close_warning_loan?.addEventListener("click", () => {
+    content_warning_loan_rate.style.display = window.getComputedStyle(content_warning_loan_rate).display == "none" ? "flex" : "none";  
+});
+
 function simulate_loan(){
     let cuotas = elements_loan.input_cuotas.selectedIndex;
     let monto = elements_loan.input_action_loan.value;
@@ -1103,10 +1111,11 @@ function simulate_loan(){
 document.querySelector("#form-loan")?.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    let value_simulate = document.querySelector("#tasa-simulate-loan")?.value;
     let value_loan = document.querySelector("#input-tasa-loan")?.value;
 
-    console.log(value_simulate, value_loan)
+    if(value_loan == "Loading..."){
+        document.querySelector("#content-warning-rate").style.display = "flex"
+    }
 
     let submitter = event.submitter;
     if(submitter.id == "button-simulate-loan"){
