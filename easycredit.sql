@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-04-2024 a las 14:54:07
+-- Tiempo de generación: 13-05-2024 a las 02:46:03
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -29,7 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `codes` (
   `email` text NOT NULL,
-  `code` int(6) NOT NULL
+  `code` int(6) NOT NULL,
+  `type` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -55,7 +56,14 @@ CREATE TABLE `movements` (
 --
 
 INSERT INTO `movements` (`id_movement`, `id_user`, `origin`, `index_movement`, `tipo_movement`, `fecha_movement`, `action_movement`, `state_movement`, `message`) VALUES
-(625122631, 698671, 'Bank', 1, 'Bank Loan', '2024-04-29', '120000000', 'positivo', 'Hizo un prestamo por un monto de 120000000$.');
+(175499058, 924832, 'Bank', 3, 'Bank Loan', '2024-05-11', '1200000', 'positivo', 'Hizo un prestamo por un monto de 1200000$.'),
+(233748643, 924832, 'Bank', 1, 'Bank Loan', '2024-05-11', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
+(312170298, 924832, 'Bank', 4, 'Bank Loan', '2024-05-11', '120000000', 'positivo', 'Hizo un prestamo por un monto de 120000000$.'),
+(358601610, 924832, 'Bank', 5, 'Bank Loan', '2024-05-11', '120000000', 'positivo', 'Hizo un prestamo por un monto de 120000000$.'),
+(443095110, 924832, 'Bank', 7, 'Bank Loan', '2024-05-11', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
+(625955911, 924832, 'Bank', 8, 'Bank Loan', '2024-05-11', '1200000', 'positivo', 'Hizo un prestamo por un monto de 1200000$.'),
+(660988074, 924832, 'Bank', 2, 'Bank Loan', '2024-05-11', '12000000', 'positivo', 'Hizo un prestamo por un monto de 12000000$.'),
+(936519759, 924832, 'Bank', 6, 'Bank Loan', '2024-05-11', '1200000', 'positivo', 'Hizo un prestamo por un monto de 1200000$.');
 
 -- --------------------------------------------------------
 
@@ -94,13 +102,6 @@ CREATE TABLE `prestamos` (
   `tasa_fija` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `prestamos`
---
-
-INSERT INTO `prestamos` (`id_user`, `name_loan`, `numero_telefono_loan`, `tasa_interes`, `cuotas`, `frencuencia_pago`, `action_prestamo`, `tasa_variable`, `tasa_fija`) VALUES
-(698671, 'Sebastian Garces', '1234567890', 12.25, 12, 'mensual', '120000000', 0, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -118,13 +119,6 @@ CREATE TABLE `registers` (
   `fecha_creacion` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `registers`
---
-
-INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `fecha_creacion`) VALUES
-(698671, 'Vidroid GM', 'google', 'sebastiangarces152@gmail.com', '1234567890', '1234567890', 1, '30/04/24');
-
 -- --------------------------------------------------------
 
 --
@@ -139,15 +133,9 @@ CREATE TABLE `users` (
   `ingresos_totales` text NOT NULL,
   `saldo_disponible` text NOT NULL,
   `fecha_update` text NOT NULL,
-  `fecha_activity` text NOT NULL
+  `fecha_activity` text NOT NULL,
+  `image_profile` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `users`
---
-
-INSERT INTO `users` (`id_user`, `name_user`, `email_user`, `number_card`, `ingresos_totales`, `saldo_disponible`, `fecha_update`, `fecha_activity`) VALUES
-(698671, 'Vidroid GM', 'sebastiangarces152@gmail.com', '1237 4611 9659 5162', '', '120000000', 'NaN', '2024-04-30T12:58:00.095Z');
 
 -- --------------------------------------------------------
 
@@ -166,7 +154,7 @@ CREATE TABLE `words` (
 --
 
 INSERT INTO `words` (`word`, `es`, `en`) VALUES
-('agree_text', 'Estoy de acuerdo con el', 'I agree with the'),
+('agree_text', 'Estoy de acuerdo con los', 'I agree with the'),
 ('article_1_description', 'Realiza todos los trámites y gestiones de tu crédito libre inversión de manera conveniente y segura a través de nuestro proceso 100% en línea. Desde la solicitud hasta la aprobación, te ofrecemos una experiencia eficiente y sin complicaciones.', 'Carry out all the procedures and procedures for your free investment credit in a convenient and secure manner through our 100% online process. From application to approval, we offer you an efficient and hassle-free experience.'),
 ('article_1_titulo', 'Proceso 100% en linea', '100% online process'),
 ('article_2_description', 'Utiliza nuestra herramienta de simulación para calcular la cuota de tu crédito libre inversión. Personaliza las condiciones según tus necesidades financieras, incluyendo montos, plazos y tasas de interés, y obtén un plan de pagos transparente y adaptado a ti.', 'Use our simulation tool to calculate the quota of your free investment credit. Customize the conditions according to your financial needs, including amounts, terms and interest rates, and get a transparent payment plan adapted to you.'),
