@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-05-2024 a las 05:18:01
+-- Tiempo de generación: 14-05-2024 a las 16:44:13
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -136,7 +136,12 @@ CREATE TABLE `users` (
   `fecha_update` text NOT NULL,
   `fecha_activity` text NOT NULL,
   `image_profile` longtext NOT NULL,
-  `history_credit` int(11) NOT NULL
+  `history_credit` int(11) NOT NULL,
+  `limit_prestamo` int(11) NOT NULL,
+  `limit_monto` text NOT NULL,
+  `discount_tasa` double NOT NULL,
+  `state_prestamo` int(11) NOT NULL,
+  `ingreso_mensual` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
