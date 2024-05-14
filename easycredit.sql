@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-05-2024 a las 05:18:25
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.0.25
+-- Tiempo de generación: 14-05-2024 a las 05:18:01
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,6 +35,13 @@ CREATE TABLE `codes` (
   `used` longtext NOT NULL,
   `expired` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `codes`
+--
+
+INSERT INTO `codes` (`email`, `code`, `type`, `action`, `used`, `expired`) VALUES
+('easycredit4321@gmail.com', '3DFW8H', 'promotion', 1200000, '[\"541998\",\"537612\",\"1004101\"]', 'Sun May 13 2024 20:10:00 GMT-0500 (hora estándar de Colombia)');
 
 -- --------------------------------------------------------
 
@@ -80,15 +87,20 @@ CREATE TABLE `notifications` (
 --
 
 CREATE TABLE `prestamos` (
+  `id_loan` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `name_loan` text NOT NULL,
   `numero_telefono_loan` text NOT NULL,
   `tasa_interes` double NOT NULL,
   `cuotas` int(11) NOT NULL,
-  `frencuencia_pago` text NOT NULL,
+  `frecuencia_pago` text NOT NULL,
   `action_prestamo` text NOT NULL,
   `tasa_variable` tinyint(1) NOT NULL,
-  `tasa_fija` tinyint(1) NOT NULL
+  `tasa_fija` tinyint(1) NOT NULL,
+  `fecha` text NOT NULL,
+  `fecha_next` text NOT NULL,
+  `excedent_now` text NOT NULL,
+  `simulate` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -123,7 +135,8 @@ CREATE TABLE `users` (
   `saldo_disponible` text NOT NULL,
   `fecha_update` text NOT NULL,
   `fecha_activity` text NOT NULL,
-  `image_profile` longtext NOT NULL
+  `image_profile` longtext NOT NULL,
+  `history_credit` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -258,6 +271,12 @@ ALTER TABLE `movements`
 --
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id_notification`);
+
+--
+-- Indices de la tabla `prestamos`
+--
+ALTER TABLE `prestamos`
+  ADD PRIMARY KEY (`id_loan`);
 
 --
 -- Indices de la tabla `registers`
