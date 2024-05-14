@@ -253,7 +253,7 @@ form_simulate_loan?.addEventListener("submit", async (event) => {
     let value_simulate = document.querySelector("#tasa-simulate-loan")?.value;
 
     if(value_simulate == "Loading..."){
-        document.querySelector("#content-warning-rate").style.display = "flex"
+        document.querySelector("#content-warning-rate-simulate").style.display = "flex"
     }
 
     let monto = parseFloat(document.querySelector("#monto-simulate-loan").value);
@@ -1202,6 +1202,7 @@ async function send_req_loan(){
 
         if(state_prestamo >= limit_prestamo){
             document.querySelector("#content-warning-loan-rate").style.display = "flex"
+            document.querySelector("#content-warning-loan-rate").textContent = "Has alcanzado el limite de prestamos.";
             return;
         }
 
@@ -1224,7 +1225,7 @@ async function send_req_loan(){
             let id_without_input = id.split("input")[1];
             let id_with_err = "err" + id_without_input;
             document.querySelector("#" + id_with_err).style.display = "initial";
-            document.querySelector("#" + id_with_err).innerHTML = "* El monto debe ser menor a 4000M y mayor a 1k."
+            document.querySelector("#" + id_with_err).innerHTML = `Por favor, introduce un monto entre ${formatNumberAbbreviaton(1000)} y ${formatNumberAbbreviaton(limit_monto)}`
             elements_loan.input_action_loan.style.borderColor = "tomato";
             isContinueLoan = false;
         }
@@ -1355,7 +1356,8 @@ document.querySelector("#form-loan")?.addEventListener("submit", (event) => {
     let value_loan = document.querySelector("#input-tasa-loan")?.value;
 
     if(value_loan == "Loading..."){
-        document.querySelector("#content-warning-rate").style.display = "flex"
+        document.querySelector("#content-warning-loan-rate").style.display = "flex"
+        document.querySelector("#content-warning-loan-rate").textContent = "Por favor, espere a que la tasa de interes cargue."
     }
 
     let submitter = event.submitter;
@@ -1749,6 +1751,28 @@ function formatNumber(number) {
     } else {
         return integerPart;
     }
+}
+
+function formatNumberAbbreviaton(num) {
+    const abbreviations = {
+        K: 1000,
+        M: 1000000,
+        B: 1000000000
+    };
+
+    if (num >= 1000000000) {
+        return (num / abbreviations.B).toFixed(1) + 'B';
+    }
+
+    if (num >= 1000000) {
+        return (num / abbreviations.M).toFixed(1) + 'M';
+    }
+
+    if (num >= 1000) {
+        return (num / abbreviations.K).toFixed(1) + 'K';
+    }
+
+    return num.toString();
 }
 
 function encrypt(value){

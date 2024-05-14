@@ -1133,13 +1133,11 @@ app.post("/EA/movement", async (req, res) => {
         movements_positive = movements_positive.reduce((a, b) => a + b, 0);
         const fecha_notification = new Date();
 
-        console.log(id_notification, id_user, origin, notifications_user_complete.length + 1, tipo_notification, fecha_notification, movements_positive, notifications_user_complete.length + "", "none")
-
         if(id_notification == null){
             return res.status(404).send({message: "Invalid Id User"})
         }
 
-        const set_notification = await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification, id_user, origin, notifications_user_complete.length + 1, tipo_notification, fecha_notification, movements_positive, notifications_user_complete.length + "", "none", true]);
+        const set_notification = await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification, id_user, origin, notifications_user_complete.length + 1, tipo_notification, fecha_notification, movements_positive, movements_complete_user.length + "", "none", true]);
         
         if(set_notification){
             res.status(200).json({ status: "Good Request", message: "Movimiento insertado correctamente" });
