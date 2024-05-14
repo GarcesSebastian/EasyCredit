@@ -60,9 +60,6 @@ if(session){
             isGoogle = false
         }
 
-        console.log(RegisterIncomplete)
-
-
     }catch(e){
         isContinue = false
         err = e;
@@ -125,6 +122,40 @@ try{
     first_loan_text: (data.find((item: { word: string }) => item.word === "first_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     please_enter_text: (data.find((item: { word: string }) => item.word === "please_enter_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     make_loan_text: (data.find((item: { word: string }) => item.word === "make_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    pay_loan_text: (data.find((item: { word: string }) => item.word === "pay_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    notifications_text: (data.find((item: { word: string }) => item.word === "notifications_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    clear_all_text: (data.find((item: { word: string }) => item.word === "clear_all_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    title_promo_text: (data.find((item: { word: string }) => item.word === "title_promo_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    placeholder_promo_text: (data.find((item: { word: string }) => item.word === "placeholder_promo_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    send_text: (data.find((item: { word: string }) => item.word === "send_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    history_movements_text: (data.find((item: { word: string }) => item.word === "history_movements_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    movement_text: (data.find((item: { word: string }) => item.word === "movement_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    fecha_text: (data.find((item: { word: string }) => item.word === "fecha_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    description_text: (data.find((item: { word: string }) => item.word === "description_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    clear_text: (data.find((item: { word: string }) => item.word === "clear_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    from_text: (data.find((item: { word: string }) => item.word === "from_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    not_found_notifications_text: (data.find((item: { word: string }) => item.word === "not_found_notifications_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    show_text: (data.find((item: { word: string }) => item.word === "show_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    send_transfer_text: (data.find((item: { word: string }) => item.word === "send_transfer_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    get_transfer_text: (data.find((item: { word: string }) => item.word === "get_transfer_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    send_loan_text: (data.find((item: { word: string }) => item.word === "send_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    with_amout_text: (data.find((item: { word: string }) => item.word === "with_amout_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    number_register_is_text: (data.find((item: { word: string }) => item.word === "number_register_is_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    balance_avaible_is_text: (data.find((item: { word: string }) => item.word === "balance_avaible_is_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    not_register_income_text: (data.find((item: { word: string }) => item.word === "not_register_income_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    income_amount_is_text: (data.find((item: { word: string }) => item.word === "income_amount_is_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    title_loans_text: (data.find((item: { word: string }) => item.word === "title_loans_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    not_found_loans_text: (data.find((item: { word: string }) => item.word === "not_found_loans_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    hide_all_text: (data.find((item: { word: string }) => item.word === "hide_all_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    name_text: (data.find((item: { word: string }) => item.word === "name_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    id_loan_text: (data.find((item: { word: string }) => item.word === "id_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    amount_text: (data.find((item: { word: string }) => item.word === "amount_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    interes_text: (data.find((item: { word: string }) => item.word === "interes_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    text_cuotas: (data.find((item: { word: string }) => item.word === "text_cuotas") || {})[flag === "es" ? 'es' : 'en'] as string,
+    frecuencia_one_text: (data.find((item: { word: string }) => item.word === "frecuencia_one_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    next_date_text: (data.find((item: { word: string }) => item.word === "next_date_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    excedent_pay_text: (data.find((item: { word: string }) => item.word === "excedent_pay_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    pay_cuotas_text: (data.find((item: { word: string }) => item.word === "pay_cuotas_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     available_balance: (data.find((item: { word: string }) => item.word === "available_balance") || {})[flag === "es" ? 'es' : 'en'] as string,
     total_income_text: (data.find((item: { word: string }) => item.word === "total_income_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     check_card_text: (data.find((item: { word: string }) => item.word === "check_card_text") || {})[flag === "es" ? 'es' : 'en'] as string,
@@ -165,6 +196,28 @@ try{
                 registrarse_text={text && text.registrarse_text ? text.registrarse_text : "Registrarse"}
                 iniciar_text={text && text.iniciar_text ? text.iniciar_text : "Iniciar sesión"}        
                 isGoogle={isGoogle}
+                notifications_text={text.notifications_text}
+                clear_all_text={text.clear_all_text}
+                title_promo_text={text.title_promo_text}
+                placeholder_promo_text={text.placeholder_promo_text}
+                send_text={text.send_text}
+                not_found_text={text.not_found_text}
+                history_movement_text={text.history_movements_text}
+                movement_text={text.movement_text}
+                date_text={text.fecha_text}
+                description_text={text.description_text}
+                clear_text={text.clear_text}
+                from_text={text.from_text}
+                not_found_notifications_text={text.not_found_notifications_text}
+                show_text={text.show_text}
+                send_transfer_text={text.send_transfer_text}
+                get_transfer_text={text.get_transfer_text}
+                send_loan_text={text.send_loan_text}
+                with_amout_text={text.with_amout_text}
+                number_register_is_text={text.number_register_is_text}
+                balance_avaible_is_text={text.balance_avaible_is_text}
+                not_register_income_text={text.not_register_income_text}
+                income_amount_is_text={text.income_amount_is_text}
             ></Header>
             {
                 initiated == "false" ? (
@@ -231,6 +284,19 @@ try{
                         simulate_loan_text={text.simulate_loan_text}
                         more_text={text.more_text}
                         not_found_text={text.not_found_text}
+                        pay_loan_text={text.pay_loan_text}
+                        title_loans_text={text.title_loans_text}
+                        not_found_loans_text={text.not_found_loans_text}
+                        hide_all_text={text.hide_all_text}
+                        name_text={text.name_text}
+                        id_loan_text={text.id_loan_text}
+                        amount_text={text.amount_text}
+                        interes_text={text.interes_text}
+                        text_cuotas={text.text_cuotas}
+                        frecuencia_one_text={text.frecuencia_one_text}
+                        next_date_text={text.next_date_text}
+                        excedent_pay_text={text.excedent_pay_text}
+                        pay_cuotas_text={text.pay_cuotas_text}
                     ></BannerUser>
                 )
             }

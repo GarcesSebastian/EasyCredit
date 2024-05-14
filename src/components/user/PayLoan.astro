@@ -2,9 +2,13 @@
 
 interface Props{
   length_loan: number;
+
+  //Translate
+  title_loans_text: string;
+  not_found_loans_text: string;
 }
 
-const {length_loan} = Astro.props;
+const {length_loan, title_loans_text, not_found_loans_text} = Astro.props;
 ---
 
 <section class="bg-black/50 fixed top-0 right-0 h-full w-full z-50 justify-end hidden" id="content-loan-pay">
@@ -18,18 +22,18 @@ const {length_loan} = Astro.props;
           <path d="M6 6l12 12" />
         </svg>
       </span>
-      <h1 class="text-2xl text-white max-[490px]:text-lg">Prestamos</h1>
+      <h1 class="text-2xl text-white max-[490px]:text-lg">{title_loans_text}</h1>
     </header>
 
     <main class="overflow-y-auto h-full flex flex-col gap-4" id="allLoans">
       {
         length_loan === 0 ? (
           <div class="flex flex-col items-center justify-center gap-4">
-            <h2 class="text-white text-lg">No se encontraron prestamos</h2>
+            <h2 class="text-white text-lg">{not_found_loans_text}</h2>
           </div>
         ) : (
           <div id="loan_hidden" class="flex-col items-center justify-center gap-4 hidden">
-            <h2 class="text-white text-lg">No se encontraron prestamos</h2>
+            <h2 class="text-white text-lg">{not_found_loans_text}</h2>
           </div>
           <slot/> 
         )

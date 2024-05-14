@@ -8,7 +8,23 @@ interface Props{
     cuotas: number,
     frecuencia: string,
     date_next: string,
+
+    //Translate
+    view_all_text: string,
+    hide_all_text: string,
+    name_text: string,
+    id_loan_text: string,
+    amount_text: string,
+    interes_text: string,
+    text_cuotas: string,
+    frecuencia_one_text: string,
+    next_date_text: string,
+    excedent_pay_text: string,
+    pay_cuotas_text: string,
 }
+
+//Variables translate
+const {view_all_text, hide_all_text, name_text, id_loan_text, amount_text, interes_text, text_cuotas, frecuencia_one_text, next_date_text, excedent_pay_text, pay_cuotas_text} = Astro.props;
 
 const {id, date, monto, name, interes, cuotas, frecuencia, date_next} = Astro.props;
 
@@ -41,8 +57,8 @@ let newMonto = formatNumber(monto)
     </div>
 
     <div class="w-full flex justify-end">
-      <button id="view-all-loan" data-id={id} type="button" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white" data-dismiss-target="#toast-notification" aria-label="Close">
-        View all
+      <button id="view-all-loan" data-id={id} data-view={view_all_text} data-hide={hide_all_text} type="button" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white" data-dismiss-target="#toast-notification" aria-label="Close">
+        {view_all_text}
       </button>
     </div>
 
@@ -51,47 +67,49 @@ let newMonto = formatNumber(monto)
       <div class="bg-slate-800 shadow-lg shadow-slate-800 p-4 rounded-md mt-4">
         <div class="grid grid-cols-2 gap-4 mb-2">
           <div>
-            <p class="text-gray-400">Nombre:</p>
+            <p class="text-gray-400">{name_text}:</p>
             <p class="font-bold">{name}</p>
           </div>
           <div>
-            <p class="text-gray-400">ID del Prestamo:</p>
+            <p class="text-gray-400">{id_loan_text}:</p>
             <p class="font-bold">{id}</p>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-2">
           <div>
-            <p class="text-gray-400">Monto:</p>
+            <p class="text-gray-400">{amount_text}:</p>
             <p class="font-bold">{newMonto}$</p>
           </div>
           <div>
-            <p class="text -gray-400">Interes:</p>
+            <p class="text text-gray-400">{interes_text}:</p>
             <p class="font-bold">{interes}%</p>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-2">
           <div>
-            <p class="text -gray-400">Cuotas:</p>
+            <p class="text text-gray-400">{text_cuotas}:</p>
             <p class="font-bold">{cuotas}</p>
           </div>
           <div>
-            <p class="text -gray-400">Frecuencia:</p>
+            <p class="text text-gray-400">{frecuencia_one_text}:</p>
             <p class="font-bold">{frecuencia}</p>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-2">
             <div>
-                <p class="text -gray-400">Proxima fecha de pago:</p>
+                <p class="text text-gray-400">{next_date_text}:</p>
                 <p class="font-bold">{date_next}</p>
             </div>
             <div>
-                <p class="text -gray-400">Excedente pago actual:</p>
+                <p class="text text-gray-400">{excedent_pay_text}:</p>
                 <span id="excedent_now" data-id={id} class="hover:underline text-yellow-400 font-bold">factura.pdf</span>
             </div>
         </div>
       </div>
 
-      <button type="button" id="pay-loan-list" data-id={id} class="bg-green-500 hover:bg-green-600 transition-all ease-in text-white w-full px-4 py-2 text-center rounded-md mt-4">Pagar Cuotas</button>
+      <button type="button" id="pay-loan-list" data-id={id} class="bg-green-500 hover:bg-green-600 transition-all ease-in text-white w-full px-4 py-2 text-center rounded-md mt-4">
+        {pay_cuotas_text}
+      </button>
     </div>
 </div>
 

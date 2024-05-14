@@ -308,8 +308,6 @@ app.post("/update/user_loan", async (req, res) => {
             return res.status(400).send({state: "Bad Request", message: "No se pudo encontrar el usuario con el id " + id_user})
         }
 
-        console.log(data_user_history_credit[0].state_prestamo)
-
         history_credit += data_user_history_credit[0].history_credit;
         let state_prestamo = data_user_history_credit[0].state_prestamo;
         let ingreso_mensual = Number(data_user_history_credit[0].ingreso_mensual)
@@ -489,8 +487,6 @@ app.post("/validate/code", async (req, res) => {
     if(req.body){
         let { code } = req.body;
 
-        console.log(code)
-
         const connection = await database.getConnection();
 
         let validate_code = await connection.query("SELECT * FROM codes WHERE code = ?",[Number(code)]);
@@ -509,8 +505,6 @@ app.post("/promo/validate", async (req, res) => {
         let { code, id } = req.body;
 
         code = code.toString().toUpperCase();
-
-        console.log(code)
 
         const connection = await database.getConnection();
 
@@ -531,8 +525,6 @@ app.post("/promo/validate", async (req, res) => {
             }
 
             let isUsed = codes_use.includes(id);
-
-            console.log(codes_use, isUsed)
 
             if(isUsed){
                 return res.status(400).send({state: "Bad Request", message: "El codigo ya fue usado."});
@@ -886,7 +878,6 @@ app.post("/email/send_transfer", async (req, res) => {
     if(req.body){
         const {action, origin, message, numero_card, subject} = req.body;
         let numero_card_formatted = "";
-        console.log(numero_card);
 
         for(let i = 0; i < numero_card.length; i++){
             if(i != numero_card.length - 1){
@@ -1074,7 +1065,6 @@ app.post("/email/send_simulated_activity", async (req, res) => {
         }
 
         let email = email_users[0].email_user
-        console.log(email)
 
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -1126,7 +1116,6 @@ app.post("/EA/movement", async (req, res) => {
         const id_notification = await generateIdNotifications(connection);
 
         const notifications_user_complete = await connection.query("SELECT * FROM notifications WHERE id_user = ? AND tipo_notification = ?", [id_user, "Movement"]);
-        console.log(notifications_user_complete)
         const movements_complete_user = await connection.query("SELECT * FROM movements WHERE id_user = ?", [id_user]);
         let movements_positive = movements_complete_user.filter((item) => item.state_movement == "positivo");
         movements_positive = movements_complete_user.map((item) => Number(item.action_movement));
@@ -1274,7 +1263,6 @@ app.get('/create/pdf_loan', async (req, res) => {
         }
 
         const loan = data_loan[0];
-        console.log(loan)
 
         // Obtener la fecha formateada
         const fecha = new Date(loan.fecha);
@@ -1291,7 +1279,6 @@ app.get('/create/pdf_loan', async (req, res) => {
 
         //Obtener datos de la simulacion
         const simulate = JSON.parse(loan.simulate);
-        console.log(simulate)
 
         const cuota_month = formatNumber(simulate[0].pago_capital);
         const base_imponible = formatNumber(simulate[0].pago_capital);

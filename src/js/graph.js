@@ -68,8 +68,6 @@ if(ctx){
         response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
         data_user = await response_data_user.json();
 
-        console.log(data_user);
-
         data_user.user_movements_complete.forEach((item) => {
             eje_x.push(item.fecha_movement);
         });
@@ -104,7 +102,6 @@ if(ctx){
 
     }catch(e){
         isContinue = !isContinue;
-        console.log(e);
         err = e;
     }
 

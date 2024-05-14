@@ -91,8 +91,6 @@ window.addEventListener("DOMContentLoaded", async () => {
             let fecha_update = response_data_user.user_info[0].fecha_update;
             localStorage.setItem("updateNotifications", fecha_update);
         }
-    }else{
-        console.log("false")
     }
 
 
@@ -124,8 +122,6 @@ window.addEventListener("DOMContentLoaded", async () => {
             if(response_set_fecha_activity.state == "Good Request" && emailNotificationsElements.check_email_movement.checked == true){
                 let list_options = ["Nuevo Registro", "Publicación de Contenido", "Oferta Especial", "Default"]
                 Notifications.sendActivityNotificationEmail(getCookie("ID-USER"), list_options[Math.floor(Math.random() * (list_options.length - 1 - 0 + 1)) + 0]);
-            }else{
-                console.log(response_set_fecha_activity.message)
             }
             localStorage.setItem("activityNotifications", data.fecha_activity);
         }
@@ -152,8 +148,6 @@ window.addEventListener("DOMContentLoaded", async () => {
                 let data_user = await response_data_user.json();
 
                 Notifications.sendMovementNotificationEA(data_user);
-            }else{
-                console.log(response_set_fecha_update.message)
             }
             localStorage.setItem("updateNotifications", data.fecha_update);
         }

@@ -1,7 +1,13 @@
 ---
 interface Props{
-  length_movement: number;
+  length_movement: number,
+  history_movement_text: string,
+  clear_all_text: string,
+  not_found_text: string
 }
+
+//Variables translate
+const {history_movement_text, clear_all_text, not_found_text} = Astro.props;
 
 const {length_movement} = Astro.props;
 ---
@@ -17,7 +23,7 @@ const {length_movement} = Astro.props;
           <path d="M6 6l12 12" />
         </svg>
       </span>
-      <h1 class="text-2xl text-white max-[490px]:text-lg">Historial de Movimientos</h1>
+      <h1 class="text-2xl text-white max-[490px]:text-lg">{history_movement_text}</h1>
       <span id="options_movements" class="cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots">
           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -30,7 +36,7 @@ const {length_movement} = Astro.props;
 
     <div id="content_options_movements" class="w-full hidden justify-end -mt-2 animate-deployment">
       <div class="flex flex-col w-full bg-slate-700 p-1 rounded-[4px]">
-        <button id="delete_all_movements" class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800" >Borrar todo</button>
+        <button id="delete_all_movements" class="w-full p-3 text-center text-sm text-white cursor-pointer hover:bg-gray-800" >{clear_all_text}</button>
       </div>
     </div>
 
@@ -38,11 +44,11 @@ const {length_movement} = Astro.props;
       {
         length_movement === 0 ? (
           <div class="flex flex-col items-center justify-center gap-4">
-            <h2 class="text-white text-lg">No se encontraron movimientos</h2>
+            <h2 class="text-white text-lg">{not_found_text}</h2>
           </div>
         ) : (
           <div id="movement_hidden" class="flex-col items-center justify-center gap-4 hidden">
-            <h2 class="text-white text-lg">No se encontraron movimientos</h2>
+            <h2 class="text-white text-lg">{not_found_text}</h2>
           </div>
           <slot/> 
         )

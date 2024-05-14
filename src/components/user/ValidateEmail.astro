@@ -132,7 +132,6 @@ import PopupBase from "./PopupBase.astro";
         }
         const digits = text?.split('') as any
         inputs.forEach((input: any, index: any) => input.value = digits[index])
-        console.log(digits)
         submit?.focus()
     }
 

@@ -45,7 +45,6 @@ if(session){
         });
 
         data_response = await response.json();
-        console.log(data_response)
 
         if(data_response.status == "Good Request"){
             Astro.cookies.set("ID-USER", data_response.id, {expires: new Date("9999-12-31")});

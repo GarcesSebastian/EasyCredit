@@ -15,7 +15,46 @@ interface Props{
     registrarse_text: string;
     iniciar_text: string;
     isGoogle: boolean;
+
+    //Translate
+    notifications_text: string,
+    clear_all_text: string,
+    title_promo_text: string;
+    placeholder_promo_text: string;
+    send_text: string;
+    not_found_notifications_text: string,
+
+    //Movements
+    history_movement_text: string,
+    not_found_text: string
+
+    //Movement
+    movement_text: string,
+    date_text: string,
+    description_text: string,
+    clear_text: string,
+    from_text: string,
+
+    //Notification
+    show_text: string,
+    send_transfer_text: string,
+    get_transfer_text: string,
+    send_loan_text: string,
+    with_amout_text: string,
+    number_register_is_text: string,
+    balance_avaible_is_text: string,
+    not_register_income_text: string,
+    income_amount_is_text: string,
 }
+
+//Variables translate
+const {notifications_text, clear_all_text, title_promo_text, 
+    placeholder_promo_text, send_text, not_found_notifications_text, 
+    history_movement_text, not_found_text, movement_text, date_text, 
+    description_text, clear_text, from_text, show_text, send_transfer_text,
+    get_transfer_text, send_loan_text, with_amout_text, number_register_is_text,
+    balance_avaible_is_text, not_register_income_text, income_amount_is_text
+} = Astro.props;
 
 function formatNumber(number: any) {
     let [integerPart, decimalPart] = String(number).split('.');
@@ -144,7 +183,11 @@ try{
                                         </svg>
                                     </span>
 
-                                    <Promo/>
+                                    <Promo
+                                        title_promo_text={title_promo_text}
+                                        placeholder_promo_text={placeholder_promo_text}
+                                        send_text={send_text}
+                                    />
 
                                 </div>
 
@@ -193,7 +236,11 @@ try{
                 </div>
             </div>
         </header>
-        <Notifications length_notification={data_user ? notifications_not_is_active.length : 0}>
+        <Notifications length_notification={data_user ? notifications_not_is_active.length : 0}
+        notifications_text={notifications_text}
+        clear_all_text={clear_all_text}
+        not_found_notifications_text={not_found_notifications_text}
+        >
             {
                 data_user ? (
                     notifications_not_is_active.map((item: any) => (
@@ -206,6 +253,15 @@ try{
                             id_notification={item.id_notification}
                             length_movements={Number(item.state_notification)}
                             income_accumulated={"$" + formatNumber(data_user.user_info[0].saldo_disponible) + "."}
+                            show_text={show_text}
+                            send_transfer_text={send_transfer_text}
+                            get_transfer_text={get_transfer_text}
+                            send_loan_text={send_loan_text}
+                            with_amout_text={with_amout_text}
+                            number_register_is_text={number_register_is_text}
+                            balance_avaible_is_text={balance_avaible_is_text}
+                            not_register_income_text={not_register_income_text}
+                            income_amount_is_text={income_amount_is_text}
                         />
                     ))
                 ):(
@@ -213,7 +269,11 @@ try{
                 )
             }
         </Notifications>
-        <Movements length_movement={data_user ? data_user.user_movements_complete.length : 0}>
+        <Movements length_movement={data_user ? data_user.user_movements_complete.length : 0}
+            clear_all_text={clear_all_text}
+            history_movement_text={history_movement_text}
+            not_found_text={not_found_text}
+        >
             {
                 data_user ? (
                     data_user.user_movements_complete.map((item: any) => (
@@ -225,6 +285,11 @@ try{
                             fecha_movement = {item.fecha_movement.split(" ")[0]}
                             message = {item.message}
                             id_movement={item.id_movement}
+                            movement_text={movement_text}
+                            date_text={date_text}
+                            description_text={description_text}
+                            clear_text={clear_text}
+                            from_text={from_text}
                         />
                     ))
                 ):(

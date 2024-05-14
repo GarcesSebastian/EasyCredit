@@ -1,11 +1,18 @@
 ---
+interface Props{
+    title_promo_text: string;
+    placeholder_promo_text: string;
+    send_text: string;
+}
+
+const { title_promo_text, placeholder_promo_text, send_text } = Astro.props;
 
 ---
 
 
 <form id="content-code-promo" class="absolute hidden left-0 mt-2 w-full h-fit animate-deployment">
     <div id="content-prestamo" class="bg-slate-800 rounded-md p-3 mt-1 shadow-lg shadow-slate-900 flex flex-col">
-        <label for="input-action-loan" class="block mb-2 text-sm font-medium text-white relative">Ingrese el codigo</label>
+        <label for="input-action-loan" class="block mb-2 text-sm font-medium text-white relative">{title_promo_text}</label>
         <div class="relative mb-1">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mail-dollar w-5 h-5 text-gray-400">
@@ -16,12 +23,12 @@
                     <path d="M3 7l9 6l9 -6" />
                 </svg>
             </div>
-            <input type="text" id="input-code-promo" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder="Codigo de promocion" required>
+            <input type="text" id="input-code-promo" class="transition-all duration-500 outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-900 border-slate-900 placeholder-gray-400" placeholder={placeholder_promo_text} required>
         </div>
         <span id="err-code-promo" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
 
         <!--Button Submit -->
         <button type="submit" class="bg-white w-full text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-            Enviar
+            {send_text}
         </button>
 </div>

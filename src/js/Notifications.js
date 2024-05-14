@@ -351,12 +351,11 @@ async function sendMovementNotificationEA(data){
     });
 
     const response = await response_send_email.json();
-    if(response.state !== "Good Request"){
+    if(!response_send_email.ok){
         console.log("Error sending email");
         return;
     }
 
-    console.log("Email sent successfully");
 
 }
 

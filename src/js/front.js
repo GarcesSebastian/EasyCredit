@@ -112,8 +112,6 @@ function simulateLoanJSON(monto, tasa, frecuencia, plazo){
         table.push(data);
     }
 
-    console.log(table)
-
     return table;
 }
 
@@ -282,7 +280,6 @@ let content_code_promo = document.querySelector("#content-code-promo");
 let err_code_promo = document.querySelector("#err-code-promo");
 
 const date_now = new Date();
-console.log(date_now)
 
 content_code_promo?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -438,8 +435,6 @@ const _SaveImage = async (img) => {
 
     if(res_save_image.ok){
         localStorage.setItem("img", img);
-    }else{
-        console.log(save_image.message)
     }
 };
 
@@ -455,7 +450,6 @@ const loadImageFromStorage = async () => {
     let image_value = get_image.user_info[0].image_profile;
 
     if(image_value){
-        console.log(image_value.length)
         image_profile.forEach((item) => {
             item.src = image_value;
         })
@@ -479,7 +473,6 @@ dropzoneFile?.addEventListener("change", (event) => {
         const reader = new FileReader();
         reader.onload = (e) => {
         const imageDataUrl = e.target?.result;
-        console.log(imageDataUrl.length)
         _SaveImage(imageDataUrl);
         image_profile.forEach((item) => {
             item.src = imageDataUrl;
@@ -535,7 +528,6 @@ document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
                     inputErr(document.querySelector("#input-email"), "#err-email", responseJson.message);
                 }
     
-                console.log("Ocurrió un error " + responseJson.message);
             }
         }
     }
@@ -578,8 +570,6 @@ delete_all_movements.addEventListener("click", async () => {
         document.querySelector("#slot_card").style.display = "none";
         document.querySelector("#not_found_movements").style.display = "flex";
         document.querySelector("#movement_hidden").style.display = "flex";
-    }else{
-        console.log(delete_all_movements.message);
     }
 });
 
@@ -622,7 +612,6 @@ delete_movements.forEach((item, index) => {
                 const delete_movement = await response_delete_movement.json();
 
                 if(delete_movement.state == "Good Request"){
-                    console.log(delete_movement.message);
                     movements_list[index_element].remove();
                     
                     item_movement.forEach((item) => {
@@ -640,12 +629,7 @@ delete_movements.forEach((item, index) => {
                         document.querySelector("#not_found_movements").style.display = "flex";
                         document.querySelector("#movement_hidden").style.display = "flex";
                     }
-                }else{
-                    console.log(delete_movement.message);
                 }
-            }else{
-                console.log("nono")
-                console.log(index == index_element, index, index_element)
             }
         });
     });
@@ -680,8 +664,6 @@ delete_all_notifications.addEventListener("click", async () => {
         });
         localStorage.setItem("easyCreditNotifications", 0);
         document.querySelector("#notification_hidden").style.display = "flex";
-    }else{
-        console.log(delete_all_notifications.message);
     }
 });
 
@@ -719,8 +701,6 @@ item_notification.forEach((item, index) => {
                     if(notifications_list.length <= 0){
                         document.querySelector("#notification_hidden").style.display = "flex";
                     }
-                }else{
-                    console.log(delete_notification.message);
                 }
             }
         });
@@ -802,27 +782,22 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
         }else{
             if(numero_telefono.value.length < 10){
                 inputErr(document.querySelector("#input-numero_telefono"), "#err-numero_telefono", "El numero de telefono es incorrecto.");
-                console.log("EL numero de telefono es incorrecto.");
             }
 
             if(numero_identidad.value.length < 10){
                 inputErr(document.querySelector("#input-numero_identidad"), "#err-numero_identidad", "El numero de identidad es incorrecto.");
-                console.log("EL numero de identidad es incorrecto.");
             }
             
             if(username.value.length < 6 || username.value.length > 15){
                 inputErr(document.querySelector("#input-username"), "#err-username", "El nombre de usuario debe tener entre 6 y 15 caracteres.");
-                console.log("El nombre de usuario debe tener entre 6 y 15 caracteres.");
             }
 
             if(password.value.length < 8 || password.value.length > 24){
                 inputErr(document.querySelector("#input-password"), "#err-password", "La contraseña debe tener entre 8 y 24 caracteres.");
-                console.log("La contraseña debe tener entre 8 y 24 caracteres.");
             }
 
             if(ingreso_mensual.value.length < 8 || ingreso_mensual.value.length > 24){
                 inputErr(document.querySelector("#input-ingreso-mensual"), "#err-ingreso-mensual", "El ingreso mensual debe ser mayor a 1k.");
-                console.log("El ingreso mensual debe ser mayor a 1k.");
             }
         }
     }
@@ -903,7 +878,6 @@ form?.addEventListener("submit", async (e) => {
         }
     }
 
-    console.log(Number(value))
 })
 
 let form_update = document.querySelector("#form_update");
@@ -1322,7 +1296,6 @@ async function send_req_loan(){
         }catch(e){
             err = e;
             isContinue = false;
-            console.log(err);
         }
     }
 }
@@ -1357,7 +1330,8 @@ document.querySelector("#form-loan")?.addEventListener("submit", (event) => {
 
     if(value_loan == "Loading..."){
         document.querySelector("#content-warning-loan-rate").style.display = "flex"
-        document.querySelector("#content-warning-loan-rate").textContent = "Por favor, espere a que la tasa de interes cargue."
+        document.querySelector("#content-text-warning-loan").textContent = "Por favor, espere a que la tasa de interes cargue."
+        return;
     }
 
     let submitter = event.submitter;
@@ -1524,7 +1498,6 @@ async function send_req_transfer(){
         }catch(e){
             err = e;
             isContinue = false;
-            console.log(err);
         }
     }
 }
@@ -1723,7 +1696,6 @@ function verifyNoticiations(){
     }else{
         point_red.style.display = "none";
     }
-    console.log("Verify");
 
     let number_notifications = document.querySelector("#number_notifications");
     if(number_notifications){

@@ -20,6 +20,7 @@ interface Props {
     first_loan_text: string,
     please_enter_text: string,
     make_loan_text: string,
+    pay_loan_text: string,
     available_balance: string,
     total_income_text: string,
     check_card_text: string,
@@ -34,7 +35,39 @@ interface Props {
     simulate_loan_text: string,
     more_text: string,
     not_found_text: string,
+
+    //Translate
+    title_loans_text: string;
+    not_found_loans_text: string;
+
+    hide_all_text: string,
+    name_text: string,
+    id_loan_text: string,
+    amount_text: string,
+    interes_text: string,
+    text_cuotas: string,
+    frecuencia_one_text: string,
+    next_date_text: string,
+    excedent_pay_text: string,
+    pay_cuotas_text: string,
 }
+
+//Translate Variables
+const {
+    title_loans_text,
+    not_found_loans_text,
+    hide_all_text,
+    name_text,
+    id_loan_text,
+    amount_text,
+    interes_text,
+    text_cuotas,
+    frecuencia_one_text,
+    next_date_text,
+    excedent_pay_text,
+    pay_cuotas_text,
+} = Astro.props;
+
 
 const {
     welcome_back_text,
@@ -45,6 +78,7 @@ const {
     first_loan_text,
     please_enter_text,
     make_loan_text,
+    pay_loan_text,
     available_balance,
     total_income_text,
     check_card_text,
@@ -205,7 +239,7 @@ try{
                                     </button>
 
                                     <button id="button-loan-pay" class="bg-white w-fit text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white">
-                                        Pagar prestamo
+                                        {pay_loan_text}
                                     </button>
                                 </div>
                             </div>
@@ -269,7 +303,10 @@ try{
             </article>
         </section>
 
-        <PayLoan length_loan={data_user.data_user_loans.length}>
+        <PayLoan length_loan={data_user.data_user_loans.length}
+            title_loans_text={title_loans_text}
+            not_found_loans_text={not_found_loans_text}
+        >
             {
                 data_user.data_user_loans.map((item: any) => (
                     <LoanArticle
@@ -281,6 +318,17 @@ try{
                         cuotas={item.cuotas}
                         frecuencia={item.frecuencia_pago}
                         date_next={item.fecha_next.split("T")[0]}
+                        view_all_text={view_all_text}
+                        hide_all_text={hide_all_text}
+                        name_text={name_text}
+                        id_loan_text={id_loan_text}
+                        amount_text={amount_text}
+                        interes_text={interes_text}
+                        text_cuotas={text_cuotas}
+                        frecuencia_one_text={frecuencia_one_text}
+                        next_date_text={next_date_text}
+                        excedent_pay_text={excedent_pay_text}
+                        pay_cuotas_text={pay_cuotas_text}
                     />
                 ))
             }

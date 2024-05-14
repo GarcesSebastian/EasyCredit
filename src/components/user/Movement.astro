@@ -7,7 +7,17 @@
         fecha_movement: string;
         message: string;
         id_movement: number;
+
+        //translate
+        movement_text: string,
+        date_text: string,
+        description_text: string,
+        clear_text: string,
+        from_text: string,
     }
+
+    //Variables translate
+    const { movement_text, date_text, description_text, clear_text, from_text } = Astro.props;
 
     const { tipo_movement, origin, action_movement, state_movement, fecha_movement, message, id_movement } = Astro.props;
 ---
@@ -50,11 +60,11 @@
     <div id="info"  class="hidden flex-col gap-3 px-5 py-3 text-white border-t-2 animate-deployment">
 
         <h3 class="flex gap-2 text-lg">
-            De:<p class="font-semibold">{origin}</p>
+            {from_text}:<p class="font-semibold">{origin}</p>
         </h3>
         
         <h3 class="flex gap-2 text-lg">
-            Movimiento:
+            {movement_text}:
             {
                 state_movement == "positivo" ? (
                     <p class="font-bold text-green-400">
@@ -69,16 +79,16 @@
         </h3>
 
         <h3 class="flex gap-2 text-base">
-            Fecha:<p class="text-gray-200 text-md w-full">{fecha_movement}</p>
+            {date_text}:<p class="text-gray-200 text-md w-full">{fecha_movement}</p>
         </h3>
 
         <h3 class="text-lg flex flex-col">
-            Descripcion:
+            {description_text}:
             <textarea class="bg-slate-700/50 p-3 rounded-lg h-[200px] max-h-[250px] font-bold mt-3" disabled>{message}</textarea>
         </h3>
                 
         <button id="delete_movement" data-id-movement={id_movement} type="button" class="focus:outline-none text-white w-full font-bold bg-red-400 hover:bg-red-500 focus:ring-4 focus:ring-white rounded-[3px] text-md px-5 py-2.5">
-            Borrar
+            {clear_text}
         </button>
     </div>
 </article> 

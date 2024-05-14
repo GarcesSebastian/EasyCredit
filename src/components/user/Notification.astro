@@ -8,10 +8,31 @@
         id_notification: number;
         length_movements: number;
         income_accumulated: string;
+
+        //Translate
+        show_text: string,
+        send_transfer_text: string,
+        get_transfer_text: string,
+        send_loan_text: string,
+        with_amout_text: string,
+        number_register_is_text: string,
+        balance_avaible_is_text: string,
+        not_register_income_text: string,
+        income_amount_is_text: string,
     }
 
+    //Translate Variables
+    let { show_text, send_transfer_text, get_transfer_text, send_loan_text, with_amout_text, number_register_is_text, balance_avaible_is_text, not_register_income_text, income_amount_is_text } = Astro.props;
+
     let { tipo_notification, origin, action_notification, state_notification, fecha_notification, id_notification, length_movements, income_accumulated } = Astro.props;
-    income_accumulated = Number(income_accumulated.split("$")[0]) > 0 ? income_accumulated : "";
+    
+    let income_value = income_accumulated.split(".").join("").split("$").join("").split(",").join("");
+
+    income_value = Number(income_value) > 0 ? income_value : "";
+
+    console.log(income_value, income_accumulated)
+
+
 ---
 
 <article id="notification" class="bg-gradient-to-r to-[#0074D3] from-[#0040A8] shadow-lg flex flex-col rounded-lg" data-notification={id_notification}>
@@ -30,12 +51,12 @@
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
                     <p class="text-white">
-                        Haz recibido una transferencia de <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">${action_notification}</span>.
+                        {get_transfer_text} <span class="font-bold">{origin}</span> {with_amout_text} <span class="font-bold">${action_notification}</span>.
                     </p>
 
                     <span class="w-full h-fit flex justify-between items-end mt-2">
                         <button id="item_notification" data-id-movement={id_notification} type="button" class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
-                            mostrar
+                            {show_text}
                         </button>
 
                         <h3 class="w-full text-wrap px-2 h-full flex items-center justify-end text-white">
@@ -56,12 +77,12 @@
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
                     <p class="text-white">
-                        Haz enviado una transferencia a <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">${action_notification}</span>.
+                        {send_transfer_text} <span class="font-bold">{origin}</span> {with_amout_text} <span class="font-bold">${action_notification}</span>.
                     </p>
 
                     <span class="w-full h-fit flex justify-between items-end mt-2">
                         <button id="item_notification" data-id-movement={id_notification} type="button" class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
-                            mostrar
+                            {show_text}
                         </button>
 
                         <h3 class="w-full text-wrap px-2 h-full flex items-center justify-end text-white">
@@ -82,12 +103,12 @@
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
                     <p class="text-white">
-                        El numero de movimientos registrados en tu cuenta es de <span class="font-bold">{length_movements}</span>. El saldo disponible es de <span class="font-bold">${action_notification}</span>. 
+                        {number_register_is_text} <span class="font-bold">{length_movements}</span>. {balance_avaible_is_text} <span class="font-bold">${action_notification}</span>. 
                         {
-                            Number(income_accumulated.split("$")[0]) > 0 ? (
-                                "El monto acumulado de ingresos es de "
+                            Number(income_value) > 0 ? (
+                                income_amount_is_text
                             ) : (
-                                "No se han registrado ingresos en tu cuenta."
+                                not_register_income_text
                             )
 
                         }
@@ -113,12 +134,12 @@
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
                     <p class="text-white">
-                        Usted hizo un prestamo al <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">${action_notification}</span>.
+                        {send_loan_text} <span class="font-bold">{origin}</span> {with_amout_text} <span class="font-bold">${action_notification}</span>.
                     </p>
 
                     <span class="w-full h-fit flex justify-between items-end mt-2">
                         <button id="item_notification" type="button" data-id-movement={id_notification} class="focus:outline-none text-black font-bold bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-white rounded-lg text-md px-5 py-2.5">
-                            mostrar
+                            {show_text}
                         </button>
 
                         <h3 class="w-full h-full text-wrap px-2 flex items-center justify-end text-white">
