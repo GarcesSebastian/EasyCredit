@@ -44,8 +44,81 @@ btn_simulate_loan_offline?.addEventListener("click", async () => {
     window.location.href = "/SimulateLoan";
 });
 
+function simulateLoanJSON(monto, tasa, frecuencia, plazo){
+    monto = Number(monto)
+    tasa = Number(tasa.split("%")[0])
+    frecuencia = frecuencia;
+    plazo = plazo;
+
+    const tasa_interes_mensual = (tasa / 100) / 12;
+    let total_pagos;
+    let frecuencia_value;
+  
+    switch (frecuencia) {
+        case 'mensual':
+            total_pagos = plazo;
+            frecuencia_value = 1;
+            break;
+        case 'trimestral':
+            total_pagos = plazo / 3;
+            frecuencia_value = 3;
+            break;
+        case 'semestral':
+            total_pagos = plazo / 6;
+            frecuencia_value = 6;
+            break;
+        case 'anual':
+            total_pagos = plazo / 12;
+            frecuencia_value = 12;
+            break;
+        default:
+            console.error('Frecuencia de pago no válida');
+            return;
+    }
+
+    let pago_restante = monto;
+    let pago_mensual = (monto * tasa_interes_mensual) / (1 - Math.pow(1 + tasa_interes_mensual, -total_pagos));
+
+    let table = []
+    for(let i = 1; i <= total_pagos; i++){
+        let data = {
+            saldo_capital:1,
+            pago_capital: 1,
+            pago_interes: 1,
+            monto: 1,
+            plazo: 30,
+            saldo_final: 1,
+            numero_pago: 1,
+            fecha: 1
+        }
+
+        let pago_interes = pago_restante * tasa_interes_mensual;
+        let pago_principal = pago_mensual - pago_interes;
+        let pago_total = pago_interes + pago_principal;
+        let pago_final = pago_restante - pago_principal
+        const currentDate = new Date();
+        currentDate.setMonth(currentDate.getMonth() + i * frecuencia_value);
+        currentDate.setDate(currentDate.getDate() - 1)
+
+        data.saldo_capital = pago_restante.toFixed(2)
+        data.pago_capital = pago_principal.toFixed(2)
+        data.pago_interes = pago_interes.toFixed(2)
+        data.monto = pago_total.toFixed(2)
+        data.plazo = 30
+        data.saldo_final = pago_final.toFixed(2)
+        data.numero_pago = i
+        data.fecha = currentDate
+
+        pago_restante = pago_final;
+        table.push(data);
+    }
+
+    console.log(table)
+
+    return table;
+}
+
 function simulateLoan(monto, tasa, frecuencia, plazo){
-    console.log(monto, tasa, frecuencia, plazo)
     const tasa_interes_mensual = (tasa / 100) / 12;
     let total_pagos;
     let frecuencia_value;
@@ -79,19 +152,25 @@ function simulateLoan(monto, tasa, frecuencia, plazo){
     body_table_simulate_loan.innerHTML = '';
 
     for(let i = 1; i <= total_pagos; i++){
-        console.log(i)
+        let data = {
+            saldo_capital:1,
+            pago_capital: 1,
+            pago_interes: 1,
+            monto: 1,
+            plazo: 30,
+            saldo_final: 1,
+            numero_pago: 1,
+            fecha: 1
+        }
+
         let pago_interes = pago_restante * tasa_interes_mensual;
         let pago_principal = pago_mensual - pago_interes;
         let pago_total = pago_interes + pago_principal;
         let pago_final = pago_restante - pago_principal
-
         const currentDate = new Date();
         currentDate.setMonth(currentDate.getMonth() + i * frecuencia_value);
-
         const formattedDate = currentDate.toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
-
         const row = document.createElement('tr');
-        
         if(i == 1){
             row.innerHTML = `
             <td class="text-center py-2 px-4 rounded-tl-lg">1</td>
@@ -131,8 +210,20 @@ function simulateLoan(monto, tasa, frecuencia, plazo){
         }
 
         body_table_simulate_loan.appendChild(row);
+        data.saldo_capital = pago_restante.toFixed(2)
+        data.pago_capital = pago_principal.toFixed(2)
+        data.pago_interes = pago_interes.toFixed(2)
+        data.monto = pago_total.toFixed(2)
+        data.plazo = 30
+        data.saldo_final = pago_final.toFixed(2)
+        data.numero_pago = i
+        data.fecha = currentDate
+
         pago_restante = pago_final;
+        table.push(data);
     }
+
+    return table;
 }
 
 let popup_simulate_loan = document.querySelector("#popup-simulate-loan");
@@ -897,6 +988,123 @@ if(document.querySelector("#background-popup-transfer") // Si existen los elemen
     });
 }
 
+let bg_popup_pay = document.querySelector("#background-popup-pay");
+let close_pay = document.querySelector("#close-pay");
+let button_loan_pay = document.querySelector("#button-loan-pay");
+let closeLoans = document.querySelector("#closeLoans")
+
+bg_popup_pay?.addEventListener("click", () => {
+    document.querySelector("#popup-center").style.display = "none";
+});
+
+close_pay?.addEventListener("click", () => {
+    document.querySelector("#popup-center").style.display = "none";
+});
+
+button_loan_pay?.addEventListener("click", () => {
+    document.querySelector("#content-loan-pay").style.display = "flex"
+})
+
+closeLoans?.addEventListener("click", () => {
+    document.querySelector("#content-loan-pay").style.display = "none"
+});
+
+let form_pay = document.querySelector("#form-pay");
+let value_cuotas_use = 0;
+let attrPay;
+
+let excedent_now = document.querySelector("#excedent_now");
+
+excedent_now?.addEventListener("click", () => {
+    let id_loan = excedent_now.getAttribute("data-id")
+    createPdfLoan(id_loan)
+});
+
+form_pay?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    let value_cuotas = document.querySelector("#input-numero-cuotas-pay").value;
+    attrPay = form_pay.getAttribute("data-pay");
+
+    const input_total_pay = document.querySelector("#input-total-pay");
+
+    inputSucess(document.querySelector("#input-numero-cuotas-pay"), "#err-numero-cuotas-pay")
+    inputSucess(document.querySelector("#input-total-pay"), "#err-total-pay")
+
+    if(e.submitter.id == "submit-pay-cuotas"){
+        const res_data_loan = await fetch(`http://localhost:4000/user/loan?id_loan=${attrPay}`);
+
+        const data_loan = await res_data_loan.json();
+    
+        const simulate = JSON.parse(data_loan[0].simulate);
+    
+        if(value_cuotas > simulate.length){
+            inputErr(document.querySelector("#input-numero-cuotas-pay"), "#err-numero-cuotas-pay", "El numero maximo de cuotas del prestamo es de " + simulate.length)
+            return;
+        }
+    
+        document.querySelector("#result-pay").style.display = "flex"
+
+        let total_pays = 0;
+
+        for(let i = 0; i < value_cuotas; i++){
+            total_pays += Number(simulate[i].monto);
+        }
+
+        input_total_pay.setAttribute("data-value", total_pays.toString())
+        input_total_pay.value = "$" + formatNumber(total_pays.toFixed(2)).toString();
+        value_cuotas_use = value_cuotas;
+    }else{
+        const res_data_user = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+
+        const data_user = await res_data_user.json();
+
+        const amount_avaible = data_user.user_info[0].saldo_disponible;
+
+        if(Number(input_total_pay.getAttribute("data-value")) > Number(amount_avaible)){
+            inputErr(document.querySelector("#input-total-pay"), "#err-total-pay", "No tienes saldo suficiente.")
+            return;
+        }
+
+        let amount_avaible_new = (Number(amount_avaible) - Number(input_total_pay.getAttribute("data-value"))).toFixed(2);
+
+        const res_data_loan = await fetch(`http://localhost:4000/user/loan?id_loan=${attrPay}`);
+
+        const data_loan = await res_data_loan.json();
+    
+        const simulate = JSON.parse(data_loan[0].simulate);
+
+        for(let i = 1; i <= value_cuotas_use; i++){
+            simulate.splice(0,1);
+        }
+
+        const data = {
+            simulate: simulate,
+            id_user: getCookie("ID-USER"),
+            id_loan: attrPay,
+            saldo: amount_avaible_new.toString(),
+        }
+
+        const res_update_user_loan = await fetch("http://localhost:4000/update/user_loan",{
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        });
+
+
+        const update_user_loan = await res_update_user_loan.json();
+
+        if(res_update_user_loan.ok){
+            window.location.reload();
+        }else{
+            inputErr(document.querySelector("#input-total-pay"), "#err-total-pay", update_user_loan.message)
+        }
+    }
+
+})
+
 if(
     document.querySelector("#background-popup-forward")
     && document.querySelector("#popup-center-forward")
@@ -1036,7 +1244,8 @@ async function send_req_loan(){
             tasa_fija: elements_loan.tasa_fija.checked,
             date: new Date().toLocaleDateString(),
             id_client: getCookie("ID-USER"),
-            is_active: smsNotificationsElements.check_sms_loans.checked
+            is_active: smsNotificationsElements.check_sms_loans.checked,
+            table: simulateLoanJSON(elements_loan.input_action_loan.value, elements_loan.input_tasa_loan.value, elements_loan.input_frecuencia.value, Number(elements_loan.input_cuotas.value))
         }
     
         let response_user_loan;
@@ -1081,6 +1290,8 @@ async function send_req_loan(){
                 if(emailNotificationsElements.check_email_loans.checked){
                     Notifications.sendLoanNotificationEmail(data);
                 }
+
+
 
                 window.location.href = "/"
             }
@@ -1498,6 +1709,18 @@ function transformSrc(srcImage){
     return src;
 }
 
+function formatNumber(number) {
+    let [integerPart, decimalPart] = String(number).split('.');
+
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    if (decimalPart) {
+        return `${integerPart},${decimalPart}`;
+    } else {
+        return integerPart;
+    }
+}
+
 function encrypt(value){
     value = CryptoJS.AES.encrypt(value, 'clave_secreta').toString();
     return value;
@@ -1520,6 +1743,7 @@ function inputErr(input, id, message) {
     
     if (errElement) {
         errElement.style.opacity = "1";
+        errElement.style.display = "flex";
         errElement.innerHTML = message;
     } else {
         console.error("El elemento de error no se encontró.");
@@ -1578,6 +1802,7 @@ function inputSucess(input, id) {
     
     if (errElement) {
         errElement.style.opacity = "1";
+        errElement.style.display = "none";
         errElement.innerHTML = "";
     } else {
         console.error("El elemento de error no se encontró.");
@@ -1598,6 +1823,10 @@ function getCookie(cookieName) {
         }
     }
     return null;
+}
+
+async function createPdfLoan(id_loan) {
+    window.location.href = `http://localhost:4000/create/pdf_loan?id_loan=${id_loan}`;
 }
 
 export {simulateLoan}

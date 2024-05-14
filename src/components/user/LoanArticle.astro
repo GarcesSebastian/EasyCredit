@@ -1,0 +1,130 @@
+---
+interface Props{
+    id: number,
+    date: string,
+    monto: string,
+    name: string,
+    interes: number,
+    cuotas: number,
+    frecuencia: string,
+    date_next: string,
+}
+
+const {id, date, monto, name, interes, cuotas, frecuencia, date_next} = Astro.props;
+
+function formatNumber(number: any) {
+    let [integerPart, decimalPart] = String(number).split('.');
+
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    if (decimalPart) {
+        return `${integerPart},${decimalPart}`;
+    } else {
+        return integerPart;
+    }
+}
+
+let newMonto = formatNumber(monto)
+
+---
+
+<div id="toast-notification" data-id={id} class="w-full p-2 rounded-md shadow bg-gradient-to-r to-[#0074D3] from-[#0040A8] text-gray-300" role="alert">
+    <div class="flex items-center">
+        <div class="relative inline-block shrink-0">
+            <img class="w-12 h-12 rounded-full" src="https://img.icons8.com/?size=256&id=eYaVJ9Nbqqbw&format=png" alt="Jese Leos image"/>
+        </div>
+        <div class="ms-3 text-sm font-normal">
+            <div class="text-lg font-semibold text-white">Bank Loan</div>
+            <div class="text-lg font-normal">Usted hizo un prestamo de <span class="text-white">{newMonto}$</span>.</div> 
+            <span class="text-base font-medium text-slate-100">{date}</span>   
+        </div>
+    </div>
+
+    <div class="w-full flex justify-end">
+      <button id="view-all-loan" data-id={id} type="button" class="bg-white text-black rounded-lg px-4 py-2 mt-2 outline-none transition-all duration-250 ease-in hover:bg-black hover:text-white" data-dismiss-target="#toast-notification" aria-label="Close">
+        View all
+      </button>
+    </div>
+
+    <!--Info Prestamo -->
+    <div id="content-view-all" data-id={id} class="w-full flex-col hidden animate-deployment">
+      <div class="bg-slate-800 shadow-lg shadow-slate-800 p-4 rounded-md mt-4">
+        <div class="grid grid-cols-2 gap-4 mb-2">
+          <div>
+            <p class="text-gray-400">Nombre:</p>
+            <p class="font-bold">{name}</p>
+          </div>
+          <div>
+            <p class="text-gray-400">ID del Prestamo:</p>
+            <p class="font-bold">{id}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-2">
+          <div>
+            <p class="text-gray-400">Monto:</p>
+            <p class="font-bold">{newMonto}$</p>
+          </div>
+          <div>
+            <p class="text -gray-400">Interes:</p>
+            <p class="font-bold">{interes}%</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-2">
+          <div>
+            <p class="text -gray-400">Cuotas:</p>
+            <p class="font-bold">{cuotas}</p>
+          </div>
+          <div>
+            <p class="text -gray-400">Frecuencia:</p>
+            <p class="font-bold">{frecuencia}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-2">
+            <div>
+                <p class="text -gray-400">Proxima fecha de pago:</p>
+                <p class="font-bold">{date_next}</p>
+            </div>
+            <div>
+                <p class="text -gray-400">Excedente pago actual:</p>
+                <span id="excedent_now" data-id={id} class="hover:underline text-yellow-400 font-bold">factura.pdf</span>
+            </div>
+        </div>
+      </div>
+
+      <button type="button" id="pay-loan-list" data-id={id} class="bg-green-500 hover:bg-green-600 transition-all ease-in text-white w-full px-4 py-2 text-center rounded-md mt-4">Pagar Cuotas</button>
+    </div>
+</div>
+
+<script>
+    const viewAll = document.querySelectorAll("#view-all-loan");
+    const contentViewAll = document.querySelectorAll("#content-view-all") as NodeListOf<HTMLButtonElement>;
+
+    viewAll?.forEach(item => {
+        item?.addEventListener("click", () => {
+            let attrItem = item.getAttribute("data-id");
+
+            contentViewAll?.forEach((element: any) => {
+                let attrElement = element.getAttribute("data-id");
+
+                if(attrItem == attrElement){
+                    if(item.textContent?.trim() == "View all"){
+                        element.style.display = "flex";
+                        item.textContent = "Hidden all"
+                    }else{
+                        element.style.display = "none";
+                        item.textContent = "View all"
+                    }
+                }
+            });
+
+        })
+    })
+
+    let pay_loan_list = document.querySelectorAll("#pay-loan-list");
+    pay_loan_list.forEach(item => {
+        item?.addEventListener("click", () => {
+            (document.querySelector("#popup-center") as HTMLElement).style.display = "flex";
+            (document.querySelector("#form-pay") as HTMLFormElement).setAttribute("data-pay", item?.getAttribute("data-id") ?? "")
+        })
+    });
+</script>

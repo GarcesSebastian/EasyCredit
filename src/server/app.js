@@ -7,6 +7,7 @@ import { createServer } from 'node:http';
 // import { Server } from 'socket.io';
 import nodemailer from 'nodemailer';
 import bodyParser from 'body-parser';
+import puppeteer from 'puppeteer';
 
 const app = express();
 const server = createServer(app);
@@ -284,6 +285,53 @@ app.post("/update/date", async (req, res) => {
     }
 });
 
+app.post("/update/user_loan", async (req, res) => {
+    if(req.body){
+        const {simulate, saldo, id_loan, id_user} = req.body;
+
+        let history_credit = 0;
+
+        const connection = await database.getConnection();
+
+        const data_user_history_credit = await connection.query("SELECT history_credit FROM users WHERE id_user = ?",[id_user])
+
+        if(!data_user_history_credit.length > 0){
+            return res.status(400).send({state: "Bad Request", message: "No se pudo encontrar el usuario con el id " + id_user})
+        }
+
+        history_credit += data_user_history_credit[0].history_credit;
+
+        if(!simulate.length > 0){
+            const res_loan = await connection.query("DELETE FROM prestamos WHERE id_loan = ?",[id_loan]);
+
+            if(!res_loan){
+                return res.status(400).send({state: "Bad Request", message: "No se pudo eliminar el prestamo con el id " + id_loan})
+            }
+
+            history_credit += 10;
+        }else{
+            const fecha_next = simulate[0].fecha;
+
+            const res_loan = await connection.query("UPDATE prestamos SET simulate = ?, cuotas = ?, fecha_next = ? WHERE id_loan = ?",[JSON.stringify(simulate), simulate.length, fecha_next, id_loan]);
+
+            if(!res_loan){
+                return res.status(400).send({state: "Bad Request", message: "No se pudo acatualizar el prestamo con el id " + id_loan})
+            }
+
+            history_credit += 1;
+        }
+
+
+        const res_user = await connection.query("UPDATE users SET saldo_disponible = ?, history_credit = ? WHERE id_user = ?",[saldo, history_credit, id_user])
+        
+        if(!res_user){
+            return res.status(400).send({state: "Bad Request", message: "No se pudieron actualizar los datos."})
+        }
+
+        return res.status(200).send({state: "Good Request", message: "Los datos se pudieron actualizar."})
+    }
+});
+
 app.post("/login/auth", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
@@ -321,6 +369,8 @@ app.post("/user/loan", async (req, res) => {
         const tasa_fija = req.body.tasa_fija;
         const tasa_variable = req.body.tasa_variable;
 
+        const table = req.body.table;
+
         const is_active = req.body.is_active;
 
         const data_user_basic = await connection.query("SELECT * FROM users WHERE email_user = ?", [email_user]);
@@ -331,8 +381,20 @@ app.post("/user/loan", async (req, res) => {
                 let is_id = id_loan == data_user_import[0].numero_identidad;
                 if(is_id){
                     let sumary_action = parseFloat(action_loan) + parseFloat(data_user_basic[0].saldo_disponible);
-                    
-                    await connection.query("INSERT INTO prestamos(id_user, name_loan, numero_telefono_loan, tasa_interes, cuotas, frencuencia_pago, action_prestamo, tasa_variable, tasa_fija) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [data_user_basic[0].id_user, name_loan, numero_telefono_loan, tasa_loan, cuotas, frecuencia, action_loan, tasa_variable, tasa_fija]);            
+
+                    let id_loan = await generateIdPrestamos(connection);
+                    let excedent_now = await generateIdExcentedNow(connection);
+
+                    if(id_loan == null){
+                        return res.status(400).send({state: "Bad Request", message: "No se pudo generar el id del prestamo"})
+                    }
+
+                    let date_now = new Date();
+                    let date_next = table[0].fecha;
+
+                    console.log(date_next)
+
+                    await connection.query("INSERT INTO prestamos(id_loan, id_user, name_loan, numero_telefono_loan, tasa_interes, cuotas, frecuencia_pago, action_prestamo, tasa_variable, tasa_fija, fecha, fecha_next, excedent_now, simulate) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_loan, data_user_basic[0].id_user, name_loan, numero_telefono_loan, tasa_loan, cuotas, frecuencia, action_loan, tasa_variable, tasa_fija, date_now, date_next, excedent_now, JSON.stringify(table)]);            
                     
                     let movements = await connection.query("SELECT * FROM movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
                     let notifications = await connection.query("SELECT * FROM notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
@@ -1164,6 +1226,133 @@ app.post("/create/information", async (req, res) => {
     }
 });
 
+app.get('/create/pdf_loan', async (req, res) => {
+    try {
+        const { id_loan } = req.query;
+
+        const connection = await database.getConnection();
+
+        // Obtener los datos del préstamo desde la base de datos
+        const data_loan = await connection.query("SELECT * FROM prestamos WHERE id_loan = ?", [id_loan]);
+
+        if (data_loan.length === 0) {
+            return res.status(404).json({ error: "Prestamo no encontrado" });
+        }
+
+        const loan = data_loan[0];
+        console.log(loan)
+
+        // Obtener la fecha formateada
+        const fecha = new Date(loan.fecha);
+        const fechaVencimiento = new Date(loan.fecha_next);
+        fechaVencimiento.setDate(fechaVencimiento.getDate() + 1)
+        const date_now = formatDate(fecha);
+        const date_next = formatDate(fechaVencimiento);
+
+        // Obtener el número de tarjeta del usuario
+        const userData = await connection.query("SELECT number_card FROM users WHERE id_user = ?", [loan.id_user]);
+        const userNumberCard = userData.length > 0 ? userData[0].number_card : '';
+
+        //Obtener numero de cuotas a pagar
+        const cuotas_pagar = 1;
+
+        //Obtener datos de la simulacion
+        const simulate = JSON.parse(loan.simulate);
+        console.log(simulate)
+
+        const cuota_month = formatNumber(simulate[0].pago_capital);
+        const base_imponible = formatNumber(simulate[0].pago_capital);
+        const intereses = formatNumber(simulate[0].pago_interes);
+        const amount = formatNumber(simulate[0].monto);
+
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        
+        // Crear el contenido HTML con los datos del préstamo y el usuario
+        const htmlContent = `
+            <div class="pdf-convert" style="max-width: 800px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;">
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: start; align-items: center; gap: 1rem;">
+                        <svg id="icon-header" class="icon icon-tabler icon-tabler-steam" width="64" height="64" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" fill="white" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+                            <path d="M4 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+                            <path d="M20 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+                            <path d="M12 20m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+                            <path d="M5.5 5.5l3 3"/>
+                            <path d="M15.5 15.5l3 3"/>
+                            <path d="M18.5 5.5l-3 3"/>
+                            <path d="M8.5 15.5l-3 3"/>
+                        </svg>
+                        <span style="font-size: 34px; font-weight: bold; color: #333;">EasyCredit</span>
+                    </div>
+                    <div style="font-size: 18px; color: #555;">
+                        <div>Factura #: ${loan.excedent_now}</div>
+                        <div>Fecha: ${date_now}</div>
+                        <div>Fecha de Vencimiento: ${date_next}</div>
+                    </div>
+                </div>
+
+                <hr style="border-top: 1px solid #ddd; margin-bottom: 20px;">
+
+                <div style="font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px;">Detalles del Cliente</div>
+
+                <div style="margin-bottom: 10px;">Nombre del Cliente: ${loan.name_loan}</div>
+                <div style="margin-bottom: 10px;">Número de Teléfono: ${loan.numero_telefono_loan}</div>
+                <div style="margin-bottom: 10px;">Número de Tarjeta: ${userNumberCard}</div>
+
+                <hr style="border-top: 1px solid #ddd; margin-bottom: 20px;">
+
+                <div style="font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px;">Detalles del Préstamo</div>
+
+                <div style="margin-bottom: 10px;">Nombre del Préstamo: Préstamo Bancario Personal</div>
+                <div style="margin-bottom: 10px;">Monto del Préstamo: $${formatNumber(loan.action_prestamo)}</div>
+                <div style="margin-bottom: 10px;">Tasa de Interés: ${loan.tasa_interes}%</div>
+                <div style="margin-bottom: 10px;">Cuotas: ${loan.cuotas}</div>
+                <div style="margin-bottom: 10px;">Frecuencia de Pago: ${loan.frecuencia_pago}</div>
+                <div style="margin-bottom: 10px;">Acción del Préstamo: Aprobado</div>
+
+                <hr style="border-top: 1px solid #ddd; margin-bottom: 20px;">
+
+                <div style="font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px;">Información del Pago Actual</div>
+
+                <div style="margin-bottom: 10px;">Número de Cuotas a Pagar: ${cuotas_pagar}</div>
+                <div style="margin-bottom: 10px;">Monto a Pagar por Cuota: $${cuota_month}</div>
+
+                <hr style="border-top: 1px solid #ddd; margin-bottom: 20px;">
+
+                <div style="font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px;">Excedente de Pago</div>
+
+                <div style="margin-bottom: 10px;">Base Imponible: $${base_imponible}</div>
+                <div style="margin-bottom: 10px;">Intereses: $${intereses}</div>
+                <div style="margin-bottom: 10px;">Total a Reembolsar: $${amount}</div>
+
+                <hr style="border-top: 1px solid #ddd; margin-bottom: 20px;">
+
+                <div style="text-align: center;">
+                    <button style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #007bff; border: none; border-radius: 4px; cursor: pointer;">Gracias por usar EasyCredit</button>
+                </div>
+
+            </div>
+        `;
+
+        await page.setContent(htmlContent);
+
+        const pdfBuffer = await page.pdf({ format: 'A4' });
+
+        await browser.close();
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=factura.pdf');
+
+        res.status(200).send(pdfBuffer);
+    } catch (error) {
+        console.error('Error al generar el PDF:', error);
+        res.status(500).send('Error al generar el PDF');
+    }
+});
+
 app.post("/delete/information", async (req, res) => {
     try {
         if (req.body) {
@@ -1278,6 +1467,7 @@ app.get("/user/data", async (req, res) => {
     const data_user_info = await connection.query("SELECT * FROM users WHERE id_user = ?", [id_user]);
     const data_user_register = await connection.query("SELECT * FROM registers WHERE id = ?", [id_user]);
     const data_user_notifications = await connection.query("SELECT * FROM notifications WHERE id_user = ?", [id_user]);
+    const data_user_loans = await connection.query("SELECT * FROM prestamos WHERE id_user = ?", [id_user]);
     let data_user_movements_incomplete;
     let data_user_movements;
     if(data_user_info[0] && data_user_info[0].id_user){
@@ -1290,12 +1480,28 @@ app.get("/user/data", async (req, res) => {
         user_notifications: data_user_notifications,
         user_movements_incomplete: data_user_movements_incomplete,
         user_movements_complete: data_user_movements,
+        data_user_loans: data_user_loans,
     };
 
     if (data) {
         res.json(data);
     } else {
         res.status(404).send({ message: "User not found" });
+    }
+});
+
+app.get("/user/loan", async (req, res) => {
+    const id_loan = req.query.id_loan;
+
+    if(!id_loan){
+        return res.status(400).send({ message: "ID Loan is required" });
+    }
+
+    const connection = await database.getConnection();
+    const data_loan = await connection.query("SELECT * FROM prestamos WHERE id_loan = ?",[id_loan]);
+    
+    if(data_loan.length > 0){
+        res.json(data_loan);
     }
 });
 
@@ -1360,6 +1566,40 @@ async function generateIdMovements(connection){
     }
 }
 
+async function generateIdPrestamos(connection){
+    let id_loan_destino = Math.floor(Math.random() * 900000000) + 100000000;
+    let exist_id_loan_destino = await connection.query("SELECT * FROM prestamos WHERE id_loan = ?", [id_loan_destino]);
+    let max_attemps_id_destino = 100;
+    while(exist_id_loan_destino.length > 0 && max_attemps_id_destino > 0){
+        id_loan_destino = Math.floor(Math.random() * 900000000) + 100000000;
+        exist_id_loan_destino = await connection.query("SELECT * FROM prestamos WHERE id_loan = ?", [id_loan_destino]);
+        max_attemps_id_destino --;
+    }
+
+    if(max_attemps_id_destino == 0){
+        return null;
+    }else{
+        return id_loan_destino;
+    }
+}
+
+async function generateIdExcentedNow(connection){
+    let excedent_now_destino = Math.floor(Math.random() * 900000000) + 100000000;
+    let exist_excedent_now_destino = await connection.query("SELECT * FROM prestamos WHERE excedent_now = ?", [excedent_now_destino]);
+    let max_attemps_id_destino = 100;
+    while(exist_excedent_now_destino.length > 0 && max_attemps_id_destino > 0){
+        excedent_now_destino = Math.floor(Math.random() * 900000000) + 100000000;
+        exist_excedent_now_destino = await connection.query("SELECT * FROM prestamos WHERE excedent_now = ?", [excedent_now_destino]);
+        max_attemps_id_destino --;
+    }
+
+    if(max_attemps_id_destino == 0){
+        return null;
+    }else{
+        return excedent_now_destino;
+    }
+}
+
 async function generateIdNotifications(connection){
     let id_notification_destino = Math.floor(Math.random() * 900000000) + 100000000;
     let exist_id_notification_destino = await connection.query("SELECT * FROM notifications WHERE id_notification = ?", [id_notification_destino]);
@@ -1374,5 +1614,32 @@ async function generateIdNotifications(connection){
         return null;
     }else{
         return id_notification_destino;
+    }
+}
+
+function formatDate(fecha) {
+    const meses = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    ];
+
+    const dia = fecha.getDate();
+    const mes = meses[fecha.getMonth()];
+    const anio = fecha.getFullYear();
+
+    const fechaFormateada = `${dia} de ${mes} de ${anio}`;
+    return fechaFormateada;
+}
+
+
+function formatNumber(number) {
+    let [integerPart, decimalPart] = String(number).split('.');
+
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    if (decimalPart) {
+        return `${integerPart},${decimalPart}`;
+    } else {
+        return integerPart;
     }
 }
