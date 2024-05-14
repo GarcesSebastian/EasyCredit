@@ -8,7 +8,22 @@ interface Props{
     id_movement: number;
 }
 
+function formatNumber(number: any) {
+    let [integerPart, decimalPart] = String(number).split('.');
+
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    if (decimalPart) {
+        return `${integerPart},${decimalPart}`;
+    } else {
+        return integerPart;
+    }
+}
+
 const {type_loan_text, date_text, amount, is_positive, message, id_movement} = Astro.props;
+
+let newAmount = formatNumber(amount);
+
 ---
 
 <div id="item_movement" class="flex justify-between items-center bg-gradient-to-r to-[#0074D3] from-[#0040A8] rounded-[.3rem] py-1 px-2 hover:scale-105 transition-all duration-300" data-id-movement={id_movement}>
@@ -40,11 +55,11 @@ const {type_loan_text, date_text, amount, is_positive, message, id_movement} = A
         {
         is_positive == "positivo" ? (
             <span id="positive" class="text-lime-400 font-bold text-sm">
-                +{amount}$
+                +{newAmount}$
             </span>
         ): (
             <span id="negative" class="text-red-400 font-bold text-sm">
-                -{amount}$
+                -{newAmount}$
             </span>
         )
         }

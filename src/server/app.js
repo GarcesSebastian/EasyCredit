@@ -151,9 +151,14 @@ app.post("/register/auth", async (req, res) => {
                 number_card += randomDigits + " "
             }
         }
+
+        let ingreso_mensual = req.body.ingreso_mensual;
+        let DTI = 0.4; //40%
+
+        let limit_prestamo = (ingreso_mensual * DTI) / 12;
         
-        connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, req.body.numero_identidad, req.body.numero_telefono, false, fecha_creacion]);
-        connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity]);
+        await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, req.body.numero_identidad, req.body.numero_telefono, false, fecha_creacion]);
+        await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa, ingreso_mensual) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, limit_prestamo.toString(), 0, req.body.ingreso_mensual]);
 
         res.status(200).json({ message: "Register Successful"});
         
@@ -233,9 +238,13 @@ app.post("/auth/google", async (req, res) => {
                 }
             }
 
-            await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "google", "google", "google", true, fecha_creacion]);
-            await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity) VALUES (?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity]);
+            const data_register = await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "google", "google", "google", true, fecha_creacion]);
+            const data_user = await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, "100000000", 0]);
         
+            if(!data_register || !data_user){
+                return res.status(400).json({ status: "Bad Request", message: "Ocurrio un error al registrarse."});
+            }
+
             return res.status(200).json({ status: "Good Request", message: "Register Successful", id: user_id});
         }
     } else {
@@ -293,13 +302,17 @@ app.post("/update/user_loan", async (req, res) => {
 
         const connection = await database.getConnection();
 
-        const data_user_history_credit = await connection.query("SELECT history_credit FROM users WHERE id_user = ?",[id_user])
+        const data_user_history_credit = await connection.query("SELECT history_credit, state_prestamo, ingreso_mensual FROM users WHERE id_user = ?",[id_user])
 
         if(!data_user_history_credit.length > 0){
             return res.status(400).send({state: "Bad Request", message: "No se pudo encontrar el usuario con el id " + id_user})
         }
 
+        console.log(data_user_history_credit[0].state_prestamo)
+
         history_credit += data_user_history_credit[0].history_credit;
+        let state_prestamo = data_user_history_credit[0].state_prestamo;
+        let ingreso_mensual = Number(data_user_history_credit[0].ingreso_mensual)
 
         if(!simulate.length > 0){
             const res_loan = await connection.query("DELETE FROM prestamos WHERE id_loan = ?",[id_loan]);
@@ -309,6 +322,7 @@ app.post("/update/user_loan", async (req, res) => {
             }
 
             history_credit += 10;
+            state_prestamo -= 1;
         }else{
             const fecha_next = simulate[0].fecha;
 
@@ -321,9 +335,32 @@ app.post("/update/user_loan", async (req, res) => {
             history_credit += 1;
         }
 
-
-        const res_user = await connection.query("UPDATE users SET saldo_disponible = ?, history_credit = ? WHERE id_user = ?",[saldo, history_credit, id_user])
+        let tasa_interes;
+        let limit_prestamo;
         
+        let DTI = 0.4;
+        let limit_monto = (ingreso_mensual * DTI) / 12;
+
+        if(history_credit >= 0 && history_credit < 50){
+            tasa_interes = 0.0;
+            limit_prestamo = 3;
+            limit_monto *= 1
+        }else if(history_credit >= 50 && history_credit < 75){
+            tasa_interes = 0.5;
+            limit_prestamo = 5;
+            limit_monto *= 5;
+        }else if(history_credit >= 75 && history_credit < 100){
+            tasa_interes = 1;
+            limit_prestamo = 7;
+            limit_monto *= 7
+        }else if(history_credit >= 100){
+            tasa_interes = 1.5;
+            limit_prestamo = 10;
+            limit_monto *= 10;
+        }
+
+        const res_user = await connection.query("UPDATE users SET saldo_disponible = ?, history_credit = ?, limit_prestamo = ?, limit_monto = ?, discount_tasa = ?, state_prestamo = ? WHERE id_user = ?",[Number(saldo).toFixed(2).toString(), history_credit, limit_prestamo.toString(), limit_monto, tasa_interes, state_prestamo, id_user])
+
         if(!res_user){
             return res.status(400).send({state: "Bad Request", message: "No se pudieron actualizar los datos."})
         }
@@ -370,6 +407,7 @@ app.post("/user/loan", async (req, res) => {
         const tasa_variable = req.body.tasa_variable;
 
         const table = req.body.table;
+        let state_prestamo = req.body.state_prestamo;
 
         const is_active = req.body.is_active;
 
@@ -392,8 +430,6 @@ app.post("/user/loan", async (req, res) => {
                     let date_now = new Date();
                     let date_next = table[0].fecha;
 
-                    console.log(date_next)
-
                     await connection.query("INSERT INTO prestamos(id_loan, id_user, name_loan, numero_telefono_loan, tasa_interes, cuotas, frecuencia_pago, action_prestamo, tasa_variable, tasa_fija, fecha, fecha_next, excedent_now, simulate) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_loan, data_user_basic[0].id_user, name_loan, numero_telefono_loan, tasa_loan, cuotas, frecuencia, action_loan, tasa_variable, tasa_fija, date_now, date_next, excedent_now, JSON.stringify(table)]);            
                     
                     let movements = await connection.query("SELECT * FROM movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_basic[0].id_user]);
@@ -407,11 +443,12 @@ app.post("/user/loan", async (req, res) => {
                         res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
                     }
 
-                    let message_origin = `Hizo un prestamo por un monto de ${action_loan}$.`;
-                    await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement, data_user_basic[0].id_user, "Bank" ,movements.length + 1, "Bank Loan", date_now_string, action_loan, "positivo", message_origin]);
-                    await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification, data_user_basic[0].id_user, "Bank" ,notifications.length + 1, "Bank Loan", date_now_string, action_loan, "positivo", message_origin, is_active]);
+                    let message_origin = `Hizo un prestamo por un monto de $${formatNumber(action_loan)}.`;
+                    await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement, data_user_basic[0].id_user, "Bank" ,movements.length + 1, "Bank Loan", date_now, action_loan, "positivo", message_origin]);
+                    await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification, data_user_basic[0].id_user, "Bank" ,notifications.length + 1, "Bank Loan", date_now, action_loan, "positivo", message_origin, is_active]);
 
-                    await connection.query("UPDATE users SET saldo_disponible=?  WHERE id_user = ?", [sumary_action, data_user_basic[0].id_user]);
+                    state_prestamo += 1;
+                    await connection.query("UPDATE users SET saldo_disponible = ?, state_prestamo = ? WHERE id_user = ?", [sumary_action, state_prestamo, data_user_basic[0].id_user]);
                     res.status(200).json({ message: "Loan Successful" });
                 }else{
                     res.status(400).send({ state: "Bad Request", message: "Numero de Identificacion Invalido." });
@@ -544,6 +581,7 @@ app.post("/user/transfer", async (req, res) => {
                             let saldo_disponible_origen = data_user_origin[0].saldo_disponible;
                             let saldo_restado_origen = parseFloat(saldo_disponible_origen) - parseFloat(action);
                             
+                            let date_mow = new Date();
                             
                             //Actulizamos los saldos de ambos
                             await connection.query("UPDATE users SET saldo_disponible=?  WHERE id_user = ?", [saldo_enviado_destino, data_user_register_destino[0].id_user]);
@@ -552,7 +590,6 @@ app.post("/user/transfer", async (req, res) => {
                             //Agregamos movimientos a ambos y notificaciones
 
                             //Movimiento para el destino
-                            let date_now_string_destino = getDateNow();
                             let movements_destino = await connection.query("SELECT * FROM movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
                             let notifications_destino = await connection.query("SELECT * FROM notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_register_destino[0].id_user]);
                             
@@ -563,11 +600,10 @@ app.post("/user/transfer", async (req, res) => {
                                 res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del destino" });
                             }
 
-                            await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_destino, data_user_register_destino[0].id_user, data_user_origin[0].name_user ,movements_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo", message]);
-                            await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification_destino, data_user_register_destino[0].id_user, data_user_origin[0].name_user ,notifications_destino.length + 1, "Transfer", date_now_string_destino, action, "positivo", message, true]);
+                            await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_destino, data_user_register_destino[0].id_user, data_user_origin[0].name_user ,movements_destino.length + 1, "Transfer", date_mow, action, "positivo", message]);
+                            await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification_destino, data_user_register_destino[0].id_user, data_user_origin[0].name_user ,notifications_destino.length + 1, "Transfer", date_mow, action, "positivo", message, true]);
 
                             //Movimiento para el origen
-                            let date_now_string_origin = getDateNow();
                             let movements_origin = await connection.query("SELECT * FROM movements WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
                             let notifications_origin = await connection.query("SELECT * FROM notifications WHERE id_user = ? ORDER BY id_user ASC", [data_user_origin[0].id_user]);
                                                         
@@ -577,9 +613,9 @@ app.post("/user/transfer", async (req, res) => {
                             if(id_movement_origin == null || id_notification_origin == null){
                                 res.status(400).send({ state: "Bad Request", message: "No se pudo generar un id unico del origen" });
                             }
-                            let message_origin = `Enviaste una transferencia al usuario con el numero de tarjeta: ${numero_card} por un monto de ${action}$.`;
-                            await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_origin, data_user_origin[0].id_user, data_user_origin[0].name_user ,movements_origin.length + 1, "Transfer", date_now_string_origin, action, "negativo", message_origin]);
-                            await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification_origin, data_user_origin[0].id_user, data_user_origin[0].name_user ,notifications_destino.length + 1, "Transfer", date_now_string_destino, action, "negativo", message, is_active]);
+                            let message_origin = `Enviaste una transferencia al usuario con el numero de tarjeta: ${numero_card} por un monto de $${formatNumber(action)}.`;
+                            await connection.query("INSERT INTO movements(id_movement, id_user, origin, index_movement, tipo_movement, fecha_movement, action_movement, state_movement, message) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_movement_origin, data_user_origin[0].id_user, data_user_origin[0].name_user ,movements_origin.length + 1, "Transfer", date_mow, action, "negativo", message_origin]);
+                            await connection.query("INSERT INTO notifications (id_notification, id_user, origin, index_notification, tipo_notification, fecha_notification, action_notification, state_notification, message, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [id_notification_origin, data_user_origin[0].id_user, data_user_origin[0].name_user ,notifications_destino.length + 1, "Transfer", date_mow, action, "negativo", message, is_active]);
 
                             res.status(200).json({ message: "Transfer Successful" });
                         }else{
@@ -1245,7 +1281,6 @@ app.get('/create/pdf_loan', async (req, res) => {
         // Obtener la fecha formateada
         const fecha = new Date(loan.fecha);
         const fechaVencimiento = new Date(loan.fecha_next);
-        fechaVencimiento.setDate(fechaVencimiento.getDate() + 1)
         const date_now = formatDate(fecha);
         const date_next = formatDate(fechaVencimiento);
 

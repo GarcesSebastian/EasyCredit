@@ -123,7 +123,7 @@ let newMonto = formatNumber(monto)
     let pay_loan_list = document.querySelectorAll("#pay-loan-list");
     pay_loan_list.forEach(item => {
         item?.addEventListener("click", () => {
-            (document.querySelector("#popup-center") as HTMLElement).style.display = "flex";
+            (document.querySelector("#popup-center-pay") as HTMLElement).style.display = "flex";
             (document.querySelector("#form-pay") as HTMLFormElement).setAttribute("data-pay", item?.getAttribute("data-id") ?? "")
         })
     });

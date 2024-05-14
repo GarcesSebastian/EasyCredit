@@ -290,8 +290,6 @@
 </style>
 
 <script>
-  import { simulateLoan } from '../../js/front';
-
   let close_warning = document.querySelector("#close-warning") as HTMLButtonElement;
   let content_warning_rate = document.querySelector("#content-warning-rate") as HTMLElement;
 
@@ -316,4 +314,134 @@
     (document.querySelector("#content-table-simulate-loan") as HTMLElement).style.display = "initial";
     simulateLoan(monto_value, tasa_value, frecuencia.value, Number(cuotas.value.split(" ")[0]));
   }
+
+  function formatNumber(number: any) {
+      let [integerPart, decimalPart] = String(number).split('.');
+
+      integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+      if (decimalPart) {
+          return `${integerPart},${decimalPart}`;
+      } else {
+          return integerPart;
+      }
+  }
+
+  function simulateLoan(monto: any, tasa: any, frecuencia: any, plazo: any){
+      const tasa_interes_mensual = (tasa / 100) / 12;
+      let total_pagos;
+      let frecuencia_value;
+    
+      switch (frecuencia) {
+          case 'mensual':
+              total_pagos = plazo;
+              frecuencia_value = 1;
+              break;
+          case 'trimestral':
+              total_pagos = plazo / 3;
+              frecuencia_value = 3;
+              break;
+          case 'semestral':
+              total_pagos = plazo / 6;
+              frecuencia_value = 6;
+              break;
+          case 'anual':
+              total_pagos = plazo / 12;
+              frecuencia_value = 12;
+              break;
+          default:
+              console.error('Frecuencia de pago no válida');
+              return;
+      }
+
+      let pago_restante = monto;
+      let pago_mensual = (monto * tasa_interes_mensual) / (1 - Math.pow(1 + tasa_interes_mensual, -total_pagos));
+
+      let body_table_simulate_loan = document.querySelector("#body-table-simulate-loan") as HTMLElement;
+      body_table_simulate_loan.innerHTML = '';
+
+      interface PropsData {
+        saldo_capital: any,
+        pago_capital: any,
+        pago_interes: any,
+        monto: any,
+        plazo: any,
+        saldo_final: any,
+        numero_pago: any,
+        fecha: any
+      }
+
+      for(let i = 1; i <= total_pagos; i++){
+          let data: PropsData = {
+              saldo_capital:1,
+              pago_capital: 1,
+              pago_interes: 1,
+              monto: 1,
+              plazo: 30,
+              saldo_final: 1,
+              numero_pago: 1,
+              fecha: 1
+          }
+
+          let pago_interes = pago_restante * tasa_interes_mensual;
+          let pago_principal = pago_mensual - pago_interes;
+          let pago_total = pago_interes + pago_principal;
+          let pago_final = pago_restante - pago_principal
+          const currentDate = new Date();
+          currentDate.setMonth(currentDate.getMonth() + i * frecuencia_value);
+          const formattedDate = currentDate.toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
+          const row = document.createElement('tr');
+          if(i == 1){
+            row.innerHTML = `
+            <td class="text-center py-2 px-4 rounded-tl-lg">1</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_restante.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_principal.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_interes.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_total.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">30</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_final.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">${i}</td>
+            <td class="text-center py-2 px-4 rounded-tr-lg">${formattedDate}</td>
+        `;
+        }else if(i == total_pagos){
+            row.innerHTML = `
+            <td class="text-center py-2 px-4 rounded-bl-lg">1</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_restante.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_principal.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_interes.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_total.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">30</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_final.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">${i}</td>
+            <td class="text-center py-2 px-4 rounded-br-lg">${formattedDate}</td>
+        `;
+        }else{
+            row.innerHTML = `
+            <td class="text-center py-2 px-4 ">1</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_restante.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_principal.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_interes.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_total.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">30</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_final.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">${i}</td>
+            <td class="text-center py-2 px-4 ">${formattedDate}</td>
+        `;
+        }
+
+          body_table_simulate_loan.appendChild(row);
+
+          pago_restante = pago_final;
+      }
+
+  }
+
+  setInterval(() => {
+    if(!tasa_value){
+      return;
+    }
+    const tasa = document.querySelector("#tasa-simulate-loan") as HTMLInputElement;
+    tasa.value = tasa_value + "%";
+    return;
+  }, 100);
 </script>

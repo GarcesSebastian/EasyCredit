@@ -2,7 +2,7 @@
     interface Props{
         tipo_notification: string;
         origin: string;
-        action_notification: number;
+        action_notification: string;
         state_notification: string;
         fecha_notification: string;
         id_notification: number;
@@ -30,7 +30,7 @@
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
                     <p class="text-white">
-                        Haz recibido una transferencia de <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">{action_notification}$</span>.
+                        Haz recibido una transferencia de <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">${action_notification}</span>.
                     </p>
 
                     <span class="w-full h-fit flex justify-between items-end mt-2">
@@ -56,7 +56,7 @@
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
                     <p class="text-white">
-                        Haz enviado una transferencia a <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">{action_notification}$</span>.
+                        Haz enviado una transferencia a <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">${action_notification}</span>.
                     </p>
 
                     <span class="w-full h-fit flex justify-between items-end mt-2">
@@ -82,7 +82,7 @@
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
                     <p class="text-white">
-                        El numero de movimientos registrados en tu cuenta es de <span class="font-bold">{length_movements}</span>. El saldo disponible es de <span class="font-bold">{action_notification}$</span>. 
+                        El numero de movimientos registrados en tu cuenta es de <span class="font-bold">{length_movements}</span>. El saldo disponible es de <span class="font-bold">${action_notification}</span>. 
                         {
                             Number(income_accumulated.split("$")[0]) > 0 ? (
                                 "El monto acumulado de ingresos es de "
@@ -113,7 +113,7 @@
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
                     <p class="text-white">
-                        Usted hizo un prestamo al <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">{action_notification}$</span>.
+                        Usted hizo un prestamo al <span class="font-bold">{origin}</span> con un monto de <span class="font-bold">${action_notification}</span>.
                     </p>
 
                     <span class="w-full h-fit flex justify-between items-end mt-2">

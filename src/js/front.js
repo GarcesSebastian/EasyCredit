@@ -98,7 +98,6 @@ function simulateLoanJSON(monto, tasa, frecuencia, plazo){
         let pago_final = pago_restante - pago_principal
         const currentDate = new Date();
         currentDate.setMonth(currentDate.getMonth() + i * frecuencia_value);
-        currentDate.setDate(currentDate.getDate() - 1)
 
         data.saldo_capital = pago_restante.toFixed(2)
         data.pago_capital = pago_principal.toFixed(2)
@@ -174,56 +173,44 @@ function simulateLoan(monto, tasa, frecuencia, plazo){
         if(i == 1){
             row.innerHTML = `
             <td class="text-center py-2 px-4 rounded-tl-lg">1</td>
-            <td class="text-center py-2 px-4 ">${pago_restante.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 ">${pago_principal.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 ">${pago_interes.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 ">${pago_total.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_restante.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_principal.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_interes.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_total.toFixed(2))}</td>
             <td class="text-center py-2 px-4 ">30</td>
-            <td class="text-center py-2 px-4 ">${pago_final.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_final.toFixed(2))}</td>
             <td class="text-center py-2 px-4 ">${i}</td>
             <td class="text-center py-2 px-4 rounded-tr-lg">${formattedDate}</td>
         `;
         }else if(i == total_pagos){
             row.innerHTML = `
             <td class="text-center py-2 px-4 rounded-bl-lg">1</td>
-            <td class="text-center py-2 px-4 ">${pago_restante.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 ">${pago_principal.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 ">${pago_interes.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 ">${pago_total.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_restante.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_principal.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_interes.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_total.toFixed(2))}</td>
             <td class="text-center py-2 px-4 ">30</td>
-            <td class="text-center py-2 px-4 ">${pago_final.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_final.toFixed(2))}</td>
             <td class="text-center py-2 px-4 ">${i}</td>
             <td class="text-center py-2 px-4 rounded-br-lg">${formattedDate}</td>
         `;
         }else{
             row.innerHTML = `
             <td class="text-center py-2 px-4 ">1</td>
-            <td class="text-center py-2 px-4 ">${pago_restante.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 ">${pago_principal.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 ">${pago_interes.toFixed(2)}</td>
-            <td class="text-center py-2 px-4 ">${pago_total.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_restante.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_principal.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_interes.toFixed(2))}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_total.toFixed(2))}</td>
             <td class="text-center py-2 px-4 ">30</td>
-            <td class="text-center py-2 px-4 ">${pago_final.toFixed(2)}</td>
+            <td class="text-center py-2 px-4 ">$${formatNumber(pago_final.toFixed(2))}</td>
             <td class="text-center py-2 px-4 ">${i}</td>
             <td class="text-center py-2 px-4 ">${formattedDate}</td>
         `;
         }
 
         body_table_simulate_loan.appendChild(row);
-        data.saldo_capital = pago_restante.toFixed(2)
-        data.pago_capital = pago_principal.toFixed(2)
-        data.pago_interes = pago_interes.toFixed(2)
-        data.monto = pago_total.toFixed(2)
-        data.plazo = 30
-        data.saldo_final = pago_final.toFixed(2)
-        data.numero_pago = i
-        data.fecha = currentDate
-
         pago_restante = pago_final;
-        table.push(data);
     }
-
-    return table;
 }
 
 let popup_simulate_loan = document.querySelector("#popup-simulate-loan");
@@ -749,14 +736,23 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
         const password = document.querySelector("#input-password");
         const numero_identidad = document.querySelector("#input-numero_identidad");
         const numero_telefono = document.querySelector("#input-numero_telefono");
+        const ingreso_mensual = document.querySelector("#input-ingreso-mensual");
 
         inputSucess(document.querySelector("#input-email"), "#err-email");
         inputSucess(document.querySelector("#input-password"), "#err-password");
         inputSucess(document.querySelector("#input-username"), "#err-username");
         inputSucess(document.querySelector("#input-numero_telefono"), "#err-numero_telefono");
         inputSucess(document.querySelector("#input-numero_identidad"), "#err-numero_identidad");
+        inputSucess(document.querySelector("#input-ingreso-mensual"), "#err-ingreso-mensual");
     
-        if ((username.value.length >= 6 && username.value.length <= 15) && email.value.length > 0 && (password.value.length >= 8 && password.value.length <= 24) && numero_telefono.value.length >= 10 && numero_identidad.value.length >= 10) {
+        if ((username.value.length >= 6 && username.value.length <= 15) 
+            && email.value.length > 0 
+            && (password.value.length >= 8 && password.value.length <= 24) 
+            && numero_telefono.value.length >= 10 
+            && numero_identidad.value.length >= 10
+            && ingreso_mensual.value >= 1000
+            ) 
+            {
             const data = {
                 email: email.value,
                 numero_identidad: numero_identidad.value,
@@ -823,6 +819,11 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
                 inputErr(document.querySelector("#input-password"), "#err-password", "La contraseña debe tener entre 8 y 24 caracteres.");
                 console.log("La contraseña debe tener entre 8 y 24 caracteres.");
             }
+
+            if(ingreso_mensual.value.length < 8 || ingreso_mensual.value.length > 24){
+                inputErr(document.querySelector("#input-ingreso-mensual"), "#err-ingreso-mensual", "El ingreso mensual debe ser mayor a 1k.");
+                console.log("El ingreso mensual debe ser mayor a 1k.");
+            }
         }
     }
 });
@@ -866,6 +867,7 @@ form?.addEventListener("submit", async (e) => {
         const password = document.querySelector("#input-password");
         const numero_identidad = document.querySelector("#input-numero_identidad");
         const numero_telefono = document.querySelector("#input-numero_telefono");
+        const ingreso_mensual = document.querySelector("#input-ingreso-mensual");
 
         const data = {
             username: username.value,
@@ -873,6 +875,7 @@ form?.addEventListener("submit", async (e) => {
             password: password.value,
             numero_identidad: numero_identidad.value,
             numero_telefono: numero_telefono.value,
+            ingreso_mensual: ingreso_mensual.value,
         };
 
         const res = await fetch("http://localhost:4000/register/auth", {
@@ -994,11 +997,11 @@ let button_loan_pay = document.querySelector("#button-loan-pay");
 let closeLoans = document.querySelector("#closeLoans")
 
 bg_popup_pay?.addEventListener("click", () => {
-    document.querySelector("#popup-center").style.display = "none";
+    document.querySelector("#popup-center-pay").style.display = "none";
 });
 
 close_pay?.addEventListener("click", () => {
-    document.querySelector("#popup-center").style.display = "none";
+    document.querySelector("#popup-center-pay").style.display = "none";
 });
 
 button_loan_pay?.addEventListener("click", () => {
@@ -1013,11 +1016,13 @@ let form_pay = document.querySelector("#form-pay");
 let value_cuotas_use = 0;
 let attrPay;
 
-let excedent_now = document.querySelector("#excedent_now");
+let excedent_now = document.querySelectorAll("#excedent_now");
 
-excedent_now?.addEventListener("click", () => {
-    let id_loan = excedent_now.getAttribute("data-id")
-    createPdfLoan(id_loan)
+excedent_now.forEach(item => {
+    item?.addEventListener("click", () => {
+        let id_loan = item.getAttribute("data-id")
+        createPdfLoan(id_loan)
+    });
 });
 
 form_pay?.addEventListener("submit", async (e) => {
@@ -1183,6 +1188,23 @@ async function send_req_loan(){
     if(isContinueLoanReq == true){
         let isContinueLoan = true;
 
+        const data_user_loans = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+
+        const user_loans_complete = await data_user_loans.json();
+
+        const user_loans = user_loans_complete.user_info[0];
+
+        let limit_prestamo = user_loans.limit_prestamo;
+        let state_prestamo = user_loans.state_prestamo;
+        let limit_monto = user_loans.limit_monto;
+        let discount_tasa = user_loans.discount_tasa;
+        discount_tasa = (parseFloat(elements_loan.input_tasa_loan.value.split("%")[0]) - discount_tasa.toString() + "%");
+
+        if(state_prestamo >= limit_prestamo){
+            document.querySelector("#content-warning-loan-rate").style.display = "flex"
+            return;
+        }
+
         for(let key in elements_loan){
             if(elements_loan.hasOwnProperty(key)){
                 let item = elements_loan[key];
@@ -1197,12 +1219,12 @@ async function send_req_loan(){
             }
         }
     
-        if(parseFloat(elements_loan.input_action_loan.value) < 500000 || parseFloat(elements_loan.input_action_loan.value) > 4000000000) {
+        if(parseFloat(elements_loan.input_action_loan.value) < 1000 || parseFloat(elements_loan.input_action_loan.value) > Number(limit_monto)) {
             let id = elements_loan.input_action_loan.id.toString();
             let id_without_input = id.split("input")[1];
             let id_with_err = "err" + id_without_input;
             document.querySelector("#" + id_with_err).style.display = "initial";
-            document.querySelector("#" + id_with_err).innerHTML = "* El monto debe ser menor a 4000M y mayor a 500k."
+            document.querySelector("#" + id_with_err).innerHTML = "* El monto debe ser menor a 4000M y mayor a 1k."
             elements_loan.input_action_loan.style.borderColor = "tomato";
             isContinueLoan = false;
         }
@@ -1230,10 +1252,10 @@ async function send_req_loan(){
         if(!isContinueLoan){
             return null;
         }
-    
+
         let data = {
             action_loan: elements_loan.input_action_loan.value,
-            tasa_loan: elements_loan.input_tasa_loan.value,
+            tasa_loan: discount_tasa,
             cuotas: Number(elements_loan.input_cuotas.value),
             frecuencia: elements_loan.input_frecuencia.value,
             name_loan: elements_loan.input_name_loan.value,
@@ -1245,7 +1267,8 @@ async function send_req_loan(){
             date: new Date().toLocaleDateString(),
             id_client: getCookie("ID-USER"),
             is_active: smsNotificationsElements.check_sms_loans.checked,
-            table: simulateLoanJSON(elements_loan.input_action_loan.value, elements_loan.input_tasa_loan.value, elements_loan.input_frecuencia.value, Number(elements_loan.input_cuotas.value))
+            table: simulateLoanJSON(elements_loan.input_action_loan.value, elements_loan.input_tasa_loan.value, elements_loan.input_frecuencia.value, Number(elements_loan.input_cuotas.value)),
+            state_prestamo: state_prestamo,
         }
     
         let response_user_loan;
@@ -1310,14 +1333,21 @@ close_warning_loan?.addEventListener("click", () => {
     content_warning_loan_rate.style.display = window.getComputedStyle(content_warning_loan_rate).display == "none" ? "flex" : "none";  
 });
 
-function simulate_loan(){
+async function simulate_loan(){
+    const data_user_loans = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+
+    const user_loans_complete = await data_user_loans.json();
+
+    const user_loans = user_loans_complete.user_info[0];
+
+    let discount_tasa = user_loans.discount_tasa;
+    discount_tasa = (parseFloat(elements_loan.input_tasa_loan.value.split("%")[0]) - discount_tasa.toString() + "%");
+
     let cuotas = elements_loan.input_cuotas.selectedIndex;
     let monto = elements_loan.input_action_loan.value;
     let frecuencia = elements_loan.input_frecuencia.selectedIndex;
-    let tasa = elements_loan.input_tasa_loan.value;
 
-    console.log(cuotas, monto, frecuencia);
-    window.location.href = `/SimulateLoan?monto=${monto}&frecuencia=${frecuencia}&cuotas=${cuotas}&tasa=${tasa.split("%")[0]}`
+    window.location.href = `/SimulateLoan?monto=${monto}&frecuencia=${frecuencia}&cuotas=${cuotas}&tasa=${discount_tasa.split("%")[0]}`
 }
 document.querySelector("#form-loan")?.addEventListener("submit", (event) => {
     event.preventDefault();

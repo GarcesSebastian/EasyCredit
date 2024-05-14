@@ -102,7 +102,21 @@ const {registrarse_text,iniciar_text,exists_text,username_text,email_text,passwo
             </div>
             <input type="number" id="input-numero_telefono" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={phone_text} required>
         </div>
-        <span id="err-numero_telefono" class="relative text-sm mx-2 mb-0 text-[tomato] transition-all duration-500 opacity-0"></span>
+        <span id="err-numero_telefono" class="relative text-sm mx-2 mb-5 text-[tomato] transition-all duration-500 opacity-0"></span>
+
+        <label for="input-ingreso-mensual" class="block mb-2 text-sm font-medium text-white relative">Ingresos mensuales estimados</label>
+        <div class="relative mb-1">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-heart-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M13 19l-1 1l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 0 1 8.785 4.444" />
+                    <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                    <path d="M19 21v1m0 -8v1" />
+                </svg>
+            </div>
+            <input type="number" id="input-ingreso-mensual" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Ingresos mensuales estimados" required>
+        </div>
+        <span id="err-ingreso-mensual" class="relative text-sm mx-2 mb-0 text-[tomato] transition-all duration-500 opacity-0"></span>
 
     </div>
 

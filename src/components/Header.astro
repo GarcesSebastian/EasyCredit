@@ -17,6 +17,18 @@ interface Props{
     isGoogle: boolean;
 }
 
+function formatNumber(number: any) {
+    let [integerPart, decimalPart] = String(number).split('.');
+
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    if (decimalPart) {
+        return `${integerPart},${decimalPart}`;
+    } else {
+        return integerPart;
+    }
+}
+
 const {href_image, href_signin, href_signup, registrarse_text, iniciar_text, isGoogle} = Astro.props;
 
 let response_data_user: Response;
@@ -188,12 +200,12 @@ try{
                         <Notification
                             tipo_notification = {item.tipo_notification}
                             origin = {item.origin}
-                            action_notification = {data_user.user_info[0].saldo_disponible}
+                            action_notification = {formatNumber(item.action_notification)}
                             state_notification = {item.state_notification}
-                            fecha_notification = {item.fecha_notification}
+                            fecha_notification = {item.fecha_notification.split(" ")[0]}
                             id_notification={item.id_notification}
                             length_movements={Number(item.state_notification)}
-                            income_accumulated={item.action_notification + "$."}
+                            income_accumulated={"$" + formatNumber(data_user.user_info[0].saldo_disponible) + "."}
                         />
                     ))
                 ):(
@@ -208,9 +220,9 @@ try{
                         <Movement
                             tipo_movement = {item.tipo_movement}
                             origin = {item.origin}
-                            action_movement = {item.action_movement}
+                            action_movement = {formatNumber(item.action_movement)}
                             state_movement = {item.state_movement}
-                            fecha_movement = {item.fecha_movement}
+                            fecha_movement = {item.fecha_movement.split(" ")[0]}
                             message = {item.message}
                             id_movement={item.id_movement}
                         />

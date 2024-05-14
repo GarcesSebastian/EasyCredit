@@ -74,6 +74,20 @@ let isContinue = true;
 let err: any;
 
 
+function formatNumber(number: any) {
+    let [integerPart, decimalPart] = String(number).split('.');
+
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    if (decimalPart) {
+        return `${integerPart},${decimalPart}`;
+    } else {
+        return integerPart;
+    }
+}
+
+let newMonto;
+
 try{
     if(initiated != "false"){
         response_user_exist = await fetch(`http://localhost:4000/user/exists?id_user=${id_user}`);
@@ -83,7 +97,7 @@ try{
             response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
             data_user = await response_data_user.json();
 
-            console.log(data_user.data_user_loans.length)
+            newMonto = formatNumber(Number(data_user.user_info[0].saldo_disponible))
 
             date_creation_formatt = data_user.user_register[0].fecha_creacion.split(" ")[0];
 
@@ -137,7 +151,7 @@ try{
                             <div id="card_balance" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
                                 <CardBasic
                                 img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
-                                balance_text={data_user.user_info[0]?.saldo_disponible ?? 0}
+                                balance_text={newMonto ?? 0}
                                 available_balance_text={available_balance}
                                 >
                                 </CardBasic>
@@ -174,7 +188,7 @@ try{
                             <div id="card_balance_principal" class="flex col-span-1 row-span-1 justify-center flex-col w-full p-7 rounded-xl cursor-pointer bg-slate-800 shadow-lg shadow-gray-900 transition-all duration-150 ease-in hover:scale-105">
                                 <CardBasic
                                 img_url="https://cdn-icons-png.flaticon.com/512/9063/9063313.png"
-                                balance_text={data_user.user_info[0]?.saldo_disponible ?? 0}
+                                balance_text={newMonto ?? 0}
                                 available_balance_text={available_balance}
                                 >
                                 </CardBasic>
@@ -239,7 +253,7 @@ try{
                                     
                                     <CardMovementsArtcile
                                     type_loan_text={item.tipo_movement}
-                                    date_text={item.fecha_movement}
+                                    date_text={item.fecha_movement.split(" ")[0]}
                                     amount={item.action_movement}
                                     is_positive={item.state_movement}
                                     message={item.message}
@@ -272,7 +286,7 @@ try{
             }
         </PayLoan>
 
-        <div id="popup-center" class="popup top-0 w-screen justify-center items-center z-50 p-5 drop-shadow-lg hidden h-screen fixed">
+        <div id="popup-center-pay" class="popup top-0 w-screen justify-center items-center z-50 p-5 drop-shadow-lg hidden h-screen fixed">
             <div id="background-popup-pay" class="absolute w-full h-full bg-transparent cursor-pointer"></div>
 
             <div id="popup-inter-pay" class="relative w-[30rem] -top-10 py-5 rounded-md z-10 bg-slate-700 mb-5">
