@@ -144,7 +144,7 @@ try{
     balance_avaible_is_text: (data.find((item: { word: string }) => item.word === "balance_avaible_is_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     not_register_income_text: (data.find((item: { word: string }) => item.word === "not_register_income_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     income_amount_is_text: (data.find((item: { word: string }) => item.word === "income_amount_is_text") || {})[flag === "es" ? 'es' : 'en'] as string,
-    title_loans_text: (data.find((item: { word: string }) => item.word === "title_loans_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    title_loan_text: (data.find((item: { word: string }) => item.word === "title_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     not_found_loans_text: (data.find((item: { word: string }) => item.word === "not_found_loans_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     hide_all_text: (data.find((item: { word: string }) => item.word === "hide_all_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     name_text: (data.find((item: { word: string }) => item.word === "name_text") || {})[flag === "es" ? 'es' : 'en'] as string,
@@ -156,6 +156,11 @@ try{
     next_date_text: (data.find((item: { word: string }) => item.word === "next_date_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     excedent_pay_text: (data.find((item: { word: string }) => item.word === "excedent_pay_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     pay_cuotas_text: (data.find((item: { word: string }) => item.word === "pay_cuotas_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    description_pay_cuotas_text: (data.find((item: { word: string }) => item.word === "description_pay_cuotas_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    number_cuotas_text: (data.find((item: { word: string }) => item.word === "number_cuotas_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    title_pay_cuotas_text: (data.find((item: { word: string }) => item.word === "title_pay_cuotas_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    calculate_cuotas_text: (data.find((item: { word: string }) => item.word === "calculate_cuotas_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+    value_cuotas_text: (data.find((item: { word: string }) => item.word === "value_cuotas_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     available_balance: (data.find((item: { word: string }) => item.word === "available_balance") || {})[flag === "es" ? 'es' : 'en'] as string,
     total_income_text: (data.find((item: { word: string }) => item.word === "total_income_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     check_card_text: (data.find((item: { word: string }) => item.word === "check_card_text") || {})[flag === "es" ? 'es' : 'en'] as string,
@@ -285,7 +290,7 @@ try{
                         more_text={text.more_text}
                         not_found_text={text.not_found_text}
                         pay_loan_text={text.pay_loan_text}
-                        title_loans_text={text.title_loans_text}
+                        title_loans_text={text.title_loan_text}
                         not_found_loans_text={text.not_found_loans_text}
                         hide_all_text={text.hide_all_text}
                         name_text={text.name_text}
@@ -297,6 +302,11 @@ try{
                         next_date_text={text.next_date_text}
                         excedent_pay_text={text.excedent_pay_text}
                         pay_cuotas_text={text.pay_cuotas_text}
+                        title_pay_cuotas_text={text.title_pay_cuotas_text}
+                        description_pay_cuotas_text={text.description_pay_cuotas_text}
+                        number_cuotas_text={text.number_cuotas_text}
+                        calculate_cuotas_text={text.calculate_cuotas_text}
+                        value_cuotas_text={text.calculate_cuotas_text}
                     ></BannerUser>
                 )
             }

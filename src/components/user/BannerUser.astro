@@ -50,6 +50,11 @@ interface Props {
     next_date_text: string,
     excedent_pay_text: string,
     pay_cuotas_text: string,
+    title_pay_cuotas_text: string,
+    description_pay_cuotas_text: string,
+    number_cuotas_text: string,
+    calculate_cuotas_text: string,
+    value_cuotas_text: string,
 }
 
 //Translate Variables
@@ -66,6 +71,11 @@ const {
     next_date_text,
     excedent_pay_text,
     pay_cuotas_text,
+    title_pay_cuotas_text,
+    description_pay_cuotas_text,
+    number_cuotas_text,
+    calculate_cuotas_text,
+    value_cuotas_text,
 } = Astro.props;
 
 
@@ -348,18 +358,18 @@ try{
                 </div>
 
                 <div class="p-5 border-b-[1px] mb-5">
-                    <h1 class="text-2xl font-bold text-white">Pago de Cuotas</h1>
+                    <h1 class="text-2xl font-bold text-white">{title_pay_cuotas_text}</h1>
                 </div>
 
                 <form id="form-pay" class="px-5 pt-0" data-pay="">
 
                     <div class="w-full flex justify-center items-center mb-5 text-gray-300">
                         <p>
-                            Debe elegir el numero de cuotas que desea pagar, debe comprender que dependiendo del numero de cuotas incrementara su historial crediticio.
+                            {description_pay_cuotas_text}
                         </p>
                     </div>
 
-                    <label for="input-numero-identidad" class="block mb-2 ml-0 text-sm font-medium text-white relative">Numero de cuotas</label>
+                    <label for="input-numero-identidad" class="block mb-2 ml-0 text-sm font-medium text-white relative">{number_cuotas_text}</label>
                     <div class="relative mb-2.5">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                             <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -371,18 +381,18 @@ try{
                                 <path d="M7 16l10 0" />
                             </svg>
                         </div>
-                        <input type="number" id="input-numero-cuotas-pay" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Numero de cuotas" required>
+                        <input type="number" id="input-numero-cuotas-pay" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={number_cuotas_text} required>
                     </div>
                     <span id="err-numero-cuotas-pay" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden opacity-0"></span>
 
                     <div class="w-full flex justify-left items-center relative mt-2.5">
                         <button id="submit-pay-cuotas" type="submit" class="w-full max-w-[13rem] transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-lg px-5 py-3 text-center inline-flex items-center justify-center mb-2">
-                            Calcular Pago
+                            {calculate_cuotas_text}
                         </button>
                     </div>
 
                     <div id="result-pay" class="hidden flex-col animate-deployment mt-2">
-                        <label for="input-numero-identidad" class="block mb-2 ml-0 text-sm font-medium text-white relative">Valor a pagar</label>
+                        <label for="input-numero-identidad" class="block mb-2 ml-0 text-sm font-medium text-white relative">{value_cuotas_text}</label>
                         <div class="relative mb-2.5">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-id w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -394,13 +404,13 @@ try{
                                     <path d="M7 16l10 0" />
                                 </svg>
                             </div>
-                            <input type="text" data-value="" id="input-total-pay" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Valor a pagar" required disabled>
+                            <input type="text" data-value="" id="input-total-pay" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={value_cuotas_text} required disabled>
                         </div>
                         <span id="err-total-pay" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 hidden opacity-0"></span>
 
                         <div class="w-full flex justify-left items-center relative mt-2.5">
                             <button id="submit-pay" type="submit" class="w-full max-w-[13rem] transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-lg px-5 py-3 text-center inline-flex items-center justify-center mb-2">
-                                Pagar Cuotas
+                                {pay_cuotas_text}
                             </button>
                         </div>
                     </div>

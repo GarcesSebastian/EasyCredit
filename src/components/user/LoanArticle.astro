@@ -125,12 +125,15 @@ let newMonto = formatNumber(monto)
                 let attrElement = element.getAttribute("data-id");
 
                 if(attrItem == attrElement){
-                    if(item.textContent?.trim() == "View all"){
+                    let attrView = item.getAttribute("data-view");
+                    let attrHide = item.getAttribute("data-hide");
+
+                    if(item.textContent?.trim() == attrView){
                         element.style.display = "flex";
-                        item.textContent = "Hidden all"
+                        item.textContent = attrHide
                     }else{
                         element.style.display = "none";
-                        item.textContent = "View all"
+                        item.textContent = attrView
                     }
                 }
             });
