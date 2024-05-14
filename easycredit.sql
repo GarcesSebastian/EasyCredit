@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-05-2024 a las 20:43:04
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.0.25
+-- Tiempo de generación: 14-05-2024 a las 22:29:22
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -120,13 +120,6 @@ CREATE TABLE `registers` (
   `fecha_creacion` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `registers`
---
-
-INSERT INTO `registers` (`id`, `username`, `password`, `email`, `numero_identidad`, `numero_telefono`, `estado`, `fecha_creacion`) VALUES
-(507722, 'Sebastian Garces', 'google', 'sebastiangarces158@gmail.com', 'google', 'google', 1, '2024-05-14 13:42:59.006');
-
 -- --------------------------------------------------------
 
 --
@@ -182,6 +175,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('balance_avaible_is_text', 'El saldo disponible es de', 'The available balance is'),
 ('bill_text', 'factura', 'bill'),
 ('calcular_inicio', 'Calcular', 'Calculate'),
+('calculate_cuotas_text', 'Calcular Pago', 'Calculate Payment'),
 ('check_card_text', '¡Consulte nuestra opción de simulación de crédito!', 'Check out our credit simulation option!'),
 ('check_card_text_second', '¡Consulte nuestra opción de simulación de crédito!', 'Check out our credit simulation option!'),
 ('clear_all_text', 'Borrar todo', 'Clear all'),
@@ -194,6 +188,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('descripcion_inicio', 'Explora las posibilidades con nuestro simulador de crédito. Calcula las cuotas y diseña tu plan de pago en línea de manera conveniente y sin complicaciones.', 'Explore the possibilities with our credit simulator. Calculate installments and design your payment plan online in a convenient and hassle-free way.'),
 ('description_forgot_password', 'Ingresa tu correo electronico y te enviaremos un codigo de verificacion para que puedas recuperar tu contraseña.', 'Enter your email and we will send you a verification code so you can recover your password.'),
 ('description_new_password', 'Ingresa tu nueva contraseña y confírmala para recuperar tu cuenta.', 'Enter your new password and confirm it to recover your account.'),
+('description_pay_cuotas_text', 'Debe elegir el numero de cuotas que desea pagar, debe comprender que dependiendo del numero de cuotas incrementara su historial crediticio.', 'You must choose the number of installments you want to pay, you must understand that depending on the number of installments your credit history will increase.'),
 ('description_recover_code', 'Ingresa el código de verificación que te enviamos a tu correo electrónico.', 'Enter the verification code that we sent to your email.'),
 ('description_text', 'Descripción', 'Description'),
 ('email_text', 'Correo electrónico', 'Email'),
@@ -232,6 +227,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('not_found_notifications_text', 'No se encontraron notificaciones', 'No notifications found'),
 ('not_found_text', 'Movimientos históricos no encontrados', 'Not Found History Movements'),
 ('not_register_income_text', 'No se han registrado ingresos en tu cuenta.', 'No deposits have been posted to your account.'),
+('number_cuotas_text', 'Número de cuotas', 'Number of installments'),
 ('number_register_is_text', 'El número de movimientos registrados en tu cuenta es de', 'The number of movements registered in your account is'),
 ('password_text', 'Contraseña', 'Password'),
 ('pay_cuotas_text', 'Pagar cuotas', 'Pay dues'),
@@ -282,6 +278,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('text_tasa_variable', 'Tasa Variable', 'Variable rate'),
 ('text_transfer', 'Transferencia', 'Transfer'),
 ('title_loan_text', 'Préstamos', 'Loans'),
+('title_pay_cuotas_text', 'Pago de Cuotas', 'Payment of Fees'),
 ('title_promo_text', 'Ingrese el código', 'Enter the code'),
 ('titulo_inicio', 'Simulador de crédito', 'Credit simulator'),
 ('total_income_text', 'Ingresos totales', 'Total Income'),
@@ -291,6 +288,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('type_loan', 'Tipo de Préstamo', 'Loan Type'),
 ('type_recover_code', 'Escribe tu Codigo de Recuperación', 'Write your Recovery Code'),
 ('username_text', 'Nombre de usuario', 'Username'),
+('value_cuotas_text', 'Valor a pagar', 'Amount to be paid'),
 ('view_all_text', 'Ver todo', 'View all'),
 ('welcome_back_text', 'Bienvenido de nuevo ', 'Welcome back '),
 ('with_amout_text', 'con un monto de', 'with an amount of');
