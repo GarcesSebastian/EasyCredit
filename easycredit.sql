@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-05-2024 a las 22:29:22
+-- Tiempo de generación: 15-05-2024 a las 09:07:13
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -41,7 +41,9 @@ CREATE TABLE `codes` (
 --
 
 INSERT INTO `codes` (`email`, `code`, `type`, `action`, `used`, `expired`) VALUES
-('easycredit4321@gmail.com', '3DFW8H', 'promotion', 1200000, '[\"541998\",\"537612\",\"1004101\"]', 'Sun May 13 2024 20:10:00 GMT-0500 (hora estándar de Colombia)');
+('12313@dwasd12', '415854', '', 0, '', ''),
+('easycredit4321@gmail.com', '3DFW8H', 'promotion', 1200000, '[\"541998\",\"537612\",\"1004101\"]', 'Sun May 13 2024 20:10:00 GMT-0500 (hora estándar de Colombia)'),
+('sebastiangarces12@gmail.com', '950135', '', 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -161,6 +163,7 @@ CREATE TABLE `words` (
 --
 
 INSERT INTO `words` (`word`, `es`, `en`) VALUES
+('active_2fa_text', 'Activar la autenticación de dos pasos', 'Activate Two-Step Authentication'),
 ('agree_text', 'Estoy de acuerdo con los', 'I agree with the'),
 ('amount_text', 'Monto', 'Amount'),
 ('article_1_description', 'Realiza todos los trámites y gestiones de tu crédito libre inversión de manera conveniente y segura a través de nuestro proceso 100% en línea. Desde la solicitud hasta la aprobación, te ofrecemos una experiencia eficiente y sin complicaciones.', 'Carry out all the procedures and procedures for your free investment credit in a convenient and secure manner through our 100% online process. From application to approval, we offer you an efficient and hassle-free experience.'),
@@ -176,21 +179,33 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('bill_text', 'factura', 'bill'),
 ('calcular_inicio', 'Calcular', 'Calculate'),
 ('calculate_cuotas_text', 'Calcular Pago', 'Calculate Payment'),
+('change_password_text', 'Cambiar la contraseña', 'Change password'),
 ('check_card_text', '¡Consulte nuestra opción de simulación de crédito!', 'Check out our credit simulation option!'),
 ('check_card_text_second', '¡Consulte nuestra opción de simulación de crédito!', 'Check out our credit simulation option!'),
 ('clear_all_text', 'Borrar todo', 'Clear all'),
 ('clear_text', 'Borrar', 'Clear'),
+('code_auth_text', 'Autenticación de código', 'Code Authentication'),
+('configure_2fa_text', 'Configurar la autenticación de dos pasos', 'Configure Two-Step Authentication'),
+('consent_text', 'Consentimiento para el uso de datos', 'Consent for data use'),
 ('content_check_card_text', '¿Necesitas calcular tus pagos mensuales de préstamo antes de comprometerte? ¡Estás en el lugar correcto! Con nuestra herramienta de simulación de crédito, puedes explorar diferentes escenarios financieros y planificar tu futuro con confianza.', 'Do you need to calculate your monthly loan payments before committing? You are in the right place! With our credit simulation tool, you can explore different financial scenarios and plan your future with confidence.'),
 ('content_check_card_text_second', '¿Necesita calcular los pagos mensuales de su préstamo antes de comprometerse? Estás en el lugar correcto! Con nuestra herramienta de simulación de crédito, podrá explorar diferentes escenarios financieros y planificar su futuro con confianza.', 'Do you need to calculate your monthly loan payments before committing? You are in the right place! With our credit simulation tool, you can explore different financial scenarios and plan your future with confidence.'),
 ('content_security_text', '¿Necesitas enviar dinero a amigos o familiares? Con nuestra función de transferencia a otros usuarios, puedes enviar fondos de manera rápida y segura. Ya sea que estés compartiendo gastos, ayudando a un ser querido o simplemente pagando por un servicio, nuestra plataforma te permite realizar transferencias de manera conveniente y sin complicaciones. Olvídate de los largos procesos bancarios y las comisiones excesivas. Con nosotros, enviar dinero es tan fácil como pulsar un botón.', 'Do you need to send money to friends or family? With our transfer feature to other users, you can send funds quickly and securely. Whether you\'re sharing expenses, helping a loved one, or simply paying for a service, our platform allows you to make transfers conveniently and without complications. Forget about long banking processes and excessive commissions. With us, sending money is as easy as pressing a button.'),
 ('continue_with_text', 'O CONTINUAR CON', 'OR CONTINUE WITH'),
 ('crear_cuenta_text', 'Crea una cuenta', 'Create an account'),
+('current_password_text', 'Contraseña actual', 'Current password'),
 ('descripcion_inicio', 'Explora las posibilidades con nuestro simulador de crédito. Calcula las cuotas y diseña tu plan de pago en línea de manera conveniente y sin complicaciones.', 'Explore the possibilities with our credit simulator. Calculate installments and design your payment plan online in a convenient and hassle-free way.'),
 ('description_forgot_password', 'Ingresa tu correo electronico y te enviaremos un codigo de verificacion para que puedas recuperar tu contraseña.', 'Enter your email and we will send you a verification code so you can recover your password.'),
 ('description_new_password', 'Ingresa tu nueva contraseña y confírmala para recuperar tu cuenta.', 'Enter your new password and confirm it to recover your account.'),
+('description_notifications_text', 'Es posible que aún le enviemos notificaciones importantes sobre su cuenta fuera de su configuración de notificaciones.', 'We may still send you important notifications about your account outside of your notification settings.'),
 ('description_pay_cuotas_text', 'Debe elegir el numero de cuotas que desea pagar, debe comprender que dependiendo del numero de cuotas incrementara su historial crediticio.', 'You must choose the number of installments you want to pay, you must understand that depending on the number of installments your credit history will increase.'),
+('description_privacy_text', 'Personalice su configuración de privacidad para proteger sus datos personales.', 'Customize your privacy settings to protect your personal data.'),
+('description_profile_picture_text', 'Sube tu foto de perfil aquí.', 'Upload your profile picture here.'),
+('description_profile_text', 'Administra la configuración de tu perfil', 'Manage your profile settings'),
 ('description_recover_code', 'Ingresa el código de verificación que te enviamos a tu correo electrónico.', 'Enter the verification code that we sent to your email.'),
+('description_security_text', 'Las configuraciones de seguridad ofrecen opciones como cambio de contraseña, autenticación en dos pasos, registro de actividad, entre otras. Esto es para proteger los datos del usuario y garantizar un entorno seguro en la aplicación.', 'The security settings offer options such as password change, two-step authentication, activity log, among others. This is to protect user data and ensure a secure environment in the application.'),
+('description_subtitle_profile_text', 'Cuéntanos tus datos básicos de información', 'Tell us your basic info details'),
 ('description_text', 'Descripción', 'Description'),
+('description_validate_email_text', 'Hemos enviado un código de verificación a tu correo electrónico. Por favor, ingresa el código a continuación.', 'We have sent a verification code to your email. Please enter the code below.'),
 ('email_text', 'Correo electrónico', 'Email'),
 ('excedent_pay_text', 'Excedente pago actual', 'Current payment surplus'),
 ('exists_text', 'Ya tienes una cuenta?', 'Already have an account?'),
@@ -207,6 +222,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('id_loan_text', 'ID del préstamo', 'Loan ID'),
 ('id_number_text', 'Número de identificación', 'ID number'),
 ('income_amount_is_text', 'El monto acumulado de ingresos es de', 'The accumulated amount of income is'),
+('income_monthly_text', 'Ingresos mensuales estimados', 'Estimated monthly income'),
 ('iniciar_text', 'Iniciar sesión', 'Sign In'),
 ('interes_text', 'Interés', 'Interest'),
 ('learn_more_text', 'Aprende Más', 'Learn More'),
@@ -235,6 +251,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('phone_text', 'Número de teléfono', 'Phone number'),
 ('placeholder_promo_text', 'Código de promoción', 'Promotion Code'),
 ('please_enter_text', 'Por favor ingresa aquí', 'Please enter here'),
+('profile_picture_text', 'Foto de perfil', 'Profile Picture'),
 ('recursos_footer_titulo', 'Recursos', 'Resources'),
 ('recursos_item_1', 'Astro', 'Astro'),
 ('recursos_item_2', 'Tailwind CSS', 'Tailwind CSS'),
@@ -253,6 +270,19 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('siganos_item_1', 'Github', 'Github'),
 ('siganos_item_2', 'Linkedin', 'Linkedin'),
 ('simulate_loan_text', 'Simular Préstamo', 'Simulate Loan'),
+('subdescription2_notifications_text', 'Reciba notificaciones de EasyCredit sobre la actividad de su cuenta y nuestras actualizaciones.', 'Receive EasyCredit notifications about your account activity and updates from us.'),
+('subdescription2_privacy_text', 'Cambie su contraseña actual por una nueva para mantener su cuenta segura.', 'Change your current password to a new one to keep your account secure.'),
+('subdescription2_security_text', 'Comprueba en qué dispositivos está tu cuenta y configura a cuáles tiene acceso.', 'Check which devices your account is on and configure which ones they have access to.'),
+('subdescription_notifications_text', 'Reciba correos electrónicos sobre la actividad de su cuenta y nuestras actualizaciones.', 'Receive emails about your account activity and updates from us.'),
+('subdescription_privacy_text', 'Asegúrese de dar su consentimiento para el uso y el intercambio de sus datos personales.', 'Please make sure you consent to the use and sharing of your personal data.'),
+('subdescription_security_text', 'Utilice la autenticación de dos pasos para mejorar la seguridad de su cuenta', 'Use two-step authentication to improve your account security'),
+('subtitle2_notifications_text', 'Notificaciones de EasyCredit', 'EasyCredit Notifications'),
+('subtitle2_privacy_text', 'Contraseña', 'Password'),
+('subtitle2_security_text', 'Registro de actividad', 'Activity Register'),
+('subtitle_notifications_text', 'Notificaciónes de Correo Electrónico', 'Email Notifications'),
+('subtitle_privacy_text', 'Consentimiento explícito', 'Explicit consent'),
+('subtitle_profile_text', 'Información básica', 'Basic Info'),
+('subtitle_security_text', 'Autenticación de dos pasos', 'Two-step Authentication'),
 ('text_amount_loan', 'Monto del Préstamo', 'Loan Amount'),
 ('text_confirm', 'Confirmar', 'Confirm'),
 ('text_confirm_code', 'Confirmar Codigo', 'Confirm Code'),
@@ -278,8 +308,15 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('text_tasa_variable', 'Tasa Variable', 'Variable rate'),
 ('text_transfer', 'Transferencia', 'Transfer'),
 ('title_loan_text', 'Préstamos', 'Loans'),
+('title_movements_text', 'Movimientos', 'Movements'),
+('title_others_text', 'Otras actividades', 'Other activities'),
 ('title_pay_cuotas_text', 'Pago de Cuotas', 'Payment of Fees'),
+('title_privacy_text', 'Privacidad', 'Privacy'),
+('title_profile_text', 'Perfil', 'Profile'),
 ('title_promo_text', 'Ingrese el código', 'Enter the code'),
+('title_security_text', 'Seguridad', 'Security'),
+('title_Transfer_text', 'Transferencias', 'Transfers'),
+('title_validate_email_text', 'Validar Correo Electrónico', 'Validate Email'),
 ('titulo_inicio', 'Simulador de crédito', 'Credit simulator'),
 ('total_income_text', 'Ingresos totales', 'Total Income'),
 ('transferir_text', 'Transferir', 'Transfer'),
@@ -287,8 +324,10 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('type_email', 'Escribe tu correo electronico', 'Write your email'),
 ('type_loan', 'Tipo de Préstamo', 'Loan Type'),
 ('type_recover_code', 'Escribe tu Codigo de Recuperación', 'Write your Recovery Code'),
+('update_text', 'Actualizar', 'Update'),
 ('username_text', 'Nombre de usuario', 'Username'),
 ('value_cuotas_text', 'Valor a pagar', 'Amount to be paid'),
+('verify_email_text', 'Verificar correo', 'Check email'),
 ('view_all_text', 'Ver todo', 'View all'),
 ('welcome_back_text', 'Bienvenido de nuevo ', 'Welcome back '),
 ('with_amout_text', 'con un monto de', 'with an amount of');
