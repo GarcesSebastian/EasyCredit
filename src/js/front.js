@@ -1176,7 +1176,6 @@ async function send_req_loan(){
 
         if(state_prestamo >= limit_prestamo){
             document.querySelector("#content-warning-loan-rate").style.display = "flex"
-            document.querySelector("#content-warning-loan-rate").textContent = "Has alcanzado el limite de prestamos.";
             return;
         }
 

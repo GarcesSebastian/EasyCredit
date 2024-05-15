@@ -17,34 +17,85 @@ interface Props{
     isGoogle: boolean;
 
     //Translate
-    notifications_text: string,
-    clear_all_text: string,
-    title_promo_text: string;
-    placeholder_promo_text: string;
-    send_text: string;
-    not_found_notifications_text: string,
+    notifications_text?: any,
+    clear_all_text?: any,
+    title_promo_text?: any,
+    placeholder_promo_text?: any,
+    send_text?: any,
+    not_found_notifications_text?: any,
 
     //Movements
-    history_movement_text: string,
-    not_found_text: string
+    history_movement_text?: any,
+    not_found_text?: any,
 
     //Movement
-    movement_text: string,
-    date_text: string,
-    description_text: string,
-    clear_text: string,
-    from_text: string,
+    movement_text?: any,
+    date_text?: any,
+    description_text?: any,
+    clear_text?: any,
+    from_text?: any,
 
     //Notification
-    show_text: string,
-    send_transfer_text: string,
-    get_transfer_text: string,
-    send_loan_text: string,
-    with_amout_text: string,
-    number_register_is_text: string,
-    balance_avaible_is_text: string,
-    not_register_income_text: string,
-    income_amount_is_text: string,
+    show_text?: any,
+    send_transfer_text?: any,
+    get_transfer_text?: any,
+    send_loan_text?: any,
+    with_amout_text?: any,
+    number_register_is_text?: any,
+    balance_avaible_is_text?: any,
+    not_register_income_text?: any,
+    income_amount_is_text?: any,
+
+    //Profile
+    title_profile_text?: any,
+    description_profile_text?: any,
+    subtitle_profile_text?: any,
+    description_subtitle_profile_text?: any,
+    update_text?: any,
+    profile_picture_text?: any,
+    description_profile_picture_text?: any,
+
+    //Notifications
+    description_notifications_text?: any,
+    subtitle_notifications_text?: any,
+    subdescription_notifications_text?: any,
+    subtitle2_notifications_text?: any,
+    subdescription2_notifications_text?: any,
+    title_movements_text?: any,
+    title_Transfer_text?: any,
+    title_others_text?: any,
+
+    //Privacy
+    title_privacy_text?: any,
+    description_privacy_text?: any,
+    subtitle_privacy_text?: any,
+    subdescription_privacy_text?: any,
+    subtitle2_privacy_text?: any,
+    subdescription2_privacy_text?: any,
+    consent_text?: any,
+    current_password_text?: any,
+    change_password_text?: any,
+
+    //Security
+    title_security_textd?: any,
+    description_security_textd?: any,
+    subtitle_security_textd?: any,
+    subdescription_security_textd?: any,
+    subtitle2_security_textd?: any,
+    subdescription2_security_textd?: any,
+    active_2fa_textd?: any,
+    configure_2fa_textd?: any,
+    code_auth_textd?: any,
+
+    //Exists
+    username_textd?: any,
+    id_number_textd?: any,
+    phone_textd?: any,
+    email_textd?: any,
+    title_loan_textd?: any,
+    text_new_password_invertd?: any,
+    text_repeat_new_passwordd?: any,
+    text_confirmd?: any,
 }
 
 //Variables translate
@@ -55,6 +106,33 @@ const {notifications_text, clear_all_text, title_promo_text,
     get_transfer_text, send_loan_text, with_amout_text, number_register_is_text,
     balance_avaible_is_text, not_register_income_text, income_amount_is_text
 } = Astro.props;
+
+//Variables translate profile
+const {title_profile_text, description_subtitle_profile_text, subtitle_profile_text,
+    description_profile_picture_text, description_profile_text, profile_picture_text,
+    update_text
+} = Astro.props;
+
+//Notifications
+const {description_notifications_text, subtitle_notifications_text,
+    subdescription_notifications_text, subtitle2_notifications_text, subdescription2_notifications_text,
+    title_movements_text, title_Transfer_text, title_others_text
+} = Astro.props;
+
+//Privacy
+const {title_privacy_text, description_privacy_text, subtitle_privacy_text,
+  subdescription_privacy_text, subtitle2_privacy_text, subdescription2_privacy_text,
+  consent_text, current_password_text, change_password_text,
+} = Astro.props;
+
+//Security
+const {title_security_text, description_security_text, subtitle_security_text,
+    subdescription_security_text, subtitle2_security_text, subdescription2_security_text,
+    active_2fa_text, configure_2fa_text, code_auth_text
+} = Astro.props;
+
+//Exists
+const {title_loan_text, username_text, id_number_text, phone_text, email_text, text_new_password_invert, text_repeat_new_password, text_confirm} = Astro.props;
 
 function formatNumber(number: any) {
     let [integerPart, decimalPart] = String(number).split('.');
@@ -297,7 +375,51 @@ try{
                 )
             }
         </Movements>
-        <Configurations isGoogle={isGoogle}></Configurations>
+        <Configurations isGoogle={isGoogle}
+            title_profile_text={title_profile_text}
+            description_profile_text={description_profile_text}
+            subtitle_profile_text={subtitle_profile_text}
+            description_subtitle_profile_text={description_subtitle_profile_text}
+            update_text={update_text}
+            profile_picture_text={profile_picture_text}
+            description_profile_picture_text={description_profile_picture_text}
+            username_text={username_text}
+            id_number_text={id_number_text}
+            phone_text={phone_text}
+            email_text={email_text}
+            description_notifications_text={description_notifications_text}
+            subtitle_notifications_text={subtitle_notifications_text}
+            subdescription_notifications_text={subdescription_notifications_text}
+            subtitle2_notifications_text={subtitle2_notifications_text}
+            subdescription2_notifications_text={subdescription2_notifications_text}
+            title_movements_text={title_movements_text}
+            title_Transfer_text={title_Transfer_text}
+            title_others_text={title_others_text}
+            notifications_text={notifications_text}
+            title_loan_text={title_loan_text}
+            title_privacy_text={title_privacy_text}
+            description_privacy_text={description_privacy_text}
+            subtitle_privacy_text={subtitle_privacy_text}
+            subdescription_privacy_text={subdescription_privacy_text}
+            subtitle2_privacy_text={subtitle2_privacy_text}
+            subdescription2_privacy_text={subdescription2_privacy_text}
+            consent_text={consent_text}
+            current_password_text={current_password_text}
+            change_password_text={change_password_text}
+            text_new_password_invert={text_new_password_invert}
+            text_repeat_new_password={text_repeat_new_password}
+            title_security_text={title_security_text}
+            description_security_text={description_security_text}
+            subtitle_security_text={subtitle_security_text}
+            subdescription_security_text={subdescription_security_text}
+            subtitle2_security_text={subtitle2_security_text}
+            subdescription2_security_text={subdescription2_security_text}
+            active_2fa_text={active_2fa_text}
+            configure_2fa_text={configure_2fa_text}
+            code_auth_text={code_auth_text}
+            email_text={email_text}
+            text_confirm={text_confirm}
+        ></Configurations>
         
         <style>
             #content-header{

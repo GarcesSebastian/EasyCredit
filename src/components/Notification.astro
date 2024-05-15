@@ -1,56 +1,77 @@
 ---
 interface Props{
-  data_id: string;
+    data_id: string;
+
+    //Translate
+    description_notifications_text: string,
+    subtitle_notifications_text: string,
+    subdescription_notifications_text: string,
+    subtitle2_notifications_text: string,
+    subdescription2_notifications_text: string,
+    title_movements_text: string,
+    title_Transfer_text: string,
+    title_others_text: string,
+
+    //Exists
+    notifications_text: string,
+    title_loan_text: string,
 }
+
+//Variables translate
+const {notifications_text, description_notifications_text, subtitle_notifications_text,
+    subdescription_notifications_text, subtitle2_notifications_text, subdescription2_notifications_text,
+    title_movements_text, title_Transfer_text, title_others_text, title_loan_text,
+} = Astro.props;
 
 const {data_id} = Astro.props;
 ---
+
 
 <div class="flex-col overflow-y-auto hidden" id="sub_sections_configurations"  data-id={data_id}>
     <div class="w-full h-fit border-b-2 border-gray-300 pb-5">
         <h1 class="text-white text-2xl font-semibold">
             <!--Titulo -->
-            Notifications
+            {notifications_text}
         </h1>
         <h4 class="text-gray-300 text-lg font-light">
             <!--Descripcion de la configuracion -->
-            We may still send you important notifications about your account outside of your notification settings.
+            {description_notifications_text}
         </h4>
     </div>
     
     <div class="w-full h-fit border-b-2 border-gray-300 py-7 px-3">
         <h2 class="text-white text-lg">
             <!--Subtitulo -->
-            Email Notifications
+            {subtitle_notifications_text}
         </h2>
         <h4 class="text-gray-300 text-base font-light">
             <!--Descripcion de la subconfiguracion -->
-            Receive emails about your account activity and updates from us.
+            {subdescription_notifications_text}
         </h4>
     
         <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-5 mt-4 w-full">
             <label class="flex cursor-pointer">
                 <input id="check_email_movements" type="checkbox" value="" class="sr-only peer">
                 <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-base font-semibold text-gray-200">Movimientos</span>
+                <span class="ms-3 text-base font-semibold text-gray-200">{title_movements_text}</span>
             </label>
     
             <label class="flex cursor-pointer">
                 <input id="check_email_loans" type="checkbox" value="" class="sr-only peer">
                 <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-base font-semibold text-gray-200">Prestamos</span>
+                <span class="ms-3 text-base font-semibold text-gray-200">{title_loan_text}</span>
             </label>
     
             <label class="flex cursor-pointer">
                 <input id="check_email_transfers" type="checkbox" value="" class="sr-only peer">
                 <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-base font-semibold text-gray-200">Transferencias</span>
+                <span class="ms-3 text-base font-semibold text-gray-200">{title_Transfer_text}</span>
             </label>
     
             <label class="flex cursor-pointer">
                 <input id="check_email_others" type="checkbox" value="" class="sr-only peer">
                 <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-base font-semibold text-gray-200">Otras actividades</span>
+                <span class="ms-3 text-base font-semibold text-gray-200">{title_others_text}</span>
             </label>
         </div>
     </div>
@@ -58,36 +79,36 @@ const {data_id} = Astro.props;
     <div class="w-full h-fit py-7 px-3">
         <h2 class="text-white text-lg">
             <!--Subtitulo -->
-            EasyCredit Notifications
+            {subtitle2_notifications_text}
         </h2>
         <h4 class="text-gray-300 text-base font-light">
             <!--Descripcion de la subconfiguracion -->
-            Receive EasyCredit notifications about your account activity and updates from us.
+            {subdescription2_notifications_text}
         </h4>
     
         <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-5 mt-4 w-full">
             <label class="flex cursor-pointer">
                 <input id="check_sms_movements" type="checkbox" value="" class="sr-only peer">
                 <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-base font-semibold text-gray-200">Movimientos</span>
+                <span class="ms-3 text-base font-semibold text-gray-200">{title_movements_text}</span>
             </label>
     
             <label class="flex cursor-pointer">
                 <input id="check_sms_loans" type="checkbox" value="" class="sr-only peer">
                 <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-base font-semibold text-gray-200">Prestamos</span>
+                <span class="ms-3 text-base font-semibold text-gray-200">{title_loan_text}</span>
             </label>
     
             <label class="flex cursor-pointer">
                 <input id="check_sms_transfers" type="checkbox" value="" class="sr-only peer">
                 <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-base font-semibold text-gray-200">Transferencias</span>
+                <span class="ms-3 text-base font-semibold text-gray-200">{title_Transfer_text}</span>
             </label>
     
             <label class="cursor-pointer hidden">
                 <input id="check_sms_others" type="checkbox" value="" class="sr-only peer">
                 <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-base font-semibold text-gray-200">Otras actividades</span>
+                <span class="ms-3 text-base font-semibold text-gray-200">{title_others_text}</span>
             </label>
         </div>
     </div>

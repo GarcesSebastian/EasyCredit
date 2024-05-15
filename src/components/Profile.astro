@@ -7,7 +7,28 @@ interface Props{
   id: string;
   email: string;
   phone: string;
+
+  //Translate
+  title_profile_text: string,
+  description_profile_text: string,
+  subtitle_profile_text: string,
+  description_subtitle_profile_text: string,
+  update_text: string,
+  profile_picture_text: string,
+  description_profile_picture_text: string,
+
+  //Exists
+  username_text: string,
+  id_number_text: string,
+  phone_text: string,
+  email_text: string,
 }
+
+//Variables translate
+const {title_profile_text, description_subtitle_profile_text, subtitle_profile_text,
+    description_profile_picture_text, description_profile_text, profile_picture_text,
+    update_text, username_text, id_number_text, phone_text, email_text
+} = Astro.props;
 
 const {data_id, username, id, email, phone} = Astro.props;
 
@@ -22,71 +43,71 @@ if(session){
 }
 ---
 
-<div class="flex flex-col overflow-y-auto overflow-x-hidden pb-10" id="sub_sections_configurations" data-id={data_id}>
+<div class="hidden flex-col overflow-y-auto overflow-x-hidden pb-10" id="sub_sections_configurations" data-id={data_id}>
   <div class="w-full h-fit border-b-2 border-gray-300 pb-2 mb-3">
     <h1 class="text-white text-2xl font-semibold">
-      Profile
+      {title_profile_text}
     </h1>
     <h4 class="text-gray-300 text-base font-light">
-      Manage your profile settings
+      {description_profile_text}
     </h4>
   </div>
 
   <div class="w-full h-fit border-b-2 border-gray-300 py-2 px-3">
-    <h3 class="text-white text-base">Basic Info</h3>
+    <h3 class="text-white text-base">{subtitle_profile_text}</h3>
     <h4 class="text-gray-300 text-base font-light">
-      Tell us your basic info details
+      {description_subtitle_profile_text}
     </h4>
 
     <form id="form_update" class="flex flex-col">
       <div class="grid grid-cols-2 gap-6 max-sm:grid-cols-1 mt-4">
         <div>
-          <p class="text-white text-base">Nombre de Usuario</p>
+          <p class="text-white text-base">{username_text}</p>
           <input
             type="text"
             id="username-update"
             name="username-update"
             class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
-            placeholder="Nombre de usuario"
+            placeholder={username_text}
             value={username}
           />
           <span id="err-username-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
         </div>
 
         <div>
-          <p class="text-white text-base">Numero de identificacion</p>
+          <p class="text-white text-base">{id_number_text}</p>
           <input
             type="number"
             id="id-update"
             name="id-update"
             class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
-            placeholder={"Numero de identificacion"}
+            placeholder={id_number_text}
             value={id}
           />
           <span id="err-id-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
         </div>
         
         <div>
-          <p class="text-white text-base">Teléfono</p>
+          <p class="text-white text-base">{phone_text}</p>
           <input
             type="number"
             id="phone-update"
             name="phone-update"
             class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
-            placeholder="Numero de telefono"
+            placeholder={phone_text}
             value={phone}
           />
           <span id="err-phone-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
         </div>
         
         <div>
-          <p class="text-white text-base">Correo Electronico</p>
+          <p class="text-white text-base">{email_text}</p>
           <input
             type="email"
             id="email-update"
             name="email-update"
             class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
-            placeholder="Correo Electronico"
+            placeholder={email_text}
             value={email}
           />
           <span id="err-email-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
@@ -97,7 +118,7 @@ if(session){
         <button
           id="update_btn"
           type="submit"
-          class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-md mt-4 mx-auto">update</button
+          class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-md mt-4 mx-auto">{update_text}</button
         >
       </div>
     </form>
@@ -126,10 +147,10 @@ if(session){
         </div>  
         <div class="max-[450px]:w-full flex flex-col">
           <h2 class="text-white text-lg font-semibold">
-              Profile Picture
+              {profile_picture_text}
           </h2>
           <h4 class="text-gray-300 text-base font-light">
-                Upload your profile picture here.
+              {description_profile_picture_text}
           </h4>
         </div>
       </div>

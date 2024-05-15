@@ -1,5 +1,14 @@
 ---
 import PopupBase from "./PopupBase.astro";
+
+interface Props{
+    title_validate_email_text: string,
+    description_validate_email_text: string,
+    verify_email_text: string,
+}
+
+const {title_validate_email_text, description_validate_email_text, verify_email_text} = Astro.props;
+
 ---
 
 <PopupBase 
@@ -11,12 +20,12 @@ import PopupBase from "./PopupBase.astro";
     id_close="close-validate"
     >
     <div class="p-5 border-b-[1px] mb-5">
-        <h1 class="text-2xl font-bold text-white">Validar Correo Electrónico</h1>
+        <h1 class="text-2xl font-bold text-white">{title_validate_email_text}</h1>
     </div>
 
     <div class="w-full flex px-5 mb-5 text-gray-300 font-semibold">
         <p>
-            Hemos enviado un código de verificación a tu correo electrónico. Por favor, ingresa el código a continuación.
+            {description_validate_email_text}
         </p>
     </div>
 
@@ -64,7 +73,7 @@ import PopupBase from "./PopupBase.astro";
 
         <div class="w-full flex mt-5 px-5">
             <button type="submit" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-lg px-5 py-3 text-center inline-flex items-center justify-center mb-2">
-                Verify Account
+                {verify_email_text}
             </button>
         </div>
     </form>

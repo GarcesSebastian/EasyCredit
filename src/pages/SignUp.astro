@@ -45,6 +45,10 @@ if(isContinue){
         username_text: (data.find((item: any) => item.word === "username_text") || {})[flag === "es" ? 'es' : 'en'] as string,
         email_text: (data.find((item: any) => item.word === "email_text") || {})[flag === "es" ? 'es' : 'en'] as string,
         password_text: (data.find((item: any) => item.word === "password_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        title_validate_email_text: (data.find((item: any) => item.word === "title_validate_email_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        description_validate_email_text: (data.find((item: any) => item.word === "description_validate_email_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        verify_email_text: (data.find((item: any) => item.word === "verify_email_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        income_monthly_text: (data.find((item: any) => item.word === "income_monthly_text") || {})[flag === "es" ? 'es' : 'en'] as string,
         id_number_text: (data.find((item: any) => item.word === "id_number_text") || {})[flag === "es" ? 'es' : 'en'] as string,
         phone_text: (data.find((item: any) => item.word === "phone_text") || {})[flag === "es" ? 'es' : 'en'] as string,
         agree_text: (data.find((item: any) => item.word === "agree_text") || {})[flag === "es" ? 'es' : 'en'] as string,
@@ -81,7 +85,28 @@ if(isContinue){
                 registrarse_text={text.registrarse_text}
                 iniciar_text={text.iniciar_text}
                 isGoogle={false}
-                isIncomplete={false}
+                notifications_text={text.notifications_text}
+                clear_all_text={text.clear_all_text}
+                title_promo_text={text.title_promo_text}
+                placeholder_promo_text={text.placeholder_promo_text}
+                send_text={text.send_text}
+                not_found_text={text.not_found_text}
+                history_movement_text={text.history_movements_text}
+                movement_text={text.movement_text}
+                date_text={text.fecha_text}
+                description_text={text.description_text}
+                clear_text={text.clear_text}
+                from_text={text.from_text}
+                not_found_notifications_text={text.not_found_notifications_text}
+                show_text={text.show_text}
+                send_transfer_text={text.send_transfer_text}
+                get_transfer_text={text.get_transfer_text}
+                send_loan_text={text.send_loan_text}
+                with_amout_text={text.with_amout_text}
+                number_register_is_text={text.number_register_is_text}
+                balance_avaible_is_text={text.balance_avaible_is_text}
+                not_register_income_text={text.not_register_income_text}
+                income_amount_is_text={text.income_amount_is_text}
             ></Header>
             <Section>
             <FormSignUp
@@ -97,6 +122,10 @@ if(isContinue){
             terms_conditions={text.legal_item_2}
             continue_with_text={text.continue_with_text}
             registrarse_with_google={text.registrarse_with_google}
+            income_monthly_text={text.income_monthly_text}
+            title_validate_email_text={text.title_validate_email_text},
+            description_validate_email_text={text.description_validate_email_text},
+            verify_email_text={text.verify_email_text}
             >
             </FormSignUp>
             <Footer

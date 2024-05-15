@@ -15,9 +15,18 @@ interface Props{
     terms_conditions: string;
     continue_with_text: string;
     registrarse_with_google: string;
+    income_monthly_text: string,
+    title_validate_email_text: string,
+    description_validate_email_text: string,
+    verify_email_text: string,
 }
 
-const {registrarse_text,iniciar_text,exists_text,username_text,email_text,password_text,id_number_text,phone_text,agree_text,terms_conditions,continue_with_text,registrarse_with_google} = Astro.props;
+const {registrarse_text,iniciar_text,exists_text,username_text,
+    email_text,password_text,id_number_text,phone_text,agree_text,
+    terms_conditions,continue_with_text,registrarse_with_google,
+    income_monthly_text, title_validate_email_text, description_validate_email_text,
+    verify_email_text
+    } = Astro.props;
 
 ---
 
@@ -104,7 +113,7 @@ const {registrarse_text,iniciar_text,exists_text,username_text,email_text,passwo
         </div>
         <span id="err-numero_telefono" class="relative text-sm mx-2 mb-5 text-[tomato] transition-all duration-500 opacity-0"></span>
 
-        <label for="input-ingreso-mensual" class="block mb-2 text-sm font-medium text-white relative">Ingresos mensuales estimados</label>
+        <label for="input-ingreso-mensual" class="block mb-2 text-sm font-medium text-white relative">{income_monthly_text}</label>
         <div class="relative mb-1">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-heart-dollar w-5 h-5 text-gray-500 dark:text-gray-400">
@@ -114,7 +123,7 @@ const {registrarse_text,iniciar_text,exists_text,username_text,email_text,passwo
                     <path d="M19 21v1m0 -8v1" />
                 </svg>
             </div>
-            <input type="number" id="input-ingreso-mensual" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder="Ingresos mensuales estimados" required>
+            <input type="number" id="input-ingreso-mensual" class="outline-none border text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-4  bg-slate-800 border-slate-800 placeholder-gray-400" placeholder={income_monthly_text} required>
         </div>
         <span id="err-ingreso-mensual" class="relative text-sm mx-2 mb-0 text-[tomato] transition-all duration-500 opacity-0"></span>
 
@@ -151,7 +160,11 @@ const {registrarse_text,iniciar_text,exists_text,username_text,email_text,passwo
     </div>
 </form>
 
-<ValidateEmail />
+<ValidateEmail 
+    title_validate_email_text={title_validate_email_text},
+    description_validate_email_text={description_validate_email_text},
+    verify_email_text={verify_email_text}
+/>
 
 <style>
     #background-blur{

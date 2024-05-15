@@ -9,7 +9,90 @@ import {SignOut} from 'auth-astro/components';
 
 interface Props{
   isGoogle: boolean,
+
+  //Translate
+
+  //Profile
+  title_profile_text: string,
+  description_profile_text: string,
+  subtitle_profile_text: string,
+  description_subtitle_profile_text: string,
+  update_text: string,
+  profile_picture_text: string,
+  description_profile_picture_text: string,
+
+  //Notifications
+  description_notifications_text: string,
+  subtitle_notifications_text: string,
+  subdescription_notifications_text: string,
+  subtitle2_notifications_text: string,
+  subdescription2_notifications_text: string,
+  title_movements_text: string,
+  title_Transfer_text: string,
+  title_others_text: string,
+
+  //Privacy
+  title_privacy_text: string,
+  description_privacy_text: string,
+  subtitle_privacy_text: string,
+  subdescription_privacy_text: string,
+  subtitle2_privacy_text: string,
+  subdescription2_privacy_text: string,
+  consent_text: string,
+  current_password_text: string,
+  change_password_text: string,
+
+  //Security
+  title_security_text: string,
+  description_security_text: string,
+  subtitle_security_text: string,
+  subdescription_security_text: string,
+  subtitle2_security_text: string,
+  subdescription2_security_text: string,
+  active_2fa_text: string,
+  configure_2fa_text: string,
+  code_auth_text: string,
+
+  //Exists
+  username_text: string,
+  id_number_text: string,
+  phone_text: string,
+  email_text: string,
+  notifications_text: string,
+  title_loan_text: string,
+  text_new_password_invert: string,
+  text_repeat_new_password: string,
+  text_confirm: string,
 }
+
+//Variables translate
+
+//Profile
+const {title_profile_text, description_subtitle_profile_text, subtitle_profile_text,
+    description_profile_picture_text, description_profile_text, profile_picture_text,
+    update_text
+} = Astro.props;
+
+//Notifications
+const {description_notifications_text, subtitle_notifications_text,
+    subdescription_notifications_text, subtitle2_notifications_text, subdescription2_notifications_text,
+    title_movements_text, title_Transfer_text, title_others_text
+} = Astro.props;
+
+//Privacy
+const {title_privacy_text, description_privacy_text, subtitle_privacy_text,
+  subdescription_privacy_text, subtitle2_privacy_text, subdescription2_privacy_text,
+  consent_text, current_password_text, change_password_text,
+} = Astro.props;
+
+//Security
+const {title_security_text, description_security_text, subtitle_security_text,
+    subdescription_security_text, subtitle2_security_text, subdescription2_security_text,
+    active_2fa_text, configure_2fa_text, code_auth_text
+} = Astro.props;
+
+//Exists
+const {notifications_text, title_loan_text, username_text, id_number_text, phone_text, email_text, text_new_password_invert, text_repeat_new_password, text_confirm} = Astro.props;
 
 const {isGoogle} = Astro.props;
 
@@ -46,7 +129,7 @@ try{
 
 {
   isContinue ? (
-  <section class="bg-black/50 fixed top-0 -right-full h-full w-full z-50 justify-end flex transition-all duration-500 ease-in" id="content-configurations">
+  <section class="bg-black/50 fixed top-0 -right-0 h-full w-full z-50 justify-end flex transition-all duration-500 ease-in" id="content-configurations">
     <div class="bg-slate-800 shadow-lg shadow-gray-900 w-full flex flex-col">
       <header class="flex justify-start gap-4 items-center p-4 rounded-t-sm border-b-2 border-blue-500 w-full h-fit" >
         <span id="close_configurations" class="w-fit h-fit p-1 cursor-pointer hover:bg-slate-700 transition-all duration-150 ease-in rounded-[3px]">
@@ -122,10 +205,57 @@ try{
         </div>
 
         <div class="flex flex-col w-[80%] max-sm:w-full h-full bg-black/50 p-5 gap-5">
-          <Profile data_id="profile" username={data_user?.user_register[0]?.username} id={data_user?.user_register[0]?.numero_identidad} phone={data_user?.user_register[0]?.numero_telefono} email={data_user?.user_register[0]?.email}/>
-          <Security data_id="security"/>
-          <Privacy data_id="privacy"/>
-          <Notification data_id="notification"/>
+          <Profile data_id="profile" username={data_user?.user_register[0]?.username} id={data_user?.user_register[0]?.numero_identidad} phone={data_user?.user_register[0]?.numero_telefono} email={data_user?.user_register[0]?.email}
+            title_profile_text={title_profile_text}
+            description_profile_text={description_profile_text}
+            subtitle_profile_text={subtitle_profile_text}
+            description_subtitle_profile_text={description_subtitle_profile_text}
+            update_text={update_text}
+            profile_picture_text={profile_picture_text}
+            description_profile_picture_text={description_profile_picture_text}
+            username_text={username_text}
+            id_number_text={id_number_text}
+            phone_text={phone_text}
+            email_text={email_text}
+          />
+          <Security data_id="security"
+                title_security_text={title_security_text}
+                description_security_text={description_security_text}
+                subtitle_security_text={subtitle_security_text}
+                subdescription_security_text={subdescription_security_text}
+                subtitle2_security_text={subtitle2_security_text}
+                subdescription2_security_text={subdescription2_security_text}
+                active_2fa_text={active_2fa_text}
+                configure_2fa_text={configure_2fa_text}
+                code_auth_text={code_auth_text}
+                email_text={email_text}
+                text_confirm={text_confirm}
+          />
+          <Privacy data_id="privacy"
+                title_privacy_text={title_privacy_text}
+                description_privacy_text={description_privacy_text}
+                subtitle_privacy_text={subtitle_privacy_text}
+                subdescription_privacy_text={subdescription_privacy_text}
+                subtitle2_privacy_text={subtitle2_privacy_text}
+                subdescription2_privacy_text={subdescription2_privacy_text}
+                consent_text={consent_text}
+                current_password_text={current_password_text}
+                change_password_text={change_password_text}
+                text_new_password_invert={text_new_password_invert}
+                text_repeat_new_password={text_repeat_new_password}
+          />
+          <Notification data_id="notification"
+              description_notifications_text={description_notifications_text}
+              subtitle_notifications_text={subtitle_notifications_text}
+              subdescription_notifications_text={subdescription_notifications_text}
+              subtitle2_notifications_text={subtitle2_notifications_text}
+              subdescription2_notifications_text={subdescription2_notifications_text}
+              title_movements_text={title_movements_text}
+              title_Transfer_text={title_Transfer_text}
+              title_others_text={title_others_text}
+              notifications_text={notifications_text}
+              title_loan_text={title_loan_text}
+          />
         </div>
       </section>
     </div>

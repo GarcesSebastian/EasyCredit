@@ -3,26 +3,49 @@ import SpanNotification from './user/SpanNotification.astro';
 
 interface Props{
   data_id: string;
+
+    //Translate
+    title_privacy_text: string,
+    description_privacy_text: string,
+    subtitle_privacy_text: string,
+    subdescription_privacy_text: string,
+    subtitle2_privacy_text: string,
+    subdescription2_privacy_text: string,
+    consent_text: string,
+    current_password_text: string,
+    change_password_text: string,
+
+    //Exists
+    text_new_password_invert: string,
+    text_repeat_new_password: string,
 }
 
+//Translate
+const {title_privacy_text, description_privacy_text, subtitle_privacy_text,
+  subdescription_privacy_text, subtitle2_privacy_text, subdescription2_privacy_text,
+  consent_text, current_password_text, change_password_text,
+} = Astro.props;
+
+//Exists
+const {text_new_password_invert, text_repeat_new_password} = Astro.props;
 const {data_id} = Astro.props;
 ---
 
 <div class="pb-10 flex-col overflow-y-auto hidden" id="sub_sections_configurations"  data-id={data_id}>
 
   <div class="w-full h-fit border-b border-gray-600 pb-5">
-    <h1 class="text-white text-2xl font-semibold">Privacy</h1>
+    <h1 class="text-white text-2xl font-semibold">{title_privacy_text}</h1>
 
     <h4 class="text-gray-400 text-lg font-light">
-        Customize your privacy settings to protect your personal data.    
+        {description_privacy_text}    
     </h4>
   </div>
 
   <div class="w-full h-fit border-b border-gray-600 py-7 px-3">
-    <h2 class="text-white text-xl">Explicit consent</h2>
+    <h2 class="text-white text-xl">{subtitle_privacy_text}</h2>
 
     <h4 class="text-gray-400 text-base font-light">
-        Please make sure you consent to the use and sharing of your personal data.
+        {subdescription_privacy_text}
     </h4>
 
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-5 mt-4">
@@ -31,36 +54,36 @@ const {data_id} = Astro.props;
         <input type="checkbox" value="" class="sr-only peer" />
         <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600">
         </div>
-        <span class="ms-3 text-base font-semibold text-gray-200">Consent for data use</span>
+        <span class="ms-3 text-base font-semibold text-gray-200">{consent_text}</span>
       </label>
 
     </div>
   </div>
 
   <div class="w-full h-fit border-b border-gray-600 py-7 px-3">
-    <h2 class="text-white text-xl">Password</h2>
-    <h4 class="text-gray-400 text-base font-light">Change your current password to a new one to keep your account secure.</h4>
+    <h2 class="text-white text-xl">{subtitle2_privacy_text}</h2>
+    <h4 class="text-gray-400 text-base font-light">{subdescription2_privacy_text}</h4>
   
     <form id="form-change-password-settings" class= "mt-4 flex flex-col gap-2">
       <div class="">
-        <label for="current-password" class=" text-gray-200">Current password</label>
+        <label for="current-password" class=" text-gray-200">{current_password_text}</label>
         <input type="password" id="current-password" name="current-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%] max-[980px]:w-full" required>
       </div>
       <span id="err-current-password" class="relative text-sm text-[tomato] transition-all duration-500 opacity-0"></span>
 
       <div class="">
-        <label for="new-password" class="text-gray-200">New password</label>
+        <label for="new-password" class="text-gray-200">{text_new_password_invert}</label>
         <input type="password" id="new-password" name="new-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%] max-[980px]:w-full" required>
       </div>
       <span id="err-new-password" class="relative text-sm text-[tomato] transition-all duration-500 opacity-0"></span>
 
       <div class="">
-        <label for="confirm-password" class=" text-gray-200">Confirm new password</label>
+        <label for="confirm-password" class=" text-gray-200">{text_repeat_new_password}</label>
         <input type="password" id="confirm-password" name="confirm-password" class="flex bg-gray-700 text-gray-200 py-2 px-3 rounded-sm w-[50%] max-[980px]:w-full" required>
       </div>
       <span id="err-confirm-password" class="relative text-sm text-[tomato] transition-all duration-500 opacity-0"></span>
 
-      <button type="submit" class="bg-gradient-to-r w-fit to-[#0074D3] from-[#0040A8] hover:opacity-80 text-white px-4 py-3 rounded mt-2">Change password</button>
+      <button type="submit" class="bg-gradient-to-r w-fit to-[#0074D3] from-[#0040A8] hover:opacity-80 text-white px-4 py-3 rounded mt-2">{change_password_text}</button>
     </form>
   </div>
 </div>
