@@ -76,6 +76,9 @@ if(isContinue){
         description_new_password: (data.find((item: { word: string }) => item.word === "description_new_password") || {})[flag === "es" ? 'es' : 'en'] as string,
         text_confirm: (data.find((item: { word: string }) => item.word === "text_confirm") || {})[flag === "es" ? 'es' : 'en'] as string,
         text_password_update: (data.find((item: { word: string }) => item.word === "text_password_update") || {})[flag === "es" ? 'es' : 'en'] as string,
+        title_2fa_text: (data.find((item: any) => item.word === "title_2fa_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        description_2fa_text: (data.find((item: any) => item.word === "description_2fa_text") || {})[flag === "es" ? 'es' : 'en'] as string,
+        verify_email_text: (data.find((item: any) => item.word === "verify_email_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     };
 }else{
     return Astro.redirect("/SignIn")
@@ -118,6 +121,9 @@ if(isContinue){
                     description_new_password={text.description_new_password}
                     text_confirm={text.text_confirm}
                     text_password_update={text.text_password_update}
+                    title_2fa_text={text.title_2fa_text}
+                    description_2fa_text={text.description_2fa_text}
+                    verify_email_text={text.verify_email_text}
                 >
                 </FormLogin>
                 <Footer

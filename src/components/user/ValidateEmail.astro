@@ -5,19 +5,28 @@ interface Props{
     title_validate_email_text: string,
     description_validate_email_text: string,
     verify_email_text: string,
+    id_form: string,
+    id_form_inputs: string,
+    id_popup: string,
+    id_inter: string,
+    id_background: string,
+    id_close: string
+    id_err_code: string,
 }
 
-const {title_validate_email_text, description_validate_email_text, verify_email_text} = Astro.props;
+const {title_validate_email_text, description_validate_email_text, verify_email_text, id_form, id_form_inputs, id_popup,
+    id_inter, id_background, id_close, id_err_code
+} = Astro.props;
 
 ---
 
 <PopupBase 
     class="relative w-[30rem] -top-10 py-5 rounded-md z-10 bg-slate-700 mb-5" 
-    id="popup-center-validate" 
+    id={id_popup}
     class_content="hidden h-screen fixed" 
-    id_inter_content="popup-inter-validate"
-    id_background="background-popup-validate" 
-    id_close="close-validate"
+    id_inter_content={id_inter}
+    id_background={id_background}
+    id_close={id_close}
     >
     <div class="p-5 border-b-[1px] mb-5">
         <h1 class="text-2xl font-bold text-white">{title_validate_email_text}</h1>
@@ -29,47 +38,47 @@ const {title_validate_email_text, description_validate_email_text, verify_email_
         </p>
     </div>
 
-    <form id="form-validate" class="px-5 pt-0">
+    <form id={id_form} class="form-validate px-5 pt-0">
 
         <div class="flex items-center justify-center gap-3 mb-2">
             <input
                 type="text"
-                id="validate_email_input"
+                id={id_form_inputs}
                 class="w-14 h-14 text-center text-2xl font-extrabold text-white focus:ring-blue-500 focus:border-blue-500 bg-slate-800 border border-transparent appearance-none rounded p-4 outline-none focus:ring-2"
                 maxlength="1"
             />
             <input
                 type="text"
-                id="validate_email_input"
+                id={id_form_inputs}
                 class="w-14 h-14 text-center text-2xl font-extrabold text-white focus:ring-blue-500 focus:border-blue-500 bg-slate-800 border border-transparent appearance-none rounded p-4 outline-none focus:ring-2"
                 maxlength="1"
             />
             <input
                 type="text"
-                id="validate_email_input"
+                id={id_form_inputs}
                 class="w-14 h-14 text-center text-2xl font-extrabold text-white focus:ring-blue-500 focus:border-blue-500 bg-slate-800 border border-transparent appearance-none rounded p-4 outline-none focus:ring-2"
                 maxlength="1"
             />
             <input
                 type="text"
-                id="validate_email_input"
+                id={id_form_inputs}
                 class="w-14 h-14 text-center text-2xl font-extrabold text-white focus:ring-blue-500 focus:border-blue-500 bg-slate-800 border border-transparent appearance-none rounded p-4 outline-none focus:ring-2"
                 maxlength="1"
             />
             <input
                 type="text"
-                id="validate_email_input"
+                id={id_form_inputs}
                 class="w-14 h-14 text-center text-2xl font-extrabold text-white focus:ring-blue-500 focus:border-blue-500 bg-slate-800 border border-transparent appearance-none rounded p-4 outline-none focus:ring-2"
                 maxlength="1"
             />
             <input
                 type="text"
-                id="validate_email_input"
+                id={id_form_inputs}
                 class="w-14 h-14 text-center text-2xl font-extrabold text-white focus:ring-blue-500 focus:border-blue-500 bg-slate-800 border border-transparent appearance-none rounded p-4 outline-none focus:ring-2"
                 maxlength="1"
             />
         </div>
-        <span id="err-validate-code" class="relative text-sm mx-2 mt-5 ml-5 text-[tomato] transition-all duration-500 opacity-0"></span>
+        <span id={id_err_code} class="relative text-sm mx-2 mt-5 ml-5 text-[tomato] transition-all duration-500 opacity-0"></span>
 
         <div class="w-full flex mt-5 px-5">
             <button type="submit" class="w-full transition-all duration-300 text-black outline-none text-bold text-base bg-white hover:bg-whit hover:bg-black hover:text-white focus:ring-slate-800 focus:ring-4 font-medium rounded-lg px-5 py-3 text-center inline-flex items-center justify-center mb-2">
@@ -93,7 +102,19 @@ const {title_validate_email_text, description_validate_email_text, verify_email_
         (document.querySelector("#popup-center-validate") as HTMLElement).style.display = "flex";
     });
 
-    const form = document.getElementById('form-validate') as HTMLFormElement;
+    document.querySelector("#background-popup-validate-2fa")?.addEventListener("click", () => {
+        (document.querySelector("#popup-center-validate-2fa") as HTMLElement).style.display = "none";
+    });
+    
+    document.querySelector("#close-validate-2fa")?.addEventListener("click", () => {
+        (document.querySelector("#popup-center-validate-2fa") as HTMLElement).style.display = "none";
+    });
+    
+    document.querySelector("#btn-validate-2fa")?.addEventListener("click", () =>{
+        (document.querySelector("#popup-center-validate-2fa") as HTMLElement).style.display = "flex";
+    });
+
+    const form = document.querySelector('.form-validate') as HTMLFormElement;
     const inputs = [...form.querySelectorAll('input[type=text]')] as HTMLInputElement[]
     const submit: HTMLButtonElement | null = form.querySelector('button[type=submit]')
 

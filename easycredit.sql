@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-05-2024 a las 09:07:13
+-- Tiempo de generación: 15-05-2024 a las 18:53:48
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -41,9 +41,21 @@ CREATE TABLE `codes` (
 --
 
 INSERT INTO `codes` (`email`, `code`, `type`, `action`, `used`, `expired`) VALUES
-('12313@dwasd12', '415854', '', 0, '', ''),
-('easycredit4321@gmail.com', '3DFW8H', 'promotion', 1200000, '[\"541998\",\"537612\",\"1004101\"]', 'Sun May 13 2024 20:10:00 GMT-0500 (hora estándar de Colombia)'),
-('sebastiangarces12@gmail.com', '950135', '', 0, '', '');
+('easycredit4321@gmail.com', '3DFW8H', 'promotion', 1200000, '', 'Sun May 16 2024 20:10:00 GMT-0500 (hora estándar de Colombia)');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `history_2fa`
+--
+
+CREATE TABLE `history_2fa` (
+  `id_user` int(11) NOT NULL,
+  `device` text NOT NULL,
+  `country` text NOT NULL,
+  `date` text NOT NULL,
+  `type` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -143,7 +155,9 @@ CREATE TABLE `users` (
   `limit_monto` text NOT NULL,
   `discount_tasa` double NOT NULL,
   `state_prestamo` int(11) NOT NULL,
-  `ingreso_mensual` text NOT NULL
+  `ingreso_mensual` text NOT NULL,
+  `devices` longtext NOT NULL,
+  `is2fa` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -194,6 +208,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('crear_cuenta_text', 'Crea una cuenta', 'Create an account'),
 ('current_password_text', 'Contraseña actual', 'Current password'),
 ('descripcion_inicio', 'Explora las posibilidades con nuestro simulador de crédito. Calcula las cuotas y diseña tu plan de pago en línea de manera conveniente y sin complicaciones.', 'Explore the possibilities with our credit simulator. Calculate installments and design your payment plan online in a convenient and hassle-free way.'),
+('description_2fa_text', 'Ingrese el código de verificación enviado a su correo electrónico para completar la autenticación de dos factores (2FA).', 'Enter the verification code sent to your email to complete two-factor authentication (2FA).'),
 ('description_forgot_password', 'Ingresa tu correo electronico y te enviaremos un codigo de verificacion para que puedas recuperar tu contraseña.', 'Enter your email and we will send you a verification code so you can recover your password.'),
 ('description_new_password', 'Ingresa tu nueva contraseña y confírmala para recuperar tu cuenta.', 'Enter your new password and confirm it to recover your account.'),
 ('description_notifications_text', 'Es posible que aún le enviemos notificaciones importantes sobre su cuenta fuera de su configuración de notificaciones.', 'We may still send you important notifications about your account outside of your notification settings.'),
@@ -307,6 +322,7 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 ('text_tasa_loan', 'Tasa de Interés', 'Interest rate'),
 ('text_tasa_variable', 'Tasa Variable', 'Variable rate'),
 ('text_transfer', 'Transferencia', 'Transfer'),
+('title_2fa_text', 'Verificación de Correo Electrónico (2FA)', 'Email Verification (2FA)'),
 ('title_loan_text', 'Préstamos', 'Loans'),
 ('title_movements_text', 'Movimientos', 'Movements'),
 ('title_others_text', 'Otras actividades', 'Other activities'),
@@ -341,6 +357,12 @@ INSERT INTO `words` (`word`, `es`, `en`) VALUES
 --
 ALTER TABLE `codes`
   ADD PRIMARY KEY (`email`(250));
+
+--
+-- Indices de la tabla `history_2fa`
+--
+ALTER TABLE `history_2fa`
+  ADD PRIMARY KEY (`device`(250)) USING BTREE;
 
 --
 -- Indices de la tabla `movements`

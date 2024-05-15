@@ -151,14 +151,9 @@ app.post("/register/auth", async (req, res) => {
                 number_card += randomDigits + " "
             }
         }
-
-        let ingreso_mensual = req.body.ingreso_mensual;
-        let DTI = 0.4; //40%
-
-        let limit_prestamo = (ingreso_mensual * DTI) / 12;
         
         await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, req.body.numero_identidad, req.body.numero_telefono, false, fecha_creacion]);
-        await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa, ingreso_mensual) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, limit_prestamo.toString(), 0, req.body.ingreso_mensual]);
+        await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa, ingreso_mensual, is2fa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, "0", 0, 0, false]);
 
         res.status(200).json({ message: "Register Successful"});
         
@@ -238,8 +233,13 @@ app.post("/auth/google", async (req, res) => {
                 }
             }
 
+            let ingreso_mensual = req.body.ingreso_mensual;
+            let DTI = 0.4;
+    
+            let limit_prestamo = (ingreso_mensual * DTI) / 12;
+
             const data_register = await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "google", "google", "google", true, fecha_creacion]);
-            const data_user = await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, "100000000", 0]);
+            const data_user = await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, limit_prestamo.toString(), 0, req.body.ingreso_mensual, false]);
         
             if(!data_register || !data_user){
                 return res.status(400).json({ status: "Bad Request", message: "Ocurrio un error al registrarse."});
@@ -254,15 +254,15 @@ app.post("/auth/google", async (req, res) => {
 
 app.post("/update/data", async (req, res) => {
     if(req.body){
-        const id_user = req.body.id_user;
-        const id = req.body.id;
-        const phone = req.body.phone;
-        const username = req.body.username;
-        const email = req.body.email;
+        const {id_user, id, phone, username, email, income_monthly} = req.body;
+
+        let DTI = 0.4;
+
+        let limit_prestamo = (income_monthly * DTI) / 12;
 
         const connection = await database.getConnection();
         const res_update_registers = await connection.query("UPDATE registers SET numero_telefono = ?, numero_identidad = ?, username = ?, email = ? WHERE id = ?", [phone, id, username, email, id_user]);
-        const res_update_users = await connection.query("UPDATE users SET name_user = ?, email_user = ? WHERE id_user = ?", [username, email, id_user]);
+        const res_update_users = await connection.query("UPDATE users SET name_user = ?, email_user = ?, ingreso_mensual = ?, limit_monto = ? WHERE id_user = ?", [username, email, income_monthly, limit_prestamo, id_user]);
 
         if(res_update_registers && res_update_users){
             res.status(200).json({ message: "Update Successful"});
@@ -371,21 +371,141 @@ app.post("/login/auth", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
         const emailExists = await connection.query("SELECT email, password, id FROM registers WHERE email = ?", [req.body.email]);
+        const data_user = await connection.query("SELECT devices, is2fa FROM users WHERE email_user = ?",[req.body.email]);
 
-        if (!emailExists.length > 0) {
+
+        if (!emailExists.length > 0 || !data_user.length > 0) {
             res.status(400).json({ message: "Correo electrónico incorrecto." });
         } else {
             const hashedPassword = CryptoJS.SHA256(req.body.password).toString(CryptoJS.enc.Hex);
 
             if (emailExists[0].password === hashedPassword) {
-                connection.query("UPDATE registers SET estado = ? WHERE email = ?", [true, req.body.email]);
-                res.status(200).json({ message: "Login Successful", id: emailExists[0].id});
+                connection.query("UPDATE registers SET estado = ? WHERE email = ?", [true, req.body.email]);                
+
+                if(data_user[0].is2fa){
+                    let devices = data_user[0].devices;
+    
+                    if(!devices){
+                        return res.status(200).json({ message: "Login Successful but not find device", id: emailExists[0].id, isFind: false});
+                    }
+    
+                    const deviceId = req.body.deviceId;
+                    devices = JSON.parse(devices)
+    
+                    const existElement = devices.some((element) => {
+                        return element.device_id === deviceId;
+                    });
+    
+                    if(!existElement){
+                        return res.status(200).json({ message: "Login Successful but not find device", id: emailExists[0].id, isFind: false});
+                    }
+                }
+
+                res.status(200).json({ message: "Login Successful", id: emailExists[0].id, isFind: true});
             } else {
                 res.status(400).json({ message: "Contraseña incorrecta." });
             }
         }
     } else {
         res.status(400).json({ message: "Bad Request" });
+    }
+});
+
+app.post("/2fa/auth", async (req, res) => {
+    if(req.body){
+        const connection = await database.getConnection();
+        let {email, deviceId, type_device} = req.body;
+
+        const get_info_ip = await fetch("https://ipinfo.io/json");
+
+        const info_ip = await get_info_ip.json();
+
+        const countryCode = info_ip.country;
+
+        const response_country = await fetch(`https://restcountries.com/v3/alpha/${countryCode}`);
+        const data = await response_country.json();
+        const countryName = data[0].name.common;
+
+        const date_now = new Date();
+
+        const get_devices = await connection.query("SELECT devices, id_user FROM users WHERE email_user = ?",[email]);
+
+        if(!get_devices.length > 0){
+            return res.status(400).json({ message: "Correo electrónico incorrecto." });;
+        }
+
+        let devices = [];
+
+        if(get_devices[0].devices){
+            devices = [...JSON.parse(get_devices[0].devices)]
+        }else{
+        }
+
+        if(!devices.length > 0){
+            const data_device = {
+                device_id: deviceId,
+                device_type: type_device,
+            }
+
+            devices.push(data_device);
+            const send_auth_2fa = await connection.query("UPDATE users SET devices = ? WHERE email_user = ?",[JSON.stringify(devices), email]);
+
+            if(!send_auth_2fa){
+                return res.status(400).json({ message: "No se pudo insertar el dispositivo" });;
+            }
+
+            const create_history_2fa = await connection.query("INSERT INTO history_2fa (id_user, device, country, date, type) VALUES (?, ?, ?, ?, ?)",[get_devices[0].id_user, deviceId, countryName, date_now, type_device]);
+
+            if(!create_history_2fa){
+                return res.status(400).json({ message: "No se pudo insertar el historial del dispositivo" });;
+            }
+
+            return res.status(200).json({message: "Dispositivo insertado con exito"});
+        }
+
+        const existElement = devices.some((element) => {
+            return element.device_id === deviceId;
+        });
+
+        if(existElement){
+            return res.status(200).json({ message: "El dispositivo ya existe"});
+        }
+
+        const data_device = {
+            device_id: deviceId,
+            device_type: type_device,
+        }
+        
+        devices.push(data_device);
+        const send_auth_2fa = await connection.query("UPDATE users SET devices = ? WHERE email_user = ?",[JSON.stringify(devices), email]);
+
+        if(!send_auth_2fa){
+            return res.status(400).json({ message: "No se pudo insertar el dispositivo" });;
+        }
+
+        const create_history_2fa = await connection.query("INSERT INTO history_2fa (id_user, device, country, date, type) VALUES (?, ?, ?, ?, ?)",[get_devices[0].id_user, deviceId, countryName, date_now, type_device]);
+
+        if(!create_history_2fa){
+            return res.status(400).json({ message: "No se pudo insertar el historial del dispositivo" });;
+        }
+
+        return res.status(200).json({message: "Dispositivo insertado con exito"});
+    }
+});
+
+app.post("/2fa/change", async (req, res) => {
+    if(req.body){
+        const {value, id_user} = req.body
+        const connection = await database.getConnection();
+        const send_value_2fa = await connection.query("UPDATE users SET is2fa = ? WHERE id_user = ?",[value, id_user]);
+
+        console.log(send_value_2fa)
+
+        if(!send_value_2fa){
+            return res.status(400).send({message: "No se pudo actualizar el 2fa"})
+        }
+
+        return res.status(200).send({message: "El 2fa se actulizo correctamente"})
     }
 });
 
@@ -1488,6 +1608,7 @@ app.get("/user/data", async (req, res) => {
     const data_user_register = await connection.query("SELECT * FROM registers WHERE id = ?", [id_user]);
     const data_user_notifications = await connection.query("SELECT * FROM notifications WHERE id_user = ?", [id_user]);
     const data_user_loans = await connection.query("SELECT * FROM prestamos WHERE id_user = ?", [id_user]);
+    const data_history_2fa = await connection.query("SELECT * FROM history_2fa WHERE id_user = ?",[id_user]);
     let data_user_movements_incomplete;
     let data_user_movements;
     if(data_user_info[0] && data_user_info[0].id_user){
@@ -1501,6 +1622,7 @@ app.get("/user/data", async (req, res) => {
         user_movements_incomplete: data_user_movements_incomplete,
         user_movements_complete: data_user_movements,
         data_user_loans: data_user_loans,
+        data_history_2fa: data_history_2fa,
     };
 
     if (data) {

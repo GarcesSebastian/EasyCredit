@@ -63,6 +63,7 @@ interface Props{
   text_new_password_invert: string,
   text_repeat_new_password: string,
   text_confirm: string,
+  income_monthly_text: string,
 }
 
 //Variables translate
@@ -70,7 +71,7 @@ interface Props{
 //Profile
 const {title_profile_text, description_subtitle_profile_text, subtitle_profile_text,
     description_profile_picture_text, description_profile_text, profile_picture_text,
-    update_text
+    update_text, income_monthly_text
 } = Astro.props;
 
 //Notifications
@@ -105,6 +106,9 @@ let data_user: any;
 let isContinue = true;
 let err: any;
 
+let history_2fa;
+let devices_2fa;
+
 const id_user = (Astro.cookies.get("ID-USER") || {})?.value;
 const initiated = (Astro.cookies.get("W-INIT-ENT") || {})?.value;
 
@@ -116,6 +120,10 @@ try{
         if(data_user_exist.state == "Good Request"){
             response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
             data_user = await response_data_user.json();
+            history_2fa = data_user.data_history_2fa;
+            if(data_user.user_info[0].devices){
+              devices_2fa = JSON.parse(data_user.user_info[0].devices);
+            }
         }else{
             throw new Error("Error in the request to the server");
         }
@@ -205,7 +213,7 @@ try{
         </div>
 
         <div class="flex flex-col w-[80%] max-sm:w-full h-full bg-black/50 p-5 gap-5">
-          <Profile data_id="profile" username={data_user?.user_register[0]?.username} id={data_user?.user_register[0]?.numero_identidad} phone={data_user?.user_register[0]?.numero_telefono} email={data_user?.user_register[0]?.email}
+          <Profile data_id="profile" username={data_user?.user_register[0]?.username} id={data_user?.user_register[0]?.numero_identidad} phone={data_user?.user_register[0]?.numero_telefono} email={data_user?.user_register[0]?.email} income_monthly={data_user?.user_info[0]?.ingreso_mensual}
             title_profile_text={title_profile_text}
             description_profile_text={description_profile_text}
             subtitle_profile_text={subtitle_profile_text}
@@ -217,6 +225,7 @@ try{
             id_number_text={id_number_text}
             phone_text={phone_text}
             email_text={email_text}
+            income_monthly_text={income_monthly_text}
           />
           <Security data_id="security"
                 title_security_text={title_security_text}
@@ -230,6 +239,8 @@ try{
                 code_auth_text={code_auth_text}
                 email_text={email_text}
                 text_confirm={text_confirm}
+                data_history_2fa={history_2fa}
+                devices_2fa={devices_2fa}
           />
           <Privacy data_id="privacy"
                 title_privacy_text={title_privacy_text}

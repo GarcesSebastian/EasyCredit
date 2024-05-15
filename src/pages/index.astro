@@ -123,7 +123,6 @@ try{
     please_enter_text: (data.find((item: { word: string }) => item.word === "please_enter_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     make_loan_text: (data.find((item: { word: string }) => item.word === "make_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     pay_loan_text: (data.find((item: { word: string }) => item.word === "pay_loan_text") || {})[flag === "es" ? 'es' : 'en'] as string,
-    notifications_text: (data.find((item: { word: string }) => item.word === "notifications_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     clear_all_text: (data.find((item: { word: string }) => item.word === "clear_all_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     title_promo_text: (data.find((item: { word: string }) => item.word === "title_promo_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     placeholder_promo_text: (data.find((item: { word: string }) => item.word === "placeholder_promo_text") || {})[flag === "es" ? 'es' : 'en'] as string,
@@ -192,6 +191,7 @@ try{
     id_number_text: (data.find((item: { word: string }) => item.word === 'id_number_text') || {})[flag === "es" ? 'es' : 'en'] as string,
     phone_text: (data.find((item: { word: string }) => item.word === 'phone_text') || {})[flag === "es" ? 'es' : 'en'] as string,
     email_text: (data.find((item: { word: string }) => item.word === 'email_text') || {})[flag === "es" ? 'es' : 'en'] as string,
+    notifications_text: (data.find((item: { word: string }) => item.word === "notifications_text") || {})[flag === "es" ? 'es' : 'en'] as string,
     description_notifications_text: (data.find((item: { word: string }) => item.word === 'description_notifications_text') || {})[flag === "es" ? 'es' : 'en'] as string,
     subtitle_notifications_text: (data.find((item: { word: string }) => item.word === 'subtitle_notifications_text') || {})[flag === "es" ? 'es' : 'en'] as string,
     subdescription_notifications_text: (data.find((item: { word: string }) => item.word === 'subdescription_notifications_text') || {})[flag === "es" ? 'es' : 'en'] as string,
@@ -221,6 +221,7 @@ try{
     configure_2fa_text: (data.find((item: { word: string }) => item.word === 'configure_2fa_text') || {})[flag === "es" ? 'es' : 'en'] as string,
     code_auth_text: (data.find((item: { word: string }) => item.word === 'code_auth_text') || {})[flag === "es" ? 'es' : 'en'] as string,
     text_confirm: (data.find((item: { word: string }) => item.word === 'text_confirm') || {})[flag === "es" ? 'es' : 'en'] as string,
+    income_monthly_text: (data.find((item: { word: string }) => item.word === 'income_monthly_text') || {})[flag === "es" ? 'es' : 'en'] as string,
 };
 }catch(e){
     isContinue = false;
@@ -306,6 +307,7 @@ try{
                 code_auth_text={text.code_auth_text}
                 email_text={text.email_text}
                 text_confirm={text.text_confirm}
+                income_monthly_text={text.income_monthly_text}
             ></Header>
             {
                 initiated == "false" ? (

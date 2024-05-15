@@ -1,5 +1,24 @@
 import {emailNotificationsElements, smsNotificationsElements} from "./localStorage";
 import * as Notifications from './Notifications'
+import platform from 'platform'
+
+const info = platform.parse(navigator.userAgent);
+let type_device;
+const deviceInfo = {
+    browserName: info.name,
+    browserVersion: info.version,
+    browserLayout: info.layout,
+    operatingSystem: info.os,
+    browserDescription: info.description,
+    productType: info.product,
+    manufacturer: info.manufacturer
+};
+
+if (deviceInfo.operatingSystem.family === 'Mac' || deviceInfo.operatingSystem.family === 'Windows' || deviceInfo.operatingSystem.family === 'Linux') {
+    type_device = "desktop";
+} else {
+    type_device = "mobile"
+}
 
 let response_data_user, data_user, data_movements_incomplete, initial_value_movements;
 
@@ -252,6 +271,7 @@ form_simulate_loan?.addEventListener("submit", async (event) => {
 
     if(value_simulate == "Loading..."){
         document.querySelector("#content-warning-rate-simulate").style.display = "flex"
+        return;
     }
 
     let monto = parseFloat(document.querySelector("#monto-simulate-loan").value);
@@ -273,6 +293,21 @@ actual_element?.addEventListener("click", () =>{
     }else{
         svg.style.transform = "rotate(90deg)";
         list_flags.style.display = "none";
+    }
+});
+
+let activateTwoStep = document.getElementById("activateTwoStep");
+activateTwoStep?.addEventListener("change", async (e) => {
+    const res = await fetch("http://localhost:4000/2fa/change", {
+        method: "POST",
+        body: JSON.stringify({value: e.target.checked, id_user: getCookie("ID-USER")}),
+        headers: {
+            'Content-type': 'application/json'
+        }
+    });
+
+    if(!res.ok){
+        alert("Ha ocurrido un error " + res.ok)
     }
 });
 
@@ -493,9 +528,20 @@ document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
         const password = document.querySelector("#input-password");
     
         if (email.value.length > 0 && password.value.length > 0) {
+            
+            let deviceId = generateDeviceId(deviceInfo);
+            
+            if(getCookie("device_id") != null){
+                deviceId = getCookie("device_id");
+            }else{
+                setCookie("device_id", deviceId);
+            }
+
             const data = {
                 email: email.value,
-                password: password.value
+                password: password.value,
+                deviceId: deviceId,
+                type_device: type_device,
             };
     
             isContinueSignIn = false;
@@ -513,6 +559,26 @@ document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
             inputSucess(document.querySelector("#input-password"), "#err-password");
     
             if (res.ok) {
+
+                if(!responseJson.isFind){
+                    document.querySelector("#popup-center-validate-2fa").style.display = "flex";
+
+                    const res_code = await fetch("http://localhost:4000/email/send_code", {
+                        method: 'POST',
+                        body: JSON.stringify({email: data.email, isEmail: true}),
+                        headers:{
+                            'Content-Type': 'application/json'
+                        }
+                    });
+    
+                    const responseJson_code = await res_code.json();
+    
+                    if(!res_code.ok){
+                        inputErr(document.querySelector("#input-email"), "#err-email", responseJson_code.message);
+                    }
+                    return;
+                }
+
                 setCookie("ID-USER", responseJson.id)
                 setCookie("W-INIT-ENT", "true")
                 isContinueSignIn = true;
@@ -532,6 +598,93 @@ document.querySelector("#formSignIn")?.addEventListener("submit", async (e) => {
         }
     }
 });
+
+
+const form_2fa = document.querySelector("#form-validate-2fa");
+let formInputs2fa = document.querySelectorAll('#validate_email_input_2fa');
+const inputs2fa = [...formInputs2fa];
+
+let isContinueValidate2FA = true;
+
+form_2fa?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if(isContinueValidate2FA){
+        
+        let value = "";
+        inputs2fa.forEach(item => {
+            value += item.value;
+        })
+
+        inputSuccessArray(inputs2fa, "#err-validate-code-2fa");
+
+        isContinueValidate2FA = false;
+
+        const validate_code = await fetch("http://localhost:4000/validate/code", {
+            method: 'POST',
+            body: JSON.stringify({code: value}),
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const res_validate_code = await validate_code.json();
+
+        if(res_validate_code.state == "Bad Request"){
+            isContinueValidate2FA = true;
+            inputErrArray(inputs2fa, "#err-validate-code-2fa", res_validate_code.message);
+            return;
+        }
+
+        const email = document.querySelector("#input-email");
+        const password = document.querySelector("#input-password");
+
+        let deviceId = generateDeviceId(deviceInfo);
+            
+        if(getCookie("device_id") != null){
+            deviceId = getCookie("device_id");
+        }else{
+            setCookie("device_id", deviceId);
+        }
+
+        const data = {
+            email: email.value,
+            password: password.value,
+            deviceId: deviceId,
+            type_device: type_device,
+        };
+
+        const res_2fa = await fetch("http://localhost:4000/2fa/auth", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if(!res_2fa.ok){
+            alert("Ha ocurrido un error")
+            return;
+        }
+
+        const res = await fetch("http://localhost:4000/login/auth", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const responseJson = await res.json();
+
+        if(res.ok){
+            setCookie("ID-USER", responseJson.id)
+            setCookie("W-INIT-ENT", "true")
+            isContinueSignIn = true;
+            window.location.href = "/"
+        }
+    }
+})
 
 let items_movements = document.querySelectorAll("#item_movement");
 let movements_list = document.querySelectorAll("#movement");
@@ -891,14 +1044,16 @@ form_update?.addEventListener("submit", async (e) => {
     inputSucess(inputs[1], "#err-id-update");
     inputSucess(inputs[2], "#err-phone-update");
     inputSucess(inputs[3], "#err-email-update");
+    inputSucess(inputs[4], "#err-income-update");
 
-    if ((inputs[0].value.length >= 6 && inputs[0].value.length <= 15) && inputs[3].value.length > 0 && inputs[2].value.length >= 10 && inputs[1].value.length >= 10) {
+    if ((inputs[0].value.length >= 6 && inputs[0].value.length <= 15) && inputs[3].value.length > 0 && inputs[2].value.length >= 10 && inputs[1].value.length >= 10 && inputs[4].value > 0) {
         const data = {
             id_user: getCookie("ID-USER"),
             username: inputs[0].value,
             id: inputs[1].value,
             phone: inputs[2].value,
             email: inputs[3].value,
+            income_monthly: inputs[4].value,
         }
 
         const response_update_data = await fetch("http://localhost:4000/update/data", {
@@ -920,6 +1075,10 @@ form_update?.addEventListener("submit", async (e) => {
             window.location.reload();
         }
     }else{
+        if(inputs[4].value <= 0){
+            inputErr(inputs[4], "#err-income-update", "Los ingresos mensuales deben ser mayores a 0.");
+        }
+
         if(inputs[3].value.length <= 0){
             inputErr(inputs[3], "#err-email-update", "El correo electrónico es incorrecto.");
         }
@@ -1176,6 +1335,7 @@ async function send_req_loan(){
 
         if(state_prestamo >= limit_prestamo){
             document.querySelector("#content-warning-loan-rate").style.display = "flex"
+            document.querySelector("#content-text-warning-loan").style.textContent = "Usted ha excedido el limite de prestamos en su cuenta, por favor resuelva los prestamos."
             return;
         }
 
@@ -1711,6 +1871,20 @@ function transformSrc(srcImage){
     }
     return src;
 }
+
+const generateUniqueNumber = () => {
+    return Math.floor(1000000000 + Math.random() * 9000000000);
+};
+
+const generateDeviceId = (deviceInfo) => {
+    const { family, version } = deviceInfo.operatingSystem;
+
+    const randomNumber = generateUniqueNumber();
+
+    const uniqueId = `${family}_${version}_${randomNumber}`;
+
+    return uniqueId;
+};
 
 function formatNumber(number) {
     let [integerPart, decimalPart] = String(number).split('.');

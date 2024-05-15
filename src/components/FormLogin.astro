@@ -2,6 +2,7 @@
 import PopupBase from './user/PopupBase.astro';
 import SpanNotification from './user/SpanNotification.astro';
 import {SignIn} from 'auth-astro/components';
+import ValidateEmail from './user/ValidateEmail.astro';
 
 interface Props{
     registrarse_text: string;
@@ -25,6 +26,9 @@ interface Props{
     description_new_password: string;
     text_confirm: string;
     text_password_update: string;
+    title_2fa_text: string,
+    description_2fa_text: string,
+    verify_email_text: string,
 }
 
 const {registrarse_text,
@@ -46,7 +50,10 @@ const {registrarse_text,
     text_repeat_new_password,
     description_new_password,
     text_confirm,
-    text_password_update
+    text_password_update,
+    title_2fa_text, 
+    description_2fa_text,
+    verify_email_text,
     } = Astro.props;
 
 ---
@@ -264,6 +271,19 @@ const {registrarse_text,
     message={text_password_update}
     class_toast='hidden',
     id_toast='toast-success'
+/>
+
+<ValidateEmail
+    title_validate_email_text={title_2fa_text}
+    description_validate_email_text={description_2fa_text}
+    verify_email_text={verify_email_text}
+    id_form='form-validate-2fa'
+    id_form_inputs='validate_email_input_2fa'
+    id_popup="popup-center-validate-2fa" 
+    id_inter="popup-inter-validate-2fa"
+    id_background="background-popup-validate-2fa" 
+    id_close="close-validate-2fa"
+    id_err_code='err-validate-code-2fa'
 />
 
 <style>

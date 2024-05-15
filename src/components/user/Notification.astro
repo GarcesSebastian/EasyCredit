@@ -23,15 +23,9 @@
 
     //Translate Variables
     let { show_text, send_transfer_text, get_transfer_text, send_loan_text, with_amout_text, number_register_is_text, balance_avaible_is_text, not_register_income_text, income_amount_is_text } = Astro.props;
-
     let { tipo_notification, origin, action_notification, state_notification, fecha_notification, id_notification, length_movements, income_accumulated } = Astro.props;
-    
     let income_value = income_accumulated.split(".").join("").split("$").join("").split(",").join("");
-
     income_value = Number(income_value) > 0 ? income_value : "";
-
-    console.log(income_value, income_accumulated)
-
 
 ---
 

@@ -54,6 +54,7 @@ interface Props{
     update_text?: any,
     profile_picture_text?: any,
     description_profile_picture_text?: any,
+    income_monthly_text?: any,
 
     //Notifications
     description_notifications_text?: any,
@@ -110,7 +111,7 @@ const {notifications_text, clear_all_text, title_promo_text,
 //Variables translate profile
 const {title_profile_text, description_subtitle_profile_text, subtitle_profile_text,
     description_profile_picture_text, description_profile_text, profile_picture_text,
-    update_text
+    update_text, income_monthly_text
 } = Astro.props;
 
 //Notifications
@@ -419,6 +420,7 @@ try{
             code_auth_text={code_auth_text}
             email_text={email_text}
             text_confirm={text_confirm}
+            income_monthly_text={income_monthly_text}
         ></Configurations>
         
         <style>

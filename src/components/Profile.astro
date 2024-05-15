@@ -7,6 +7,7 @@ interface Props{
   id: string;
   email: string;
   phone: string;
+  income_monthly: string,
 
   //Translate
   title_profile_text: string,
@@ -22,15 +23,16 @@ interface Props{
   id_number_text: string,
   phone_text: string,
   email_text: string,
+  income_monthly_text: string,
 }
 
 //Variables translate
 const {title_profile_text, description_subtitle_profile_text, subtitle_profile_text,
     description_profile_picture_text, description_profile_text, profile_picture_text,
-    update_text, username_text, id_number_text, phone_text, email_text
+    update_text, username_text, id_number_text, phone_text, email_text, income_monthly_text
 } = Astro.props;
 
-const {data_id, username, id, email, phone} = Astro.props;
+const {data_id, username, id, email, phone, income_monthly} = Astro.props;
 
 import {getSession} from 'auth-astro/server';
 const session = await getSession(Astro.request);
@@ -111,6 +113,19 @@ if(session){
             value={email}
           />
           <span id="err-email-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
+        </div>
+
+        <div>
+          <p class="text-white text-base">{income_monthly_text}</p>
+          <input
+            type="number"
+            id="income-update"
+            name="income-update"
+            class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
+            placeholder={income_monthly_text}
+            value={income_monthly}
+          />
+          <span id="err-income-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
         </div>
       </div>
       

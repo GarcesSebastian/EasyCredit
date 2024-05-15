@@ -23,7 +23,10 @@ window.addEventListener("DOMContentLoaded", async () => {
         for(let key in emailNotifications) {
             const index = Object.keys(emailNotifications).indexOf(key);
             let emailNotificationsElementsArray = Object.values(emailNotificationsElements);
-            emailNotificationsElementsArray[index].checked = emailNotifications[key];
+            const element_notification_array = emailNotificationsElementsArray[index];
+            if(element_notification_array){
+                element_notification_array.checked = emailNotifications[key];
+            }
         }
     }else{
         localStorage.setItem("emailNotifications", JSON.stringify({
@@ -46,7 +49,10 @@ window.addEventListener("DOMContentLoaded", async () => {
         for(let key in smsNotifications) {
             const index = Object.keys(smsNotifications).indexOf(key);
             let smsNotificationsElementsArray = Object.values(smsNotificationsElements);
-            smsNotificationsElementsArray[index].checked = smsNotifications[key];
+            let element_notification_array = smsNotificationsElementsArray[index]
+            if(element_notification_array){
+                element_notification_array.checked = smsNotifications[key];
+            }
         }
     }else{
         localStorage.setItem("smsNotifications", JSON.stringify({
@@ -61,6 +67,18 @@ window.addEventListener("DOMContentLoaded", async () => {
             let smsNotificationsElementsArray = Object.values(smsNotificationsElements);
             smsNotificationsElementsArray[index].checked = smsNotifications[key];
         }
+    }
+
+    if(localStorage.getItem("consent") != "undefined" || localStorage.getItem("consent") != undefined){
+        document.querySelector("#consent_privacy").checked = JSON.parse(localStorage.getItem("consent"));
+    }else{
+        localStorage.setItem("consent", JSON.stringify(document.querySelector("#consent_privacy").checked))
+    }
+
+    if(localStorage.getItem("2FA") != "undefined" || localStorage.getItem("2FA") != undefined){
+        document.querySelector("#activateTwoStep").checked = JSON.parse(localStorage.getItem("2FA"));
+    }else{
+        localStorage.setItem("2FA", JSON.stringify(document.querySelector("#activateTwoStep").checked))
     }
 
     //Check Notifications EasyCredit
@@ -156,7 +174,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 //Eventos de los checkbox
 for(let key in emailNotificationsElements) {
-    emailNotificationsElements[key].addEventListener("change", (e) => {
+    emailNotificationsElements[key]?.addEventListener("change", (e) => {
         let emailNotifications = JSON.parse(localStorage.getItem("emailNotifications"));
         emailNotificationsElements[key].checked = e.target.checked;
         const index = Object.keys(emailNotificationsElements).indexOf(key);
@@ -166,7 +184,7 @@ for(let key in emailNotificationsElements) {
 }
 
 for(let key in smsNotificationsElements) {
-    smsNotificationsElements[key].addEventListener("change", (e) => {
+    smsNotificationsElements[key]?.addEventListener("change", (e) => {
         let smsNotifications = JSON.parse(localStorage.getItem("smsNotifications"));
         smsNotificationsElements[key].checked = e.target.checked;
         const index = Object.keys(smsNotificationsElements).indexOf(key);
@@ -174,6 +192,14 @@ for(let key in smsNotificationsElements) {
         localStorage.setItem("smsNotifications", JSON.stringify(smsNotifications));
     });
 }
+
+document.querySelector("#consent_privacy").addEventListener("change", (e) => {
+    localStorage.setItem("consent", JSON.stringify(e.target.checked))
+});
+
+document.querySelector("#activateTwoStep").addEventListener("change", (e) => {
+    localStorage.setItem("2FA", JSON.stringify(e.target.checked))
+});
 
 function formattHour(date){
     return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();

@@ -1,6 +1,8 @@
 ---
 interface Props{
     data_id: string;
+    data_history_2fa: any,
+    devices_2fa: any,
 
     //Translate
     title_security_text: string,
@@ -13,7 +15,6 @@ interface Props{
     configure_2fa_text: string,
     code_auth_text: string,
 
-
     //Exists
     text_confirm: string,
     email_text: string
@@ -22,13 +23,15 @@ interface Props{
 //Variables translate
 const {title_security_text, description_security_text, subtitle_security_text,
     subdescription_security_text, subtitle2_security_text, subdescription2_security_text,
-    active_2fa_text, configure_2fa_text, code_auth_text, text_confirm, email_text
+    active_2fa_text, configure_2fa_text, code_auth_text, text_confirm, email_text,
+    data_history_2fa, devices_2fa
 } = Astro.props;
 
 const {data_id} = Astro.props;
+
 ---
 
-<div class="flex-col overflow-y-auto hidden" id="sub_sections_configurations"  data-id={data_id}>
+<div class="flex-col overflow-y-auto hidden pb-10" id="sub_sections_configurations"  data-id={data_id}>
     <div class="w-full h-fit border-b-2 border-gray-300 pb-5">
         <h1 class="text-white text-2xl font-semibold">
             {title_security_text}
@@ -53,9 +56,6 @@ const {data_id} = Astro.props;
                 </div>
                 <span class="ms-3 text-base font-semibold text-gray-200">{active_2fa_text}</span>
             </label>
-            <button type="button" disabled id="configureTwoStep" class="bg-cyan-600 p-2 rounded opacity-50">
-                {configure_2fa_text}
-            </button>
         </div>
 
         <form id="twoStepConfiguration" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
@@ -65,16 +65,7 @@ const {data_id} = Astro.props;
                 </h2>
                 <div class="flex flex-col gap-5 w-full">
                     <div class="flex flex-col gap-4 w-full p-5 rounded-lg bg-stone-600">
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input type="checkbox" value="" id="activateCodeAuthentication" class="sr-only peer"/>
-                            <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 rounded-full peer bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-blue-600">
-                            </div>
-                            <span class="ms-3 text-base font-semibold text-gray-200">
-                                {code_auth_text}
-                            </span>
-                        </label>
-
-                        <label id="codeAutentication" class="p-0 hidden flex-col items-center animate-deployment">
+                        <label id="codeAutentication" class="p-0 flex flex-col items-center animate-deployment">
                             <input type="email" id="email" class="outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={email_text} required />
                         </label>
                     </div>
@@ -97,219 +88,82 @@ const {data_id} = Astro.props;
         <section id="activityRegister" class="flex gap-5 max-[800px]:flex-col">
             <article class="flex flex-col gap-3 p-3 px-4 bg-slate-800/50 rounded">
                 <h3 class="text-xl text-center text-white">Your Devices</h3>
-                <div class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg">
-                    <i>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z"></path>
-                            <path d="M11 4h2"></path>
-                            <path d="M12 17v.01"></path>
-                            </svg>
-                        </i>
-                    <p class="border-l-2 pl-2">A14</p>
-                </div>
-                <div class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg text-center">
-                    <i>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-desktop">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                            </path><path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10z">
-                            </path><path d="M7 20h10"></path><path d="M9 16v4">
-                            </path><path d="M15 16v4"></path>
-                        </svg>
-                    </i>
-                    <p class="border-l-2 pl-2">ASDASCW5635</p>
-                </div>
-                <div class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg text-center">
-                    <i>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="50"
-                            height="50"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="white"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-device-tablet"
-                            ><path stroke="none" d="M0 0h24v24H0z" fill="none"
-                            ></path><path
-                                d="M5 4a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v16a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1v-16z"
-                            ></path><path
-                                d="M11 17a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"
-                            ></path></svg
-                        ></i
-                    >
-                    <p class="border-l-2 pl-2">Tablet de Ladeu</p>
-                </div>
-                <div
-                    class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg text-center"
-                >
-                    <i
-                        ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="50"
-                            height="50"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="white"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-device-laptop"
-                            ><path stroke="none" d="M0 0h24v24H0z" fill="none"
-                            ></path><path d="M3 19l18 0"></path><path
-                                d="M5 6m0 1a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"
-                            ></path></svg
-                        ></i
-                    >
-                    <p class="border-l-2 pl-2">Laptop LUISK</p>
-                </div>
+                {
+                    devices_2fa != undefined && devices_2fa.length > 0 ? (
+                        devices_2fa.map((item: any) => (
+                            <div class="flex items-center gap-2 p-2 bg-slate-900 rounded-lg">
+                                {
+                                    item.device_type == "desktop" ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-desktop">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none">
+                                            </path><path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10z">
+                                            </path><path d="M7 20h10"></path><path d="M9 16v4">
+                                            </path><path d="M15 16v4"></path>
+                                        </svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z">
+                                            </path><path d="M11 4h2"></path>
+                                            <path d="M12 17v.01"></path>
+                                        </svg>
+                                    )
+                                }
+                                <p class="border-l-2 pl-2">{item.device_id.split("_").slice(0,2).join(' ')}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <span class="text-gray-300">
+                            Not found devices
+                        </span>
+                    )
+                }
             </article>
 
             <!-- historial -->
             <article class="flex flex-col gap-3 p-3 bg-slate-800/50 rounded">
                 <h3 class="text-xl text-center">Historial</h3>
-                <div
-                    class="flex items-center gap-3 p-3 bg-slate-900 rounded-lg"
-                >
-                    <i
-                        ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="30"
-                            height="30"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="white"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile"
-                            ><path stroke="none" d="M0 0h24v24H0z" fill="none"
-                            ></path><path
-                                d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z"
-                            ></path><path d="M11 4h2"></path><path
-                                d="M12 17v.01"></path></svg
-                        ></i
-                    >
-                    <nav>
-                        <h4 class="font-semibold flex items-center gap-2">
-                            Nuevo Inicio de sesion <p>Samsumg A14</p>
-                        </h4>
-                        <h5 class="opacity-50">
-                            Colombia, 25/04/2024, 6:08 p.m
-                        </h5>
-                    </nav>
-                </div>
-                <div
-                    class="flex items-center gap-3 p-3 bg-slate-900 rounded-lg"
-                >
-                    <i
-                        ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="30"
-                            height="30"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="white"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-device-desktop"
-                            ><path stroke="none" d="M0 0h24v24H0z" fill="none"
-                            ></path><path
-                                d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10z"
-                            ></path><path d="M7 20h10"></path><path d="M9 16v4"
-                            ></path><path d="M15 16v4"></path></svg
-                        ></i
-                    >
-                    <nav>
-                        <h4 class="font-semibold flex items-center gap-2">
-                            Nuevo Inicio de sesion en <p>UFHTW5500</p>
-                        </h4>
-                        <h5 class="opacity-50">
-                            Colombia, 25/04/2024, 6:08 p.m
-                        </h5>
-                    </nav>
-                </div>
-                <div
-                    class="flex items-center gap-3 p-3 bg-slate-900 rounded-lg"
-                >
-                    <i
-                        ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="30"
-                            height="30"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="white"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-key"
-                            ><path stroke="none" d="M0 0h24v24H0z" fill="none"
-                            ></path><path
-                                d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z"
-                            ></path><path d="M15 9h.01"></path></svg
-                        ></i
-                    >
-                    <nav>
-                        <h4 class="font-semibold flex items-center gap-2">
-                            Cambió la Contraseña de la cuenta
-                        </h4>
-                        <h5 class="opacity-50">
-                            Colombia, 25/04/2024, 6:08 p.m
-                        </h5>
-                    </nav>
-                </div>
+                {
+                    data_history_2fa != undefined && data_history_2fa.length > 0 ? (
+                        data_history_2fa.map((item: any) => (
+                            <div class="flex items-center gap-3 p-3 bg-slate-900 rounded-lg">
+                                <i>
+                                    {
+                                        item.type == "desktop" ? (
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-desktop">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none">
+                                                </path><path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10z">
+                                                </path><path d="M7 20h10"></path><path d="M9 16v4">
+                                                </path><path d="M15 16v4"></path>
+                                            </svg>
+                                        ) : (
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z">
+                                                </path><path d="M11 4h2"></path>
+                                                <path d="M12 17v.01"></path>
+                                            </svg>
+                                        )
+                                    }
+
+                                </i>
+                                <nav>
+                                    <h4 class="font-semibold flex items-center gap-2">
+                                        Nuevo Inicio de sesion <p>{item.device.split("_").slice(0,2).join(' ')}</p>
+                                    </h4>
+                                    <h5 class="opacity-50">
+                                        {item.country}, {item.date.split(" ")[0]}, {item.date.split(" ")[1].split(":").slice(0,2).join(":")}
+                                    </h5>
+                                </nav>
+                            </div>
+                        ))
+                    ) : (
+                        <span class="text-gray-300">
+                            Not found history devices
+                        </span>
+                    )
+                }
             </article>
         </section>
     </div>
 </div>
-<script>
-    function openAuthentication(input: any, contenetor: any) {
-        input?.addEventListener("change", () => {
-            if (window.getComputedStyle(contenetor).display == "none") {
-                contenetor.style.display = "flex";
-            } else {
-                contenetor.style.display = "none";
-            }
-        });
-    }
-
-    let modal = document.getElementById("twoStepConfiguration") as HTMLDivElement;
-    let abrirModal = document.getElementById("configureTwoStep") as HTMLButtonElement;
-    let cerrarModal = document.getElementById("confirmConfiguration") as HTMLButtonElement;
-
-    let activateTwoStep = document.getElementById("activateTwoStep") as HTMLInputElement;
-    activateTwoStep?.addEventListener("change", () => {
-        if (activateTwoStep.checked) {
-            abrirModal.style.opacity = "1";
-            abrirModal.disabled = false;
-        } else {
-            abrirModal.style.opacity = "0.5";
-            abrirModal.disabled = true;
-        }
-    });
-
-    abrirModal?.addEventListener("click", () => {
-        if (window.getComputedStyle(modal).display == "none") {
-            modal.style.display = "flex";
-        }
-    });
-
-    cerrarModal?.addEventListener("click", () => {
-        if (window.getComputedStyle(modal).display == "flex") {
-            modal.style.display = "none";
-        }
-    });
-
-    let activateCodeAuthentication = document.getElementById("activateCodeAuthentication") as HTMLInputElement;
-    let inputCodeAuthentication = document.getElementById("codeAutentication") as HTMLLabelElement;
-
-    let activateKeywordAuthentication = document.getElementById("activateKeywordAuthentication") as HTMLInputElement;
-    let inputKeywordAuthentication = document.getElementById("keywordAutentication") as HTMLLabelElement;
-
-    openAuthentication(activateCodeAuthentication, inputCodeAuthentication);
-    openAuthentication(activateKeywordAuthentication,inputKeywordAuthentication);
-</script>
