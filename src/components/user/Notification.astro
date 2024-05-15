@@ -103,7 +103,7 @@
                     <h3 class="text-xl text-white">{tipo_notification}</h3>
 
                     <p class="text-white">
-                        {number_register_is_text} <span class="font-bold">{length_movements}</span>. {balance_avaible_is_text} <span class="font-bold">${action_notification}</span>. 
+                        {number_register_is_text} <span class="font-bold">{length_movements}</span>. {balance_avaible_is_text} <span class="font-bold">{income_accumulated}</span>
                         {
                             Number(income_value) > 0 ? (
                                 income_amount_is_text
@@ -112,7 +112,7 @@
                             )
 
                         }
-                        <span class="font-bold">{income_accumulated}</span>
+                        <span class="font-bold">${action_notification}</span>
                     </p>
 
                     <span class="w-full h-fit flex justify-between items-end mt-2">
