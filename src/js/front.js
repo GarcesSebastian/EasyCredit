@@ -42,7 +42,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     verifyNoticiations();
 });
 
-export async function obtenerTasa() {
+async function obtenerTasa() {
     let response_data_gobierno;
     let data_gobierno;
     let tasa;
