@@ -23,18 +23,26 @@ if (deviceInfo.operatingSystem.family === 'Mac' || deviceInfo.operatingSystem.fa
 let response_data_user, data_user, data_movements_incomplete, initial_value_movements;
 
 window.addEventListener("DOMContentLoaded", async () => {
+
+    const res_get_disccount = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
+    const get_disccount = await res_get_disccount.json();
+    
+    let disccount_rate = get_disccount.user_info[0].discount_tasa;
+    let rate = await obtenerTasa();
+    let rate_disccount = rate - disccount_rate;
+
     if(document.querySelector("#input-tasa-loan")){
-        document.querySelector("#input-tasa-loan").value = await obtenerTasa() + "%";
+        document.querySelector("#input-tasa-loan").value = rate_disccount + "%";
     }
 
     if(document.querySelector("#tasa-simulate-loan")){
-        document.querySelector("#tasa-simulate-loan").value = await obtenerTasa() + "%";
+        document.querySelector("#tasa-simulate-loan").value = rate_disccount + "%";
     }
 
     verifyNoticiations();
 });
 
-async function obtenerTasa() {
+export async function obtenerTasa() {
     let response_data_gobierno;
     let data_gobierno;
     let tasa;
@@ -360,6 +368,13 @@ close_configurations?.addEventListener("click", () => {
 
 button_config?.addEventListener("click", () =>{
     contentConfig.style.right = window.getComputedStyle(contentConfig).right === 0 ? "-100%" : "0%";
+});
+
+let view_info_loan = document.querySelector("#view-info-loan");
+
+view_info_loan?.addEventListener("click", () => {
+    let info_loan = document.querySelector("#info-loan");
+    info_loan.style.display = window.getComputedStyle(info_loan).display === "none" ? "flex" : "none";
 });
 
 let btnNotification = document.querySelector("#button-notifications");
@@ -1331,9 +1346,10 @@ async function send_req_loan(){
         let state_prestamo = user_loans.state_prestamo;
         let limit_monto = user_loans.limit_monto;
         let discount_tasa = user_loans.discount_tasa;
+        let multiplier = user_loans.multiplier;
         discount_tasa = (parseFloat(elements_loan.input_tasa_loan.value.split("%")[0]) - discount_tasa.toString() + "%");
 
-        if(state_prestamo >= limit_prestamo){
+        if(state_prestamo >= (limit_prestamo * multiplier)){
             document.querySelector("#content-warning-loan-rate").style.display = "flex"
             document.querySelector("#content-text-warning-loan").style.textContent = "Usted ha excedido el limite de prestamos en su cuenta, por favor resuelva los prestamos."
             return;
@@ -1353,12 +1369,12 @@ async function send_req_loan(){
             }
         }
     
-        if(parseFloat(elements_loan.input_action_loan.value) < 1000 || parseFloat(elements_loan.input_action_loan.value) > Number(limit_monto)) {
+        if(parseFloat(elements_loan.input_action_loan.value) < 1000 || parseFloat(elements_loan.input_action_loan.value) > Number(limit_monto * multiplier)) {
             let id = elements_loan.input_action_loan.id.toString();
             let id_without_input = id.split("input")[1];
             let id_with_err = "err" + id_without_input;
             document.querySelector("#" + id_with_err).style.display = "initial";
-            document.querySelector("#" + id_with_err).innerHTML = `Por favor, introduce un monto entre ${formatNumberAbbreviaton(1000)} y ${formatNumberAbbreviaton(limit_monto)}`
+            document.querySelector("#" + id_with_err).innerHTML = `Por favor, introduce un monto entre $${1000.00} y $${formatNumber(limit_monto)}`
             elements_loan.input_action_loan.style.borderColor = "tomato";
             isContinueLoan = false;
         }

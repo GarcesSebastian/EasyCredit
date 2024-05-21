@@ -1,0 +1,130 @@
+---
+    interface Props{
+        level_account?: any,
+        loans_made?: any,
+        max_base_amount?: any,
+        max_current_amount?: any,
+        limit_loans?: any,
+        multiplier?: any,
+        income_rate?: any
+    }
+
+    //Variables Props
+    const { level_account, loans_made, max_base_amount, max_current_amount, limit_loans, multiplier, income_rate } = Astro.props;
+
+    function formatNumber(number: any) {
+        let [integerPart, decimalPart] = String(number).split('.');
+
+        integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        if (decimalPart) {
+            return `${integerPart},${decimalPart}`;
+        } else {
+            return integerPart;
+        }
+    }
+
+    async function obtenerTasa() {
+        let response_data_gobierno;
+        let data_gobierno;
+        let tasa;
+        let isContinue = true;
+
+        try {
+            response_data_gobierno = await fetch("https://www.datos.gov.co/resource/Captacion.json?$query=SELECT%20tipoentidad%2C%20codigoentidad%2C%20nombreentidad%2C%20fechacorte%2C%20uca%2C%20nombre_unidad_de_captura%2C%20subcuenta%2C%20descripcion%2C%20tasa%2C%20monto%20WHERE%20((%60codigoentidad%60%20%3D%20'7')%20AND%20%60codigoentidad%60%20IS%20NOT%20NULL)%20ORDER%20BY%20fechacorte%20DESC");
+            data_gobierno = await response_data_gobierno.json();
+
+            data_gobierno.forEach((item: any) => {
+                if (item.fechacorte.split("-")[0] == (new Date().getFullYear()).toString() && item.uca == "4" && isContinue) {
+                    tasa = item.tasa;
+                    isContinue = false;
+                }
+            });
+
+            return tasa;
+        } catch (e) {
+            return null;
+        }
+    }
+
+
+---
+
+<div class="w-[18rem] max-[560px]:w-full h-fit relative">
+    <div class="flex items-center w-full">
+        <button id="view-info-loan" class="text-white text-sm w-full font-medium bg-slate-800 hover:bg-slate-700 p-2 rounded-md">Ver informacion de Préstamo</button>
+    </div>
+    
+    <div id="info-loan" class="w-full h-fit bg-slate-800 p-2 mt-2 absolute z-20 rounded-[3px] shadow-lg shadow-black/70 animate-deployment hidden">
+        <div class="w-full flex flex-col justify-center items-center">
+            <h1 class="text-white font-semibold text-[15px]">
+                Información de Préstamo
+            </h1>
+            
+            <ol class="w-full h-fit flex flex-col px-2 gap-2 mt-2">
+                
+                <li class="w-full h-fit flex justify-start items-center gap-2">
+                    <span class="text-white text-sm font-medium">Nivel de cuenta:</span>
+                    <span class="text-white text-sm font-medium">{level_account}</span>
+                </li>
+
+                <li class="w-full h-fit flex justify-start items-center gap-2">
+                    <span class="text-white text-sm font-medium">Prestamos hechos:</span>
+                    <span class="text-white text-sm font-medium">{loans_made}</span>
+                </li>
+
+                <li class="w-full h-fit flex justify-start items-center gap-2">
+                    <span class="text-white text-sm font-medium">Monto máximo base:</span>
+                    <span class="text-white text-sm font-medium">${formatNumber(max_base_amount)}</span>
+                </li>
+
+                <li class="w-full h-fit flex justify-start items-center gap-2">
+                    <span class="text-white text-sm font-medium">Monto máximo actual:</span>
+                    <span class="text-white text-sm font-medium">${formatNumber(Number(max_base_amount) * Number(multiplier))}</span>
+                </li>
+
+                <li class="w-full h-fit flex justify-start items-center gap-2">
+                    <span class="text-white text-sm font-medium">Tasa de interés máxima base:</span>
+                    <span class="text-white text-sm font-medium">{}%</span>
+                </li>
+
+                <li class="w-full h-fit flex justify-start items-center gap-2">
+                    <span class="text-white text-sm font-medium">Tasa de interés máxima actual:</span>
+                    <span class="text-white text-sm font-medium">${formatNumber(Number(max_base_amount) * Number(multiplier))}</span>
+                </li>
+
+                <li class="w-full h-fit flex flex-col justify-center items-start gap-2 border-t-2 pt-2">
+                    <span class="text-white text-sm font-bold">Privilegios del nivel {level_account}</span>
+                    <ul class="w-full h-fit flex flex-col gap-2">
+                        <li class="w-full h-fit flex justify-start items-center gap-2">
+                            <svg class="icon icon-tabler icons-tabler-outline icon-tabler-eggs w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M13 22c-3 0 -4.868 -2.118 -5 -5c0 -3 2 -5 5 -5c4 0 8.01 2.5 8 5c0 2.5 -4 5 -8 5z" />
+                                <path d="M8 18c-3.03 -.196 -5 -2.309 -5 -5.38c0 -4.307 2.75 -8.625 5.5 -8.62c2.614 0 5.248 3.915 5.5 8" />
+                            </svg>
+                            <span class="text-white text-sm font-medium">El límite de prestamos cambia a {limit_loans}.</span>
+                        </li>
+
+                        <li class="w-full h-fit flex justify-start items-center gap-2">
+                            <svg class="icon icon-tabler icons-tabler-outline icon-tabler-eggs w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M13 22c-3 0 -4.868 -2.118 -5 -5c0 -3 2 -5 5 -5c4 0 8.01 2.5 8 5c0 2.5 -4 5 -8 5z" />
+                                <path d="M8 18c-3.03 -.196 -5 -2.309 -5 -5.38c0 -4.307 2.75 -8.625 5.5 -8.62c2.614 0 5.248 3.915 5.5 8" />
+                            </svg>
+                            <span class="text-white text-sm font-medium">Tu monto maximo base x{multiplier}</span>
+                        </li>
+
+                        <li class="w-full h-fit flex justify-start items-center gap-2">
+                            <svg class="icon icon-tabler icons-tabler-outline icon-tabler-eggs w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M13 22c-3 0 -4.868 -2.118 -5 -5c0 -3 2 -5 5 -5c4 0 8.01 2.5 8 5c0 2.5 -4 5 -8 5z" />
+                                <path d="M8 18c-3.03 -.196 -5 -2.309 -5 -5.38c0 -4.307 2.75 -8.625 5.5 -8.62c2.614 0 5.248 3.915 5.5 8" />
+                            </svg>
+                            <span class="text-white text-sm font-medium">La tasa de interes dimisnuye un {income_rate}%</span>
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>

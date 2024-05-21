@@ -152,8 +152,13 @@ app.post("/register/auth", async (req, res) => {
             }
         }
         
+        let ingreso_mensual = req.body.ingreso_mensual;
+        let DTI = 0.4;
+
+        let limit_prestamo = (ingreso_mensual * DTI) / 12;
+        
         await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, req.body.numero_identidad, req.body.numero_telefono, false, fecha_creacion]);
-        await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa, ingreso_mensual, is2fa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, "0", 0, 0, false]);
+        await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa, level_account, multiplier, ingreso_mensual, is2fa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, limit_prestamo.toString(), 0, 1, 1, req.body.ingreso_mensual, false]);
 
         res.status(200).json({ message: "Register Successful"});
         
@@ -239,7 +244,7 @@ app.post("/auth/google", async (req, res) => {
             let limit_prestamo = (ingreso_mensual * DTI) / 12;
 
             const data_register = await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "google", "google", "google", true, fecha_creacion]);
-            const data_user = await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, limit_prestamo.toString(), 0, req.body.ingreso_mensual, false]);
+            const data_user = await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa, level_account, multiplier) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, 0, 0, 1, 1]);
         
             if(!data_register || !data_user){
                 return res.status(400).json({ status: "Bad Request", message: "Ocurrio un error al registrarse."});
@@ -335,29 +340,33 @@ app.post("/update/user_loan", async (req, res) => {
 
         let tasa_interes;
         let limit_prestamo;
-        
+        let level_account = 1;
+        let multiplier = 1;
+
         let DTI = 0.4;
         let limit_monto = (ingreso_mensual * DTI) / 12;
 
         if(history_credit >= 0 && history_credit < 50){
             tasa_interes = 0.0;
             limit_prestamo = 3;
-            limit_monto *= 1
         }else if(history_credit >= 50 && history_credit < 75){
             tasa_interes = 0.5;
             limit_prestamo = 5;
-            limit_monto *= 5;
+            multiplier = 5;
+            level_account = 2;
         }else if(history_credit >= 75 && history_credit < 100){
             tasa_interes = 1;
             limit_prestamo = 7;
-            limit_monto *= 7
+            multiplier = 7;
+            level_account = 3;
         }else if(history_credit >= 100){
             tasa_interes = 1.5;
             limit_prestamo = 10;
-            limit_monto *= 10;
+            multiplier = 10;
+            level_account = 4;
         }
 
-        const res_user = await connection.query("UPDATE users SET saldo_disponible = ?, history_credit = ?, limit_prestamo = ?, limit_monto = ?, discount_tasa = ?, state_prestamo = ? WHERE id_user = ?",[Number(saldo).toFixed(2).toString(), history_credit, limit_prestamo.toString(), limit_monto, tasa_interes, state_prestamo, id_user])
+        const res_user = await connection.query("UPDATE users SET saldo_disponible = ?, history_credit = ?, limit_prestamo = ?, limit_monto = ?, discount_tasa = ?, state_prestamo = ?, level_account = ?, multiplier = ? WHERE id_user = ?",[Number(saldo).toFixed(2).toString(), history_credit, limit_prestamo.toString(), limit_monto, tasa_interes, state_prestamo, level_account, multiplier, id_user])
 
         if(!res_user){
             return res.status(400).send({state: "Bad Request", message: "No se pudieron actualizar los datos."})
@@ -536,7 +545,7 @@ app.post("/user/loan", async (req, res) => {
             if(data_user_basic[0].id_user == req.body.id_client){
                 let is_id = id_loan == data_user_import[0].numero_identidad;
                 if(is_id){
-                    let sumary_action = parseFloat(action_loan) + parseFloat(data_user_basic[0].saldo_disponible);
+                    let sumary_action = (parseFloat(action_loan) + parseFloat(data_user_basic[0].saldo_disponible)).toFixed(2);
 
                     let id_loan = await generateIdPrestamos(connection);
                     let excedent_now = await generateIdExcentedNow(connection);

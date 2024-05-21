@@ -16,6 +16,9 @@ let data: any;
 let response_user_exist: Response;
 let data_user_exist: any;
 
+let response_data_user: any;
+let data_user: any;
+
 let text: any;
 let text_1: any;
 let text_2: any;
@@ -83,6 +86,10 @@ try{
     if(initiated != "false"){
         response_user_exist = await fetch(`http://localhost:4000/user/exists?id_user=${id_user}`);
         data_user_exist = await response_user_exist.json();
+
+        response_data_user = await fetch(`http://localhost:4000/user/data?id_user=${id_user}`);
+        data_user = await response_data_user.json();
+        console.log(data_user.user_info[0].limit_monto)
 
         if(data_user_exist.state != "Good Request"){
             throw new Error("Error in the request to the server");
@@ -438,6 +445,13 @@ text = {...text_1, ...text_2}
         text_tasa_variable={text.text_tasa_variable}
         text_select_cuotas={text.text_select_cuotas}
         text_select_frecuencia={text.text_select_frecuencia}
+        level_account={data_user.user_info[0].level_account}
+        loans_made={data_user.user_info[0].state_prestamo}
+        max_base_amount={data_user.user_info[0].limit_monto}
+        max_current_amount={data_user.user_info[0].limit_monto}
+        limit_loans={data_user.user_info[0].limit_prestamo}
+        multiplier={data_user.user_info[0].multiplier}
+        income_rate={data_user.user_info[0].discount_tasa}
     ></PopupLoan>
     <Footer
         recursos_footer_titulo={text.recursos_footer_titulo}
