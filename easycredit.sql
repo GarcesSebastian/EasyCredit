@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-05-2024 a las 18:53:48
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 22-05-2024 a las 01:37:41
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -155,6 +155,8 @@ CREATE TABLE `users` (
   `limit_monto` text NOT NULL,
   `discount_tasa` double NOT NULL,
   `state_prestamo` int(11) NOT NULL,
+  `level_account` int(11) NOT NULL,
+  `multiplier` int(11) NOT NULL,
   `ingreso_mensual` text NOT NULL,
   `devices` longtext NOT NULL,
   `is2fa` tinyint(1) NOT NULL
