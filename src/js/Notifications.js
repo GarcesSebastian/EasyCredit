@@ -39,9 +39,9 @@ async function sendLoanNotificationEmail(data){
                 background-color: #fff;
                 border-radius: 8px;
                 box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                text-align: center;
             }
             .header {
-                text-align: center;
                 margin-bottom: 20px;
             }
             .header h1 {
@@ -78,8 +78,12 @@ async function sendLoanNotificationEmail(data){
         </style>
     </head>
     <body style="background-color: #f2f2f2; padding: 20px;">
-    
     <div class="container">
+    
+        <header style="background: #272525; width: 100%; padding: .5rem 0; border-radius: 8px 8px 0px 0px;">
+            <span style="color: white; font-size: 1.3rem;">EasyCredit</span>
+        </header>
+    
         <div class="header">
             <h1>Notificación de Préstamo</h1>
             <p>Estimado <strong>${name}</strong>,</p>
@@ -111,7 +115,7 @@ async function sendLoanNotificationEmail(data){
                 </tr>
                 <tr>
                     <td><strong>Tasa:</strong></td>
-                    <td>${specifics_loan.tasa}</td>
+                    <td>${specifics_loan.tasa}%</td>
                 </tr>
                 <tr>
                     <td><strong>Cuotas:</strong></td>
@@ -132,12 +136,14 @@ async function sendLoanNotificationEmail(data){
             </table>
         </div>
         
-        <p class="thanks">¡Gracias por elegir EasyCredit!</p>
+        <footer style="width: 100%; text-align: center; background: #272525; padding: .8rem 0; border-radius: 0 0 8px 8px;">
+            <span style="color: white; font-size: 1.3rem;">Gracias por elegir EasyCredit</span>
+        </footer>
     </div>
     
     </body>
     </html>
-    
+        
     
     `;
     const subject = `Loan Notification`;
@@ -168,6 +174,7 @@ async function sendTransferNotificationEmail(data){
     const origin = data.origin;
     const message = data.message;
     const numero_card = data.numero_card;
+    let date = new Date();
 
     const subject = `Transfer Notification`;
     const emailData = {
@@ -176,6 +183,7 @@ async function sendTransferNotificationEmail(data){
         message,
         numero_card,
         subject,
+        date
     }
 
     const response_send_email = await fetch("http://localhost:4000/email/send_transfer", {
@@ -201,7 +209,7 @@ async function sendMovementNotificationEmail(data){
         amount_movements += parseFloat(movement.action_movement);
     });
     const name = data.user_info[0].name_user;
-    const numbre_card = data.user_info[0].number_card;
+    const number_card = data.user_info[0].number_card;
     const saldo_disponible = data.user_info[0].saldo_disponible;
     const ingresos_totales = data.user_info[0].ingresos_totales;
     const email = data.user_info[0].email_user;
@@ -210,106 +218,167 @@ async function sendMovementNotificationEmail(data){
     const subject = `Movement Notification`;
     const htmlMessage = `
     <!DOCTYPE html>
-    <html lang="es">
+    <html lang="en">
+    
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Notificación de Movimientos</title>
+        <title>Example</title>
         <style>
+            
+            * {
+                text-decoration: none;
+                list-style: none;
+                box-sizing: border-box;
+                text-align: center;
+            }
+    
             body {
                 background-color: #f2f2f2;
                 padding: 20px;
                 font-family: Arial, sans-serif;
             }
+    
             .container {
-                max-width: 600px;
+                max-width: 500px;
                 margin: auto;
                 padding: 20px;
                 background-color: #fff;
                 border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
-            .header {
+    
+            header {
+                background: #272525;
+                width: 100%;
+                padding: .5rem 0;
+                border-radius: 8px 8px 0px 0px;
+            }
+    
+            .headerInfo{
+                align-items: center;
+            }
+    
+            .headerInfo p{
                 text-align: center;
-                margin-bottom: 20px;
             }
-            .header h1 {
+    
+            .headerInfo p:nth-child(3){
+                padding: 0 1rem;
+            }
+    
+            .headerInfo h1 {
                 color: #333;
             }
+    
             .details {
-                margin-bottom: 20px;
+                box-sizing: border-box;
+                padding: .5rem 1rem;
             }
+    
             .details table {
                 width: 100%;
+                
                 border-collapse: collapse;
             }
+    
             .details table td {
                 padding: 10px;
                 border-bottom: 1px solid #ddd;
                 font-weight: bold;
                 color: #666;
             }
+    
             .details table td:first-child {
-                width: 30%; /* Ancho de la primera columna */
+                width: 30%;
+                /* Ancho de la primera columna */
             }
+    
             .details table td:last-child {
                 text-align: right;
                 font-weight: normal;
                 color: #333;
             }
+    
             .thanks {
                 text-align: center;
                 color: #666;
                 font-size: 16px;
-                margin-top: 20px;
-                padding-bottom: 20px;
+            }
+    
+            .date {
+                padding: 1rem 10rem;
+                margin-top: -10px;
+            }
+    
+            .date h3 {
+                padding: 1rem;
+                border-radius: 8px;
+                color: white;
+                background-color: rgb(0, 115, 230);
+            }
+    
+            @media (max-width: 640px) {
+                .email {
+                    width: 90%;
+                    height: fit-content;
+                }
             }
         </style>
     </head>
-    <body style="background-color: #f2f2f2; padding: 20px;">
     
-    <div class="container">
-        <div class="header">
-            <h1>Notificación de Movimientos</h1>
-            <p>Estimado <strong>${name}</strong>,</p>
-            <p>A continuación se presenta un resumen de tus movimientos:</p>
-        </div>
-        
-        <div class="details">
-            <h2 style="color: #333; font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">Resumen de Movimientos ${fecha_update}</h2>
-            <table>
-                <tr>
-                    <td><strong>Número de Movimientos:</strong></td>
-                    <td>${num_movements}</td>
-                </tr>
-                <tr>
-                    <td><strong>Total de Movimientos:</strong></td>
-                    <td>${amount_movements}</td>
-                </tr>
-                <tr>
-                    <td><strong>Nombre:</strong></td>
-                    <td>${name}</td>
-                </tr>
-                <tr>
-                    <td><strong>Número de Tarjeta:</strong></td>
-                    <td>${numbre_card}</td>
-                </tr>
-                <tr>
-                    <td><strong>Saldo Disponible:</strong></td>
-                    <td>${saldo_disponible}</td>
-                </tr>
-                <tr>
-                    <td><strong>Ingresos Totales:</strong></td>
-                    <td>${ingresos_totales}</td>
-                </tr>
-            </table>
-        </div>
-        
-        <p class="thanks">¡Gracias por elegir nuestro servicio!</p>
-    </div>
+    <body>
+        <div class="container">
+            <header>
+                <span style="color: white; font-size: 1.3rem;">EasyCredit</span>
+            </header>
     
+            <div class="headerInfo">
+                <h1>Notificación del Movimientos</h1>
+                <p>Estimado <strong>${name}</strong>,</p>
+                <p>Recibió una notificación de movimientos en su cuenta de 
+                    <span style="font-weight: bold;">EasyCredit</span>
+                </p>
+            </div>
+    
+            <section class="date">
+                <h3>${fecha_update.split("T")[0]}</h3>
+            </section>
+    
+            <div class="details">
+                <h2 style="color: #333; font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 10px; text-align: left;">Detalles del
+                    Movimiento</h2>
+                <table>
+                    <tr>
+                        <td><strong>Nombre:</strong></td>
+                        <td>${name}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ID del préstamo:</strong></td>
+                        <td>${name}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Monto:</strong></td>
+                        <td>${saldo_disponible}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Numero de tarjeta:</strong></td>
+                        <td>${number_card}</td>
+                    </tr>
+                </table>
+            </div>
+    
+    
+            <footer
+                style="width: 100%; text-align: center; background: #272525; padding: .8rem 0; border-radius: 0 0 8px 8px; margin-top: 1rem;">
+                <span style="color: white; font-size: 1.3rem;">Gracias por elegir EasyCredit</span>
+            </footer>
+        </div>
+        </div>
     </body>
+    
     </html>
+    
     `;
 
     const emailData = {
@@ -377,7 +446,7 @@ async function sendActivityNotificationEmail(id_user, activityType) {
             htmlMessage = generateContentPublicationEmail();
             break;
         case "Oferta Especial":
-            htmlMessage = generateSpecialOfferEmail();
+            htmlMessage = await generateSpecialOfferEmail();
             break;
         default:
             htmlMessage = generateDefaultEmail();
@@ -409,81 +478,621 @@ async function sendActivityNotificationEmail(id_user, activityType) {
 
 function generateNewRegistrationEmail() {
     const content = `
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Example</title>
+        <style>
+            * {
+                text-decoration: none;
+                list-style: none;
+                box-sizing: border-box;
+                text-align: center;
+            }
+    
+            body {
+                background-color: #f2f2f2;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+            }
+    
+            .container {
+                max-width: 500px;
+                margin: auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            header {
+                width: 100%;
+                text-align: center;
+                background: #272525;
+                padding: .8rem 0;
+                border-radius: 8px 8px 0 0;
+            }
+    
+            footer {
+                margin-top: 1.5rem;
+                width: 100%;
+                text-align: center;
+                background: #272525;
+                padding: .8rem 0;
+                border-radius: 0 0 8px 8px;
+            }
+    
+            section{
+                padding: 1rem;
+                width: 100%;
+            }
+    
+            article{
+                align-items: center;
+            }
+    
+            .info p:nth-child(1){
+                font-size: 2rem;
+                font-weight: bold;
+            }
+    
+            .info p:nth-child(2){
+                font-size: 1.2rem;
+                font-weight:600;
+            }
+    
+            .message p{
+                color: rgb(128, 128, 128);
+                font-weight: 500;
+                text-align: center;
+            }
+    
+            .details{
+                padding: .5rem 0;
+                margin-bottom: 1.5rem;
+            }
+    
+            .details p:nth-child(1){
+                font-size: 1.2rem;
+                font-weight: 600;
+            }
+            .details p:nth-child(2){
+                color:rgb(128, 128, 128) ;
+            }
+    
+            section a {
+                font-size: 1.5rem;
+                font-weight:500;
+                border-radius: 10px;
+                color: white;
+                background-color: rgb(31, 177, 255);
+                padding: 1.2rem 2rem;
+            }
+    
+            @media (max-width: 640px) {
+                .email {
+                    width: 90%;
+                    height: fit-content;
+                }
+            }
+        </style>
+    </head>
+    
+    <body>
         <div class="container">
-            <div class="header">
-                <h1 style="color: #007bff;">Notificación</h1>
-            </div>
-            <div class="message">
-                <p>Hola,</p>
-                <p>¡Gracias por unirte a nuestra plataforma! Te damos la bienvenida a nuestra comunidad.</p>
-                <p>Empieza a disfrutar de los beneficios exclusivos que ofrecemos:</p>
-                <ol id="ul">
-                    <li>Acceso a contenido premium</li>
-                    <li>Oportunidades de participación en eventos</li>
-                    <li>Actualizaciones periódicas sobre nuevas funciones</li>
-                </ol>
-                <p>Para comenzar a explorar, <a href="#" style="color: #007bff; text-decoration: none;">inicia sesión en tu cuenta</a>.</p>
-            </div>
-            <p class="thanks" style="color: #666;">¡Gracias por elegirnos!</p>
+            <header>
+                <span style="color: white; font-size: 1.3rem;">EasyCredit</span>
+            </header>
+    
+            <section>
+                <article class="info">
+                    <p>Bienvenido</p>
+                    <p>¡Gracias por registrarte en EasyCredit!</p>
+                </article>
+    
+                <article class="message">
+                    <p>Gracias por unirte a nuestra plataforma, te damos la bienvenida a nuestra comunidad esperamos que disfrutes de nuestros servicios.</p>
+                </article>
+    
+                <article class="details">
+                    <p>¿Todo Listo para Empezar?</p>
+                    <p>Para comenzar a explorar, Inicia sesión en tu cuenta</p>
+                </article>
+                <a href="http://localhost:4321/SignIn">Iniciar Sesión</a>
+            </section>
+    
+            <footer>
+                <span style="color: white; font-size: 1.3rem;">Gracias por elegir EasyCredit</span>
+            </footer>
         </div>
+        </div>
+    </body>
+    
+    </html>
     `;
-    return generateEmailTemplate(content);
+    return content;
 }
 
 function generateContentPublicationEmail() {
     const content = `
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Example</title>
+        <style>
+            * {
+                color: black;
+                text-decoration: none;
+                list-style: none;
+                box-sizing: border-box;
+                text-align: center;
+            }
+    
+            img {
+                height: 10rem;
+            }
+    
+            body {
+                background-color: rgb(237, 237, 237);
+                padding: 20px;
+                font-family: Arial, sans-serif;
+            }
+    
+            .container {
+                align-items: center;
+                max-width: 500px;
+                margin: auto;
+                padding: 20px;
+                background-color: rgb(255, 255, 255);
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            header {
+                width: 100%;
+                text-align: center;
+                background: rgb(39, 37, 37);
+                padding: .8rem 0;
+                border-radius: 8px 8px 0 0;
+            }
+    
+            footer {
+                width: 100%;
+                text-align: center;
+                background: #272525;
+                margin-top: 1.5rem;
+                padding: .8rem 0;
+                border-radius: 0 0 8px 8px;
+            }
+    
+            section {
+                padding: 1.5rem;
+                width: 100%;
+            }
+    
+            article {
+                align-items: center;
+            }
+    
+            .info p:nth-child(1) {
+                font-size: 2rem;
+                font-weight: bold;
+            }
+    
+            .info p:nth-child(2) {
+                font-size: 1.2rem;
+                padding: 0 1rem;
+                text-align: center;
+                font-weight: 600;
+            }
+    
+            .message span {
+                font-weight: 700;
+                color: rgb(0, 0, 0);
+            }
+    
+            .message p {
+                color: rgb(128, 128, 128);
+                font-weight: 500;
+                text-align: center;
+            }
+    
+            .details {
+                padding: 1rem 0;
+                margin-bottom: 1rem;
+            }
+    
+            .details p:nth-child(1) {
+                font-weight: 600;
+            }
+    
+            .details p:nth-child(2) {
+                color: rgb(128, 128, 128);
+            }
+    
+            section a {
+                font-size: 1.5rem;
+                font-weight: 500;
+                border-radius: 10px;
+                color: white;
+                background-color: rgb(31, 177, 255);
+                padding: 1.2rem 2rem;
+            }
+    
+            @media (max-width: 640px) {
+                .email {
+                    width: 90%;
+                    height: fit-content;
+                }
+            }
+        </style>
+    </head>
+    
+    <body>
         <div class="container">
-            <div class="header">
-                <h1 style="color: #007bff;">Notificación</h1>
-            </div>
-            <div class="message">
-                <p>Hola,</p>
-                <p>¡Descubre lo último en nuestra plataforma!</p>
-                <p>Hemos añadido contenido fresco y emocionante que no te puedes perder.</p>
-                <ol id="ul">
-                    <li>Ve el nuevo contenido</li>
-                </ol>
-            </div>
-            <p class="thanks" style="color: #666;">¡Gracias por elegirnos!</p>
+            <header>
+                <span style="color: white; font-size: 1.3rem;">EasyCredit</span>
+            </header>
+    
+            <section>
+                <article class="info">
+                    <p>¡Nueva Publicacion!</p>
+                    <p>Descubre lo ultimo en nuestra plataforma</p>
+                    <img src="https://main-pdf2-aspose-app.s3.us-west-2.amazonaws.com/b6c05d20-6d51-40c4-8c4a-5dc087002e6d/undraw_web_development_0l6v.png?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22undraw_web_development_0l6v.png%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4XIV7DNDPELHCB2Q%2F20240521%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240521T231504Z&X-Amz-SignedHeaders=host&X-Amz-Signature=73f4640562389f0fe82bd9178f84de79a70c0adafe50db7983086210228f65fc"
+                        alt="">
+                </article>
+    
+                <article class="message">
+                    <p><span>¡Hola!, </span>
+                        Hemos añadido nuevo contenido fresco y emocionante a nuestra plataforma, no te lo pierdas ¡Hechale
+                        un vistazo!.</p>
+                </article>
+    
+                <article class="details">
+                    <p>¡Contenido Emocionante!</p>
+                    <p>Para ver mas detalles, Inicia sesión en tu cuenta</p>
+    
+                </article>
+                <a href="http://localhost:4321/SignIn">Iniciar Sesión</a>
+            </section>
+    
+            <footer>
+                <span style="color: white; font-size: 1.3rem;">Gracias por elegir EasyCredit</span>
+            </footer>
         </div>
+        </div>
+    </body>
+    
+    </html>
     `;
-    return generateEmailTemplate(content);
+    return content;
 }
 
-function generateSpecialOfferEmail() {
+let attemps = 0;
+let maxAttempts = 100;
+
+async function generateSpecialOfferEmail() {
+    const res_codes = await fetch("http://localhost:4000/codes/promotion");
+    const codes = await res_codes.json();
+
+    const randomIndex = Math.floor(Math.random() * codes.length);
+    const code = codes[randomIndex].code;
+    const date = new Date();
+    const expired = new Date(code.expired);
+    if (expired < date && attemps < maxAttempts) {
+        attemps++;
+        return generateSpecialOfferEmail();
+    }
+
+    if(attemps >= maxAttempts){
+        return;
+    }
+
     const content = `
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Example</title>
+        <style>
+            * {
+                text-decoration: none;
+                list-style: none;
+                text-align: center;
+                color:black;
+                box-sizing: border-box;
+            }
+    
+            body {
+                padding: 20px;
+                background-color: #f2f2f2;
+                font-family: Arial, sans-serif;
+            }
+    
+            .container {
+                width: 500px;
+                margin: auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            header {
+                width: 100%;
+                text-align: center;
+                background: #272525;
+                padding: .8rem 0;
+                border-radius: 8px 8px 0 0;
+            }
+    
+            footer {
+                width: 100%;
+                text-align: center;
+                background: #272525;
+                padding: .8rem 0;
+                margin-top: 1.2rem;
+                border-radius: 0 0 8px 8px;
+            }
+    
+            section {
+                text-align: center;
+                padding: 1rem;
+                width: 100%;
+            }
+    
+            article {
+                padding: 1rem;
+                text-align: center;
+            }
+    
+            .info p:nth-child(1) {
+                font-size: 2rem;
+                font-weight: bold;
+                text-align: center;
+            }
+    
+            .info p:nth-child(2) {
+                font-size: 1.2rem;
+                font-weight: 600;
+                text-align: center;
+            }
+    
+            .message p {
+                color: rgb(128, 128, 128);
+                font-weight: 500;
+                font-size:1.1rem;
+                text-align: center;
+            }
+    
+            .details {
+                text-align: center;
+                padding: 1rem 0;
+            }
+    
+            .details p {
+                font-size: 1.2rem;
+                text-align: center;
+                font-weight: 600;
+                padding: 0 0 2rem 0;
+            }
+            
+            a {
+                font-size: 1.5rem;
+                font-weight:500;
+                border-radius: 10px;
+                color: white;
+                background-color: rgb(31, 177, 255);
+                padding: 1.2rem 2rem;
+            }
+    
+            @media (max-width: 640px) {
+                .email {
+                    width: 90%;
+                    height: fit-content;
+                }
+            }
+        </style>
+    </head>
+    
+    <body>
         <div class="container">
-            <div class="header">
-                <h1 style="color: #dc3545;">Notificación</h1>
-            </div>
-            <div class="message">
-                <p>Hola,</p>
-                <p>¡Oferta Especial por Tiempo Limitado!</p>
-                <p>No te pierdas nuestra oferta exclusiva para usuarios nuevos.</p>
-                <p>Usa el siguiente código al registrarte: <strong style="color: #dc3545;">SPECIAL50</strong></p>
-                <p>Regístrate <a href="#" style="color: #dc3545; text-decoration: none;">aquí</a> para aprovechar esta oferta.</p>
-            </div>
-            <p class="thanks" style="color: #666;">¡Gracias por elegirnos!</p>
+            <header>
+                <span style="color: white; font-size: 1.3rem;">EasyCredit</span>
+            </header>
+    
+            <section>
+                <article class="info">
+                    <p>¡Hola!</p>
+                    <p>Oferta especial por tiempo limitado</p>
+                </article>
+    
+                <article class="message">
+                    <p>No te pierdas nuestra oferta exclusiva para nuestros usuarios para obtener beneficios increibles.</p>
+                </article>
+    
+                <article class="details">
+                    <p>Usa el siguiente codigo de promocion</p>
+                    <a href="http://localhost:4321/">${code}</a>
+                </article>
+            </section>
+    
+            <footer>
+                <span style="color: white; font-size: 1.3rem;">Gracias por elegir EasyCredit</span>
+            </footer>
         </div>
+        </div>
+    </body>
+    
+    </html>
     `;
-    return generateEmailTemplate(content);
+    return content;
 }
 
 function generateDefaultEmail() {
     const content = `
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Example</title>
+        <style>
+            * {
+                color: black;
+                text-decoration: none;
+                list-style: none;
+                box-sizing: border-box;
+                text-align: center;
+            }
+    
+            img {
+                height: 10rem;
+            }
+    
+            body {
+                background-color: rgb(237, 237, 237);
+                padding: 20px;
+                font-family: Arial, sans-serif;
+            }
+    
+            .container {
+                align-items: center;
+                max-width: 500px;
+                margin: auto;
+                padding: 20px;
+                background-color: rgb(255, 255, 255);
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            header {
+                width: 100%;
+                text-align: center;
+                background: rgb(39, 37, 37);
+                padding: .8rem 0;
+                border-radius: 8px 8px 0 0;
+            }
+    
+            footer {
+                width: 100%;
+                text-align: center;
+                background: #272525;
+                margin-top: 1.5rem;
+                padding: .8rem 0;
+                border-radius: 0 0 8px 8px;
+            }
+    
+            section {
+                padding: 1.5rem;
+                gap: 1rem;
+                width: 100%;
+            }
+    
+            article {
+                align-items: center;
+            }
+    
+            .info p:nth-child(1) {
+                font-size: 2rem;
+                font-weight: bold;
+            }
+    
+            .info p:nth-child(2) {
+                font-size: 1.2rem;
+                padding: 0 1rem;
+                text-align: center;
+                font-weight: 600;
+            }
+    
+            .message span{
+                font-weight: 700;
+                color: rgb(0, 0, 0);
+            }
+    
+            .message p {
+                color: rgb(128, 128, 128);
+                font-weight: 500;
+                text-align: center;
+            }
+    
+            .details {
+                padding: 1rem 0;
+                margin-bottom: 1rem;
+            }
+    
+            .details p:nth-child(1) {
+                font-weight: 600;
+            }
+    
+            .details p:nth-child(2) {
+                color: rgb(128, 128, 128);
+            }
+    
+            section a {
+                font-size: 1.5rem;
+                font-weight:500;
+                border-radius: 10px;
+                color: white;
+                background-color: rgb(31, 177, 255);
+                padding: 1.2rem 2rem;
+            }
+    
+            @media (max-width: 640px) {
+                .email {
+                    width: 90%;
+                    height: fit-content;
+                }
+            }
+        </style>
+    </head>
+    
+    <body>
         <div class="container">
-            <div class="header">
-                <h1 style="color: #007bff;">Notificación</h1>
-            </div>
-            <div class="message">
-                <p>Hola,</p>
-                <p>Queríamos informarte sobre una actualización reciente en nuestra plataforma.</p>
-                <p>Para obtener más detalles, <a href="#" style="color: #007bff; text-decoration: none;">inicia sesión en tu cuenta</a>.</p>
-            </div>
-            <p class="thanks" style="color: #666;">¡Gracias por elegirnos!</p>
+            <header>
+                <span style="color: white; font-size: 1.3rem;">EasyCredit</span>
+            </header>
+    
+            <section>
+                <article class="info">
+                    <p>¡Actualizacion Disponible!</p>
+                    <p>Una nueva actualizacion ha llegado a EasyCredit</p>
+                    <img src="https://main-pdf2-aspose-app.s3.us-west-2.amazonaws.com/81fe4cfc-144d-498a-8884-44b6621208e0/undraw_details_8k13.png?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22undraw_details_8k13.png%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4XIV7DNDPELHCB2Q%2F20240521%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240521T230827Z&X-Amz-SignedHeaders=host&X-Amz-Signature=e2dca4538bd72e1fc46afa40b87bca47b0c2eeee9176b5e805923aea84844fad" alt="">
+                </article>
+    
+                <article class="message">
+                    <p><span>¡Hola!, </span>
+                        Queriamos informarte que tu plataforma de credito preferida ha agregado algunos cambios importantes con respecto a la version anterior.
+                        disfrutes de nuestros servicios.</p>
+                </article>
+    
+                <article class="details">
+                    <p>¡Nuevos Cambios y Mejoras!</p>
+                    <p>Para ver mas detalles, Inicia sesión en tu cuenta</p>
+                    
+                </article>
+                <a href="http://localhost:4321/SignIn">Iniciar Sesión</a>
+            </section>
+    
+            <footer>
+                <span style="color: white; font-size: 1.3rem;">Gracias por elegir EasyCredit</span>
+            </footer>
         </div>
+        </div>
+    </body>
+    
+    </html>
     `;
-    return generateEmailTemplate(content);
+    return content;
 }
 
 function generateEmailTemplate(content) {

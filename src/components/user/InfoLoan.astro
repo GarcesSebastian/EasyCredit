@@ -24,30 +24,6 @@
         }
     }
 
-    async function obtenerTasa() {
-        let response_data_gobierno;
-        let data_gobierno;
-        let tasa;
-        let isContinue = true;
-
-        try {
-            response_data_gobierno = await fetch("https://www.datos.gov.co/resource/Captacion.json?$query=SELECT%20tipoentidad%2C%20codigoentidad%2C%20nombreentidad%2C%20fechacorte%2C%20uca%2C%20nombre_unidad_de_captura%2C%20subcuenta%2C%20descripcion%2C%20tasa%2C%20monto%20WHERE%20((%60codigoentidad%60%20%3D%20'7')%20AND%20%60codigoentidad%60%20IS%20NOT%20NULL)%20ORDER%20BY%20fechacorte%20DESC");
-            data_gobierno = await response_data_gobierno.json();
-
-            data_gobierno.forEach((item: any) => {
-                if (item.fechacorte.split("-")[0] == (new Date().getFullYear()).toString() && item.uca == "4" && isContinue) {
-                    tasa = item.tasa;
-                    isContinue = false;
-                }
-            });
-
-            return tasa;
-        } catch (e) {
-            return null;
-        }
-    }
-
-
 ---
 
 <div class="w-[18rem] max-[560px]:w-full h-fit relative">
@@ -74,23 +50,8 @@
                 </li>
 
                 <li class="w-full h-fit flex justify-start items-center gap-2">
-                    <span class="text-white text-sm font-medium">Monto máximo base:</span>
+                    <span class="text-white text-sm font-medium">CPM:</span>
                     <span class="text-white text-sm font-medium">${formatNumber(max_base_amount)}</span>
-                </li>
-
-                <li class="w-full h-fit flex justify-start items-center gap-2">
-                    <span class="text-white text-sm font-medium">Monto máximo actual:</span>
-                    <span class="text-white text-sm font-medium">${formatNumber(Number(max_base_amount) * Number(multiplier))}</span>
-                </li>
-
-                <li class="w-full h-fit flex justify-start items-center gap-2">
-                    <span class="text-white text-sm font-medium">Tasa de interés máxima base:</span>
-                    <span class="text-white text-sm font-medium">{}%</span>
-                </li>
-
-                <li class="w-full h-fit flex justify-start items-center gap-2">
-                    <span class="text-white text-sm font-medium">Tasa de interés máxima actual:</span>
-                    <span class="text-white text-sm font-medium">${formatNumber(Number(max_base_amount) * Number(multiplier))}</span>
                 </li>
 
                 <li class="w-full h-fit flex flex-col justify-center items-start gap-2 border-t-2 pt-2">

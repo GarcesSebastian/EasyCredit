@@ -188,13 +188,12 @@ try{
 {
     isContinue ? (
         <header class="fixed w-screen h-20 flex flex-col justify-center items-center">
-            <div id="content-header" class="w-full max-w-7xl max-xl:px-5 max-md:gap-y-5 grid py-2 z-15 bg-transparent">
-                <a href={href_image} class="flex justify-left items-center cursor-pointer w-full">
+            <div id="content-header" class="w-full max-w-7xl max-xl:px-5 max-md:gap-y-5 grid py-2 z-15 bg-transparent max-[480px]:flex max-[480px]:justify-center">
+                <a href={href_image} class="flex justify-left items-center cursor-pointer w-full max-[480px]:hidden">
                     <img src="/icons/logo-nobackground-best.png" class="w-20 h-20">
                 </a>
             
                 <div class="flex gap-x-5 justify-end items-center px-3">
-            
                     <div class="flex items-center justify-center gap-x-5 relative">
 
                         {

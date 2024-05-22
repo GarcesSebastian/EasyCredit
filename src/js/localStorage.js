@@ -111,7 +111,6 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-
     setInterval( async () => {
         const newDate = new Date();
         let nowDate = new Date(localStorage.getItem("activityNotifications"));
@@ -166,6 +165,7 @@ window.addEventListener("DOMContentLoaded", async () => {
                 let data_user = await response_data_user.json();
 
                 Notifications.sendMovementNotificationEA(data_user);
+                // Notifications.sendMovementNotificationEmail(data_user);
             }
             localStorage.setItem("updateNotifications", data.fecha_update);
         }

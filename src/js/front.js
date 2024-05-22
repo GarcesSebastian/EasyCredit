@@ -27,12 +27,12 @@ window.addEventListener("DOMContentLoaded", async () => {
     const res_get_disccount = await fetch(`http://localhost:4000/user/data?id_user=${getCookie("ID-USER")}`);
     const get_disccount = await res_get_disccount.json();
     
-    let disccount_rate = get_disccount.user_info[0].discount_tasa;
+    let disccount_rate = get_disccount?.user_info[0]?.discount_tasa;
     let rate = await obtenerTasa();
-    let rate_disccount = rate - disccount_rate;
+    let rate_disccount = rate - disccount_rate ? rate - disccount_rate : await obtenerTasa();
 
     if(document.querySelector("#input-tasa-loan")){
-        document.querySelector("#input-tasa-loan").value = rate_disccount + "%";
+        document.querySelector("#input-tasa-loan").value = (rate_disccount) + "%";
     }
 
     if(document.querySelector("#tasa-simulate-loan")){
@@ -662,16 +662,15 @@ form_2fa?.addEventListener("submit", async (e) => {
             setCookie("device_id", deviceId);
         }
 
-        const data = {
+        const data_2fa = {
             email: email.value,
-            password: password.value,
             deviceId: deviceId,
             type_device: type_device,
         };
 
         const res_2fa = await fetch("http://localhost:4000/2fa/auth", {
             method: "POST",
-            body: JSON.stringify(data),
+            body: JSON.stringify(data_2fa),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -681,6 +680,13 @@ form_2fa?.addEventListener("submit", async (e) => {
             alert("Ha ocurrido un error")
             return;
         }
+
+        const data = {
+            email: email.value,
+            password: password.value,
+            deviceId: deviceId,
+            type_device: type_device,
+        };
 
         const res = await fetch("http://localhost:4000/login/auth", {
             method: "POST",
@@ -885,6 +891,7 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
         const numero_identidad = document.querySelector("#input-numero_identidad");
         const numero_telefono = document.querySelector("#input-numero_telefono");
         const ingreso_mensual = document.querySelector("#input-ingreso-mensual");
+        const gasto_mensual = document.querySelector("#input-gasto-mensual");
 
         inputSucess(document.querySelector("#input-email"), "#err-email");
         inputSucess(document.querySelector("#input-password"), "#err-password");
@@ -892,6 +899,7 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
         inputSucess(document.querySelector("#input-numero_telefono"), "#err-numero_telefono");
         inputSucess(document.querySelector("#input-numero_identidad"), "#err-numero_identidad");
         inputSucess(document.querySelector("#input-ingreso-mensual"), "#err-ingreso-mensual");
+        inputSucess(document.querySelector("#input-gasto-mensual"), "#err-gasto-mensual");
     
         if ((username.value.length >= 6 && username.value.length <= 15) 
             && email.value.length > 0 
@@ -899,6 +907,7 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
             && numero_telefono.value.length >= 10 
             && numero_identidad.value.length >= 10
             && ingreso_mensual.value >= 1000
+            && gasto_mensual.value >= 1000
             ) 
             {
             const data = {
@@ -964,8 +973,12 @@ document.querySelector("#form-signup")?.addEventListener("submit", async (e) => 
                 inputErr(document.querySelector("#input-password"), "#err-password", "La contraseña debe tener entre 8 y 24 caracteres.");
             }
 
-            if(ingreso_mensual.value.length < 8 || ingreso_mensual.value.length > 24){
+            if(ingreso_mensual.value <= 1000){
                 inputErr(document.querySelector("#input-ingreso-mensual"), "#err-ingreso-mensual", "El ingreso mensual debe ser mayor a 1k.");
+            }
+
+            if(gasto_mensual.value <= 1000){
+                inputErr(document.querySelector("#input-gasto-mensual"), "#err-gasto-mensual", "El gasto mensual debe ser mayor a 1k.");
             }
         }
     }
@@ -1011,6 +1024,7 @@ form?.addEventListener("submit", async (e) => {
         const numero_identidad = document.querySelector("#input-numero_identidad");
         const numero_telefono = document.querySelector("#input-numero_telefono");
         const ingreso_mensual = document.querySelector("#input-ingreso-mensual");
+        const gasto_mensual = document.querySelector("#input-gasto-mensual");
 
         const data = {
             username: username.value,
@@ -1019,6 +1033,7 @@ form?.addEventListener("submit", async (e) => {
             numero_identidad: numero_identidad.value,
             numero_telefono: numero_telefono.value,
             ingreso_mensual: ingreso_mensual.value,
+            gasto_mensual: gasto_mensual.value,
         };
 
         const res = await fetch("http://localhost:4000/register/auth", {
@@ -1060,8 +1075,9 @@ form_update?.addEventListener("submit", async (e) => {
     inputSucess(inputs[2], "#err-phone-update");
     inputSucess(inputs[3], "#err-email-update");
     inputSucess(inputs[4], "#err-income-update");
+    inputSucess(inputs[5], "#err-bills-update");
 
-    if ((inputs[0].value.length >= 6 && inputs[0].value.length <= 15) && inputs[3].value.length > 0 && inputs[2].value.length >= 10 && inputs[1].value.length >= 10 && inputs[4].value > 0) {
+    if ((inputs[0].value.length >= 6 && inputs[0].value.length <= 15) && inputs[3].value.length > 0 && inputs[2].value.length >= 10 && inputs[1].value.length >= 10 && inputs[4].value > 0 && inputs[5].value > 0) {
         const data = {
             id_user: getCookie("ID-USER"),
             username: inputs[0].value,
@@ -1069,6 +1085,7 @@ form_update?.addEventListener("submit", async (e) => {
             phone: inputs[2].value,
             email: inputs[3].value,
             income_monthly: inputs[4].value,
+            bills_monthly: inputs[5].value
         }
 
         const response_update_data = await fetch("http://localhost:4000/update/data", {
@@ -1090,6 +1107,10 @@ form_update?.addEventListener("submit", async (e) => {
             window.location.reload();
         }
     }else{
+        if(inputs[5].value <= 0){
+            inputErr(inputs[5], "#err-bills-update", "Los gastos mensuales deben ser mayores a 0.");
+        }
+
         if(inputs[4].value <= 0){
             inputErr(inputs[4], "#err-income-update", "Los ingresos mensuales deben ser mayores a 0.");
         }
@@ -1143,6 +1164,7 @@ let bg_popup_pay = document.querySelector("#background-popup-pay");
 let close_pay = document.querySelector("#close-pay");
 let button_loan_pay = document.querySelector("#button-loan-pay");
 let closeLoans = document.querySelector("#closeLoans")
+let close_loans = document.querySelector("#close_loans")
 
 bg_popup_pay?.addEventListener("click", () => {
     document.querySelector("#popup-center-pay").style.display = "none";
@@ -1157,6 +1179,10 @@ button_loan_pay?.addEventListener("click", () => {
 })
 
 closeLoans?.addEventListener("click", () => {
+    document.querySelector("#content-loan-pay").style.display = "none"
+});
+
+close_loans?.addEventListener("click", () => {
     document.querySelector("#content-loan-pay").style.display = "none"
 });
 
@@ -1344,10 +1370,24 @@ async function send_req_loan(){
 
         let limit_prestamo = user_loans.limit_prestamo;
         let state_prestamo = user_loans.state_prestamo;
-        let limit_monto = user_loans.limit_monto;
+        let CPM = user_loans.limit_monto;
         let discount_tasa = user_loans.discount_tasa;
         let multiplier = user_loans.multiplier;
-        discount_tasa = (parseFloat(elements_loan.input_tasa_loan.value.split("%")[0]) - discount_tasa.toString() + "%");
+        
+        let input_tasa_loan = parseFloat(elements_loan.input_tasa_loan.value.split("%")[0]);
+        discount_tasa = input_tasa_loan - discount_tasa;
+        
+        let tasa_interes_mensual = (discount_tasa / 100) / 12;
+        
+        let cuotas = Number(elements_loan.input_cuotas.value);
+        
+        let rm1 = Math.pow(1 + tasa_interes_mensual, cuotas);
+        let rm2 = rm1 - 1;
+        let denom = tasa_interes_mensual * rm1;
+        let amount_max = (CPM * rm2) / denom;
+        
+        let amount_max_rounded = Math.round(amount_max / 1000) * 1000;
+        
 
         if(state_prestamo >= (limit_prestamo * multiplier)){
             document.querySelector("#content-warning-loan-rate").style.display = "flex"
@@ -1369,12 +1409,12 @@ async function send_req_loan(){
             }
         }
     
-        if(parseFloat(elements_loan.input_action_loan.value) < 1000 || parseFloat(elements_loan.input_action_loan.value) > Number(limit_monto * multiplier)) {
+        if(parseFloat(elements_loan.input_action_loan.value) < 1000 || parseFloat(elements_loan.input_action_loan.value) > amount_max_rounded) {
             let id = elements_loan.input_action_loan.id.toString();
             let id_without_input = id.split("input")[1];
             let id_with_err = "err" + id_without_input;
             document.querySelector("#" + id_with_err).style.display = "initial";
-            document.querySelector("#" + id_with_err).innerHTML = `Por favor, introduce un monto entre $${1000.00} y $${formatNumber(limit_monto)}`
+            document.querySelector("#" + id_with_err).innerHTML = `Por favor, introduce un monto entre $1.000,00 y $${formatNumber(amount_max_rounded)}`
             elements_loan.input_action_loan.style.borderColor = "tomato";
             isContinueLoan = false;
         }
@@ -1660,7 +1700,6 @@ async function send_req_transfer(){
                 element_err.innerHTML = "* " + response_message.message
                 elements_transfer.input_numero_tarjeta.style.borderColor = "tomato";
             }else{
-                // socket.emit("transfer", (data))
                 isContinueTransferReq = true;
                 document.querySelector("#input-numero-tarjeta-transfer").value = ""
                 document.querySelector("#input-action-transfer").value = ""

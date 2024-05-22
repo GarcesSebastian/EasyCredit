@@ -8,6 +8,7 @@ interface Props{
   email: string;
   phone: string;
   income_monthly: string,
+  bills_monthly: string,
 
   //Translate
   title_profile_text: string,
@@ -32,7 +33,7 @@ const {title_profile_text, description_subtitle_profile_text, subtitle_profile_t
     update_text, username_text, id_number_text, phone_text, email_text, income_monthly_text
 } = Astro.props;
 
-const {data_id, username, id, email, phone, income_monthly} = Astro.props;
+const {data_id, username, id, email, phone, income_monthly, bills_monthly} = Astro.props;
 
 import {getSession} from 'auth-astro/server';
 const session = await getSession(Astro.request);
@@ -127,7 +128,21 @@ if(session){
           />
           <span id="err-income-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
         </div>
+
+      <div>
+        <p class="text-white text-base">Gastos mensuales</p>
+        <input
+          type="number"
+          id="bills-update"
+          name="bills-update"
+          class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-md px-4 py-2 mt-1 mb-2"
+          placeholder="Gastos mensuales"
+          value={bills_monthly}
+        />
+        <span id="err-bills-update" class="relative text-sm mx-2 text-[tomato] transition-all duration-500 opacity-0"></span>
       </div>
+      
+    </div>
       
       <div class="flex items-center justify-center my-3">
         <button

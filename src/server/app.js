@@ -8,6 +8,7 @@ import { createServer } from 'node:http';
 import nodemailer from 'nodemailer';
 import bodyParser from 'body-parser';
 import puppeteer from 'puppeteer';
+import { americaCountries } from '../Json/Countrys.js';
 
 const app = express();
 const server = createServer(app);
@@ -153,12 +154,12 @@ app.post("/register/auth", async (req, res) => {
         }
         
         let ingreso_mensual = req.body.ingreso_mensual;
-        let DTI = 0.4;
-
-        let limit_prestamo = (ingreso_mensual * DTI) / 12;
+        let NI = ingreso_mensual - req.body.gasto_mensual; //Ingreso neto mensual
+        let capacidad = 0.35;
+        let CPM = NI * capacidad; //Capacidad pago mensual
         
         await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, hashedPassword, req.body.numero_identidad, req.body.numero_telefono, false, fecha_creacion]);
-        await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa, level_account, multiplier, ingreso_mensual, is2fa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, limit_prestamo.toString(), 0, 1, 1, req.body.ingreso_mensual, false]);
+        await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa, level_account, multiplier, ingreso_mensual, gasto_mensual, is2fa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, CPM.toString(), 0, 1, 1, req.body.ingreso_mensual, req.body.gasto_mensual, false]);
 
         res.status(200).json({ message: "Register Successful"});
         
@@ -238,11 +239,6 @@ app.post("/auth/google", async (req, res) => {
                 }
             }
 
-            let ingreso_mensual = req.body.ingreso_mensual;
-            let DTI = 0.4;
-    
-            let limit_prestamo = (ingreso_mensual * DTI) / 12;
-
             const data_register = await connection.query("INSERT INTO registers (id, username, email, password, numero_identidad, numero_telefono, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, "google", "google", "google", true, fecha_creacion]);
             const data_user = await connection.query("INSERT INTO users (id_user, name_user, email_user, number_card, saldo_disponible, fecha_update, fecha_activity, history_credit, limit_prestamo, limit_monto, discount_tasa, level_account, multiplier) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [user_id, req.body.username, req.body.email, number_card, "0", fecha_update, fecha_activity, 0, 3, 0, 0, 1, 1]);
         
@@ -259,15 +255,14 @@ app.post("/auth/google", async (req, res) => {
 
 app.post("/update/data", async (req, res) => {
     if(req.body){
-        const {id_user, id, phone, username, email, income_monthly} = req.body;
+        const {id_user, id, phone, username, email, income_monthly, bills_monthly} = req.body;
 
-        let DTI = 0.4;
-
-        let limit_prestamo = (income_monthly * DTI) / 12;
+        let NI = income_monthly - bills_monthly; //Ingreso neto mensual
+        let CPM = NI * 0.35; //Capacidad pago mensual
 
         const connection = await database.getConnection();
         const res_update_registers = await connection.query("UPDATE registers SET numero_telefono = ?, numero_identidad = ?, username = ?, email = ? WHERE id = ?", [phone, id, username, email, id_user]);
-        const res_update_users = await connection.query("UPDATE users SET name_user = ?, email_user = ?, ingreso_mensual = ?, limit_monto = ? WHERE id_user = ?", [username, email, income_monthly, limit_prestamo, id_user]);
+        const res_update_users = await connection.query("UPDATE users SET name_user = ?, email_user = ?, ingreso_mensual = ?, gasto_mensual = ?, limit_monto = ? WHERE id_user = ?", [username, email, income_monthly, bills_monthly, CPM, id_user]);
 
         if(res_update_registers && res_update_users){
             res.status(200).json({ message: "Update Successful"});
@@ -307,7 +302,7 @@ app.post("/update/user_loan", async (req, res) => {
 
         const connection = await database.getConnection();
 
-        const data_user_history_credit = await connection.query("SELECT history_credit, state_prestamo, ingreso_mensual FROM users WHERE id_user = ?",[id_user])
+        const data_user_history_credit = await connection.query("SELECT history_credit, state_prestamo, limit_monto FROM users WHERE id_user = ?",[id_user])
 
         if(!data_user_history_credit.length > 0){
             return res.status(400).send({state: "Bad Request", message: "No se pudo encontrar el usuario con el id " + id_user})
@@ -315,7 +310,7 @@ app.post("/update/user_loan", async (req, res) => {
 
         history_credit += data_user_history_credit[0].history_credit;
         let state_prestamo = data_user_history_credit[0].state_prestamo;
-        let ingreso_mensual = Number(data_user_history_credit[0].ingreso_mensual)
+        let limit_monto = Number(data_user_history_credit[0].limit_monto)
 
         if(!simulate.length > 0){
             const res_loan = await connection.query("DELETE FROM prestamos WHERE id_loan = ?",[id_loan]);
@@ -341,10 +336,7 @@ app.post("/update/user_loan", async (req, res) => {
         let tasa_interes;
         let limit_prestamo;
         let level_account = 1;
-        let multiplier = 1;
-
-        let DTI = 0.4;
-        let limit_monto = (ingreso_mensual * DTI) / 12;
+        let multiplier = 1;        
 
         if(history_credit >= 0 && history_credit < 50){
             tasa_interes = 0.0;
@@ -366,7 +358,7 @@ app.post("/update/user_loan", async (req, res) => {
             level_account = 4;
         }
 
-        const res_user = await connection.query("UPDATE users SET saldo_disponible = ?, history_credit = ?, limit_prestamo = ?, limit_monto = ?, discount_tasa = ?, state_prestamo = ?, level_account = ?, multiplier = ? WHERE id_user = ?",[Number(saldo).toFixed(2).toString(), history_credit, limit_prestamo.toString(), limit_monto, tasa_interes, state_prestamo, level_account, multiplier, id_user])
+        const res_user = await connection.query("UPDATE users SET saldo_disponible = ?, history_credit = ?, limit_prestamo = ?, discount_tasa = ?, state_prestamo = ?, level_account = ?, multiplier = ? WHERE id_user = ?",[Number(saldo).toFixed(2).toString(), history_credit, limit_prestamo.toString(), tasa_interes, state_prestamo, level_account, multiplier, id_user])
 
         if(!res_user){
             return res.status(400).send({state: "Bad Request", message: "No se pudieron actualizar los datos."})
@@ -424,16 +416,17 @@ app.post("/2fa/auth", async (req, res) => {
     if(req.body){
         const connection = await database.getConnection();
         let {email, deviceId, type_device} = req.body;
+        
+        console.log(email, deviceId, type_device)
 
         const get_info_ip = await fetch("https://ipinfo.io/json");
-
         const info_ip = await get_info_ip.json();
-
         const countryCode = info_ip.country;
+        console.log(info_ip)
 
-        const response_country = await fetch(`https://restcountries.com/v3/alpha/${countryCode}`);
-        const data = await response_country.json();
-        const countryName = data[0].name.common;
+
+        const countryName = americaCountries[countryCode];
+        console.log(countryName)
 
         const date_now = new Date();
 
@@ -1005,7 +998,7 @@ app.post("/email/send_loan", async (req, res) => {
 
 app.post("/email/send_transfer", async (req, res) => {
     if(req.body){
-        const {action, origin, message, numero_card, subject} = req.body;
+        const {action, origin, message, numero_card, subject, date} = req.body;
         let numero_card_formatted = "";
 
         for(let i = 0; i < numero_card.length; i++){
@@ -1042,9 +1035,9 @@ app.post("/email/send_transfer", async (req, res) => {
                     background-color: #fff;
                     border-radius: 8px;
                     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                    text-align: center;
                 }
                 .header {
-                    text-align: center;
                     margin-bottom: 20px;
                 }
                 .header h1 {
@@ -1081,43 +1074,51 @@ app.post("/email/send_transfer", async (req, res) => {
             </style>
         </head>
         <body style="background-color: #f2f2f2; padding: 20px;">
-        
         <div class="container">
+        
+            <header style="background: #272525; width: 100%; padding: .5rem 0; border-radius: 8px 8px 0px 0px;">
+                <span style="color: white; font-size: 1.3rem;">EasyCredit</span>
+            </header>
+        
             <div class="header">
                 <h1>Notificación de Transferencia</h1>
                 <p>Estimado <strong>${name_origin}</strong>,</p>
-                <p>Se ha realizado una transferencia desde su cuenta hacia el número de tarjeta <span style="font-weight: bold;">${numero_card_formatted}</span>.</p>
+                <p>Nos complace informarle que su solicitud de transferencia por <span style="font-weight: bold;">$${formatNumber(action)}</span> ha sido aprobada.</p>
             </div>
             
             <div class="details">
-                <h2 style="color: #333; font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">Detalles de la Transferencia</h2>
+                <h2 style="color: #333; font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">Detalles del transferencia</h2>
                 <table>
                     <tr>
-                        <td><strong>Acción:</strong></td>
-                        <td>${action}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Origen:</strong></td>
+                        <td><strong>Nombre:</strong></td>
                         <td>${name_origin}</td>
                     </tr>
                     <tr>
-                        <td><strong>Mensaje:</strong></td>
+                        <td><strong>Numero destino:</strong></td>
+                        <td>${numero_card_formatted}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Monto:</strong></td>
+                        <td>$${formatNumber(action)}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Descripcion:</strong></td>
                         <td>${message}</td>
                     </tr>
                     <tr>
-                        <td><strong>Número de Tarjeta:</strong></td>
-                        <td>${numero_card_formatted}</td>
+                        <td><strong>Fecha:</strong></td>
+                        <td>${date.split("T")[0]}</td>
                     </tr>
                 </table>
             </div>
             
-            <p class="thanks">¡Gracias por elegir EasyCredit!</p>
+            <footer style="width: 100%; text-align: center; background: #272525; padding: .8rem 0; border-radius: 0 0 8px 8px;">
+                <span style="color: white; font-size: 1.3rem;">Gracias por elegir EasyCredit</span>
+            </footer>
         </div>
         
         </body>
         </html>
-        
-        
         `;
 
         let transporter = nodemailer.createTransport({
@@ -1655,6 +1656,16 @@ app.get("/user/loan", async (req, res) => {
         res.json(data_loan);
     }
 });
+
+app.get("/codes/promotion", async (req, res) => {
+    const connection = await database.getConnection();
+    const codes = await connection.query("SELECT * FROM codes WHERE type = ?", ["promotion"]);
+    if(codes.length > 0){
+        return res.status(200).json(codes);
+    }
+
+    res.status(400).send({ message: "Bad Request" });
+})
 
 app.get("/movements/one_movement", async (req, res) => {
     const id_movement = req.query.id_movement;
