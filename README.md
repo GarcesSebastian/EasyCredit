@@ -53,7 +53,7 @@ EasyCredit nació como un proyecto académico (Proyecto ABP) en la Universidad d
 - **Luis Carlos Brieva** (Desarrollador Front-end) - Contacto: [Luizkv4@outlook.com](mailto:Luizkv4@outlook.com)
 - **Luis Armando Ladeuth** (Diseñador UX/UI) - Contacto: [luisarmandoladeuth2006@gmail.com](mailto:luisarmandoladeuth2006@gmail.com)
 - **Isail Stiven Florez** (Analista de Datos) - Contacto: [Isail.stivenflorez@gmail.com](mailto:Isail.stivenflorez@gmail.com)
-- **Jorge David Tovar** (Soporte y Gestión de Requerimientos) - Contacto: [jorgets222@gmail.com](jorgets222@gmail.com)
+- **Jorge David Tovar** (Soporte y Gestión de Requerimientos) - Contacto: [jorgets222@gmail.com](mailto:jorgets222@gmail.com)
 
 ## 📝 Licencia
 
