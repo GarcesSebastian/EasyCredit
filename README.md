@@ -48,6 +48,21 @@ EasyCredit nació como un proyecto académico (Proyecto ABP) en la Universidad d
 ![EasyCredit Preview](https://github.com/GarcesSebastian/EasyCredit/blob/main/public/Captura%20de%20pantalla%20(204).png)
 ![EasyCredit Preview](https://github.com/GarcesSebastian/EasyCredit/blob/main/public/Captura%20de%20pantalla%20(206).png)
 
+## ✨ Funcionalidades
+
+EasyCredit ofrece diversas funcionalidades para simular y gestionar la vida crediticia del usuario. Dependiendo de cómo se use la plataforma, se tendrá acceso a ciertas funcionalidades:
+
+- **Modo Offline (sin iniciar sesión)**:
+  - **Simulación de Créditos**: Permite al usuario simular créditos y obtener la información requerida sin necesidad de iniciar sesión.
+
+- **Modo Online (con inicio de sesión)**:
+  - **Simulación de Vida Crediticia**: El usuario puede simular su vida crediticia completa, incluyendo la posibilidad de hacer préstamos con un excedente y un monto máximo basado en sus ingresos y gastos.
+  - **Evaluación de Situaciones Financieras**: Experimentar con diferentes escenarios, como malas situaciones al no pagar a tiempo y recibir bonificaciones al cumplir con las cuotas y préstamos.
+  - **Transferencias entre Usuarios**: Facilita la transferencia de dinero entre diferentes usuarios dentro de la plataforma.
+  - **Canjeo de Código**: Permite a los usuarios canjear códigos para obtener beneficios adicionales.
+  - **Autenticación de Dos Factores (2FA)**: Proporciona una capa adicional de seguridad para proteger la cuenta del usuario.
+  - **Experiencia de Simulación Completa**: Los usuarios pueden experimentar libremente con EasyCredit, explorando y aprendiendo a manejar su vida crediticia de manera efectiva.
+
 ## 👥 Colaboradores
 
 - **Luis Carlos Brieva** (Desarrollador Front-end) - Contacto: [Luizkv4@outlook.com](mailto:Luizkv4@outlook.com)
