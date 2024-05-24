@@ -46,7 +46,6 @@ EasyCredit nació como un proyecto académico (Proyecto ABP) en la Universidad d
 ## 🎨 Capturas de Pantalla
 
 ![EasyCredit Preview](https://github.com/GarcesSebastian/EasyCredit/blob/main/public/Captura%20de%20pantalla%20(204).png)
-![EasyCredit Preview](https://github.com/GarcesSebastian/EasyCredit/blob/main/public/Captura%20de%20pantalla%20(205).png)
 ![EasyCredit Preview](https://github.com/GarcesSebastian/EasyCredit/blob/main/public/Captura%20de%20pantalla%20(206).png)
 
 ## 👥 Colaboradores
@@ -54,7 +53,7 @@ EasyCredit nació como un proyecto académico (Proyecto ABP) en la Universidad d
 - **Luis Carlos Brieva** (Desarrollador Front-end) - Contacto: [Luizkv4@outlook.com](mailto:Luizkv4@outlook.com)
 - **Luis Armando Ladeuth** (Diseñador UX/UI) - Contacto: [luisarmandoladeuth2006@gmail.com](mailto:luisarmandoladeuth2006@gmail.com)
 - **Isail Stiven Florez** (Analista de Datos) - Contacto: [Isail.stivenflorez@gmail.com](mailto:Isail.stivenflorez@gmail.com)
-- **Jorge David Tovar** (Soporte y Gestión de Requerimientos) - Contacto: *(Aún no tiene, luego lo pondré)*
+- **Jorge David Tovar** (Soporte y Gestión de Requerimientos) - Contacto: [jorgets222@gmail.com](mailto:jorgets222@gmail.com)
 
 ## 📝 Licencia
 
