@@ -72,7 +72,7 @@ EasyCredit ofrece diversas funcionalidades para simular y gestionar la vida cred
 
 ## 📝 Licencia
 
-Este proyecto está licenciado bajo la Licencia MIT. Para más detalles, consulte el archivo [LICENSE](LICENSE).
+Este proyecto está licenciado bajo la Licencia MIT. Para más detalles, consulte el archivo [LICENSE](LICENSE.txt).
 
 ---
 
