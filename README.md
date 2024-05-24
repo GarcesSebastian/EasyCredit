@@ -46,6 +46,8 @@ EasyCredit nació como un proyecto académico (Proyecto ABP) en la Universidad d
 ## 🎨 Capturas de Pantalla
 
 ![EasyCredit Preview](https://github.com/GarcesSebastian/EasyCredit/blob/main/public/Captura%20de%20pantalla%20(204).png)
+![EasyCredit Preview](https://github.com/GarcesSebastian/EasyCredit/blob/main/public/Captura%20de%20pantalla%20(205).png)
+![EasyCredit Preview](https://github.com/GarcesSebastian/EasyCredit/blob/main/public/Captura%20de%20pantalla%20(206).png)
 
 ## 👥 Colaboradores
 
